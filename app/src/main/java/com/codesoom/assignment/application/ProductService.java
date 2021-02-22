@@ -29,10 +29,8 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         Product product = mapper.map(productData, Product.class);
-
         return productRepository.save(product);
     }
 
@@ -51,9 +49,7 @@ public class ProductService {
 
     public Product deleteProduct(Long id) {
         Product product = findProduct(id);
-
         productRepository.delete(product);
-
         return product;
     }
 
