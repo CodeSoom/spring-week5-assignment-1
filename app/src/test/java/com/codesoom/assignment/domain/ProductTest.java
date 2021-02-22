@@ -1,10 +1,13 @@
 package com.codesoom.assignment.domain;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
+
+    @DisplayName("빌더 패턴을 이용하여 상품을 생성했을 때, 유효한 값을 반환한다.")
     @Test
     void creationWithBuilder() {
         Product product = Product.builder()
@@ -21,6 +24,7 @@ class ProductTest {
         assertThat(product.getImageUrl()).isNull();
     }
 
+    @DisplayName("빌더 패턴을 이용하여 생성한 상품을 변경하였을 때, 유효한 값을 반환한다.")
     @Test
     void change() {
         Product product = Product.builder()
