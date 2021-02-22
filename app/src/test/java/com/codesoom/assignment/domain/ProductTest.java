@@ -26,16 +26,22 @@ class ProductTest {
 
     @DisplayName("빌더 패턴을 이용하여 생성한 상품을 변경하였을 때, 유효한 값을 반환한다.")
     @Test
-    void change() {
+    void changeWith() {
         Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
+            .id(1L)
+            .name("쥐돌이")
+            .maker("냥이월드")
+            .price(5000)
+            .build();
 
-        product.change("쥐순이", "코드숨", 10000,
-                "http://localhost:8080/rat");
+        product.changeWith(Product
+            .builder()
+            .id(1L)
+            .name("쥐순이")
+            .maker("코드숨")
+            .price(10000)
+            .imageUrl("http://localhost:8080/rat")
+            .build());
 
         assertThat(product.getName()).isEqualTo("쥐순이");
         assertThat(product.getMaker()).isEqualTo("코드숨");
