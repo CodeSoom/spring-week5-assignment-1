@@ -27,10 +27,7 @@ public class Product {
 
     private String imageUrl;
 
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
+    public void change(String name, String maker, Integer price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = price;

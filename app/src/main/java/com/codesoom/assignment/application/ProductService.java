@@ -30,11 +30,11 @@ public class ProductService {
 
     public Product createProduct(ProductRequest productRequest) {
         Product product = Product.builder()
-                .name(productRequest.getName())
-                .maker(productRequest.getMaker())
-                .price(productRequest.getPrice())
-                .imageUrl(productRequest.getImageUrl())
-                .build();
+            .name(productRequest.getName())
+            .maker(productRequest.getMaker())
+            .price(productRequest.getPrice())
+            .imageUrl(productRequest.getImageUrl())
+            .build();
         return productRepository.save(product);
     }
 
@@ -42,10 +42,10 @@ public class ProductService {
         Product product = findProduct(id);
 
         product.change(
-                productRequest.getName(),
-                productRequest.getMaker(),
-                productRequest.getPrice(),
-                productRequest.getImageUrl()
+            productRequest.getName(),
+            productRequest.getMaker(),
+            productRequest.getPrice(),
+            productRequest.getImageUrl()
         );
 
         return product;
@@ -61,6 +61,6 @@ public class ProductService {
 
     private Product findProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+            .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
