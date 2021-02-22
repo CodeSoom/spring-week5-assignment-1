@@ -3,7 +3,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductRequest;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -48,13 +49,13 @@ class ProductControllerTest {
         given(productService.getProduct(1000L))
                 .willThrow(new ProductNotFoundException(1000L));
 
-        given(productService.createProduct(any(ProductData.class)))
+        given(productService.createProduct(any(ProductRequest.class)))
                 .willReturn(product);
 
-        given(productService.updateProduct(eq(1L), any(ProductData.class)))
+        given(productService.updateProduct(eq(1L), any(ProductRequest.class)))
                 .will(invocation -> {
                     Long id = invocation.getArgument(0);
-                    ProductData productData = invocation.getArgument(1);
+                    ProductRequest productData = invocation.getArgument(1);
                     return Product.builder()
                             .id(id)
                             .name(productData.getName())
@@ -63,7 +64,7 @@ class ProductControllerTest {
                             .build();
                 });
 
-        given(productService.updateProduct(eq(1000L), any(ProductData.class)))
+        given(productService.updateProduct(eq(1000L), any(ProductRequest.class)))
                 .willThrow(new ProductNotFoundException(1000L));
 
         given(productService.deleteProduct(1000L))
@@ -112,7 +113,7 @@ class ProductControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("쥐돌이")));
 
-        verify(productService).createProduct(any(ProductData.class));
+        verify(productService).createProduct(any(ProductRequest.class));
     }
 
     @DisplayName("유효한 양식으로 서비스에 생성 요청을 하면 상태코드 201을 리턴한다.")
@@ -128,7 +129,7 @@ class ProductControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("쥐돌이")));
 
-        verify(productService).createProduct(any(ProductData.class));
+        verify(productService).createProduct(any(ProductRequest.class));
     }
 
     @DisplayName("유효하지 않은 양식으로 서비스에 생성 요청을 하면 상태 코드 400을 리턴한다.")
@@ -157,7 +158,7 @@ class ProductControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("쥐순이")));
 
-        verify(productService).updateProduct(eq(1L), any(ProductData.class));
+        verify(productService).updateProduct(eq(1L), any(ProductRequest.class));
     }
 
     @DisplayName("존재하지 않는 상품에 대하여 서비스에, 수정 요청을 하면 상태코드 404를 리턴한다.")
@@ -171,7 +172,7 @@ class ProductControllerTest {
         )
                 .andExpect(status().isNotFound());
 
-        verify(productService).updateProduct(eq(1000L), any(ProductData.class));
+        verify(productService).updateProduct(eq(1000L), any(ProductRequest.class));
     }
 
     @DisplayName("존재하는 상품에 대하여 서비스에 유효하지 않은 정보로 수정 요청을 하면 상태코드 400을 리턴한다.")
