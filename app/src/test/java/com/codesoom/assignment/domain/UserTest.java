@@ -18,6 +18,8 @@ class UserTest {
     @Test
     void test_변수값확인(){
         assertThat("name").isEqualTo(user.getName());
+        assertThat("email").isEqualTo(user.getEmail());
+        assertThat("password").isEqualTo(user.getPassword());
     }
 
 }
