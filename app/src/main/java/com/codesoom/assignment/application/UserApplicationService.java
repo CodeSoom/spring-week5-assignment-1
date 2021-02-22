@@ -4,6 +4,6 @@ import com.codesoom.assignment.domain.User;
 
 public class UserApplicationService {
     public User createUser(String name, String mail, String password) {
-        return new User();
+        return new User(0L, name, mail, password);
     }
 }
