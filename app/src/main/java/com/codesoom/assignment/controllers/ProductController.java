@@ -2,7 +2,6 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,6 +10,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/products")
+@CrossOrigin
 public class ProductController {
     private final ProductService productService;
 
@@ -30,21 +30,18 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody @Valid ProductData productData) {
-        return productService.createProduct(productData);
+    public Product create(@RequestBody @Valid Product product) {
+        return productService.createProduct(product);
     }
 
-    @PatchMapping("{id}")
-    public Product update(
-            @PathVariable Long id,
-            @RequestBody @Valid ProductData productData
-    ) {
-        return productService.updateProduct(id, productData);
+    @RequestMapping(value = "{id}", method = { RequestMethod.PUT, RequestMethod.PATCH })
+    public Product update(@PathVariable Long id, @RequestBody @Valid Product product) {
+        return productService.updateProduct(id, product);
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable Long id) {
+    @ResponseStatus(HttpStatus.OK)
+    public void delete(@PathVariable Long id) {
         productService.deleteProduct(id);
     }
 }

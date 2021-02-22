@@ -3,10 +3,12 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,121 +20,240 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 class ProductServiceTest {
+
+    private static final String NAME = "뱀 장난감";
+    private static final String MAKER = "야옹이네 장난감";
+    private static final Integer PRICE = 3000;
+    private static final String IMAGE = "https://bit.ly/3qzXRME";
+
+    private static final String UPDATE_NAME = "물고기 장난감";
+    private static final String UPDATE_MAKER = "애옹이네 장난감";
+    private static final Integer UPDATE_PRICE = 5000;
+    private static final String UPDATE_IMAGE = "https://bit.ly/2M4YXkw";
+
     private ProductService productService;
 
-    private ProductRepository productRepository = mock(ProductRepository.class);
+    private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
+        productRepository = mock(ProductRepository.class);
+
         productService = new ProductService(productRepository);
 
+        List<Product> products = new ArrayList<>();
+
         Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .image(IMAGE)
                 .build();
 
-        given(productRepository.findAll()).willReturn(List.of(product));
+        given(productRepository.findAll()).willReturn(products);
 
-        given(productRepository.findById(1L)).willReturn(Optional.of(product));
+        given(productRepository.findById(1L))
+                .willReturn(Optional.of(product));
 
-        given(productRepository.save(any(Product.class))).will(invocation -> {
-            Product source = invocation.getArgument(0);
-            return Product.builder()
-                    .id(2L)
-                    .name(source.getName())
-                    .maker(source.getMaker())
-                    .price(source.getPrice())
-                    .build();
-        });
+        given(productRepository.save(any(Product.class)))
+                .will(invocation -> invocation.<Product>getArgument(0));
+
+        given(productRepository.findById(1L))
+                .willReturn(Optional.of(product));
     }
 
-    @Test
-    void getProductsWithNoProduct() {
-        given(productRepository.findAll()).willReturn(List.of());
-
-        assertThat(productService.getProducts()).isEmpty();
+    void getProductTest(Product product) {
+        assertThat(product.getName()).isEqualTo(NAME);
+        assertThat(product.getMaker()).isEqualTo(MAKER);
+        assertThat(product.getPrice()).isEqualTo(PRICE);
+        assertThat(product.getImage()).isEqualTo(IMAGE);
     }
 
-    @Test
-    void getProducts() {
-        List<Product> products = productService.getProducts();
-
-        assertThat(products).isNotEmpty();
-
-        Product product = products.get(0);
-
-        assertThat(product.getName()).isEqualTo("쥐돌이");
+    void updateTest(Product update) {
+        assertThat(update.getName()).isEqualTo(UPDATE_NAME);
+        assertThat(update.getMaker()).isEqualTo(UPDATE_MAKER);
+        assertThat(update.getPrice()).isEqualTo(UPDATE_PRICE);
+        assertThat(update.getImage()).isEqualTo(UPDATE_IMAGE);
     }
 
-    @Test
-    void getProductWithExsitedId() {
-        Product product = productService.getProduct(1L);
+    @Nested
+    @DisplayName("getProducts 메소드는")
+    class Describe_getProducts {
+        Product product;
 
-        assertThat(product).isNotNull();
-        assertThat(product.getName()).isEqualTo("쥐돌이");
+        @Nested
+        @DisplayName("장난감이 존재한다면")
+        class Context_with_product {
+
+            @BeforeEach
+            void setUp() {
+                product = new Product();
+            }
+
+            @Test
+            @DisplayName("장난감 목록을 반환한다 ")
+            void it_returns_list() {
+                List<Product> products = productService.getProducts();
+
+                products.add(product);
+
+                verify(productRepository).findAll();
+
+                assertThat(products).hasSize(1);
+            }
+        }
+
+        @Nested
+        @DisplayName("장난감이 존재하지 않는다면")
+        class Context_without_product {
+
+            @Test
+            @DisplayName("빈 목록을 반환한다")
+            void it_returns_list() {
+                List<Product> products = productService.getProducts();
+
+                assertThat(products).isEmpty();
+            }
+        }
     }
 
-    @Test
-    void getProductWithNotExsitedId() {
-        assertThatThrownBy(() -> productService.getProduct(1000L))
-                .isInstanceOf(ProductNotFoundException.class);
+    @Nested
+    @DisplayName("getProduct 메소드는")
+    class Describe_getProduct {
+        Product product;
+
+        @Nested
+        @DisplayName("등록된 장난감의 ID가 주어진다면")
+        class Context_with_valid_id {
+
+            @Test
+            @DisplayName("해당 ID를 갖는 장난감을 반환한다")
+            void it_returns_product() {
+                product = productService.getProduct(1L);
+
+                verify(productRepository).findById(1L);
+
+                getProductTest(product);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 장난감의 ID가 주어진다면")
+        class Context_with_invalid_id {
+
+            @Test
+            @DisplayName("해당 장난감을 찾을 수 없다는 예외를 던진다")
+            void it_returns_warning_message() {
+                assertThatThrownBy(() -> productService.getProduct(100L))
+                        .isInstanceOf(ProductNotFoundException.class);
+
+                verify(productRepository).findById(100L);
+            }
+        }
     }
 
-    @Test
-    void createProduct() {
-        ProductData productData = ProductData.builder()
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
+    @Nested
+    @DisplayName("createProduct 메소드는")
+    class Describe_createProduct {
+        Product product;
 
-        Product product = productService.createProduct(productData);
+        @Test
+        @DisplayName("새로운 장난감을 등록한다")
+        void it_returns_product() {
+            product = new Product();
 
-        verify(productRepository).save(any(Product.class));
+            productService.createProduct(product);
 
-        assertThat(product.getId()).isEqualTo(2L);
-        assertThat(product.getName()).isEqualTo("쥐돌이");
-        assertThat(product.getMaker()).isEqualTo("냥이월드");
+            verify(productRepository).save(any(Product.class));
+        }
     }
 
-    @Test
-    void updateProductWithExistedId() {
-        ProductData productData = ProductData.builder()
-                .name("쥐순이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
+    @Nested
+    @DisplayName("updateProduct 메소드는")
+    class Describe_updateProduct {
+        Product update;
 
-        Product product = productService.updateProduct(1L, productData);
+        @Nested
+        @DisplayName("등록된 장난감의 ID가 주어진다면")
+        class Context_with_valid_id_and_product {
 
-        assertThat(product.getId()).isEqualTo(1L);
-        assertThat(product.getName()).isEqualTo("쥐순이");
+            @BeforeEach
+            void setUp() {
+                update = Product.builder()
+                        .name(UPDATE_NAME)
+                        .maker(UPDATE_MAKER)
+                        .price(UPDATE_PRICE)
+                        .image(UPDATE_IMAGE)
+                        .build();
+
+                given(productRepository.findById(1L))
+                        .willReturn(Optional.of(update));
+            }
+
+            @Test
+            @DisplayName("해당 ID를 갖는 장난감의 정보를 수정하고 반환한다")
+            void it_returns_updated_product() {
+                productService.updateProduct(1L, update);
+
+                verify(productRepository).findById(1L);
+
+                updateTest(update);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 장난감의 ID가 주어진다면")
+        class Context_with_invalid_id {
+
+            @Test
+            @DisplayName("수정할 장난감을 찾을 수 없다는 예외를 던진다")
+            void it_returns_warning_message() {
+                assertThatThrownBy(() -> productService.updateProduct(100L, update))
+                        .isInstanceOf(ProductNotFoundException.class);
+
+                verify(productRepository).findById(100L);
+            }
+        }
     }
 
-    @Test
-    void updateProductWithNotExistedId() {
-        ProductData productData = ProductData.builder()
-                .name("쥐순이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
+    @Nested
+    @DisplayName("deleteProduct 메소드는")
+    class Describe_deleteProduct {
+        Product product;
 
-        assertThatThrownBy(() -> productService.updateProduct(1000L, productData))
-                .isInstanceOf(ProductNotFoundException.class);
-    }
+        @Nested
+        @DisplayName("등록된 장난감의 ID가 주어진다면")
+        class Context_with_valid_id {
 
-    @Test
-    void deleteProductWithExistedId() {
-        productService.deleteProduct(1L);
+            @BeforeEach
+            void setUp() {
+                product = new Product();
+            }
 
-        verify(productRepository).delete(any(Product.class));
-    }
+            @Test
+            @DisplayName("해당 ID를 갖는 장난감을 삭제하고 반환한다")
+            void it_returns_deleted_product() {
+                productService.deleteProduct(1L);
 
-    @Test
-    void deleteProductWithNotExistedId() {
-        assertThatThrownBy(() -> productService.deleteProduct(1000L))
-                .isInstanceOf(ProductNotFoundException.class);
+                verify(productRepository).findById(1L);
+                verify(productRepository).delete(any(Product.class));
+
+                assertThat(productRepository.findAll()).isNotIn(1L);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 장난감의 ID가 주어진다면")
+        class Context_without_invalid_id {
+
+            @Test
+            @DisplayName("삭제할 장난감을 찾을 수 없다는 예외를 던진다")
+            void it_returns_warning_message() {
+                assertThatThrownBy(() -> productService.deleteProduct(100L))
+                        .isInstanceOf(ProductNotFoundException.class);
+
+                verify(productRepository).findById(100L);
+            }
+        }
     }
 }
