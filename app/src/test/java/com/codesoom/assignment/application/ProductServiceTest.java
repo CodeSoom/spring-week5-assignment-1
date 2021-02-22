@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -48,6 +49,7 @@ class ProductServiceTest {
         });
     }
 
+    @DisplayName("서비스에 등록된 상품이 아무것도 없을 때, 비어 있는 상품 리스트를 반환합니다.")
     @Test
     void getProductsWithNoProduct() {
         given(productRepository.findAll()).willReturn(List.of());
@@ -55,6 +57,7 @@ class ProductServiceTest {
         assertThat(productService.getProducts()).isEmpty();
     }
 
+    @DisplayName("서비스에 등록된 상품이 있을 때, 비어 있지 않은 상품 리스트 반환합니다.")
     @Test
     void getProducts() {
         List<Product> products = productService.getProducts();
@@ -66,6 +69,7 @@ class ProductServiceTest {
         assertThat(product.getName()).isEqualTo("쥐돌이");
     }
 
+    @DisplayName("서비스에 존재하는 상품을 요청 했을 때, 해당하는 상품을 반환합니다.")
     @Test
     void getProductWithExsitedId() {
         Product product = productService.getProduct(1L);
@@ -74,12 +78,14 @@ class ProductServiceTest {
         assertThat(product.getName()).isEqualTo("쥐돌이");
     }
 
+    @DisplayName("서비스에 존재하지 않는 상품을 요청 했을 때, 예외를 호출합니다.")
     @Test
     void getProductWithNotExsitedId() {
         assertThatThrownBy(() -> productService.getProduct(1000L))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 
+    @DisplayName("서비스에 상품 생성을 요청했을 때, 특정한 상품이 생성됩니다.")
     @Test
     void createProduct() {
         ProductData productData = ProductData.builder()
@@ -97,6 +103,7 @@ class ProductServiceTest {
         assertThat(product.getMaker()).isEqualTo("냥이월드");
     }
 
+    @DisplayName("서비스에 존재하는 상품에 대하여 수정을 요청했을 때, 수정된 상품을 반환합니다.")
     @Test
     void updateProductWithExistedId() {
         ProductData productData = ProductData.builder()
@@ -111,6 +118,7 @@ class ProductServiceTest {
         assertThat(product.getName()).isEqualTo("쥐순이");
     }
 
+    @DisplayName("서비스에 존재하지 않는 상품에 대하여 수정을 요청하였을 때, 예외를 호출합니다.")
     @Test
     void updateProductWithNotExistedId() {
         ProductData productData = ProductData.builder()
@@ -123,6 +131,7 @@ class ProductServiceTest {
                 .isInstanceOf(ProductNotFoundException.class);
     }
 
+    @DisplayName("서비스에 존재하는 상품에 대하여 삭제 요청을 하였을 때, 상품을 삭제합니다.")
     @Test
     void deleteProductWithExistedId() {
         productService.deleteProduct(1L);
@@ -130,6 +139,7 @@ class ProductServiceTest {
         verify(productRepository).delete(any(Product.class));
     }
 
+    @DisplayName("서비스에 존재하지 않는 상품에 대하여 삭제 요청을 하였을 때, 예외를 호출합니다.")
     @Test
     void deleteProductWithNotExistedId() {
         assertThatThrownBy(() -> productService.deleteProduct(1000L))
