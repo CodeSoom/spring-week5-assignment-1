@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,8 +31,14 @@ class ProductTest {
                 .price(5000)
                 .build();
 
-        product.change("쥐순이", "코드숨", 10000,
-                "http://localhost:8080/rat");
+        Product source = Product.builder()
+                .name("쥐순이")
+                .maker("코드숨")
+                .price(10000)
+                .imageUrl("http://localhost:8080/rat")
+                .build();
+
+        product.changeWith(source);
 
         assertThat(product.getName()).isEqualTo("쥐순이");
         assertThat(product.getMaker()).isEqualTo("코드숨");
