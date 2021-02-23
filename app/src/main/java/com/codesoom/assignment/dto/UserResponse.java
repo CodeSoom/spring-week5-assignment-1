@@ -21,8 +21,8 @@ public class UserResponse {
     private String name;
 
     @NotNull
-    private Integer age;
+    private String email;
 
     @NotBlank
-    private String sex;
+    private String password;
 }
