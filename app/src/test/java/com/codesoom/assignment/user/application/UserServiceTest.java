@@ -34,7 +34,7 @@ class UserServiceTest {
 
     @AfterEach
     public void cleanup() {
-        userRepository.findAll().clear();
+        userRepository.deleteAll();
     }
 
     @Nested
@@ -59,6 +59,41 @@ class UserServiceTest {
                     () -> assertThat(actual.getEmail()).isEqualTo(USER_EMAIL),
                     () -> assertThat(actual.getPassword()).isEqualTo(USER_PASSWORD)
             );
+        }
+    }
+
+    @Nested
+    @DisplayName("getUsers 메서드는")
+    class Describe_getUsers {
+
+        @Nested
+        @DisplayName("등록된 사용자가 존재하면")
+        class Context_with_users {
+
+            @BeforeEach
+            void setUp() {
+                UserSaveRequestDto requestDto = getUserSaveDto();
+                userService.createUser(requestDto);
+            }
+
+            @DisplayName("등록된 사용자 목록을 리턴한다")
+            @Test
+            void It_return_users() {
+                assertThat(userService.getUsers().get(0).getName()).isEqualTo(USER_NAME);
+                assertThat(userService.getUsers().get(0).getEmail()).isEqualTo(USER_EMAIL);
+                assertThat(userService.getUsers()).hasSize(1);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 사용자가 존재하지 않으면")
+        class Context_without_users {
+
+            @DisplayName("비어있는 사용자 목록을 리턴한다")
+            @Test
+            void It_return_empty_users() {
+                assertThat(userService.getUsers()).isEmpty();
+            }
         }
     }
 
