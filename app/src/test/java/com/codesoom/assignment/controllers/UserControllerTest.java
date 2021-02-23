@@ -2,7 +2,6 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
-import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserResponse;
 import com.codesoom.assignment.dto.UserUpdateRequest;
@@ -47,9 +46,9 @@ class UserControllerTest {
     private final Long existingId = 1L;
     private final Long notExistingId = 100L;
 
-    private List<User> users;
-    private User user1;
-    private User user2;
+    private List<UserResponse> users;
+    private UserResponse userResponse1;
+    private UserResponse userResponse2;
 
     private UserCreateRequest validUserCreateRequest;
     private UserCreateRequest invalidUserCreateRequest;
@@ -59,18 +58,16 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        user1 = User.builder()
+        userResponse1 = UserResponse.builder()
                 .id(1L)
                 .name("이름")
                 .email("이메일")
-                .password("password")
                 .build();
 
-        user2 = User.builder()
+        userResponse2 = UserResponse.builder()
                 .id(2L)
                 .name("이름2")
                 .email("이메일2")
-                .password("password2")
                 .build();
 
         validUserCreateRequest = UserCreateRequest.builder()
@@ -110,7 +107,7 @@ class UserControllerTest {
         class Context_with_users {
             @BeforeEach
             void setUp() {
-                users = List.of(user1, user2);
+                users = List.of(userResponse1, userResponse2);
 
                 given(userService.getUsers())
                         .willReturn(users);

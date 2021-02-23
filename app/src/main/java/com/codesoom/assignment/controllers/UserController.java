@@ -1,7 +1,6 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
-import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserResponse;
 import com.codesoom.assignment.dto.UserUpdateRequest;
@@ -30,7 +29,7 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping
-    public List<User> list() {
+    public List<UserResponse> list() {
         return userService.getUsers();
     }
 

@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -20,8 +21,12 @@ public class UserService {
 
     private final Mapper mapper;
 
-    public List<User> getUsers() {
-        return userRepository.findAll();
+    public List<UserResponse> getUsers() {
+        List<User> users = userRepository.findAll();
+
+        return users.stream()
+                .map(user -> mapper.map(user, UserResponse.class))
+                .collect(Collectors.toList());
     }
 
     public UserResponse getUser(Long id) {
