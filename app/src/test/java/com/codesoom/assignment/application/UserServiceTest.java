@@ -37,29 +37,6 @@ class UserServiceTest {
 
     @Test
     void getAllUsers(){
-        User user = User.builder()
-                .email("wenodev@codesoom.com")
-                .name("weno")
-                .password("pwd1234")
-                .build();
-        List<User> users = new ArrayList<>();
-        users.add(user);
-
-        given(userRepository.findAll()).willReturn(users);
-
-        assertThat(users.get(0).getName()).isEqualTo("weno");
-    }
-
-    @Test
-    void getUserWithExistedUser(){
-        User user = User.builder()
-                .email("wenodev@codesoom.com")
-                .name("weno")
-                .password("pwd1234")
-                .build();
-
-        assertThat(userService.getUser())
-
     }
 
 }
