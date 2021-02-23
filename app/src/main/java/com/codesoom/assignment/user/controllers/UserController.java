@@ -11,6 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 사용자에 대한 요청을 처리한다.
+ */
 @RestController
 @CrossOrigin
 @RequiredArgsConstructor
