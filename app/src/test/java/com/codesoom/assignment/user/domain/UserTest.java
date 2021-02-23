@@ -12,6 +12,11 @@ class UserTest {
     private static final String EMAIL = "test@test.com";
     private static final String PASSWORD = "test";
 
+    private static final Long UPDATE_ID = 2L;
+    private static final String UPDATE_NAME = "new_test";
+    private static final String UPDATE_EMAIL = "new@test.com";
+    private static final String UPDATE_PASSWORD = "new_test";
+
     private User user;
 
     @BeforeEach
@@ -46,5 +51,20 @@ class UserTest {
     @Test
     void getPrice() {
         assertThat(user.getPassword()).isEqualTo(PASSWORD);
+    }
+
+    @Test
+    void change() {
+        User source = User.builder()
+                .name(UPDATE_NAME)
+                .email(UPDATE_EMAIL)
+                .password(UPDATE_PASSWORD)
+                .build();
+
+        user.changeWith(source);
+
+        assertThat(user.getName()).isEqualTo(UPDATE_NAME);
+        assertThat(user.getEmail()).isEqualTo(UPDATE_EMAIL);
+        assertThat(user.getPassword()).isEqualTo(UPDATE_PASSWORD);
     }
 }
