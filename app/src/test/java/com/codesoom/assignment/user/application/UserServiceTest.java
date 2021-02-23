@@ -21,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 @Transactional
 @DisplayName("UserService 클래스")
 class UserServiceTest {
-    private static final Long USER_ID = 1L;
     private static final Long NOT_EXIST_ID = -1L;
 
     private static final String USER_NAME = "test";
