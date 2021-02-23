@@ -49,6 +49,7 @@ class UserMockMvcControllerTest {
     private static final String UPDATE_PASSWORD = "new_pass";
     private static final String UPDATE_EMAIL = "new@test.com";
 
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -160,11 +161,7 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                requestDto = UserUpdateRequestDto.builder()
-                        .name(USER_NAME)
-                        .email(USER_EMAIL)
-                        .password(USER_PASSWORD)
-                        .build();
+                requestDto = getUpdateRequest();
                 given(userService.updateUser(eq(NOT_EXIST_ID), any(UserUpdateRequestDto.class)))
                         .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
@@ -207,11 +204,7 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                requestDto = requestDto = UserUpdateRequestDto.builder()
-                        .name(USER_NAME)
-                        .email(USER_EMAIL)
-                        .password(USER_PASSWORD)
-                        .build();
+                requestDto = getUpdateRequest();
                 UserResponseDto responseDto = getUserResponse();
                 given(userService.updateUser(anyLong(), any(UserUpdateRequestDto.class)))
                         .willReturn(responseDto);
@@ -314,7 +307,7 @@ class UserMockMvcControllerTest {
                 given(userService.deleteUser(anyLong())).willReturn(USER_ID);
             }
 
-            @DisplayName("204 상태코드와 NO CONTENT 상태를 삭제된 유저 정보를 응답한다.")
+            @DisplayName("204 상태코드와 NO CONTENT 상태를 응답한다.")
             @Test
             void It_responds_no_content_with_user() throws Exception {
                 mockMvc.perform(delete("/users/{id}", anyLong())
@@ -330,6 +323,14 @@ class UserMockMvcControllerTest {
                 .name(USER_NAME)
                 .email(USER_EMAIL)
                 .password(USER_PASSWORD)
+                .build();
+    }
+
+    private UserUpdateRequestDto getUpdateRequest() {
+        return UserUpdateRequestDto.builder()
+                .name(UPDATE_NAME)
+                .email(UPDATE_EMAIL)
+                .password(UPDATE_PASSWORD)
                 .build();
     }
 }
