@@ -1,6 +1,8 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.infra.InMemoryUserRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -8,6 +10,9 @@ import io.cucumber.java.en.When;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserApplicationServiceTest {
+    UserRepository repository = new InMemoryUserRepository();
+    UserApplicationService userApplicationService = new UserApplicationService(repository);
+
     String name;
     String mail;
     String password;
@@ -22,7 +27,6 @@ public class UserApplicationServiceTest {
 
     @When("회원을 생성하는 경우")
     public void createUser() {
-        UserApplicationService userApplicationService = new UserApplicationService();
         createdUser = userApplicationService.createUser(name, mail, password);
     }
 
