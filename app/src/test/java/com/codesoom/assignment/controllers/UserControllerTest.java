@@ -37,13 +37,13 @@ public class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        UserResponse userResponse = new UserResponse(1L, "홍길동", 18, "male");
+        UserResponse userResponse = new UserResponse(1L, "홍길동", "hong@gamil.com", "1234");
         given(userService.createUser(any(UserRequest.class))).willReturn(userResponse);
         given(userService.updateUser(eq(1L), any(UserRequest.class)))
             .will(invocation -> {
                 Long id = invocation.getArgument(0);
                 UserRequest userRequest = invocation.getArgument(1);
-                return new UserResponse(1L, "임꺽정", 18, "male");
+                return new UserResponse(1L, "임꺽정", "lim@gamil.com", "5678");
             });
         given(userService.updateUser(eq(1000L), any(UserRequest.class))).willThrow(UserNotFoundException.class);
         given(userService.deleteUser(1000L))
@@ -56,7 +56,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/user")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
-            .content("{\"name\":\"홍길동\",\"age\":\"18\",\"sex\":\"male\"}"))
+            .content("{\"name\":\"홍길동\",\"email\":\"hong@gmail.com\",\"password\":\"1234\"}"))
             .andExpect(status().isCreated())
             .andExpect(MockMvcResultMatchers.content().string(containsString("홍길동")));
 
@@ -69,7 +69,7 @@ public class UserControllerTest {
         mockMvc.perform(post("/user")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
-            .content("{\"name\":,\"age\":\"18\",\"sex\":\"male\"}"))
+            .content("{\"email\":\"hong@gmail.com\",\"password\":\"1234\"}"))
             .andExpect(status().isBadRequest());
     }
 
@@ -79,7 +79,7 @@ public class UserControllerTest {
         mockMvc.perform(put("/user/1")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
-            .content("{\"name\":\"임꺽정\",\"age\":\"18\",\"sex\":\"male\"}"))
+            .content("{\"name\":\"임꺽정\",\"email\":\"lim@gmail.com\",\"password\":\"5678\"}"))
             .andExpect(status().isOk())
             .andExpect(MockMvcResultMatchers.content().string(containsString("임꺽정")));
 
@@ -92,7 +92,7 @@ public class UserControllerTest {
         mockMvc.perform(put("/user/1")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
-            .content("{\"name\":,\"age\":\"18\",\"sex\":\"male\"}"))
+            .content("{\"email\":\"hong@gmail.com\"}"))
             .andExpect(status().isBadRequest());
     }
 
@@ -102,7 +102,7 @@ public class UserControllerTest {
         mockMvc.perform(put("/user/1")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
-            .content("{\"name\":\"임꺽정\",\"age\":\"18\",\"sex\":\"male\"}"))
+            .content("{\"name\":\"임꺽정\",\"email\":\"sh9519@gmail.com\",\"password\":\"1234\"}"))
             .andExpect(status().isOk());
 
         verify(userService).updateUser(eq(1L), any(UserRequest.class));
@@ -114,7 +114,7 @@ public class UserControllerTest {
         mockMvc.perform(put("/user/1000")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
-            .content("{\"name\":\"임꺽정\",\"age\":\"18\",\"sex\":\"male\"}"))
+            .content("{\"name\":\"임꺽정\",\"email\":\"lim@gmail.com\",\"password\":\"5678\"}"))
             .andExpect(status().isNotFound());
 
         verify(userService).updateUser(eq(1000L), any(UserRequest.class));
