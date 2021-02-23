@@ -5,6 +5,7 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserResponse;
+import com.codesoom.assignment.dto.UserUpdateRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,8 +21,10 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -48,6 +51,8 @@ class UserControllerTest {
 
     private UserCreateRequest validUserCreateRequest;
     private UserCreateRequest invalidUserCreateRequest;
+    private UserUpdateRequest validUserUpdateRequest;
+    private UserUpdateRequest invalidUserUpdateRequest;
     private UserResponse userResponse;
 
     @BeforeEach
@@ -75,6 +80,16 @@ class UserControllerTest {
         invalidUserCreateRequest = UserCreateRequest.builder()
                 .name("")
                 .email("")
+                .password("")
+                .build();
+
+        validUserUpdateRequest = UserUpdateRequest.builder()
+                .name("새 이름")
+                .password("12345678")
+                .build();
+
+        invalidUserUpdateRequest = UserUpdateRequest.builder()
+                .name("")
                 .password("")
                 .build();
 
@@ -179,7 +194,7 @@ class UserControllerTest {
     @DisplayName("POST 요청은")
     class Describe_POST {
         @Nested
-        @DisplayName("올바른 회원 정보가 주어진다면")
+        @DisplayName("올바른 회원 생성 정보가 주어진다면")
         class Context_with_a_valid_user {
             @BeforeEach
             void setUp() {
@@ -202,8 +217,8 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("올바르지 않은 상품 정보가 주어진다면")
-        class Context_with_an_invalid_product {
+        @DisplayName("올바르지 않은 회원 생성 정보가 주어진다면")
+        class Context_with_an_invalid_user {
             @Test
             @DisplayName("상태코드 400을 응답한다.")
             void it_responds_status_code_400() throws Exception {
@@ -211,6 +226,69 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidUserCreateRequest)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH 요청은")
+    class Describe_PATCH {
+        @Nested
+        @DisplayName("존재하는 회원 id가 주어진다면")
+        class Context_with_an_existing_user_id {
+            @BeforeEach
+            void setUp() {
+                given(userService.updateUser(eq(existingId), any(UserUpdateRequest.class)))
+                        .willReturn(userResponse);
+            }
+
+            @Test
+            @DisplayName("수정된 회원과 상태코드 200을 응답한다.")
+            void it_responds_the_updated_user_and_status_code_200() throws Exception {
+                mockMvc.perform(patch("/users/{id}", existingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(validUserUpdateRequest)))
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("email").exists())
+                        .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 id가 주어진다면")
+        class Context_with_not_existing_user_id {
+            @BeforeEach
+            void setUp() {
+                given(userService.updateUser(eq(notExistingId), any(UserUpdateRequest.class)))
+                        .willThrow(new UserNotFoundException());
+            }
+
+            @Test
+            @DisplayName("에러메시지와 상태코드 404를 응답한다.")
+            void it_responds_the_error_message_and_status_code_404() throws Exception {
+                mockMvc.perform(patch("/users/{id}", notExistingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(validUserUpdateRequest)))
+                        .andExpect(jsonPath("name").doesNotExist())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("올바르지 않은 회원 수정 정보가 주어진다면")
+        class Context_with_an_invalid_user {
+            @Test
+            @DisplayName("상태코드 400을 응답한다.")
+            void it_responds_status_code_400() throws Exception {
+                mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidUserUpdateRequest)))
                         .andExpect(status().isBadRequest());
             }
         }

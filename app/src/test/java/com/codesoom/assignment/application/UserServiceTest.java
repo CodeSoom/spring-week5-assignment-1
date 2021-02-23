@@ -177,10 +177,9 @@ class UserServiceTest {
             @Test
             @DisplayName("수정된 회원을 리턴한다.")
             void it_returns_the_updated_user() {
-                User updatedUser = userService.updateUser(existingId, userUpdateRequest);
+                UserResponse updatedUser = userService.updateUser(existingId, userUpdateRequest);
 
                 assertThat(updatedUser.getName()).isEqualTo(userUpdateRequest.getName());
-                assertThat(updatedUser.getPassword()).isEqualTo(userUpdateRequest.getPassword());
             }
         }
 

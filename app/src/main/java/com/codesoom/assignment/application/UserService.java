@@ -36,10 +36,11 @@ public class UserService {
         return mapper.map(savedUser, UserResponse.class);
     }
 
-    public User updateUser(Long id, UserUpdateRequest updateRequest) {
+    public UserResponse updateUser(Long id, UserUpdateRequest updateRequest) {
         User user = findUser(id);
+        User updatedUser = user.changeWith(mapper.map(updateRequest, User.class));
 
-        return user.changeWith(mapper.map(updateRequest, User.class));
+        return mapper.map(updatedUser, UserResponse.class);
     }
 
     private User findUser(Long id) {
