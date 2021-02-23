@@ -81,4 +81,25 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("createUser 메소드는")
+    class Describe_createUser {
+        private User created;
+
+        @Test
+        @DisplayName("user를 추가하고, 추가된 user를 리턴한다.")
+        void it_create_user_and_return_created_user() {
+            given(userRepository.save(user)).will(invocation -> {
+                return invocation.getArgument(0);
+            });
+
+            created = userService.createUser(user);
+
+            assertThat(created.getClass()).isEqualTo(User.class);
+            assertThat(created.getName()).isEqualTo(givenName);
+            assertThat(created.getEmail()).isEqualTo(givenEmail);
+            assertThat(created.getPassword()).isEqualTo(givenPassword);
+        }
+    }
 }
