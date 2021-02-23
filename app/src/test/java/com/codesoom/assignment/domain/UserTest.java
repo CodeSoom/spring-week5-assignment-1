@@ -29,5 +29,9 @@ public class UserTest {
     @Then("user가 올바르게 생성된다")
     public void userCreatedCorrectly() {
         assertThat(createdUser).isNotNull();
+        assertThat(createdUser.getId()).isEqualTo(id);
+        assertThat(createdUser.getName()).isEqualTo(name);
+        assertThat(createdUser.getMail()).isEqualTo(mail);
+        assertThat(createdUser.getPassword()).isEqualTo(password);
     }
 }
