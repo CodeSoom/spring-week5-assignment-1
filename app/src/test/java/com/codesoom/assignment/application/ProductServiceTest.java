@@ -87,7 +87,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("상품 목록을 반환한다 ")
+            @DisplayName("상품 목록을 반환한다")
             void it_returns_list() {
                 List<Product> products = productService.getProducts();
 
@@ -142,8 +142,6 @@ class ProductServiceTest {
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.getProduct(100L))
                         .isInstanceOf(ProductNotFoundException.class);
-
-                verify(productRepository).findById(100L);
             }
         }
     }
@@ -207,8 +205,6 @@ class ProductServiceTest {
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.updateProduct(100L, update))
                         .isInstanceOf(ProductNotFoundException.class);
-
-                verify(productRepository).findById(100L);
             }
         }
     }
@@ -248,8 +244,6 @@ class ProductServiceTest {
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.deleteProduct(100L))
                         .isInstanceOf(ProductNotFoundException.class);
-
-                verify(productRepository).findById(100L);
             }
         }
     }
