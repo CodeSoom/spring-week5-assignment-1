@@ -27,8 +27,8 @@ public class UserService {
         return findUser(id);
     }
 
-    public User createUser(UserCreateRequest userCreateRequest) {
-        return null;
+    public User createUser(UserCreateRequest createRequest) {
+        return userRepository.save(mapper.map(createRequest, User.class));
     }
 
     public User updateUser(Long id, UserUpdateRequest updateRequest) {

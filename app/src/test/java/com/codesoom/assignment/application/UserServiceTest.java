@@ -152,6 +152,12 @@ class UserServiceTest {
     @Nested
     @DisplayName("createUser")
     class Describe_createUser {
+        @BeforeEach
+        void setUp() {
+            given(userRepository.save(any(User.class)))
+                    .will(invocation -> invocation.<User>getArgument(0));
+        }
+
         @Test
         @DisplayName("생성된 회원을 리턴한다.")
         void it_return_the_created_user() {
