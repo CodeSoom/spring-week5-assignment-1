@@ -44,10 +44,20 @@ public class UserService {
         return UserResponseDto.of(user);
     }
 
+    /**
+     * 등록된 사용자 정보를 갱신하고, 생신된 정보를 리턴합니다.
+     * @param userId 등록된 사용자 id
+     * @param requestDto 갱신할 사용자 정보
+     * @return 갱신된 사용자 정보
+     */
     @Transactional
-    public UserResponseDto updateUser(long userId, UserUpdateRequestDto requestDto) {
-        // TODO: 갱신된 사용자 정보를 리턴한다.
-        return null;
+    public UserResponseDto updateUser(long userId,
+                                      UserUpdateRequestDto requestDto) throws UserNotFoundException {
+        User user = findUser(userId);
+
+        user.changeWith(mapper.map(requestDto, User.class));
+
+        return UserResponseDto.of(user);
     }
 
     /**

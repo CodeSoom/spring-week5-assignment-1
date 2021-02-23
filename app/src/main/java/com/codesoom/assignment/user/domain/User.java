@@ -48,4 +48,14 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    /**
+     * 사용자의 정보를 갱신합니다.
+     * @param source 사용자 갱신 정보
+     */
+    public void changeWith(User source) {
+        this.email = source.getEmail();
+        this.name = source.getName();
+        this.password = source.getPassword();
+    }
 }

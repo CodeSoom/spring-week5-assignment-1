@@ -7,9 +7,6 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-/**
- * 사용자의 정보를 관리합니다.
- */
 public interface JpaUserRepository
         extends UserRepository, CrudRepository<User, Long> {
     List<User> findAll();
