@@ -6,29 +6,15 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
+/*
+1. getAllUsers
+2. getUser
+3. createUser
+4. updateUser
+5. deleteUser
+ */
 class UserServiceTest {
-
-    @InjectMocks
-    UserRepository userRepository;
-
-    @Mock
-    UserService userService;
-
-    @Test
-    void createUser(){
-        User user = User.builder()
-                .email("wenodev@codesoo.com")
-                .name("weno")
-                .password("pw1234")
-                .build();
-
-        given(userService.createUser()).willReturn(List.of(User));
-
-    }
-
 }
