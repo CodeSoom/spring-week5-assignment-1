@@ -8,10 +8,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @DisplayName("UserService 클래스")
 class UserServiceTest {
@@ -19,6 +21,8 @@ class UserServiceTest {
     private UserService userService;
 
     private UserRepository userRepository = mock(UserRepository.class);
+
+    private Long existingId = 1L;
 
     private List<User> users;
     private User user1;
@@ -75,8 +79,35 @@ class UserServiceTest {
 
             @Test
             @DisplayName("비어있는 회원 목록을 리턴한다.")
-            void it_returns_all_user_list() {
+            void it_returns_empty_user_list() {
                 assertThat(userService.getUsers()).hasSize(0);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("getUser")
+    class Describe_getUser {
+        @Nested
+        @DisplayName("존재하는 회원 id가 주어진다면")
+        class Context_with_an_existing_user_id {
+            @BeforeEach
+            void setUp() {
+                given(userRepository.findById(existingId))
+                        .willReturn(Optional.of(user1));
+            }
+
+            @Test
+            @DisplayName("찾은 회원을 리턴한다.")
+            void it_returns_the_found_user() {
+                User foundUser = userService.getUser(existingId);
+
+                verify(userRepository).findById(existingId);
+
+                assertThat(foundUser.getId()).isEqualTo(user1.getId());
+                assertThat(foundUser.getName()).isEqualTo(user1.getName());
+                assertThat(foundUser.getEmail()).isEqualTo(user1.getEmail());
+                assertThat(foundUser.getPassword()).isEqualTo(user1.getPassword());
             }
         }
     }
