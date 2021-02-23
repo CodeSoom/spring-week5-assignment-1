@@ -32,4 +32,10 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public void changeWith(User source) {
+        this.name = source.name;
+        this.email = source.email;
+        this.password = source.password;
+    }
 }

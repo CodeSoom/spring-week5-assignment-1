@@ -54,15 +54,14 @@ public class UserService {
     /**
      * 주어진 id에 해당하는 회원을 찾은 후 수정합니다.
      *
-     * @param id 회원의 식별자
+     * @param id       회원의 식별자
      * @param userData 수정하려는 회원
      * @return 수정된 회원
      * @throws UserNotFoundException 주어진 id가 회원 목록에 없는 경우
      */
-    public User updateUser(Long id, UserData userData)
-            throws UserNotFoundException {
+    public User updateUser(Long id, UserData userData) {
         User user = findUser(id);
-        userRepository.delete(user);
+        user.changeWith(mapper.map(userData, User.class));
 
         return user;
     }
@@ -73,8 +72,8 @@ public class UserService {
      * @param id 회원의 식별자
      * @throws UserNotFoundException 주어진 id가 회원 목록에 없는 경우
      */
-    public User deleteUser(Long id) throws UserNotFoundException{
-        User user  = findUser(id);
+    public User deleteUser(Long id) throws UserNotFoundException {
+        User user = findUser(id);
         userRepository.delete(user);
 
         return user;
