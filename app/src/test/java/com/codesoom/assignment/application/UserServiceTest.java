@@ -16,6 +16,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -164,6 +165,35 @@ class UserServiceTest {
             void it_throws_exception() {
                 assertThrows(UserNotFoundException.class,
                         () -> userService.updateUser(notExistingId, userUpdateRequest));
+
+                verify(userRepository).findById(notExistingId);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteUser")
+    class Describe_deleteUser {
+        @Nested
+        @DisplayName("존재하는 회원 id가 주어진다면")
+        class Context_with_an_existing_user_id {
+            @Test
+            @DisplayName("회원을 삭제한다.")
+            void it_deletes_the_user() {
+                userService.deleteUser(existingId);
+
+                verify(userRepository).delete(any(User.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 id가 주어진다면")
+        class Context_with_not_existing_user_id {
+            @Test
+            @DisplayName("'회원을 찾을 수 없다' 는 예외가 발생한다.")
+            void it_throws_exception() {
+                assertThrows(UserNotFoundException.class,
+                        () -> userService.deleteUser(notExistingId));
 
                 verify(userRepository).findById(notExistingId);
             }

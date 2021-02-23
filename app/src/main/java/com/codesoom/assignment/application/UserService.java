@@ -37,4 +37,7 @@ public class UserService {
                 () -> new UserNotFoundException("존재하지 않는 회원 id가 주어졌으므로 회원을 찾을 수 없습니다. 문제의 id = " + id));
     }
 
+    public void deleteUser(Long id) {
+        
+    }
 }
