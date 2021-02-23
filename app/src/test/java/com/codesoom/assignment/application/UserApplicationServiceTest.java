@@ -46,8 +46,8 @@ public class UserApplicationServiceTest {
 
     @When("회원의 이름을 변경하는 경우")
     public void changeName() {
-        String newName = "Las";
-        changedUser = userApplicationService.changeName(newName);
+        newName = "Las";
+        changedUser = userApplicationService.changeName(createdUser.getId(), newName);
     }
 
     @Then("회원의 이름이 변경된다")

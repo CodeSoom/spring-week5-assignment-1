@@ -17,4 +17,11 @@ public class UserApplicationService {
         userRepository.save(user);
         return user;
     }
+
+    public User changeName(Long id, String newName) {
+        User user = userRepository.findById(id).get();
+        user.changeName(newName);
+        userRepository.save(user);
+        return user;
+    }
 }
