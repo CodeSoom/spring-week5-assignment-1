@@ -49,7 +49,6 @@ class UserMockMvcControllerTest {
     private static final String UPDATE_PASSWORD = "new_pass";
     private static final String UPDATE_EMAIL = "new@test.com";
 
-
     @Autowired
     private MockMvc mockMvc;
 
