@@ -1,4 +1,4 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.product.application;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.product.application.ProductService;

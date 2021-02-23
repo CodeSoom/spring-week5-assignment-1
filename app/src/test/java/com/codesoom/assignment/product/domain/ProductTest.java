@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.product.domain;
 
 import com.codesoom.assignment.product.domain.Product;
 import org.junit.jupiter.api.Test;
