@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain.user;
+package com.codesoom.assignment.user.domain;
 
 import lombok.AccessLevel;
 import lombok.Builder;
