@@ -4,15 +4,12 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+import org.mockito.Mockito;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 /*
@@ -24,19 +21,16 @@ import static org.mockito.Mockito.verify;
  */
 class UserServiceTest {
 
-    @InjectMocks
     private UserService userService;
-
-    @Mock
-    private UserRepository userRepository;
 
     @BeforeEach
     void setUp(){
-        MockitoAnnotations.initMocks(this);
+        userService = new UserService();
     }
 
     @Test
     void getAllUsers(){
+        List<User> users = userService.getAllUsers();
+        assertThat(users).isNotEmpty();
     }
-
 }
