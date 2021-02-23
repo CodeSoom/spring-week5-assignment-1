@@ -9,6 +9,7 @@ import java.util.Optional;
 
 public class InMemoryUserRepository implements UserRepository {
     private final Map<Long, User> map = new HashMap<>();
+    private Long lastId = 0L;
 
     @Override
     public void save(User user) {
@@ -22,6 +23,6 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public Long nextId() {
-        return 0L;
+        return lastId++;
     }
 }
