@@ -16,8 +16,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,6 +79,23 @@ class UserControllerTest {
                         .content("{\"name\":\"updatedName\",\"email\":\"updatedEmail\",\"password\":\"updatedPassword\"}"))
                         .andDo(print())
                         .andExpect(status().isOk());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete 메서드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("만약 저장되어 있는 유저의 아이디가 주어진다면")
+        class Context_WithExistedId {
+            private final Long givenExistedId = EXISTED_ID;
+
+            @Test
+            @DisplayName("주어진 아이디에 해당하는 객체를 삭제하고 해당 객체와 NO_CONTENT를 리턴한다")
+            void itDeletesUserAndReturnsUserAndNO_CONTENTHttpStatus() throws Exception {
+                mockMvc.perform(delete("/user/" + givenExistedId))
+                        .andExpect(status().isNoContent());
             }
         }
     }
