@@ -1,7 +1,6 @@
 package com.codesoom.assignment.global.error;
 
-import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.global.error.ErrorResponse;
+import com.codesoom.assignment.product.application.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

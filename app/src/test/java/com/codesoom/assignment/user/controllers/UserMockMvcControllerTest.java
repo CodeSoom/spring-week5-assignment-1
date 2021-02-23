@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.controllers;
 
+import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.dto.UserResponseDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -11,15 +12,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -52,12 +57,7 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                UserResponseDto product = UserResponseDto.builder()
-                        .id(USER_ID)
-                        .name(USER_NAME)
-                        .email(USER_EMAIL)
-                        .password(USER_PASSWORD)
-                        .build();
+                UserResponseDto product = getUserResponse();
 
                 users = Collections.singletonList(product);
 
@@ -86,5 +86,64 @@ class UserMockMvcControllerTest {
                         .andExpect(content().string(containsString("[]")));
             }
         }
+    }
+
+    @Nested
+    @DisplayName("GET /users/{id} 는")
+    class Describe_getUser {
+
+        @Nested
+        @DisplayName("등록된 사용자가 없으면")
+        class Context_without_user {
+
+            @BeforeEach
+            void setUp() {
+                given(userService.getUser(eq(NOT_EXIST_ID)))
+                        .willThrow(new UserNotFoundException(NOT_EXIST_ID));
+            }
+
+            @DisplayName("404 상태코드, Not Found 상태를 응답한다.")
+            @Test
+            void It_responds_not_found() throws Exception {
+                mockMvc.perform(get("/users/{id}", NOT_EXIST_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 사용자가 있으면")
+        class Context_with_user {
+            UserResponseDto responseDto;
+
+            @BeforeEach
+            void setUp() {
+                responseDto = getUserResponse();
+                given(userService.getUser(anyLong())).willReturn(responseDto);
+            }
+
+            @DisplayName("200 상태코드, OK 상태와 찾고자 하는 사용자를 응답한다.")
+            @Test
+            void it_responds_ok_with_user() throws Exception {
+                mockMvc.perform(get("/users/{id}", anyLong())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(objectMapper.writeValueAsString(responseDto)))
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("email").exists());
+            }
+        }
+    }
+
+    private UserResponseDto getUserResponse() {
+        return UserResponseDto.builder()
+                .id(USER_ID)
+                .name(USER_NAME)
+                .email(USER_EMAIL)
+                .password(USER_PASSWORD)
+                .build();
     }
 }

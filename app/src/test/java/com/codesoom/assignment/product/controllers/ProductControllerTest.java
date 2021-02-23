@@ -1,8 +1,7 @@
 package com.codesoom.assignment.product.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.product.application.ProductNotFoundException;
 import com.codesoom.assignment.product.application.ProductService;
-import com.codesoom.assignment.product.controllers.ProductController;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
