@@ -19,4 +19,9 @@ public class InMemoryUserRepository implements UserRepository {
     public Optional<User> findById(Long id) {
         return Optional.ofNullable(map.get(id));
     }
+
+    @Override
+    public Long nextId() {
+        return 0L;
+    }
 }
