@@ -1,8 +1,10 @@
 package com.codesoom.assignment.user.application;
 
+import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.dto.UserResponseDto;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -12,8 +14,10 @@ import java.util.List;
  * 사용자 정보를 다룬다.
  */
 @Service
+@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
+    private final UserRepository userRepository;
 
     public List<UserResponseDto> getUsers() {
         // TODO: 사용자의 목록을 리턴한다.
