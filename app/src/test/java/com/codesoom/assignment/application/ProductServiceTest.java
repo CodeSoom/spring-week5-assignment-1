@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,12 +25,10 @@ class ProductServiceTest {
     private static final String NAME = "뱀 장난감";
     private static final String MAKER = "야옹이네 장난감";
     private static final Integer PRICE = 3000;
-    private static final String IMAGE = "https://bit.ly/3qzXRME";
 
     private static final String UPDATE_NAME = "물고기 장난감";
     private static final String UPDATE_MAKER = "애옹이네 장난감";
     private static final Integer UPDATE_PRICE = 5000;
-    private static final String UPDATE_IMAGE = "https://bit.ly/2M4YXkw";
 
     private ProductService productService;
 
@@ -47,7 +46,6 @@ class ProductServiceTest {
                 .name(NAME)
                 .maker(MAKER)
                 .price(PRICE)
-                .image(IMAGE)
                 .build();
 
         given(productRepository.findAll()).willReturn(products);
@@ -66,14 +64,12 @@ class ProductServiceTest {
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
-        assertThat(product.getImage()).isEqualTo(IMAGE);
     }
 
-    void updateTest(Product update) {
+    void updateTest(ProductData update) {
         assertThat(update.getName()).isEqualTo(UPDATE_NAME);
         assertThat(update.getMaker()).isEqualTo(UPDATE_MAKER);
         assertThat(update.getPrice()).isEqualTo(UPDATE_PRICE);
-        assertThat(update.getImage()).isEqualTo(UPDATE_IMAGE);
     }
 
     @Nested
@@ -82,7 +78,7 @@ class ProductServiceTest {
         Product product;
 
         @Nested
-        @DisplayName("장난감이 존재한다면")
+        @DisplayName("상품이 존재한다면")
         class Context_with_product {
 
             @BeforeEach
@@ -91,7 +87,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("장난감 목록을 반환한다 ")
+            @DisplayName("상품 목록을 반환한다 ")
             void it_returns_list() {
                 List<Product> products = productService.getProducts();
 
@@ -104,7 +100,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("장난감이 존재하지 않는다면")
+        @DisplayName("상품이 존재하지 않는다면")
         class Context_without_product {
 
             @Test
@@ -123,11 +119,11 @@ class ProductServiceTest {
         Product product;
 
         @Nested
-        @DisplayName("등록된 장난감의 ID가 주어진다면")
+        @DisplayName("등록된 상품의 ID가 주어진다면")
         class Context_with_valid_id {
 
             @Test
-            @DisplayName("해당 ID를 갖는 장난감을 반환한다")
+            @DisplayName("해당 ID를 갖는 상품을 반환한다")
             void it_returns_product() {
                 product = productService.getProduct(1L);
 
@@ -138,11 +134,11 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("등록되지 않은 장난감의 ID가 주어진다면")
+        @DisplayName("등록되지 않은 상품의 ID가 주어진다면")
         class Context_with_invalid_id {
 
             @Test
-            @DisplayName("해당 장난감을 찾을 수 없다는 예외를 던진다")
+            @DisplayName("해당 상품을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.getProduct(100L))
                         .isInstanceOf(ProductNotFoundException.class);
@@ -155,14 +151,14 @@ class ProductServiceTest {
     @Nested
     @DisplayName("createProduct 메소드는")
     class Describe_createProduct {
-        Product product;
+        ProductData productData;
 
         @Test
-        @DisplayName("새로운 장난감을 등록한다")
+        @DisplayName("새로운 상품을 등록한다")
         void it_returns_product() {
-            product = new Product();
+            productData = new ProductData();
 
-            productService.createProduct(product);
+            productService.createProduct(productData);
 
             verify(productRepository).save(any(Product.class));
         }
@@ -171,27 +167,28 @@ class ProductServiceTest {
     @Nested
     @DisplayName("updateProduct 메소드는")
     class Describe_updateProduct {
-        Product update;
+        ProductData update;
 
         @Nested
-        @DisplayName("등록된 장난감의 ID가 주어진다면")
+        @DisplayName("등록된 상품의 ID가 주어진다면")
         class Context_with_valid_id_and_product {
 
             @BeforeEach
             void setUp() {
-                update = Product.builder()
+                update = ProductData.builder()
                         .name(UPDATE_NAME)
                         .maker(UPDATE_MAKER)
                         .price(UPDATE_PRICE)
-                        .image(UPDATE_IMAGE)
                         .build();
 
+                Product updatedProduct = productService.createProduct(update);
+
                 given(productRepository.findById(1L))
-                        .willReturn(Optional.of(update));
+                        .willReturn(Optional.of(updatedProduct));
             }
 
             @Test
-            @DisplayName("해당 ID를 갖는 장난감의 정보를 수정하고 반환한다")
+            @DisplayName("해당 ID를 갖는 상품의 정보를 수정하고 반환한다")
             void it_returns_updated_product() {
                 productService.updateProduct(1L, update);
 
@@ -202,11 +199,11 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("등록되지 않은 장난감의 ID가 주어진다면")
+        @DisplayName("등록되지 않은 상품의 ID가 주어진다면")
         class Context_with_invalid_id {
 
             @Test
-            @DisplayName("수정할 장난감을 찾을 수 없다는 예외를 던진다")
+            @DisplayName("수정할 상품을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.updateProduct(100L, update))
                         .isInstanceOf(ProductNotFoundException.class);
@@ -222,7 +219,7 @@ class ProductServiceTest {
         Product product;
 
         @Nested
-        @DisplayName("등록된 장난감의 ID가 주어진다면")
+        @DisplayName("등록된 상품의 ID가 주어진다면")
         class Context_with_valid_id {
 
             @BeforeEach
@@ -243,11 +240,11 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("등록되지 않은 장난감의 ID가 주어진다면")
+        @DisplayName("등록되지 않은 상품의 ID가 주어진다면")
         class Context_without_invalid_id {
 
             @Test
-            @DisplayName("삭제할 장난감을 찾을 수 없다는 예외를 던진다")
+            @DisplayName("삭제할 상품을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> productService.deleteProduct(100L))
                         .isInstanceOf(ProductNotFoundException.class);
