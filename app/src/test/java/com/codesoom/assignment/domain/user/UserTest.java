@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class UserTest {
-
+    private static final Long ID = 1L;
     private static final String NAME = "test";
     private static final String EMAIL = "test@test.com";
     private static final String PASSWORD = "test";
@@ -16,7 +16,18 @@ class UserTest {
 
     @BeforeEach
     void setUp() {
-        user = User.of(NAME, EMAIL, PASSWORD);
+        user = User.builder()
+                .id(ID)
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+    }
+
+    @DisplayName("getId은 식별자를 리턴한다")
+    @Test
+    void getId() {
+        assertThat(user.getId()).isEqualTo(ID);
     }
 
     @DisplayName("getName은 이름을 리턴한다")
