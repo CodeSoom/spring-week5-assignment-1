@@ -36,4 +36,9 @@ public class UserService {
         // TODO: 사용자 입력 정보를 저장하고 리턴한다.
         return null;
     }
+
+    public Long deleteUser(Long id) {
+        // TODO: 사용자 정보를 삭제한다.
+        return null;
+    }
 }

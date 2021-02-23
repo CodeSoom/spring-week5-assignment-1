@@ -259,7 +259,7 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.deleteProduct(anyLong())).willReturn(getUserResponse());
+                given(userService.deleteUser(anyLong())).willReturn(USER_ID);
             }
 
             @DisplayName("204 상태코드와 NO CONTENT 상태를 삭제된 유저 정보를 응답한다.")
