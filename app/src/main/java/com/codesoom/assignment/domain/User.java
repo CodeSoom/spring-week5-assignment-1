@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -23,6 +24,7 @@ public class User {
     @Column
     private String password;
 
+    @Builder
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
