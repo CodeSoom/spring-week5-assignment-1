@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.dto;
 
+import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,18 +18,21 @@ public class UserUpdateRequestDto {
      * 사용자 이름.
      */
     @NotBlank(message = "이름은 필수값입니다.")
+    @Mapping("name")
     private String name;
 
     /**
      * 사용자 이메일.
      */
     @NotBlank(message = "이메일은 필수값입니다.")
+    @Mapping("email")
     private String email;
 
     /**
      * 사용자 비밀번호.
      */
     @NotBlank(message = "비밀번호는 필수값입니다.")
+    @Mapping("password")
     private String password;
 
     /**

@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.application;
 
+import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.dto.UserResponseDto;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 사용자 정보를 다룬다.
@@ -22,8 +24,10 @@ public class UserService {
     private final Mapper mapper;
 
     public List<UserResponseDto> getUsers() {
-        // TODO: 사용자의 목록을 리턴한다.
-        return null;
+        return userRepository.findAll()
+                .stream()
+                .map(UserResponseDto::of)
+                .collect(Collectors.toList());
     }
 
     public UserResponseDto getUser(Long userId) {
@@ -39,8 +43,10 @@ public class UserService {
 
     @Transactional
     public UserResponseDto createUser(UserSaveRequestDto requestDto) {
-        // TODO: 사용자 입력 정보를 저장하고 리턴한다.
-        return null;
+        User user = mapper.map(requestDto, User.class);
+        User saved = userRepository.save(user);
+
+        return UserResponseDto.of(saved);
     }
 
     public Long deleteUser(Long id) {
