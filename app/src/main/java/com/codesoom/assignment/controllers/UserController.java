@@ -2,15 +2,20 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -32,8 +37,9 @@ public class UserController {
     }
 
     @PostMapping
-    public UserResponse create() {
-        return null;
+    @ResponseStatus(HttpStatus.CREATED)
+    public UserResponse create(@RequestBody @Valid UserCreateRequest createRequest) {
+        return userService.createUser(createRequest);
     }
 
 }
