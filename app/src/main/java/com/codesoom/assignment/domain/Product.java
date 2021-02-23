@@ -33,4 +33,9 @@ public class Product {
         this.price = source.price;
         this.imageUrl = source.imageUrl;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s 장난감", name);
+    }
 }
