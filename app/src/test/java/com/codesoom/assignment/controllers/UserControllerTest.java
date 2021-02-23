@@ -23,6 +23,8 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -290,6 +292,44 @@ class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidUserUpdateRequest)))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE 요청은")
+    class Describe_DELETE {
+        @Nested
+        @DisplayName("존재하는 회원 id가 주어진다면")
+        class Context_with_an_existing_user_id {
+            @Test
+            @DisplayName("상태코드 204를 응답한다.")
+            void it_responds_status_code_204() throws Exception {
+                mockMvc.perform(delete("/users/{id}", existingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 id가 주어진다면")
+        class Context_with_not_existing_user_id {
+            @BeforeEach
+            void setUp() {
+                willThrow(new UserNotFoundException())
+                        .given(userService).deleteUser(notExistingId);
+            }
+
+            @Test
+            @DisplayName("에러메시지와 상태코드 404를 응답한다.")
+            void it_responds_the_error_message_and_status_code_404() throws Exception {
+                mockMvc.perform(delete("/users/{id}", notExistingId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("name").doesNotExist())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isNotFound());
             }
         }
     }

@@ -8,6 +8,7 @@ import com.codesoom.assignment.dto.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,6 +50,11 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody @Valid UserUpdateRequest updateRequest) {
         return userService.updateUser(id, updateRequest);
+    }
+
+    @DeleteMapping("{id}")
+    public UserResponse delete(@PathVariable Long id) {
+        return null;
     }
 
 }
