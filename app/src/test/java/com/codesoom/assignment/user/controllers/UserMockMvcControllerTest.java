@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.controllers;
 
+import com.codesoom.assignment.product.application.ProductNotFoundException;
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.dto.UserResponseDto;
@@ -19,10 +20,12 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -131,6 +134,63 @@ class UserMockMvcControllerTest {
                         .accept(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().string(objectMapper.writeValueAsString(responseDto)))
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("email").exists());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Patch /users/{id} 는")
+    class Describe_updateUser {
+        UserUpdateRequestDto requestDto;
+
+        @Nested
+        @DisplayName("갱신할 사용자가 없으면")
+        class Context_without_user {
+
+            @BeforeEach
+            void setUp() {
+                requestDto = UserUpdateRequestDto.builder()
+                        .name(NAME)
+                        .email(EMAIL)
+                        .password(PRICE)
+                        .build();
+                given(userService.updateUser(eq(NOT_EXIST_ID), any(UserNotFoundException.class)))
+                        .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+            }
+
+            @DisplayName("404 상태코드, Not Found 상태를 응답한다.")
+            @Test
+            void It_responds_not_found() throws Exception {
+                mockMvc.perform(patch("/users/{id}", NOT_EXIST_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("갱신할 사용자가 존재하면")
+        class Context_with_product {
+
+            @BeforeEach
+            void setUp() {
+                requestDto = new ProductUpdateRequestDto(NAME, MAKER, PRICE, IMAGE_URL);
+                UserResponseDto responseDto = getUserResponse();
+                given(userService.updateProduct(anyLong(), any(UserUpdateRequestDto.class)))
+                        .willReturn(responseDto);
+            }
+
+            @DisplayName("200 상태코드, OK 상태와 갱신된 사용자 정보를 응답한다.")
+            @Test
+            void It_responds_product_id() throws Exception {
+                mockMvc.perform(patch("/users/{id}", USER_ID)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .andExpect(status().isOk())
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("email").exists());
