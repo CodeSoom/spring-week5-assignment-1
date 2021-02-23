@@ -18,4 +18,12 @@ public class UserService {
     public User create(User user) {
         return userRepository.save(user);
     }
+
+    public void clearData() {
+        userRepository.deleteAll();
+    }
+
+    public User update(Long id, User user) {
+        return user;
+    }
 }
