@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserCreateRequest;
+import com.codesoom.assignment.dto.UserResponse;
 import com.codesoom.assignment.dto.UserUpdateRequest;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -124,14 +125,13 @@ class UserServiceTest {
             @Test
             @DisplayName("찾은 회원을 리턴한다.")
             void it_returns_the_found_user() {
-                User foundUser = userService.getUser(existingId);
+                UserResponse foundUser = userService.getUser(existingId);
 
                 verify(userRepository).findById(existingId);
 
                 assertThat(foundUser.getId()).isEqualTo(user1.getId());
                 assertThat(foundUser.getName()).isEqualTo(user1.getName());
                 assertThat(foundUser.getEmail()).isEqualTo(user1.getEmail());
-                assertThat(foundUser.getPassword()).isEqualTo(user1.getPassword());
             }
         }
 
