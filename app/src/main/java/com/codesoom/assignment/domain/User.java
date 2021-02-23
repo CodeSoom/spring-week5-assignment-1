@@ -32,4 +32,10 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public void change(User user) {
+        this.name = user.name;
+        this.email = user.email;
+        this.password = user.password;
+    }
 }
