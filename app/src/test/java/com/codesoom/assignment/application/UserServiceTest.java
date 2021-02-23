@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,11 +12,13 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
 @ActiveProfiles("test")
 @DisplayName("UserService 클래스")
 class UserServiceTest {
+    final Long NOT_EXIST_ID = 1000L;
     final String NAME = "My Name";
     final String EMAIL = "my@gmail.com";
     final String PASSWORD = "My Password";
@@ -70,6 +73,45 @@ class UserServiceTest {
                 assertThat(user.getName()).isEqualTo(NAME);
                 assertThat(user.getEmail()).isEqualTo(EMAIL);
                 assertThat(user.getPassword()).isEqualTo(PASSWORD);
+            }
+        }
+    }
+
+    @DisplayName("findById()")
+    @Nested
+    class Describe_findById {
+        @Nested
+        @DisplayName("존재하는 user id가 주어진다면")
+        class Context_with_exist_user_id {
+            Long givenUserId;
+
+            @BeforeEach
+            void setUp() {
+                User source = createUser();
+                User givenUser = userService.create(source);
+                givenUserId = givenUser.getId();
+            }
+
+            @DisplayName("주어진 id와 일치하는 user를 반환한다")
+            @Test
+            void it_returns_user() {
+                User user = userService.findById(givenUserId);
+
+                assertThat(user.getName()).isEqualTo(NAME);
+                assertThat(user.getEmail()).isEqualTo(EMAIL);
+                assertThat(user.getPassword()).isEqualTo(PASSWORD);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 user id와 user가 주어진다면")
+        class Context_with_not_exist_user_id {
+            Long givenUserId = NOT_EXIST_ID;
+
+            @DisplayName("user를 찾을수 없다는 예외를 던진다")
+            @Test
+            void it_returns_not_fount_exception() {
+                assertThrows(UserNotFoundException.class, () -> userService.findById(givenUserId));
             }
         }
     }
