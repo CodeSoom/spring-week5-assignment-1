@@ -16,18 +16,28 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User create(User user) {
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
-    public User findById(Long id) {
+    public User findUser(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User update(Long id, User source) {
-        User user = findById(id);
+    public User updateUser(Long id, User source) {
+        User user = findUser(id);
+
         user.update(source);
-        return userRepository.save(user);
+
+        return user;
+    }
+
+    public User deleteUser(Long id) {
+        User user = findUser(id);
+
+        userRepository.delete(user);
+
+        return user;
     }
 
     public void clearData() {

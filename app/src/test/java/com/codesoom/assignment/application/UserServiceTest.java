@@ -39,12 +39,18 @@ class UserServiceTest {
                 .build();
     }
 
+    void verifyUser(User user) {
+        assertThat(user.getName()).isEqualTo(NAME);
+        assertThat(user.getEmail()).isEqualTo(EMAIL);
+        assertThat(user.getPassword()).isEqualTo(PASSWORD);
+    }
+
     @AfterEach
     void tearDown() {
         userService.clearData();
     }
 
-    @DisplayName("create()")
+    @DisplayName("createUser()")
     @Nested
     class Describe_create {
         @Nested
@@ -62,22 +68,19 @@ class UserServiceTest {
             }
 
             User subject() {
-                return userService.create(givenUser);
+                return userService.createUser(givenUser);
             }
 
             @DisplayName("생성된 user를 반환한다")
             @Test
             void it_returns_user() {
                 User user = subject();
-
-                assertThat(user.getName()).isEqualTo(NAME);
-                assertThat(user.getEmail()).isEqualTo(EMAIL);
-                assertThat(user.getPassword()).isEqualTo(PASSWORD);
+                verifyUser(user);
             }
         }
     }
 
-    @DisplayName("findById()")
+    @DisplayName("findUser()")
     @Nested
     class Describe_findById {
         @Nested
@@ -88,18 +91,15 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 User source = createUser();
-                User givenUser = userService.create(source);
+                User givenUser = userService.createUser(source);
                 givenUserId = givenUser.getId();
             }
 
             @DisplayName("주어진 id와 일치하는 user를 반환한다")
             @Test
             void it_returns_user() {
-                User user = userService.findById(givenUserId);
-
-                assertThat(user.getName()).isEqualTo(NAME);
-                assertThat(user.getEmail()).isEqualTo(EMAIL);
-                assertThat(user.getPassword()).isEqualTo(PASSWORD);
+                User user = userService.findUser(givenUserId);
+                verifyUser(user);
             }
         }
 
@@ -111,16 +111,16 @@ class UserServiceTest {
             @DisplayName("user를 찾을수 없다는 예외를 던진다")
             @Test
             void it_returns_not_fount_exception() {
-                assertThrows(UserNotFoundException.class, () -> userService.findById(givenUserId));
+                assertThrows(UserNotFoundException.class, () -> userService.findUser(givenUserId));
             }
         }
     }
 
-    @DisplayName("update()")
+    @DisplayName("updateUser()")
     @Nested
     class Describe_update {
         User subject(Long id, User source) {
-            return userService.update(id, source);
+            return userService.updateUser(id, source);
         }
 
         @Nested
@@ -132,7 +132,7 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 User givenUser = createUser();
-                givenId = userService.create(givenUser).getId();
+                givenId = userService.createUser(givenUser).getId();
                 source = User.builder()
                         .name(UPDATE_NAME)
                         .email(UPDATE_EMAIL)
@@ -171,6 +171,45 @@ class UserServiceTest {
             @Test
             void it_returns_not_fount_exception() {
                 assertThrows(UserNotFoundException.class, () -> subject(givenId, source));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteUser()")
+    class Describe_Delete {
+        User subject(Long id) {
+            return userService.deleteUser(id);
+        }
+
+        @Nested
+        @DisplayName("존재하는 user id와 user가 주어진다면")
+        class Context_with_exist_user_id {
+            Long givenId;
+
+            @BeforeEach
+            void setUp() {
+                User givenUser = createUser();
+                givenId = userService.createUser(givenUser).getId();
+            }
+
+            @DisplayName("삭제된 user를 반환한다")
+            @Test
+            void it_returns_user() {
+                User user = subject(givenId);
+                verifyUser(user);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 user id와 user가 주어진다면")
+        class Context_with_not_exist_user_id {
+            Long givenId = NOT_EXIST_ID;
+
+            @DisplayName("user를 찾을수 없다는 예외를 던진다")
+            @Test
+            void it_returns_not_fount_exception() {
+                assertThrows(UserNotFoundException.class, () -> subject(givenId));
             }
         }
     }
