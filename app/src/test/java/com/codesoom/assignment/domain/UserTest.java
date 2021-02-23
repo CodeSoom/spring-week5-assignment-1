@@ -49,4 +49,9 @@ class UserTest {
         assertThat(user.getEmail()).isEqualTo(givenChangedEmail);
         assertThat(user.getPassword()).isEqualTo(givenChangedPassword);
     }
+
+    @Test
+    void toStringTest() {
+        assertThat(user.toString()).isEqualTo("");
+    }
 }
