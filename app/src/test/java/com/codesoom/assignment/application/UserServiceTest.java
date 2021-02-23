@@ -8,11 +8,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 
 /*
 1. getAllUsers
@@ -23,8 +24,11 @@ import static org.mockito.BDDMockito.given;
  */
 class UserServiceTest {
 
-    @Mock
+    @InjectMocks
     private UserService userService;
+
+    @Mock
+    private UserRepository userRepository;
 
     @BeforeEach
     void setUp(){
@@ -33,8 +37,17 @@ class UserServiceTest {
 
     @Test
     void getAllUsers(){
-        List<User> users = userService.getAllUsers();
-        assertThat(users).isEmpty();
+        User mockUser = User.builder()
+                .email("wenodev@codesoom.com")
+                .name("weno")
+                .password("pwd1234")
+                .build();
+        List<User> users = new ArrayList<>();
+        users.add(mockUser);
+
+        given(userRepository.findAll()).willReturn(users);
+
+        assertThat(users.get(0).getName()).isEqualTo("weno");
     }
 
 }
