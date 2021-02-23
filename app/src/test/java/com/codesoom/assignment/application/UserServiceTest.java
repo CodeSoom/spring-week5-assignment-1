@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -23,6 +25,7 @@ class UserServiceTest {
     private UserRepository userRepository = mock(UserRepository.class);
 
     private Long existingId = 1L;
+    private Long notExistingId = 100L;
 
     private List<User> users;
     private User user1;
@@ -108,6 +111,25 @@ class UserServiceTest {
                 assertThat(foundUser.getName()).isEqualTo(user1.getName());
                 assertThat(foundUser.getEmail()).isEqualTo(user1.getEmail());
                 assertThat(foundUser.getPassword()).isEqualTo(user1.getPassword());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 id가 주어진다면")
+        class Context_with_not_existing_user_id {
+            @BeforeEach
+            void setUp() {
+                given(userRepository.findById(existingId))
+                        .willReturn(Optional.empty());
+            }
+
+            @Test
+            @DisplayName("'회원을 찾을 수 없다' 는 예외가 발생한다.")
+            void it_throws_exception() {
+                assertThrows(UserNotFoundException.class,
+                        () -> userService.getUser(notExistingId));
+
+                verify(userRepository).findById(notExistingId);
             }
         }
     }
