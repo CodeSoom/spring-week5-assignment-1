@@ -7,8 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 /**
- * 사용자 비지니스 로직
- * @Author wenodev
+ * 사용자 비지니스 로직을 제공합니다.
  */
 @Service
 public class UserService {
