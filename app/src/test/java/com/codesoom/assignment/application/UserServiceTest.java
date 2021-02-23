@@ -63,6 +63,22 @@ class UserServiceTest {
                 assertThat(userService.getUsers()).hasSize(2);
             }
         }
+
+        @Nested
+        @DisplayName("저장된 회원이 없다면")
+        class Context_without_users {
+            @BeforeEach
+            void setUp() {
+                given(userRepository.findAll())
+                        .willReturn(List.of());
+            }
+
+            @Test
+            @DisplayName("비어있는 회원 목록을 리턴한다.")
+            void it_returns_all_user_list() {
+                assertThat(userService.getUsers()).hasSize(0);
+            }
+        }
     }
 
 }
