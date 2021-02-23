@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,8 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        return userRepository.findById(id).get();
+        return userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException("존재하지 않는 회원 id가 주어졌으므로 회원을 찾을 수 없습니다. 문제의 id = " + id));
     }
 
 }
