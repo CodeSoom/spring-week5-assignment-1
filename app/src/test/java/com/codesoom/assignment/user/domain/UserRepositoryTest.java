@@ -118,6 +118,51 @@ class UserRepositoryTest {
         }
     }
 
+    @Nested
+    @DisplayName("delete 메서드는")
+    class Describe_delete {
+
+        @Nested
+        @DisplayName("존재하는 사용자가 주어지면")
+        class Context_with_exist_user {
+            User existedUser;
+
+            @BeforeEach
+            void setUp() {
+                existedUser = userRepository.save(generateUser("test1@test.com"));
+            }
+
+            @Test
+            @DisplayName("사용자를 삭제한다.")
+            void It_deletes_user() {
+                userRepository.delete(existedUser);
+
+                assertThat(userRepository.findAll()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 사용자가 주어지면")
+        class Context_with_not_exist_user {
+            User notExistedUser;
+
+            @BeforeEach
+            void setUp() {
+                userRepository.save(generateUser("test1@test.com"));
+                notExistedUser = User.builder().build();
+            }
+
+            @Test
+            @DisplayName("사용자를 삭제한다.")
+            void It_deletes_noting() {
+                userRepository.delete(notExistedUser);
+
+                assertThat(userRepository.findAll()).hasSize(1);
+            }
+        }
+    }
+
+
     private User generateUser(String email) {
         return User.builder()
                 .name("test")
