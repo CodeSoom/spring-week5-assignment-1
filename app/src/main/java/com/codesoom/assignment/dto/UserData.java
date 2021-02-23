@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,5 +29,13 @@ public class UserData {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User toUser() {
+        return User.builder()
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
     }
 }

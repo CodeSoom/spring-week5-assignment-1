@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,8 +32,8 @@ class UserServiceTest {
     private UserService userService;
 
     //subject
-    User createUser() {
-        return User.builder()
+    UserData createUser() {
+        return UserData.builder()
                 .name(NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
@@ -56,11 +57,11 @@ class UserServiceTest {
         @Nested
         @DisplayName("유저 정보가 주어진다면")
         class Context_with_user {
-            User givenUser;
+            UserData givenUser;
 
             @BeforeEach
             void setUp() {
-                givenUser = User.builder()
+                givenUser = UserData.builder()
                         .name(NAME)
                         .email(EMAIL)
                         .password(PASSWORD)
@@ -90,7 +91,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                User source = createUser();
+                UserData source = createUser();
                 User givenUser = userService.createUser(source);
                 givenUserId = givenUser.getId();
             }
@@ -131,7 +132,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                User givenUser = createUser();
+                UserData givenUser = createUser();
                 givenId = userService.createUser(givenUser).getId();
                 source = User.builder()
                         .name(UPDATE_NAME)
@@ -189,7 +190,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                User givenUser = createUser();
+                UserData givenUser = createUser();
                 givenId = userService.createUser(givenUser).getId();
             }
 

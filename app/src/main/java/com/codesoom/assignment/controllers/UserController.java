@@ -22,10 +22,6 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody UserData userData) {
-        return User.builder()
-                .name(userData.getName())
-                .email(userData.getEmail())
-                .password(userData.getPassword())
-                .build();
+        return userService.createUser(userData);
     }
 }
