@@ -3,7 +3,7 @@ package com.codesoom.assignment.domain;
 import java.util.Optional;
 
 public interface UserRepository {
-    Optional<User> findById();
+    Optional<User> findById(Long id);
 
     User save(User user);
 
