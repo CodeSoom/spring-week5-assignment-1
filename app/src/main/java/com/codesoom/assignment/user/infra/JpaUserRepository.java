@@ -2,13 +2,14 @@ package com.codesoom.assignment.user.infra;
 
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
-@Primary
+/**
+ * 사용자의 정보를 관리합니다.
+ */
 public interface JpaUserRepository
         extends UserRepository, CrudRepository<User, Long> {
     List<User> findAll();
