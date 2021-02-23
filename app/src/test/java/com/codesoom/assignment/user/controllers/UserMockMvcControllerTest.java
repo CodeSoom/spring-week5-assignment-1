@@ -26,6 +26,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -227,6 +228,46 @@ class UserMockMvcControllerTest {
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("email").exists());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /users/{id} 는")
+    class Describe_deleteUser {
+
+        @Nested
+        @DisplayName("삭제 대상 사용자가 없으면")
+        class Context_without_user {
+            @BeforeEach
+            void setUp() {
+                given(userService.deleteUser(anyLong()))
+                        .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+            }
+
+            @DisplayName("404 상태코드와 Not Found 상태를 응답한다.")
+            @Test
+            void It_responds_not_found() throws Exception {
+                mockMvc.perform(delete("/users/{id}", anyLong()))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("삭제 대상인 상품이 존재하면")
+        class Context_with_user {
+
+            @BeforeEach
+            void setUp() {
+                given(userService.deleteProduct(anyLong())).willReturn(getUserResponse());
+            }
+
+            @DisplayName("204 상태코드와 NO CONTENT 상태를 삭제된 유저 정보를 응답한다.")
+            @Test
+            void It_responds_no_content_with_user() throws Exception {
+                mockMvc.perform(delete("/users/{id}", anyLong())
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andExpect(status().isNoContent());
             }
         }
     }
