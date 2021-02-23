@@ -1,5 +1,7 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -36,6 +39,7 @@ class UserServiceTest {
 
         given(userRepository.findAll()).willReturn(List.of(user));
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(1000L)).willThrow(new UserNotFoundException(1L));
 
     }
 
@@ -47,9 +51,15 @@ class UserServiceTest {
     }
 
     @Test
-    void getUser(){
+    void getUserWithExistedId(){
         User user = userService.getUser(1L);
         assertThat(user.getName()).isEqualTo("weno");
+    }
+
+    @Test
+    void getUserWithNotExistedId(){
+        assertThatThrownBy(()-> userService.getUser(1000L))
+                .isInstanceOf(UserNotFoundException.class);
     }
 
 }
