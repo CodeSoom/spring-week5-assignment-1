@@ -28,7 +28,7 @@ class UserRepositoryTest {
     @DisplayName("findAll 메서드는")
     class Describe_findAll {
         @Nested
-        @DisplayName("저장된 사용자가 있다면")
+        @DisplayName("등록된 사용자가 있다면")
         class Context_with_users {
 
             @BeforeEach
@@ -48,7 +48,7 @@ class UserRepositoryTest {
         }
 
         @Nested
-        @DisplayName("저장된 사용자가 없다면")
+        @DisplayName("등록된 사용자가 없다면")
         class Context_without_users {
 
             @Test
@@ -101,6 +101,20 @@ class UserRepositoryTest {
 
                 assertThat(user.isEmpty()).isTrue();
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("save 메서드는")
+    class Describe_save {
+        @DisplayName("사용자을 등록하고, 등록된 사용자를 리턴한다.")
+        @Test
+        void It_save_user_and_returns_saved_user() {
+            User expected = generateUser("test1@test.com");
+
+            User actual = userRepository.save(expected);
+
+            assertThat(actual).isEqualTo(expected);
         }
     }
 
