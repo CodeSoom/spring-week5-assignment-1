@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -16,19 +15,12 @@ public class User {
     @Id
     @GeneratedValue
     private Long id;
-
-    @NotBlank
     private String name;
-
-    @NotBlank
     private String email;
-
-    @NotBlank
     private String password;
 
     @Builder
-    public User(@NotBlank String name, @NotBlank String email,
-                @NotBlank String password) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
