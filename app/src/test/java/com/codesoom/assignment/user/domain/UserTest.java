@@ -31,4 +31,27 @@ public class UserTest {
         );
     }
 
+    @Test
+    @DisplayName("회원을 수정한다.")
+    void updateUser() {
+        User user = User.builder()
+                .id(1L)
+                .name("name")
+                .email("email")
+                .password("12345678")
+                .build();
+
+        User source = User.builder()
+                .name("new name")
+                .password("87654321")
+                .build();
+
+        User changedUser = user.changeWith(source);
+
+        assertAll(
+                () -> assertThat(changedUser.getName()).isEqualTo(source.getName()),
+                () -> assertThat(changedUser.getPassword()).isEqualTo(source.getPassword())
+        );
+    }
+
 }
