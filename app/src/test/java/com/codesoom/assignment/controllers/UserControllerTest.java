@@ -2,7 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -31,6 +33,9 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    private Mapper dozerMapper;
+
     @MockBean
     UserService userService;
 
@@ -54,7 +59,8 @@ class UserControllerTest {
         class Context_exist_user {
             @BeforeEach
             void setUp() {
-                given(userService.createUser(any(User.class)));
+                given(userService.createUser(any(UserDto.class)))
+                        .willReturn(dozerMapper.map(user,UserDto.class));
             }
 
             @Test

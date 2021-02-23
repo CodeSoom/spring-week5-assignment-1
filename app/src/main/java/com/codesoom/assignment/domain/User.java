@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 유저 엔티티.
+ */
 @Getter
 @Entity
 @NoArgsConstructor
