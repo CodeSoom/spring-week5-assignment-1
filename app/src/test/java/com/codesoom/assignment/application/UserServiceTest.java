@@ -23,12 +23,11 @@ class UserServiceTest {
 
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
-    private User user;
     @BeforeEach
     void setUp() {
         userService = new UserService(userRepository);
 
-        user = User.builder()
+        User user = User.builder()
                 .id(1L)
                 .name("weno")
                 .password("weno@codesoom.com")
@@ -36,6 +35,7 @@ class UserServiceTest {
                 .build();
 
         given(userRepository.findAll()).willReturn(List.of(user));
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
 
     }
 
@@ -48,7 +48,8 @@ class UserServiceTest {
 
     @Test
     void getUser(){
-        User user = userService.getUser();
+        User user = userService.getUser(1L);
+        assertThat(user.getName()).isEqualTo("weno");
     }
 
 }
