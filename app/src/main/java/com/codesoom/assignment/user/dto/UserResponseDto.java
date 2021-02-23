@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -29,6 +30,7 @@ public class UserResponseDto {
     /**
      * 사용자 비밀번호.
      */
+    @JsonIgnore
     private String password;
 
     @Builder
