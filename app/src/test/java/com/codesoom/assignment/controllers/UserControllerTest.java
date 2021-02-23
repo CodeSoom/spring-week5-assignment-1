@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -79,6 +80,8 @@ class UserControllerTest {
                         .content("{\"name\":\"updatedName\",\"email\":\"updatedEmail\",\"password\":\"updatedPassword\"}"))
                         .andDo(print())
                         .andExpect(status().isOk());
+
+                verify(userService).updateUser(eq(givenExistedId), any(User.class));
             }
         }
     }
@@ -95,7 +98,10 @@ class UserControllerTest {
             @DisplayName("주어진 아이디에 해당하는 객체를 삭제하고 해당 객체와 NO_CONTENT를 리턴한다")
             void itDeletesUserAndReturnsUserAndNO_CONTENTHttpStatus() throws Exception {
                 mockMvc.perform(delete("/user/" + givenExistedId))
+                        .andDo(print())
                         .andExpect(status().isNoContent());
+
+                verify(userService).deleteUser(givenExistedId);
             }
         }
     }

@@ -13,4 +13,8 @@ public class UserService {
     public User updateUser(Long id, User source) {
         return null;
     }
+
+    public User deleteUser(Long id) {
+        return null;
+    }
 }
