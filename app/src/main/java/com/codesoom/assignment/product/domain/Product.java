@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.product.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
