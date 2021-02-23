@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserUpdateRequest;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -36,6 +37,7 @@ class UserServiceTest {
     private User user2;
 
     private UserUpdateRequest userUpdateRequest;
+    private UserCreateRequest userCreateRequest;
 
     @BeforeEach
     void setUp() {
@@ -55,6 +57,12 @@ class UserServiceTest {
                 .name("이름2")
                 .email("이메일2")
                 .password("password2")
+                .build();
+
+        userCreateRequest = userCreateRequest.builder()
+                .name("새 이름")
+                .email("newEmail@example.com")
+                .password("12345678")
                 .build();
 
         userUpdateRequest = userUpdateRequest.builder()
@@ -138,6 +146,20 @@ class UserServiceTest {
 
                 verify(userRepository).findById(notExistingId);
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("createUser")
+    class Describe_createUser {
+        @Test
+        @DisplayName("생성된 회원을 리턴한다.")
+        void it_return_the_created_user() {
+            User createdUser = userService.createUser(userCreateRequest);
+
+            assertThat(createdUser.getName()).isEqualTo(userCreateRequest.getName());
+            assertThat(createdUser.getEmail()).isEqualTo(userCreateRequest.getEmail());
+            assertThat(createdUser.getPassword()).isEqualTo(userCreateRequest.getPassword());
         }
     }
 

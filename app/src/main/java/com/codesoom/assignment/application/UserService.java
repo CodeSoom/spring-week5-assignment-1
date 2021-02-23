@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserUpdateRequest;
 import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +27,10 @@ public class UserService {
         return findUser(id);
     }
 
+    public User createUser(UserCreateRequest userCreateRequest) {
+        return null;
+    }
+
     public User updateUser(Long id, UserUpdateRequest updateRequest) {
         User user = findUser(id);
 
@@ -42,5 +47,5 @@ public class UserService {
 
         userRepository.delete(user);
     }
-    
+
 }
