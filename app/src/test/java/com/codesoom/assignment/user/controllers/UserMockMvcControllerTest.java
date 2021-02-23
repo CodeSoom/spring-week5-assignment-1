@@ -160,7 +160,11 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                requestDto = new UserUpdateRequestDto(UPDATE_NAME, UPDATE_EMAIL, UPDATE_PASSWORD);
+                requestDto = UserUpdateRequestDto.builder()
+                        .name(USER_NAME)
+                        .email(USER_EMAIL)
+                        .password(USER_PASSWORD)
+                        .build();
                 given(userService.updateUser(eq(NOT_EXIST_ID), any(UserUpdateRequestDto.class)))
                         .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
@@ -182,7 +186,11 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                requestDto = new UserUpdateRequestDto(UPDATE_NAME, UPDATE_EMAIL, UPDATE_PASSWORD);
+                requestDto = requestDto = UserUpdateRequestDto.builder()
+                        .name(USER_NAME)
+                        .email(USER_EMAIL)
+                        .password(USER_PASSWORD)
+                        .build();
                 UserResponseDto responseDto = getUserResponse();
                 given(userService.updateUser(anyLong(), any(UserUpdateRequestDto.class)))
                         .willReturn(responseDto);
@@ -212,7 +220,11 @@ class UserMockMvcControllerTest {
         class Context_with_user {
             @BeforeEach
             void setUp() {
-                requestDto = new UserSaveRequestDto(USER_NAME, USER_EMAIL, USER_PASSWORD);
+                requestDto = UserSaveRequestDto.builder()
+                        .name(USER_NAME)
+                        .email(USER_EMAIL)
+                        .password(USER_PASSWORD)
+                        .build();
                 UserResponseDto responseDto = getUserResponse();
                 given(userService.createUser(any(UserSaveRequestDto.class)))
                         .willReturn(responseDto);
