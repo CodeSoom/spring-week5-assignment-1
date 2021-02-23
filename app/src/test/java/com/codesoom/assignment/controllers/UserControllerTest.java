@@ -3,7 +3,9 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -17,8 +19,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +33,9 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
     @MockBean
     private UserService userService;
 
@@ -38,6 +45,9 @@ class UserControllerTest {
     private List<User> users;
     private User user1;
     private User user2;
+
+    private UserCreateRequest validUserCreateRequest;
+    private UserCreateRequest invalidUserCreateRequest;
     private UserResponse userResponse;
 
     @BeforeEach
@@ -54,6 +64,18 @@ class UserControllerTest {
                 .name("이름2")
                 .email("이메일2")
                 .password("password2")
+                .build();
+
+        validUserCreateRequest = UserCreateRequest.builder()
+                .name("새 이름")
+                .email("newEmail@example.com")
+                .password("12345678")
+                .build();
+
+        invalidUserCreateRequest = UserCreateRequest.builder()
+                .name("")
+                .email("")
+                .password("")
                 .build();
 
         userResponse = UserResponse.builder()
@@ -149,6 +171,47 @@ class UserControllerTest {
                         .andExpect(jsonPath("name").doesNotExist())
                         .andExpect(jsonPath("message").exists())
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST 요청은")
+    class Describe_POST {
+        @Nested
+        @DisplayName("올바른 회원 정보가 주어진다면")
+        class Context_with_a_valid_user {
+            @BeforeEach
+            void setUp() {
+                given(userService.createUser(any(UserCreateRequest.class)))
+                        .willReturn(userResponse);
+            }
+
+            @Test
+            @DisplayName("생성된 회원과 상태코드 201을 응답한다.")
+            void it_responds_the_created_user_and_status_code_201() throws Exception {
+                mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(validUserCreateRequest)))
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("email").exists())
+                        .andExpect(status().isCreated());
+            }
+        }
+
+        @Nested
+        @DisplayName("올바르지 않은 상품 정보가 주어진다면")
+        class Context_with_an_invalid_product {
+            @Test
+            @DisplayName("상태코드 400을 응답한다.")
+            void it_responds_status_code_400() throws Exception {
+                mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(invalidUserCreateRequest)))
+                        .andExpect(status().isBadRequest());
             }
         }
     }

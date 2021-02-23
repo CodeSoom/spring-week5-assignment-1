@@ -30,8 +30,10 @@ public class UserService {
         return mapper.map(foundUser, UserResponse.class);
     }
 
-    public User createUser(UserCreateRequest createRequest) {
-        return userRepository.save(mapper.map(createRequest, User.class));
+    public UserResponse createUser(UserCreateRequest createRequest) {
+        User savedUser = userRepository.save(mapper.map(createRequest, User.class));
+
+        return mapper.map(savedUser, UserResponse.class);
     }
 
     public User updateUser(Long id, UserUpdateRequest updateRequest) {

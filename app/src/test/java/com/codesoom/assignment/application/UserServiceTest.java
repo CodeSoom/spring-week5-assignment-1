@@ -161,11 +161,10 @@ class UserServiceTest {
         @Test
         @DisplayName("생성된 회원을 리턴한다.")
         void it_return_the_created_user() {
-            User createdUser = userService.createUser(userCreateRequest);
+            UserResponse createdUser = userService.createUser(userCreateRequest);
 
             assertThat(createdUser.getName()).isEqualTo(userCreateRequest.getName());
             assertThat(createdUser.getEmail()).isEqualTo(userCreateRequest.getEmail());
-            assertThat(createdUser.getPassword()).isEqualTo(userCreateRequest.getPassword());
         }
     }
 
