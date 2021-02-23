@@ -181,6 +181,27 @@ class UserMockMvcControllerTest {
         }
 
         @Nested
+        @DisplayName("갱신 정보가 없으면")
+        class Context_without_update_data {
+
+            @BeforeEach
+            void setUp() {
+                requestDto = UserUpdateRequestDto.builder()
+                        .build();
+            }
+
+            @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
+            @Test
+            void It_responds_bad_request() throws Exception {
+                mockMvc.perform(patch("/users/{id}", NOT_EXIST_ID)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
         @DisplayName("갱신할 사용자가 존재하면")
         class Context_with_product {
 
@@ -240,6 +261,25 @@ class UserMockMvcControllerTest {
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("email").exists());
+            }
+        }
+
+        @Nested
+        @DisplayName("생성 정보가 없으면")
+        class Context_without_save_data {
+            @BeforeEach
+            void setUp() {
+                requestDto = UserSaveRequestDto.builder()
+                        .build();
+            }
+
+            @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
+            @Test
+            void It_responds_user() throws Exception {
+                mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
