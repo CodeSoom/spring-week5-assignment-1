@@ -12,7 +12,6 @@ class UserTest {
     private static final String EMAIL = "test@test.com";
     private static final String PASSWORD = "test";
 
-    private static final Long UPDATE_ID = 2L;
     private static final String UPDATE_NAME = "new_test";
     private static final String UPDATE_EMAIL = "new@test.com";
     private static final String UPDATE_PASSWORD = "new_test";
@@ -53,6 +52,7 @@ class UserTest {
         assertThat(user.getPassword()).isEqualTo(PASSWORD);
     }
 
+    @DisplayName("사용자의 정보를 갱신한다.")
     @Test
     void change() {
         User source = User.builder()

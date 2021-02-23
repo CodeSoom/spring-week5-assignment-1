@@ -121,7 +121,7 @@ class UserServiceTest {
 
             @DisplayName("등록된 사용자 id로 찾고자하는 사용자를 리턴한다")
             @Test
-            void It_return_product() {
+            void It_return_user() {
                 UserResponseDto actual = userService.getUser(givenId);
 
                 assertAll(
@@ -183,6 +183,7 @@ class UserServiceTest {
             }
         }
 
+
         @Nested
         @DisplayName("등록된 사용자 id가 존재하지 않으면")
         class Context_with_not_existed_user_id {
@@ -198,6 +199,49 @@ class UserServiceTest {
             void It_throws_exception() {
                 assertThatExceptionOfType(UserNotFoundException.class)
                         .isThrownBy(() -> userService.updateUser(givenId, updateRequestDto));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteUser 메서드는")
+    class Describe_deleteUser {
+        Long givenId;
+
+        @Nested
+        @DisplayName("등록된 사용자 id가 존재하면")
+        class Context_with_exist_user_id {
+
+            @BeforeEach
+            void setUp() {
+                UserSaveRequestDto requestDto = getUserSaveDto();
+                UserResponseDto savedProduct = userService.createUser(requestDto);
+                givenId = savedProduct.getId();
+            }
+
+            @DisplayName("삭제 대상인 사용자를 삭제한다")
+            @Test
+            void It_delete_user() {
+                userService.deleteUser(givenId);
+
+                assertThat(userService.getUsers()).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 사용자 id가 존재하지 않으면")
+        class Context_with_not_existed_user_id {
+
+            @BeforeEach
+            void setUp() {
+                givenId = NOT_EXIST_ID;
+            }
+
+            @DisplayName("예외를 던진다.")
+            @Test
+            void It_throws_exception() {
+                assertThatExceptionOfType(UserNotFoundException.class)
+                        .isThrownBy(() -> userService.deleteUser(givenId));
             }
         }
     }
