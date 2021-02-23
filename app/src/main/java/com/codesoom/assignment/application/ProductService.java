@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductBadRequestException;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -23,21 +24,33 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
-        return findProduct(id);
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(ProductData productData) {
+//        if(productData.getName().isBlank())
+//            throw new ProductBadRequestException("이름", "NotBlank");
+//
+//        if(productData.getMaker().isBlank())
+//            throw new ProductBadRequestException("메이커", "NotBlank");
+//
+//        if(productData.getPrice() == null) {
+//            throw new ProductBadRequestException("가격", "NotNull");
+//        }
+
         Product product = Product.builder()
                 .name(productData.getName())
                 .maker(productData.getMaker())
                 .price(productData.getPrice())
                 .imageUrl(productData.getImageUrl())
                 .build();
+
         return productRepository.save(product);
     }
 
     public Product updateProduct(Long id, ProductData productData) {
-        Product product = findProduct(id);
+        Product product = getProduct(id);
 
         product.change(
                 productData.getName(),
@@ -50,15 +63,10 @@ public class ProductService {
     }
 
     public Product deleteProduct(Long id) {
-        Product product = findProduct(id);
+        Product product = getProduct(id);
 
         productRepository.delete(product);
 
         return product;
-    }
-
-    private Product findProduct(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
