@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -25,6 +26,7 @@ public class UserSaveRequestDto {
      * 사용자 이메일.
      */
     @NotBlank(message = "이메일은 필수값입니다.")
+    @Email
     @Mapping("email")
     private String email;
 

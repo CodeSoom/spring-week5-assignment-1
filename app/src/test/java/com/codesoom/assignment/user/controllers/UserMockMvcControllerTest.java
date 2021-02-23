@@ -220,6 +220,28 @@ class UserMockMvcControllerTest {
                         .andExpect(jsonPath("email").exists());
             }
         }
+
+        @Nested
+        @DisplayName("잘못된 이메일이 입력되면")
+        class Context_with_invalid_email {
+            @BeforeEach
+            void setUp() {
+                requestDto = UserUpdateRequestDto.builder()
+                        .name(USER_NAME)
+                        .email("not_email")
+                        .password(USER_PASSWORD)
+                        .build();
+            }
+
+            @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
+            @Test
+            void It_responds_bad_request() throws Exception {
+                mockMvc.perform(patch("/users/{id}", USER_ID)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 
     @Nested
@@ -266,7 +288,29 @@ class UserMockMvcControllerTest {
 
             @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
             @Test
-            void It_responds_user() throws Exception {
+            void It_responds_bad_request() throws Exception {
+                mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("잘못된 이메일이 입력되면")
+        class Context_with_invalid_email {
+            @BeforeEach
+            void setUp() {
+                requestDto = UserSaveRequestDto.builder()
+                        .name(USER_NAME)
+                        .email("not_email")
+                        .password(USER_PASSWORD)
+                        .build();
+            }
+
+            @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
+            @Test
+            void It_responds_bad_request() throws Exception {
                 mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(requestDto)))

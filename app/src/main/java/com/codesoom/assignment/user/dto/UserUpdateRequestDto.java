@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
@@ -24,6 +25,7 @@ public class UserUpdateRequestDto {
     /**
      * 사용자 이메일.
      */
+    @Email
     @Mapping("email")
     private String email;
 
