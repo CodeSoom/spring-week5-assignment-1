@@ -8,10 +8,6 @@ import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
 public class App {
-    public String getGreeting() {
-        return "Hello, world!";
-    }
-
     @Bean
     public Mapper dozerMapper() {
         return DozerBeanMapperBuilder.buildDefault();
