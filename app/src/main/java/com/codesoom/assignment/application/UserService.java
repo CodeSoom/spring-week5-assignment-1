@@ -23,15 +23,18 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        return userRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 회원 id가 주어졌으므로 회원을 찾을 수 없습니다. 문제의 id = " + id));
+        return findUser(id);
     }
 
     public User updateUser(Long id, UserUpdateRequest updateRequest) {
-        User user = userRepository.findById(id).orElseThrow(
-                () -> new UserNotFoundException("존재하지 않는 회원 id가 주어졌으므로 회원을 수정할 수 없습니다. 문제의 id = " + id));
+        User user = findUser(id);
 
         return user.changeWith(mapper.map(updateRequest, User.class));
+    }
+
+    private User findUser(Long id) {
+        return userRepository.findById(id).orElseThrow(
+                () -> new UserNotFoundException("존재하지 않는 회원 id가 주어졌으므로 회원을 찾을 수 없습니다. 문제의 id = " + id));
     }
 
 }
