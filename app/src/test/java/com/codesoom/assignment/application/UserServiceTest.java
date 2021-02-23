@@ -4,11 +4,13 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -26,7 +28,7 @@ class UserServiceTest {
     private UserRepository userRepository = mock(UserRepository.class);
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         userService = new UserService(userRepository);
 
         User user = User.builder()
@@ -41,10 +43,9 @@ class UserServiceTest {
     }
 
     @Test
-    void getAllUsers(){
+    void getAllUsers() {
         List<User> users = userService.getAllUsers();
         assertThat(users).isNotEmpty();
         assertThat(users.get(0).getName()).isEqualTo("weno");
     }
-
 }
