@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserUpdateRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -31,6 +32,8 @@ class UserServiceTest {
     private User user1;
     private User user2;
 
+    private UserUpdateRequest userUpdateRequest;
+
     @BeforeEach
     void setUp() {
         userService = new UserService(userRepository);
@@ -48,6 +51,17 @@ class UserServiceTest {
                 .email("이메일2")
                 .password("password2")
                 .build();
+
+        userUpdateRequest = userUpdateRequest.builder()
+                .name("이름수정")
+                .password("87654321")
+                .build();
+
+        given(userRepository.findById(existingId))
+                .willReturn(Optional.of(user1));
+
+        given(userRepository.findById(notExistingId))
+                .willReturn(Optional.empty());
     }
 
     @Nested
@@ -94,12 +108,6 @@ class UserServiceTest {
         @Nested
         @DisplayName("존재하는 회원 id가 주어진다면")
         class Context_with_an_existing_user_id {
-            @BeforeEach
-            void setUp() {
-                given(userRepository.findById(existingId))
-                        .willReturn(Optional.of(user1));
-            }
-
             @Test
             @DisplayName("찾은 회원을 리턴한다.")
             void it_returns_the_found_user() {
@@ -117,17 +125,41 @@ class UserServiceTest {
         @Nested
         @DisplayName("존재하지 않는 회원 id가 주어진다면")
         class Context_with_not_existing_user_id {
-            @BeforeEach
-            void setUp() {
-                given(userRepository.findById(existingId))
-                        .willReturn(Optional.empty());
-            }
-
             @Test
             @DisplayName("'회원을 찾을 수 없다' 는 예외가 발생한다.")
             void it_throws_exception() {
                 assertThrows(UserNotFoundException.class,
                         () -> userService.getUser(notExistingId));
+
+                verify(userRepository).findById(notExistingId);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("updateUser")
+    class Describe_updateUser {
+        @Nested
+        @DisplayName("존재하는 회원 id가 주어진다면")
+        class Context_with_an_existing_user_id {
+            @Test
+            @DisplayName("수정된 회원을 리턴한다.")
+            void it_returns_the_updated_user() {
+                User updatedUser = userService.updateUser(existingId, userUpdateRequest);
+
+                assertThat(updatedUser.getName()).isEqualTo(userUpdateRequest.getName());
+                assertThat(updatedUser.getPassword()).isEqualTo(userUpdateRequest.getPassword());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 id가 주어진다면")
+        class Context_with_not_existing_user_id {
+            @Test
+            @DisplayName("'회원을 찾을 수 없다' 는 예외가 발생한다.")
+            void it_throws_exception() {
+                assertThrows(UserNotFoundException.class,
+                        () -> userService.updateUser(notExistingId, userUpdateRequest));
 
                 verify(userRepository).findById(notExistingId);
             }
