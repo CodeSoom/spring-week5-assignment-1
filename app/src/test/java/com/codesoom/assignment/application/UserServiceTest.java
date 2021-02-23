@@ -1,11 +1,9 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.application.dto.UserReqestDto;
-import com.codesoom.assignment.application.dto.UserRequestDto;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -28,12 +26,19 @@ class UserServiceTest {
 
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
+    private UserRequestDto userRequestDto;
     @BeforeEach
     void setUp() {
         userService = new UserService(userRepository);
 
         User user = User.builder()
                 .id(1L)
+                .name("weno")
+                .password("weno@codesoom.com")
+                .password("pwd111")
+                .build();
+
+        userRequestDto = UserRequestDto.builder()
                 .name("weno")
                 .password("weno@codesoom.com")
                 .password("pwd111")
@@ -66,7 +71,8 @@ class UserServiceTest {
 
     @Test
     void createUser(){
-        UserRequestDto userRequestDto;
+        User user = userService.createUser(userRequestDto);
+        assertThat(userRequestDto.getName()).isEqualTo(user.getName());
     }
 
 }
