@@ -26,6 +26,7 @@ class UserControllerTest {
     final String NAME = "My Name";
     final String EMAIL = "my@gmail.com";
     final String PASSWORD = "My Password";
+    final String INVALID_EMAIL = "gmail.com";
 
     @Autowired
     private MockMvc mockMvc;
@@ -49,7 +50,7 @@ class UserControllerTest {
     class Describe_POST_user {
         @Nested
         @DisplayName("유효한 user가 주어진다면")
-        class Context_valid_user_data {
+        class Context_with_valid_user_data {
             UserData givenUser;
 
             @BeforeEach
@@ -57,9 +58,9 @@ class UserControllerTest {
                 givenUser = createUser();
             }
 
-            @DisplayName("200코드와 생성된 user를 응답한다")
+            @DisplayName("201코드와 생성된 user를 응답한다")
             @Test
-            void it_returns_200_code_with_created_user() throws Exception {
+            void it_returns_201_code_with_created_user() throws Exception {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -74,14 +75,46 @@ class UserControllerTest {
 
         @Nested
         @DisplayName("모든 데이터가 공백인 user가 주어진다면")
-        class Context_all_blank_user_data {
+        class Context_with_all_blank_user_data {
+            UserData givenUser = new UserData();
 
+            @DisplayName("400코드를 응답한다")
+            @Test
+            void it_returns_400_code() throws Exception {
+                mockMvc.perform(post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(givenUser))
+                )
+                        .andExpect(status().isBadRequest());
+            }
         }
 
         @Nested
         @DisplayName("email 데이터가 유효하지 않은 user가 주어진다면")
-        class Context_invalid_email_user_data {
+        class Context_with_invalid_email_user_data {
+            UserData givenUser;
 
+            @BeforeEach
+            void setUp() {
+                givenUser = UserData.builder()
+                        .name(NAME)
+                        .email(INVALID_EMAIL)
+                        .password(PASSWORD)
+                        .build();
+
+            }
+
+            @DisplayName("400코드를 응답한다")
+            @Test
+            void it_returns_400_code() throws Exception {
+                mockMvc.perform(post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(givenUser))
+                )
+                        .andExpect(status().isBadRequest());
+            }
         }
     }
 }
