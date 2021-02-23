@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.Objects;
+
 @Getter
 public class UserResponseDto {
 
@@ -41,5 +43,28 @@ public class UserResponseDto {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    /**
+     *  사용자 응답정보가 동등한 객체라면 true를 리턴하고, 그렇지 않다면 false를 리턴합니다.
+     */
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof UserResponseDto)) {
+            return false;
+        }
+        UserResponseDto dto = (UserResponseDto) o;
+        return getId().equals(dto.getId());
+    }
+
+    /**
+     * 사용자 응답정보 객체의 해쉬 정보를 리턴합니다.
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(getId());
     }
 }
