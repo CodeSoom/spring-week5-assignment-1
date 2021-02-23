@@ -1,6 +1,5 @@
 package com.codesoom.assignment.user.controllers;
 
-import com.codesoom.assignment.product.application.ProductNotFoundException;
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.dto.UserResponseDto;
@@ -68,9 +67,9 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                UserResponseDto product = getUserResponse();
+                UserResponseDto responseDto = getUserResponse();
 
-                users = Collections.singletonList(product);
+                users = Collections.singletonList(responseDto);
 
                 given(userService.getUsers())
                         .willReturn(users);
@@ -162,7 +161,7 @@ class UserMockMvcControllerTest {
             void setUp() {
                 requestDto = getUpdateRequest();
                 given(userService.updateUser(eq(NOT_EXIST_ID), any(UserUpdateRequestDto.class)))
-                        .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+                        .willThrow(new UserNotFoundException(NOT_EXIST_ID));
             }
 
             @DisplayName("404 상태코드, Not Found 상태를 응답한다.")
@@ -199,7 +198,7 @@ class UserMockMvcControllerTest {
 
         @Nested
         @DisplayName("갱신할 사용자가 존재하면")
-        class Context_with_product {
+        class Context_with_user {
 
             @BeforeEach
             void setUp() {
@@ -211,7 +210,7 @@ class UserMockMvcControllerTest {
 
             @DisplayName("200 상태코드, OK 상태와 갱신된 사용자 정보를 응답한다.")
             @Test
-            void It_responds_product_id() throws Exception {
+            void It_responds_user_id() throws Exception {
                 mockMvc.perform(patch("/users/{id}", USER_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(requestDto)))
@@ -286,7 +285,7 @@ class UserMockMvcControllerTest {
             @BeforeEach
             void setUp() {
                 given(userService.deleteUser(anyLong()))
-                        .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
+                        .willThrow(new UserNotFoundException(NOT_EXIST_ID));
             }
 
             @DisplayName("404 상태코드와 Not Found 상태를 응답한다.")
@@ -298,7 +297,7 @@ class UserMockMvcControllerTest {
         }
 
         @Nested
-        @DisplayName("삭제 대상인 상품이 존재하면")
+        @DisplayName("삭제 대상 사용자가 존재하면")
         class Context_with_user {
 
             @BeforeEach
