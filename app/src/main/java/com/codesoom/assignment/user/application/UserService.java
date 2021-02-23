@@ -1,5 +1,7 @@
 package com.codesoom.assignment.user.application;
 
+import com.codesoom.assignment.product.application.ProductNotFoundException;
+import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.dto.UserResponseDto;
@@ -31,8 +33,10 @@ public class UserService {
     }
 
     public UserResponseDto getUser(Long userId) {
-        // TODO: 사용자 정보를 리턴한다.
-        return null;
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
+
+        return UserResponseDto.of(user);
     }
 
     @Transactional
