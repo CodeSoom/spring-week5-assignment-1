@@ -179,7 +179,7 @@ class ProductControllerWebMvcTest {
                         .andExpect(jsonPath("imageUrl").value(createdProduct.getImageUrl()))
                         .andExpect(status().isCreated());
 
-                verify(productService).createProduct(any());
+                verify(productService).createProduct(any(ProductData.class));
             }
         }
 

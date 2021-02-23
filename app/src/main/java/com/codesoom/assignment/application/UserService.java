@@ -9,4 +9,8 @@ public class UserService {
     public User createUser(User source) {
         return null;
     }
+
+    public User updateUser(Long id, User source) {
+        return null;
+    }
 }
