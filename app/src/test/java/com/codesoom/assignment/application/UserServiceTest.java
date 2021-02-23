@@ -1,8 +1,9 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,8 +15,10 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 @DataJpaTest
 @DisplayName("UserService의")
@@ -29,19 +32,22 @@ class UserServiceTest {
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
     private User user;
+    private UserData userData;
 
     @BeforeEach
     void setUp() {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 
         userService = new UserService(mapper, userRepository);
 
-        user = User.builder()
+        userData = UserData.builder()
                 .id(givenSavedId)
                 .name(givenName)
                 .email(givenEmail)
                 .password(givenPassword)
                 .build();
+
+        user = mapper.map(userData, User.class);
     }
 
     @Nested
@@ -90,11 +96,13 @@ class UserServiceTest {
         @Test
         @DisplayName("user를 추가하고, 추가된 user를 리턴한다.")
         void it_create_user_and_return_created_user() {
-            given(userRepository.save(user)).will(invocation -> {
+            given(userRepository.save(any(User.class))).will(invocation -> {
                 return invocation.getArgument(0);
             });
 
-            created = userService.createUser(user);
+            created = userService.createUser(userData);
+
+            verify(userRepository).save(any(User.class));
 
             assertThat(created.getClass()).isEqualTo(User.class);
             assertThat(created.getName()).isEqualTo(givenName);

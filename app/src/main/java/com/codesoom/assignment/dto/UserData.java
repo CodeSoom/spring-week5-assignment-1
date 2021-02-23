@@ -3,6 +3,7 @@ package com.codesoom.assignment.dto;
 import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
