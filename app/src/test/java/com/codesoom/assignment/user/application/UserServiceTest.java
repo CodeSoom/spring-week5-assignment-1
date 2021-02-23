@@ -13,6 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @SpringBootTest
@@ -93,6 +94,54 @@ class UserServiceTest {
             @Test
             void It_return_empty_users() {
                 assertThat(userService.getUsers()).isEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("getUser 메서드는")
+    class Describe_getUser {
+        Long givenId;
+
+        @Nested
+        @DisplayName("등록된 사용자 id가 존재하면")
+        class Context_with_exist_user_id {
+
+            @BeforeEach
+            void setUp() {
+                UserSaveRequestDto requestDto = getUserSaveDto();
+                UserResponseDto savedProduct = userService.createUser(requestDto);
+                givenId = savedProduct.getId();
+            }
+
+            @DisplayName("등록된 사용자 id로 찾고자하는 사용자를 리턴한다")
+            @Test
+            void It_return_product() {
+                UserResponseDto actual = userService.getUser(givenId);
+
+                assertAll(
+                        () -> assertThat(actual.getId()).isEqualTo(givenId),
+                        () -> assertThat(actual.getEmail()).isEqualTo(USER_EMAIL),
+                        () -> assertThat(actual.getName()).isEqualTo(USER_NAME),
+                        () -> assertThat(actual.getPassword()).isEqualTo(USER_PASSWORD)
+                );
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 상품 id가 존재하지 않으면")
+        class Context_without_products {
+
+            @BeforeEach
+            void setUp() {
+                givenId = NOT_EXIST_ID;
+            }
+
+            @DisplayName("예외를 던진다.")
+            @Test
+            void It_throws_exception() {
+                assertThatExceptionOfType(UserNotFoundException.class)
+                        .isThrownBy(() -> userService.getUser(givenId));
             }
         }
     }
