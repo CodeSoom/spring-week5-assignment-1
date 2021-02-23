@@ -24,13 +24,13 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User update(Long id, User user) {
-        return user;
+    public User update(Long id, User source) {
+        User user = findById(id);
+        user.update(source);
+        return userRepository.save(user);
     }
 
     public void clearData() {
         userRepository.deleteAll();
     }
-
-
 }

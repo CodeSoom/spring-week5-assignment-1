@@ -154,7 +154,24 @@ class UserServiceTest {
         @Nested
         @DisplayName("존재하지 않는 user id와 user가 주어진다면")
         class Context_with_not_exist_user_id {
+            Long givenId;
+            User source;
 
+            @BeforeEach
+            void setUp() {
+                givenId = NOT_EXIST_ID;
+                source = User.builder()
+                        .name(UPDATE_NAME)
+                        .email(UPDATE_EMAIL)
+                        .password(UPDATE_PASSWORD)
+                        .build();
+            }
+
+            @DisplayName("user를 찾을수 없다는 예외를 던진다")
+            @Test
+            void it_returns_not_fount_exception() {
+                assertThrows(UserNotFoundException.class, () -> subject(givenId, source));
+            }
         }
     }
 }
