@@ -2,7 +2,6 @@ package com.codesoom.assignment.user.dto;
 
 import com.codesoom.assignment.user.domain.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
 

@@ -53,7 +53,7 @@ public class UserController {
     /**
      * 주어진 id에 해당하는 사용자 정보를 갱신하고, 갱신된 정보를 응답합니다.
      *
-     * @param id         갱신하고자하는 사용자 식별자
+     * @param id 갱신하고자하는 사용자 식별자
      * @param requestDto 수정하고자 하는 사용자 정보
      * @return 갱신된 사용자 정보
      */

@@ -1,11 +1,11 @@
 package com.codesoom.assignment.user.controllers;
 
-import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.dto.UserResponseDto;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
+import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,6 +43,7 @@ class UserControllerTest {
     private User user2;
     private List<User> users;
     UserSaveRequestDto saveRequestDto;
+    UserUpdateRequestDto updateRequestDto;
     private List<UserResponseDto> usersResponses;
     private UserResponseDto userResponseDto1;
     private UserResponseDto userResponseDto2;
@@ -110,6 +111,22 @@ class UserControllerTest {
         verify(userService).createUser(any(UserSaveRequestDto.class));
     }
 
+    @Test
+    @DisplayName("특정 사용자 정보를 갱신할 수 있다.")
+    void updateUser() {
+        given(userService.updateUser(USER1_ID, updateRequestDto))
+                .willReturn(userResponseDto2);
+
+        UserResponseDto actual = userController.updateUser(USER1_ID, updateRequestDto);
+
+        assertAll(
+                () -> assertThat(actual.getName()).isEqualTo(USER2_NAME),
+                () -> assertThat(actual.getPassword()).isEqualTo(USER2_PASSWORD),
+                () -> assertThat(actual.getEmail()).isEqualTo(USER2_EMAIL)
+        );
+        verify(userService).updateUser(anyLong(), any(UserUpdateRequestDto.class));
+    }
+
     void setUpFixtures() {
         user1 = User.builder()
                 .id(USER1_ID)
@@ -129,6 +146,12 @@ class UserControllerTest {
                 .email(USER1_EMAIL)
                 .name(USER1_NAME)
                 .password(USER1_PASSWORD)
+                .build();
+
+        updateRequestDto = UserUpdateRequestDto.builder()
+                .email(USER2_EMAIL)
+                .name(USER2_NAME)
+                .password(USER2_PASSWORD)
                 .build();
 
         users = Arrays.asList(user1, user2);
