@@ -32,6 +32,12 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * 회원을 수정하고 수정된 회원을 리턴합니다.
+     *
+     * @param source 수정하고자 하는 회원
+     * @return 수정된 회원
+     */
     public User changeWith(User source) {
         this.name = source.name;
         this.password = source.password;
