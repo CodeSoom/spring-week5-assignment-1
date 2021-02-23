@@ -1,19 +1,25 @@
 package com.codesoom.assignment.domain;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
-    @Test
-    void creationWithBuilder() {
-        Product product = Product.builder()
+    private Product product;
+
+    @BeforeEach
+    void setUp() {
+        product = Product.builder()
                 .id(1L)
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
                 .build();
+    }
 
+    @Test
+    void creationWithBuilder() {
         assertThat(product.getId()).isEqualTo(1L);
         assertThat(product.getName()).isEqualTo("쥐돌이");
         assertThat(product.getMaker()).isEqualTo("냥이월드");
@@ -23,13 +29,6 @@ class ProductTest {
 
     @Test
     void change() {
-        Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
-
         product.changeWith(Product.builder()
                 .name("쥐순이")
                 .maker("코드숨")
@@ -42,5 +41,11 @@ class ProductTest {
         assertThat(product.getPrice()).isEqualTo(10000);
         assertThat(product.getImageUrl())
                 .isEqualTo("http://localhost:8080/rat");
+    }
+
+    @Test
+    void toStringTest() {
+        assertThat(product.toString()).isEqualTo("%s 장난감", product.getName());
+        assertThat(Product.builder().toString()).isEqualTo("Product.ProductBuilder(id=null, name=null, maker=null, price=null, imageUrl=null)");
     }
 }
