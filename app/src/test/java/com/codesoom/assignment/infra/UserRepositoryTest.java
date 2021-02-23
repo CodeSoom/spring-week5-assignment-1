@@ -1,6 +1,7 @@
 package com.codesoom.assignment.infra;
 
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -27,7 +28,7 @@ public class UserRepositoryTest {
 
     @Then("user repository에서 id로 user를 찾을 수 있다")
     public void findUserById() {
-        User foundUser = repository.findById(user.getId());
+        User foundUser = repository.findById(user.getId()).get();
 
         assertThat(foundUser).isEqualTo(user);
     }
