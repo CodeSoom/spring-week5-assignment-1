@@ -32,4 +32,11 @@ public class User {
         this.password = password;
     }
 
+    public User changeWith(User source) {
+        this.name = source.name;
+        this.password = source.password;
+
+        return this;
+    }
+
 }
