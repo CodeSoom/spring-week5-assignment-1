@@ -3,6 +3,7 @@ package com.codesoom.assignment.user.application;
 import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.dto.UserResponseDto;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
+import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +27,10 @@ class UserServiceTest {
     private static final String USER_NAME = "test";
     private static final String USER_PASSWORD = "pass";
     private static final String USER_EMAIL = "test@test.com";
+
+    private static final String UPDATE_NAME = "new_test";
+    private static final String UPDATE_PASSWORD = "new_pass";
+    private static final String UPDATE_EMAIL = "new@test.com";
 
     @Autowired
     UserService userService;
@@ -110,8 +115,8 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 UserSaveRequestDto requestDto = getUserSaveDto();
-                UserResponseDto savedProduct = userService.createUser(requestDto);
-                givenId = savedProduct.getId();
+                UserResponseDto savedUser = userService.createUser(requestDto);
+                givenId = savedUser.getId();
             }
 
             @DisplayName("등록된 사용자 id로 찾고자하는 사용자를 리턴한다")
@@ -129,8 +134,8 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("등록된 상품 id가 존재하지 않으면")
-        class Context_without_products {
+        @DisplayName("등록된 사용자 id가 존재하지 않으면")
+        class Context_with_not_existed_user_id {
 
             @BeforeEach
             void setUp() {
@@ -146,11 +151,70 @@ class UserServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("updateUser 메서드는")
+    class Describe_updateUser {
+        Long givenId;
+        UserUpdateRequestDto updateRequestDto;
+
+        @Nested
+        @DisplayName("등록된 사용자 id가 존재하면")
+        class Context_with_exist_user_id {
+
+            @BeforeEach
+            void setUp() {
+                UserSaveRequestDto requestDto = getUserSaveDto();
+                UserResponseDto savedUser = userService.createUser(requestDto);
+                givenId = savedUser.getId();
+                updateRequestDto = getUpdateRequest();
+            }
+
+            @DisplayName("수정된 사용자를 리턴한다")
+            @Test
+            void It_return_updated_user() {
+                UserResponseDto actual = userService.updateUser(givenId, updateRequestDto);
+
+                assertAll(
+                        () -> assertThat(actual.getPassword()).isEqualTo(UPDATE_PASSWORD),
+                        () -> assertThat(actual.getEmail()).isEqualTo(UPDATE_EMAIL),
+                        () -> assertThat(actual.getName()).isEqualTo(UPDATE_NAME),
+                        () -> assertThat(actual.getId()).isEqualTo(givenId)
+                );
+            }
+        }
+
+        @Nested
+        @DisplayName("등록된 사용자 id가 존재하지 않으면")
+        class Context_with_not_existed_user_id {
+
+            @BeforeEach
+            void setUp() {
+                givenId = NOT_EXIST_ID;
+                updateRequestDto = getUpdateRequest();
+            }
+
+            @DisplayName("예외를 던진다.")
+            @Test
+            void It_throws_exception() {
+                assertThatExceptionOfType(UserNotFoundException.class)
+                        .isThrownBy(() -> userService.updateUser(givenId, updateRequestDto));
+            }
+        }
+    }
+
     private UserSaveRequestDto getUserSaveDto() {
         return UserSaveRequestDto.builder()
                 .name(USER_NAME)
                 .email(USER_EMAIL)
                 .password(USER_PASSWORD)
+                .build();
+    }
+
+    private UserUpdateRequestDto getUpdateRequest() {
+        return UserUpdateRequestDto.builder()
+                .name(UPDATE_NAME)
+                .email(UPDATE_EMAIL)
+                .password(UPDATE_PASSWORD)
                 .build();
     }
 }

@@ -60,7 +60,7 @@ class UserMockMvcControllerTest {
 
     @Nested
     @DisplayName("GET /users는")
-    class Describe_getUserts {
+    class Describe_getUsers {
         @Nested
         @DisplayName("등록된 사용자가 있으면")
         class Context_with_users {
