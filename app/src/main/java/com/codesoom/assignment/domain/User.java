@@ -33,4 +33,9 @@ public class User {
         this.email = source.email;
         this.password = source.password;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s라는 이름의 사용자", name);
+    }
 }
