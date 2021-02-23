@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,6 +15,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,7 +34,7 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ProductService productService;
+    private UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -114,6 +116,43 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(givenUser))
                 )
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /user/{id} 리퀘스트는")
+    class Describe_DELETE_user {
+        @Nested
+        @DisplayName("존재하는 user id가 주어진다면")
+        class Context_with_exist_user_id {
+            Long givenId;
+
+            @BeforeEach
+            void setUp() {
+                UserData source = createUser();
+                User givenUser = userService.createUser(source);
+                givenId = givenUser.getId();
+            }
+
+            @DisplayName("204코드를 응답한다")
+            @Test
+            void it_returns_204_code() throws Exception {
+                mockMvc.perform(delete("/users/{id}", givenId))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 user id가 주어진다면")
+        class Context_with_not_exist_user_id {
+            Long givenId = NOT_EXIST_ID;
+
+            @DisplayName("404코드를 응답한다")
+            @Test
+            void it_returns_204_code() throws Exception {
+                mockMvc.perform(delete("/users/{id}", givenId))
+                        .andExpect(status().isNotFound());
             }
         }
     }
