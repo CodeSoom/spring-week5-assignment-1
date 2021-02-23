@@ -27,13 +27,9 @@ public class Product {
 
     private String imageUrl;
 
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public void changeWith(Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
     }
 }
