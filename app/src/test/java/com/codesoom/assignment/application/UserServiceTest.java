@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -56,6 +57,9 @@ class UserServiceTest {
                 given(userRepository.save(any(User.class))).willReturn(source);
 
                 User createdUser = userService.createUser(source);
+                assertThat(createdUser.getName()).isEqualTo(source.getName());
+                assertThat(createdUser.getEmail()).isEqualTo(source.getEmail());
+                assertThat(createdUser.getPassword()).isEqualTo(source.getPassword());
 
                 verify(userRepository).save(any(User.class));
             }
@@ -82,6 +86,9 @@ class UserServiceTest {
                 given(userRepository.update(eq(givenExistedId), any(User.class))).willReturn(source);
 
                 User updatedUser = userService.updateUser(givenExistedId, source);
+                assertThat(updatedUser.getName()).isEqualTo(source.getName());
+                assertThat(updatedUser.getEmail()).isEqualTo(source.getEmail());
+                assertThat(updatedUser.getPassword()).isEqualTo(source.getPassword());
 
                 verify(userRepository).update((eq(givenExistedId)),any(User.class));
             }
