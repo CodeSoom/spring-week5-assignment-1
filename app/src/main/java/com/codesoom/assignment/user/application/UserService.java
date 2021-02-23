@@ -75,12 +75,14 @@ public class UserService {
 
     /**
      * 등록된 사용자를 삭제한다.
-     * @param id 등록된 사용자 id
+     * @param userId 등록된 사용자 id
      * @return 삭제된 사용자 id
      */
-    public Long deleteUser(Long id) {
-        // TODO: 사용자 정보를 삭제한다.
-        return null;
+    @Transactional
+    public Long deleteUser(Long userId) throws UserNotFoundException {
+        User user = findUser(userId);
+        userRepository.delete(user);
+        return user.getId();
     }
 
     private User findUser(Long userId) {
