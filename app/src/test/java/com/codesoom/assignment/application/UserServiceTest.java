@@ -2,6 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.application.dto.UserReqestDto;
+import com.codesoom.assignment.application.dto.UserRequestDto;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +19,7 @@ import static org.mockito.Mockito.mock;
 
 /*
 1. getAllUsers : 완료
-2. getUser
+2. getUser : 완료
 3. createUser
 4. updateUser
 5. deleteUser
@@ -60,6 +62,11 @@ class UserServiceTest {
     void getUserWithNotExistedId(){
         assertThatThrownBy(()-> userService.getUser(1000L))
                 .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void createUser(){
+        UserRequestDto userRequestDto;
     }
 
 }
