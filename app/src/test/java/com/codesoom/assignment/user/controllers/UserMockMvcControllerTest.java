@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -192,6 +193,36 @@ class UserMockMvcControllerTest {
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(requestDto)))
                         .andExpect(status().isOk())
+                        .andExpect(jsonPath("id").exists())
+                        .andExpect(jsonPath("name").exists())
+                        .andExpect(jsonPath("email").exists());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("POST /users는")
+    class Describe_createUser {
+        UserSaveRequestDto requestDto;
+
+        @Nested
+        @DisplayName("등록할 사용자가 주어지면")
+        class Context_with_user {
+            @BeforeEach
+            void setUp() {
+                requestDto = new UserSaveRequestDto(USER_NAME, USER_EMAIL, USER_PASSWORD);
+                UserResponseDto responseDto = getUserResponse();
+                given(userService.createUser(any(UserSaveRequestDto.class)))
+                        .willReturn(responseDto);
+            }
+
+            @DisplayName("201 상태코드, Created 상태를 응답한다.")
+            @Test
+            void It_responds_user() throws Exception {
+                mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(requestDto)))
+                        .andExpect(status().isCreated())
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("email").exists());
