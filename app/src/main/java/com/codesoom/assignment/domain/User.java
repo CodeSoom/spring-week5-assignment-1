@@ -31,6 +31,8 @@ public class User {
     }
 
     public void changeWith(User source) {
-        
+        this.name = source.name;
+        this.email = source.email;
+        this.password = source.password;
     }
 }
