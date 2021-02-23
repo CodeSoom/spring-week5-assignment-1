@@ -6,11 +6,15 @@ import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 public class UserRepositoryTest {
     private User user;
     private UserRepository repository = new InMemoryUserRepository();
+
+    private Long nextId;
 
     @Given("올바르게 생성된 user가 제공된다면")
     public void givenRightUser() {
@@ -31,5 +35,17 @@ public class UserRepositoryTest {
         User foundUser = repository.findById(user.getId()).get();
 
         assertThat(foundUser).isEqualTo(user);
+    }
+
+    @When("다음 아이디를 가져온 경우")
+    public void getNextId() {
+        nextId = repository.nextId();
+    }
+
+    @Then("가져온 아이디로 기존에 저장된 user를 찾을 수 없다")
+    public void cantFindAnyUserByNextId() {
+        Optional<User> foundUser = repository.findById(nextId);
+
+        assertThat(foundUser).isEmpty();
     }
 }
