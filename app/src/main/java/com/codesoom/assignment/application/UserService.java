@@ -13,7 +13,7 @@ public class UserService {
     }
 
     public User createUser(User source) {
-        return null;
+        return userRepository.save(source);
     }
 
     public User updateUser(Long id, User source) {

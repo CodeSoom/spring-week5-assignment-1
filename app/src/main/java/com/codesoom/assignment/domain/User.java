@@ -15,7 +15,6 @@ import javax.persistence.Id;
 @Getter
 @Setter
 public class User {
-
     @Id
     @GeneratedValue
     private Long id;
@@ -25,4 +24,10 @@ public class User {
     private String email;
 
     private String password;
+
+    public User(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
