@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserResponse;
+import com.codesoom.assignment.dto.UserUpdateRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -44,8 +45,10 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
-    public UserResponse update() {
-        return null;
+    public UserResponse update(
+            @PathVariable Long id,
+            @RequestBody @Valid UserUpdateRequest updateRequest) {
+        return userService.updateUser(id, updateRequest);
     }
 
 }
