@@ -1,9 +1,11 @@
 package com.codesoom.assignment.user.controllers;
 
+import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.dto.UserResponseDto;
+import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,8 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -38,6 +42,7 @@ class UserControllerTest {
     private User user1;
     private User user2;
     private List<User> users;
+    UserSaveRequestDto saveRequestDto;
     private List<UserResponseDto> usersResponses;
     private UserResponseDto userResponseDto1;
     private UserResponseDto userResponseDto2;
@@ -89,6 +94,22 @@ class UserControllerTest {
                 .isInstanceOf(UserNotFoundException.class);
     }
 
+    @Test
+    @DisplayName("사용자를 새로 등록할 수 있다.")
+    void createUser() {
+        given(userService.createUser(saveRequestDto))
+                .willReturn(userResponseDto1);
+
+        UserResponseDto actual = userController.createUser(saveRequestDto);
+
+        assertAll(
+                () -> assertThat(actual.getName()).isEqualTo(USER1_NAME),
+                () -> assertThat(actual.getPassword()).isEqualTo(USER1_PASSWORD),
+                () -> assertThat(actual.getEmail()).isEqualTo(USER1_EMAIL)
+        );
+        verify(userService).createUser(any(UserSaveRequestDto.class));
+    }
+
     void setUpFixtures() {
         user1 = User.builder()
                 .id(USER1_ID)
@@ -102,6 +123,12 @@ class UserControllerTest {
                 .name(USER2_NAME)
                 .email(USER2_EMAIL)
                 .password(USER2_PASSWORD)
+                .build();
+
+        saveRequestDto = UserSaveRequestDto.builder()
+                .email(USER1_EMAIL)
+                .name(USER1_NAME)
+                .password(USER1_PASSWORD)
                 .build();
 
         users = Arrays.asList(user1, user2);
