@@ -4,6 +4,7 @@ import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.dto.UserResponseDto;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
+import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,6 +19,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class UserService {
     private final UserRepository userRepository;
+    private final Mapper mapper;
 
     public List<UserResponseDto> getUsers() {
         // TODO: 사용자의 목록을 리턴한다.
