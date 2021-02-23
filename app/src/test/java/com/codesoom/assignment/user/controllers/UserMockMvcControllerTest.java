@@ -4,6 +4,7 @@ import com.codesoom.assignment.product.application.ProductNotFoundException;
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.dto.UserResponseDto;
+import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,6 +41,10 @@ class UserMockMvcControllerTest {
     private static final String USER_NAME = "test";
     private static final String USER_PASSWORD = "pass";
     private static final String USER_EMAIL = "test@test.com";
+
+    private static final String UPDATE_NAME = "new_test";
+    private static final String UPDATE_PASSWORD = "new_pass";
+    private static final String UPDATE_EMAIL = "new@test.com";
 
     @Autowired
     private MockMvc mockMvc;
@@ -152,12 +157,8 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                requestDto = UserUpdateRequestDto.builder()
-                        .name(NAME)
-                        .email(EMAIL)
-                        .password(PRICE)
-                        .build();
-                given(userService.updateUser(eq(NOT_EXIST_ID), any(UserNotFoundException.class)))
+                requestDto = new UserUpdateRequestDto(UPDATE_NAME, UPDATE_EMAIL, UPDATE_PASSWORD);
+                given(userService.updateUser(eq(NOT_EXIST_ID), any(UserUpdateRequestDto.class)))
                         .willThrow(new ProductNotFoundException(NOT_EXIST_ID));
             }
 
@@ -178,9 +179,9 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                requestDto = new ProductUpdateRequestDto(NAME, MAKER, PRICE, IMAGE_URL);
+                requestDto = new UserUpdateRequestDto(UPDATE_NAME, UPDATE_EMAIL, UPDATE_PASSWORD);
                 UserResponseDto responseDto = getUserResponse();
-                given(userService.updateProduct(anyLong(), any(UserUpdateRequestDto.class)))
+                given(userService.updateUser(anyLong(), any(UserUpdateRequestDto.class)))
                         .willReturn(responseDto);
             }
 

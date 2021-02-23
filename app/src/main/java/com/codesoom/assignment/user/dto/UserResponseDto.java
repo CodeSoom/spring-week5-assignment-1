@@ -4,11 +4,6 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-
 @Getter
 public class UserResponseDto {
 
@@ -33,6 +28,13 @@ public class UserResponseDto {
     @JsonIgnore
     private String password;
 
+    /**
+     * 사용자정보 응답 생성자
+     * @param id 사용자 식별자
+     * @param name 사용자 이름
+     * @param email 사용자 이메일
+     * @param password 사용자 비밀번호
+     */
     @Builder
     public UserResponseDto(Long id, String name, String email, String password) {
         this.id = id;

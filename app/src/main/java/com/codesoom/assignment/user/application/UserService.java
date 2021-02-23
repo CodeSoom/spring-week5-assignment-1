@@ -1,6 +1,7 @@
 package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.user.dto.UserResponseDto;
+import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,4 +23,10 @@ public class UserService {
         // TODO: 사용자 정보를 리턴한다.
         return null;
     }
+
+    public UserResponseDto updateUser(long userId, UserUpdateRequestDto requestDto) {
+        // TODO: 갱신된 사용자 정보를 리턴한다.
+        return null;
+    }
+
 }
