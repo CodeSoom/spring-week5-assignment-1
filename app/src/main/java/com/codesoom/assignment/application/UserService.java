@@ -17,7 +17,7 @@ public class UserService {
     }
 
     public User updateUser(Long id, User source) {
-        return null;
+        return userRepository.update(id, source);
     }
 
     public User deleteUser(Long id) {

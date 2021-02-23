@@ -11,7 +11,7 @@ public interface JpaUserRepository
         extends UserRepository, CrudRepository<User, Long> {
     User save(User user);
 
-    User update(User user);
+    User update(Long id, User user);
 
     void delete(User user);
 }
