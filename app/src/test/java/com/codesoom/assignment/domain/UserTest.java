@@ -11,7 +11,11 @@ class UserTest {
 
     @BeforeEach
     void setUp(){
-        user = new User("name", "email", "password");
+        user = User.builder()
+                .name("name")
+                .email("email")
+                .password("password")
+                .build();
     }
 
     @Test

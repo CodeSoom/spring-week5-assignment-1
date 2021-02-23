@@ -16,7 +16,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 /*
-1. getAllUsers
+1. getAllUsers : 완료
 2. getUser
 3. createUser
 4. updateUser
@@ -37,17 +37,29 @@ class UserServiceTest {
 
     @Test
     void getAllUsers(){
-        User mockUser = User.builder()
+        User user = User.builder()
                 .email("wenodev@codesoom.com")
                 .name("weno")
                 .password("pwd1234")
                 .build();
         List<User> users = new ArrayList<>();
-        users.add(mockUser);
+        users.add(user);
 
         given(userRepository.findAll()).willReturn(users);
 
         assertThat(users.get(0).getName()).isEqualTo("weno");
+    }
+
+    @Test
+    void getUserWithExistedUser(){
+        User user = User.builder()
+                .email("wenodev@codesoom.com")
+                .name("weno")
+                .password("pwd1234")
+                .build();
+
+        assertThat(userService.getUser())
+
     }
 
 }
