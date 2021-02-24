@@ -4,16 +4,19 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDto;
-import com.codesoom.assignment.dto.UserRequestDto;
+import com.codesoom.assignment.dto.UserCreateRequestDto;
+import com.codesoom.assignment.dto.UserUpdateRequestDto;
 import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 회원 비지니스 로직을 처리합니다.
  */
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class UserService {
 
     private final Mapper mapper;
@@ -26,7 +29,8 @@ public class UserService {
      * @param userDto 저장할 회원의 정보
      * @return 저장된 회원의 정보
      */
-    public UserDto createUser(UserRequestDto userDto) {
+    @Transactional
+    public UserDto createUser(UserCreateRequestDto userDto) {
         User savedUser = userRepository.save(mapper.map(userDto, User.class));
         return mapper.map(savedUser, UserDto.class);
     }
@@ -34,14 +38,15 @@ public class UserService {
     /**
      * id에 해당하는 회원을 수정합니다
      *
-     * @param id      수정할 회원의 id
-     * @param userDto 수정할 회원의 정보
+     * @param id             수정할 회원의 id
+     * @param userUpdateRequestDto 수정할 회원의 정보
      * @return 수정된 회원의 정보
      * @throws UserNotFoundException id에 해당하는 회원이 없는경우
      */
-    public UserDto updateUser(long id, UserRequestDto userDto) {
+    @Transactional
+    public UserDto updateUser(long id, UserUpdateRequestDto userUpdateRequestDto) {
         User user = findUser(id);
-        user.change(mapper.map(userDto, User.class));
+        user.change(mapper.map(userUpdateRequestDto, User.class));
         return mapper.map(user, UserDto.class);
     }
 

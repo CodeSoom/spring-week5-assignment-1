@@ -4,7 +4,8 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserDto;
-import com.codesoom.assignment.dto.UserRequestDto;
+import com.codesoom.assignment.dto.UserCreateRequestDto;
+import com.codesoom.assignment.dto.UserUpdateRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,7 +13,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -29,7 +31,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 //        회원 생성하기 - POST /user
 //        회원 수정하기 - PATCH /user/{id} TODO   - dto validation
 //        회원 삭제하기 - DELETE /user/{id}
-@WebMvcTest(UserController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -45,7 +48,7 @@ class UserControllerTest {
 
     private User user;
 
-    private UserRequestDto validUpdateUserDto;
+    private UserCreateRequestDto validUpdateUserDto;
     private UserDto userDto;
 
     @BeforeEach
@@ -57,7 +60,7 @@ class UserControllerTest {
                 .email("rhfpdk92@naver.com")
                 .build();
 
-        validUpdateUserDto = UserRequestDto.builder()
+        validUpdateUserDto = UserCreateRequestDto.builder()
                 .name("양철수")
                 .email("newId@naver.com")
                 .password("12341234")
@@ -79,7 +82,7 @@ class UserControllerTest {
         class Context_exist_user {
             @BeforeEach
             void setUp() {
-                given(userService.createUser(any(UserRequestDto.class)))
+                given(userService.createUser(any(UserCreateRequestDto.class)))
                         .willReturn(userDto);
             }
 
@@ -137,7 +140,7 @@ class UserControllerTest {
         class Context_exist_id_and_userdto {
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(1L), any(UserRequestDto.class)))
+                given(userService.updateUser(eq(1L), any(UserUpdateRequestDto.class)))
                         .willReturn(userDto);
             }
 
@@ -161,7 +164,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(100L), any(UserRequestDto.class)))
+                given(userService.updateUser(eq(100L), any(UserUpdateRequestDto.class)))
                         .willThrow(new UserNotFoundException(100L));
             }
 

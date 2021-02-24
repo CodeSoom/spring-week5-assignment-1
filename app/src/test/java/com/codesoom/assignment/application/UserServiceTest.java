@@ -4,13 +4,15 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDto;
-import com.codesoom.assignment.dto.UserRequestDto;
+import com.codesoom.assignment.dto.UserCreateRequestDto;
+import com.codesoom.assignment.dto.UserUpdateRequestDto;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -22,6 +24,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 //TODO 수정시 정보가 없는경우 Validation 추가되지 않음
+@Transactional
 class UserServiceTest {
 
     private UserService userService;
@@ -66,7 +69,7 @@ class UserServiceTest {
             @Test
             @DisplayName("생성된 회원을 리턴한다.")
             void it_return_the_created_user() {
-                UserDto createduser = userService.createUser(new UserRequestDto(gildong));
+                UserDto createduser = userService.createUser(new UserCreateRequestDto(gildong));
                 assertThat(createduser.getName()).isEqualTo("홍길동");
             }
         }
@@ -86,7 +89,6 @@ class UserServiceTest {
                 source = User.builder()
                         .id(1L)
                         .name("새유저")
-                        .email("new@naver.com")
                         .password("1234")
                         .build();
 
@@ -98,7 +100,7 @@ class UserServiceTest {
             @Test
             @DisplayName("수정된 회원을 반환한다")
             void it_return_updated_user() {
-                UserDto updatedUser = userService.updateUser(1L, new UserRequestDto(source));
+                UserDto updatedUser = userService.updateUser(1L, new UserUpdateRequestDto(source));
                 verify(userRepository).findById(1L);
 
                 assertThat(updatedUser.getName()).isEqualTo("새유저");
@@ -111,7 +113,7 @@ class UserServiceTest {
             @Test
             @DisplayName("UserNotFoundException을 던진다")
             void it_return_user_not_found_exception() {
-                assertThrows(UserNotFoundException.class, () -> userService.updateUser(100L, new UserRequestDto()));
+                assertThrows(UserNotFoundException.class, () -> userService.updateUser(100L, new UserUpdateRequestDto()));
 
                 verify(userRepository).findById(100L);
             }

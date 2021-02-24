@@ -35,7 +35,6 @@ public class User {
 
     public void change(User user) {
         this.name = user.name;
-        this.email = user.email;
         this.password = user.password;
     }
 }

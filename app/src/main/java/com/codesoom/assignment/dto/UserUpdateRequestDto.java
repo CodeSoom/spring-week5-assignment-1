@@ -13,23 +13,18 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserRequestDto {
+public class UserUpdateRequestDto {
 
     @NotBlank
     @Mapping("name")
     private String name;
 
     @NotBlank
-    @Mapping("email")
-    private String email;
-
-    @NotBlank
     @Mapping("password")
     private String password;
 
-    public UserRequestDto(User user) {
+    public UserUpdateRequestDto(User user) {
         this.name = user.getName();
-        this.email = user.getEmail();
         this.password = user.getPassword();
     }
 }
