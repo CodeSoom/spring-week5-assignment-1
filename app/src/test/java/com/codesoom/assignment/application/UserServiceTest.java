@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDto;
+import com.codesoom.assignment.dto.UserRequestDto;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -65,7 +66,7 @@ class UserServiceTest {
             @Test
             @DisplayName("생성된 회원을 리턴한다.")
             void it_return_the_created_user() {
-                UserDto createduser = userService.createUser(new UserDto(gildong));
+                UserDto createduser = userService.createUser(new UserRequestDto(gildong));
                 assertThat(createduser.getName()).isEqualTo("홍길동");
             }
         }
@@ -97,7 +98,7 @@ class UserServiceTest {
             @Test
             @DisplayName("수정된 회원을 반환한다")
             void it_return_updated_user() {
-                UserDto updatedUser = userService.updateUser(1L, this.userDto);
+                UserDto updatedUser = userService.updateUser(1L, new UserRequestDto(source));
                 verify(userRepository).findById(1L);
 
                 assertThat(updatedUser.getName()).isEqualTo("새유저");
@@ -110,7 +111,7 @@ class UserServiceTest {
             @Test
             @DisplayName("UserNotFoundException을 던진다")
             void it_return_user_not_found_exception() {
-                assertThrows(UserNotFoundException.class, () -> userService.updateUser(100L, new UserDto()));
+                assertThrows(UserNotFoundException.class, () -> userService.updateUser(100L, new UserRequestDto()));
 
                 verify(userRepository).findById(100L);
             }

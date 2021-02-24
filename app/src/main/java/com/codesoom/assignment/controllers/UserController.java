@@ -2,9 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.dto.UserDto;
+import com.codesoom.assignment.dto.UserRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,23 +28,24 @@ public class UserController {
     /**
      * 회원을 저장하고 저장된 회원 정보를 반환합니다.
      *
-     * @param userDto 저장할 회원의 정보
+     * @param userRequestDto 저장할 회원의 정보
      * @return 저장한 회원의 정보
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody @Valid UserDto userDto) {
-        return userService.createUser(userDto);
+    public UserDto createUser(@RequestBody @Valid UserRequestDto userRequestDto) {
+        return userService.createUser(userRequestDto);
     }
 
     /**
      * id에 해당하는 회원을 수정합니다.
-     * @param id 수정할 회원의 id
-     * @param userDto 수정할 회원의 정보
+     *
+     * @param id             수정할 회원의 id
+     * @param userRequestDto 수정할 회원의 정보
      * @return 수정된 회원의 정보
      */
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
-        return userService.updateUser(id, userDto);
+    public UserDto updateUser(@PathVariable Long id, @RequestBody @Valid UserRequestDto userRequestDto) {
+        return userService.updateUser(id, userRequestDto);
     }
 }

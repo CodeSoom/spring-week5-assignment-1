@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserDto;
+import com.codesoom.assignment.dto.UserRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,7 +72,7 @@ class UserControllerTest {
         class Context_exist_user {
             @BeforeEach
             void setUp() {
-                given(userService.createUser(any(UserDto.class)))
+                given(userService.createUser(any(UserRequestDto.class)))
                         .willReturn(dozerMapper.map(user, UserDto.class));
             }
 
@@ -99,10 +100,11 @@ class UserControllerTest {
                         .andExpect(status().isBadRequest());
             }
         }
+
         @Nested
         @DisplayName("user에 파라미터가 없으면")
         class Context_user_does_not_have_parameter {
-            User userWithoutName  = User.builder()
+            User userWithoutName = User.builder()
                     .id(1L)
                     .password("1234")
                     .email("rhfpdk92@naver.com")
@@ -128,7 +130,7 @@ class UserControllerTest {
         class Context_exist_id_and_userdto {
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(1L), any(UserDto.class)))
+                given(userService.updateUser(eq(1L), any(UserRequestDto.class)))
                         .willReturn(validUpdateUserDto);
             }
 
@@ -152,7 +154,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(100L), any(UserDto.class)))
+                given(userService.updateUser(eq(100L), any(UserRequestDto.class)))
                         .willThrow(new UserNotFoundException(100L));
             }
 
@@ -164,6 +166,26 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(validUpdateUserDto)))
                         .andDo(print())
                         .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하는 회원이나 requestbody에 파라미터가 없으면")
+        class Context_user_does_not_have_parameter {
+            User userWithoutName = User.builder()
+                    .id(1L)
+                    .password("1234")
+                    .email("rhfpdk92@naver.com")
+                    .build();
+
+            @Test
+            @DisplayName("응답코드는 400며 에러메세지를 응답한다.")
+            void it_return_createdUser() throws Exception {
+                mockMvc.perform(patch("/user/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(userWithoutName)))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest());
             }
         }
     }
