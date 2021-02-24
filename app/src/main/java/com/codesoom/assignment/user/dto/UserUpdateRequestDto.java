@@ -33,7 +33,7 @@ public class UserUpdateRequestDto {
      * 사용자 비밀번호.
      */
     @NotBlank(message = "비밀번호는 필수값입니다.")
-    @Mapping
+    @Mapping("password")
     private String password;
 
     /**

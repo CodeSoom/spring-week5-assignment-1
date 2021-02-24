@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.NotNull;
 
 /**
  * 사용자 정보.
@@ -28,17 +29,20 @@ public class User {
     /**
      * 사용자 이름.
      */
+    @NotNull
     private String name;
 
     /**
      * 사용자 이메일.
      */
     @Column(unique = true)
+    @NotNull
     private String email;
 
     /**
      * 사용자 비밀번호.
      */
+    @NotNull
     private String password;
 
     @Builder
