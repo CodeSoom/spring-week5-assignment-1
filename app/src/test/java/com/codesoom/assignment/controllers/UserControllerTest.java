@@ -22,14 +22,16 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //        회원 생성하기 - POST /user
-//        회원 수정하기 - PATCH /user/{id} TODO   - dto validation
+//        회원 수정하기 - PATCH /user/{id}
 //        회원 삭제하기 - DELETE /user/{id}
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -196,6 +198,37 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(userWithoutName)))
                         .andDo(print())
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /users/{id} 요청은")
+    class Describe_deleteUser {
+        @Nested
+        @DisplayName("id가 존재하는 회원이면")
+        class Context_exist_id {
+            @Test
+            @DisplayName("응답코드 204를 응답한다.")
+            void it_return_no_content() throws Exception {
+                mockMvc.perform(delete("/users/{id}", 1L)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("id가 존재하지 않는 회원이면")
+        class Context_does_not_exist_id {
+            @Test
+            @DisplayName("응답코드 404이며 id가 존재하지 않는다는 메세지를 응답한다.")
+            void it_return_no_content() throws Exception {
+                mockMvc.perform(delete("/users/{id}", 100L)
+                        .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(status().isNotFound())
+                        .andExpect(content().string("User not found: " + 100L));
             }
         }
     }
