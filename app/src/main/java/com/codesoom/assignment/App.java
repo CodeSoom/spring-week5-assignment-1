@@ -13,7 +13,6 @@ public class App {
         return DozerBeanMapperBuilder.buildDefault();
     }
 
-
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }

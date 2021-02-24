@@ -7,6 +7,7 @@ import com.codesoom.assignment.dto.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -50,5 +51,11 @@ public class UserController {
     @PatchMapping("/{id}")
     public UserDto updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
         return userService.updateUser(id, userUpdateRequestDto);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable Long id){
+        userService.deleteUser(id);
     }
 }

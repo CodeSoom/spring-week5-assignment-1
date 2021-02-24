@@ -3,11 +3,10 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserDto;
 import com.codesoom.assignment.dto.UserCreateRequestDto;
+import com.codesoom.assignment.dto.UserDto;
 import com.codesoom.assignment.dto.UserUpdateRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,28 +21,24 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-//        회원 생성하기 - POST /user
-//        회원 수정하기 - PATCH /user/{id}
-//        회원 삭제하기 - DELETE /user/{id}
 @SpringBootTest
 @AutoConfigureMockMvc
 class UserControllerTest {
+    private final long EXIST_ID = 1L;
+    private final long NOT_EXIST_ID = 100L;
     @Autowired
     private MockMvc mockMvc;
 
     @Autowired
     private ObjectMapper objectMapper;
-
-    @Autowired
-    private Mapper dozerMapper;
 
     @MockBean
     UserService userService;
@@ -56,7 +51,7 @@ class UserControllerTest {
     @BeforeEach
     void setUp() {
         user = User.builder()
-                .id(1L)
+                .id(EXIST_ID)
                 .name("양승인")
                 .password("1234")
                 .email("rhfpdk92@naver.com")
@@ -69,7 +64,7 @@ class UserControllerTest {
                 .build();
 
         userDto = UserDto.builder()
-                .id(1L)
+                .id(EXIST_ID)
                 .name("양철수")
                 .email("newId@naver.com")
                 .password("12341234")
@@ -117,7 +112,7 @@ class UserControllerTest {
         @DisplayName("user에 파라미터가 없으면")
         class Context_user_does_not_have_parameter {
             User userWithoutName = User.builder()
-                    .id(1L)
+                    .id(EXIST_ID)
                     .password("1234")
                     .email("rhfpdk92@naver.com")
                     .build();
@@ -142,14 +137,14 @@ class UserControllerTest {
         class Context_exist_id_and_userdto {
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(1L), any(UserUpdateRequestDto.class)))
+                given(userService.updateUser(eq(EXIST_ID), any(UserUpdateRequestDto.class)))
                         .willReturn(userDto);
             }
 
             @Test
             @DisplayName("응답코드는 200이며 수정된 회원를 응답한다.")
             void it_return_updatedUser() throws Exception {
-                mockMvc.perform(patch("/users/{id}", 1L)
+                mockMvc.perform(patch("/users/{id}", EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(validUpdateUserDto)))
                         .andDo(print())
@@ -166,14 +161,14 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(100L), any(UserUpdateRequestDto.class)))
-                        .willThrow(new UserNotFoundException(100L));
+                given(userService.updateUser(eq(NOT_EXIST_ID), any(UserUpdateRequestDto.class)))
+                        .willThrow(new UserNotFoundException(NOT_EXIST_ID));
             }
 
             @Test
             @DisplayName("응답코드는 404이며 에러메세지를 응답한다")
             void it_return_not_found() throws Exception {
-                mockMvc.perform(patch("/users/{id}", 100L)
+                mockMvc.perform(patch("/users/{id}", NOT_EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(validUpdateUserDto)))
                         .andDo(print())
@@ -185,7 +180,7 @@ class UserControllerTest {
         @DisplayName("존재하는 회원이나 requestbody에 파라미터가 없으면")
         class Context_user_does_not_have_parameter {
             User userWithoutName = User.builder()
-                    .id(1L)
+                    .id(EXIST_ID)
                     .password("1234")
                     .email("rhfpdk92@naver.com")
                     .build();
@@ -193,7 +188,7 @@ class UserControllerTest {
             @Test
             @DisplayName("응답코드는 400며 에러메세지를 응답한다.")
             void it_return_createdUser() throws Exception {
-                mockMvc.perform(patch("/users/{id}", 1L)
+                mockMvc.perform(patch("/users/{id}", EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(userWithoutName)))
                         .andDo(print())
@@ -211,7 +206,7 @@ class UserControllerTest {
             @Test
             @DisplayName("응답코드 204를 응답한다.")
             void it_return_no_content() throws Exception {
-                mockMvc.perform(delete("/users/{id}", 1L)
+                mockMvc.perform(delete("/users/{id}", EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
                         .andExpect(status().isNoContent());
@@ -221,17 +216,20 @@ class UserControllerTest {
         @Nested
         @DisplayName("id가 존재하지 않는 회원이면")
         class Context_does_not_exist_id {
+            @BeforeEach
+            void setUp() {
+                willThrow(new UserNotFoundException(NOT_EXIST_ID)).given(userService).deleteUser(NOT_EXIST_ID);
+            }
+
             @Test
             @DisplayName("응답코드 404이며 id가 존재하지 않는다는 메세지를 응답한다.")
             void it_return_no_content() throws Exception {
-                mockMvc.perform(delete("/users/{id}", 100L)
+                mockMvc.perform(delete("/users/{id}", NOT_EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
                         .andExpect(status().isNotFound())
-                        .andExpect(content().string("User not found: " + 100L));
+                        .andExpect(jsonPath("message").value("User not found: " + NOT_EXIST_ID));
             }
         }
     }
 }
-
-

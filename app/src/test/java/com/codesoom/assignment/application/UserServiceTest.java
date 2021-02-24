@@ -3,8 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserDto;
 import com.codesoom.assignment.dto.UserCreateRequestDto;
+import com.codesoom.assignment.dto.UserDto;
 import com.codesoom.assignment.dto.UserUpdateRequestDto;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -23,10 +23,10 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-//TODO 수정시 정보가 없는경우 Validation 추가되지 않음
 @Transactional
 class UserServiceTest {
-
+    private final long EXIST_ID = 1L;
+    private final long NOT_EXIST_ID = 100L;
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
 
@@ -38,7 +38,7 @@ class UserServiceTest {
         userService = new UserService(mapper, userRepository);
 
         user = User.builder()
-                .id(1L)
+                .id(EXIST_ID)
                 .name("양승인")
                 .email("rhfpdk92@naver.com")
                 .password("1234")
@@ -87,21 +87,21 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 source = User.builder()
-                        .id(1L)
+                        .id(EXIST_ID)
                         .name("새유저")
                         .password("1234")
                         .build();
 
                 userDto = new UserDto(source);
-                given(userRepository.findById(1L)).willReturn(Optional.of(user));
+                given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(user));
                 given(userRepository.save(source)).willReturn(source);
             }
 
             @Test
             @DisplayName("수정된 회원을 반환한다")
             void it_return_updated_user() {
-                UserDto updatedUser = userService.updateUser(1L, new UserUpdateRequestDto(source));
-                verify(userRepository).findById(1L);
+                UserDto updatedUser = userService.updateUser(EXIST_ID, new UserUpdateRequestDto(source));
+                verify(userRepository).findById(EXIST_ID);
 
                 assertThat(updatedUser.getName()).isEqualTo("새유저");
             }
@@ -113,10 +113,43 @@ class UserServiceTest {
             @Test
             @DisplayName("UserNotFoundException을 던진다")
             void it_return_user_not_found_exception() {
-                assertThrows(UserNotFoundException.class, () -> userService.updateUser(100L, new UserUpdateRequestDto()));
+                assertThrows(UserNotFoundException.class, () -> userService.updateUser(NOT_EXIST_ID, new UserUpdateRequestDto()));
 
-                verify(userRepository).findById(100L);
+                verify(userRepository).findById(NOT_EXIST_ID);
             }
         }
     }
+
+    @Nested
+    @DisplayName("deleteUser()는 ")
+    class Describe_deleteUser {
+        @Nested
+        @DisplayName("id에 해당하는 회원이 존재하면")
+        class Context_exist_id {
+
+            @BeforeEach
+            void setUp() {
+                given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(user));
+            }
+
+            @Test
+            @DisplayName("장난감을 삭제한다.")
+            void it_return_updated_user() {
+                userService.deleteUser(EXIST_ID);
+
+                verify(userRepository).delete(user);
+            }
+        }
+
+        @Nested
+        @DisplayName("id에 해당하는 회원이 없으면")
+        class Context_does_not_exist_id {
+            @Test
+            @DisplayName("UserNotFoundException을 던진다")
+            void it_return_user_not_found_exception() {
+                assertThrows(UserNotFoundException.class, () -> userService.deleteUser(NOT_EXIST_ID));
+            }
+        }
+    }
+
 }
