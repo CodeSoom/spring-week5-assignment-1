@@ -41,9 +41,8 @@ class UserControllerTest {
 
     private User user1;
     private User user2;
-    private List<User> users;
-    UserSaveRequestDto saveRequestDto;
-    UserUpdateRequestDto updateRequestDto;
+    private UserSaveRequestDto saveRequestDto;
+    private UserUpdateRequestDto updateRequestDto;
     private List<UserResponseDto> usersResponses;
     private UserResponseDto userResponseDto1;
     private UserResponseDto userResponseDto2;
@@ -65,6 +64,7 @@ class UserControllerTest {
         given(userService.getUsers()).willReturn(usersResponses);
 
         List<UserResponseDto> users = userController.getUsers();
+
         assertThat(users).isNotEmpty();
         assertThat(users).containsExactly(userResponseDto1, userResponseDto2);
 
@@ -154,7 +154,6 @@ class UserControllerTest {
                 .password(USER2_PASSWORD)
                 .build();
 
-        users = Arrays.asList(user1, user2);
         userResponseDto1 = UserResponseDto.of(user1);
         userResponseDto2 = UserResponseDto.of(user2);
         usersResponses = Arrays.asList(userResponseDto1, userResponseDto2);
