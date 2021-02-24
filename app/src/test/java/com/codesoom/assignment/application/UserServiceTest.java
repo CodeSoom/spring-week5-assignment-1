@@ -17,6 +17,7 @@ import com.github.dozermapper.core.Mapper;
 
 public class UserServiceTest {
 
+    private User user;
     private UserService userService;
 
     private UserRepository userRepository = mock(UserRepository.class);
@@ -27,7 +28,7 @@ public class UserServiceTest {
 
         userService = new UserService(mapper, userRepository);
 
-        User user = User.builder()
+        user = User.builder()
             .id(1L)
             .name("홍길동")
             .email("hong@gmail.com")
@@ -49,15 +50,7 @@ public class UserServiceTest {
     @DisplayName("서비스가 저장소에 생성 요청을 하면, 새로운 유저가 생성된다.")
     @Test
     void test1() {
-
-        User user = userRepository.save(
-            new User()
-                .builder()
-                .id(1L)
-                .name("홍길동")
-                .email("hong@gmail.com")
-                .password("1234")
-                .build());
+        userRepository.save(user);
 
         assertThat(user.getId()).isEqualTo(1L);
         assertThat(user.getName()).isEqualTo("홍길동");
