@@ -7,4 +7,5 @@ public interface UserRepository {
     Optional<User> findById(Long id);
 
     Long nextId();
+    void delete(User user);
 }

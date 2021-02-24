@@ -25,4 +25,9 @@ public class InMemoryUserRepository implements UserRepository {
     public Long nextId() {
         return lastId++;
     }
+
+    @Override
+    public void delete(User user) {
+        map.remove(user.getId());
+    }
 }

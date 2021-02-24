@@ -4,8 +4,6 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 
-import java.util.Optional;
-
 public class UserApplicationService {
     private UserRepository userRepository;
 
@@ -29,5 +27,10 @@ public class UserApplicationService {
         user.changeName(newName);
         userRepository.save(user);
         return user;
+    }
+
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id).get();
+        userRepository.delete(user);
     }
 }
