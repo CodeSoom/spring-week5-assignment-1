@@ -3,6 +3,8 @@ package com.codesoom.assignment.product.application;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
 import com.codesoom.assignment.product.dto.ProductData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -23,7 +25,8 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository);
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        productService = new ProductService(productRepository, mapper);
 
         Product product = Product.builder()
                 .id(1L)

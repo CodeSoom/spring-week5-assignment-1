@@ -3,19 +3,19 @@ package com.codesoom.assignment.product.application;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
 import com.codesoom.assignment.product.dto.ProductData;
+import com.github.dozermapper.core.Mapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
-
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
+    private final Mapper mapper;
 
     public List<Product> getProducts() {
         return productRepository.findAll();
@@ -26,24 +26,14 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-        Product product = Product.builder()
-                .name(productData.getName())
-                .maker(productData.getMaker())
-                .price(productData.getPrice())
-                .imageUrl(productData.getImageUrl())
-                .build();
+        Product product = mapper.map(productData, Product.class);
         return productRepository.save(product);
     }
 
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
-        product.change(
-                productData.getName(),
-                productData.getMaker(),
-                productData.getPrice(),
-                productData.getImageUrl()
-        );
+        product.changeWith(mapper.map(productData, Product.class));
 
         return product;
     }

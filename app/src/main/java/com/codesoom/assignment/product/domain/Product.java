@@ -36,4 +36,11 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
     }
+
+    public void changeWith(Product source) {
+        this.name = source.getName();
+        this.maker = source.getMaker();
+        this.price = source.getPrice();
+        this.imageUrl = source.getImageUrl();
+    }
 }
