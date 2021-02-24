@@ -1,7 +1,6 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserRequestDto;
@@ -16,6 +15,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.BDDMockito.verify;
 
 /*
 1. getAllUsers : 완료
@@ -28,7 +28,7 @@ class UserServiceTest {
 
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
-    private UserRequestDto userRequestDto;
+
     @BeforeEach
     void setUp() {
         userService = new UserService(userRepository);
@@ -40,24 +40,8 @@ class UserServiceTest {
                 .password("pwd111")
                 .build();
 
-        userRequestDto = UserRequestDto.builder()
-                .name("weno")
-                .password("weno@codesoom.com")
-                .password("pwd111")
-                .build();
-
         given(userRepository.findAll()).willReturn(List.of(user));
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
-        // given(userRepository.findById(1000L)).willThrow(new UserNotFoundException(1L)); // 불필요한 코드 : 이유 생각해보기
-        given(userRepository.save(any(User.class))).will(invocation -> {
-            User source = invocation.getArgument(0);
-            return User.builder()
-                    .id(2L)
-                    .name(source.getName())
-                    .email(source.getEmail())
-                    .password(source.getPassword())
-                    .build();
-        });
 
     }
 
@@ -82,7 +66,16 @@ class UserServiceTest {
 
     @Test
     void createUser(){
+        UserRequestDto userRequestDto = UserRequestDto.builder()
+                .name("weno")
+                .password("weno@codesoom.com")
+                .password("pwd111")
+                .build();
+
         User user = userService.createUser(userRequestDto);
+
+        assertThat(user).isNotNull();
+
     }
 
 }
