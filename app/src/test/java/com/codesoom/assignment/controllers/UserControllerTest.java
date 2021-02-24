@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -8,22 +9,26 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ActiveProfiles("test")
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
+    final Long EXIST_ID = 1L;
     final Long NOT_EXIST_ID = 1000L;
     final String NAME = "My Name";
     final String EMAIL = "my@gmail.com";
@@ -33,8 +38,8 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
-    private UserService userService;
+    @MockBean
+    UserService userService;
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -45,6 +50,36 @@ class UserControllerTest {
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
+    }
+
+    @BeforeEach
+    void setUp() {
+        Mockito.reset(userService);
+        User user = User.builder()
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+        given(userService.createUser(any(UserData.class))).willReturn(user);
+
+        given(userService.findUser(EXIST_ID)).willReturn(user);
+
+        given(userService.findUser(NOT_EXIST_ID))
+                .willThrow(new UserNotFoundException(NOT_EXIST_ID));
+
+        given(userService.updateUser(eq(EXIST_ID), any(UserData.class)))
+                .will(invocation -> {
+                    UserData userData = invocation.getArgument(1);
+                    return User.builder()
+                            .name(userData.getName())
+                            .email(userData.getEmail())
+                            .password(userData.getPassword());
+                });
+
+        given(userService.deleteUser(EXIST_ID)).willReturn(user);
+        
+        given(userService.deleteUser(NOT_EXIST_ID))
+                .willThrow(new UserNotFoundException(NOT_EXIST_ID));
     }
 
     @Nested
@@ -126,14 +161,7 @@ class UserControllerTest {
         @Nested
         @DisplayName("존재하는 user id가 주어진다면")
         class Context_with_exist_user_id {
-            Long givenId;
-
-            @BeforeEach
-            void setUp() {
-                UserData source = createUser();
-                User givenUser = userService.createUser(source);
-                givenId = givenUser.getId();
-            }
+            Long givenId = EXIST_ID;
 
             @DisplayName("204코드를 응답한다")
             @Test
