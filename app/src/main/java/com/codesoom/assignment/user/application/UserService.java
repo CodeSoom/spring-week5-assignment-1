@@ -2,7 +2,7 @@ package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
-import com.codesoom.assignment.user.dto.UserResponseDto;
+import com.codesoom.assignment.user.dto.UserData;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import com.github.dozermapper.core.Mapper;
@@ -24,24 +24,24 @@ public class UserService {
     private final Mapper mapper;
 
     /**
-     * 등록된 모든 사용자 목록을 가져온다.
+     * 등록된 모든 사용자 정보를 가져온다.
      */
-    public List<UserResponseDto> getUsers() {
+    public List<UserData> getUsersInformation() {
         return userRepository.findAll()
                 .stream()
-                .map(UserResponseDto::of)
+                .map(UserData::of)
                 .collect(Collectors.toList());
     }
 
     /**
-     * 등록된 사용자 id를 가진 사용자를 리턴한다.
+     * 등록된 사용자 id를 가진 사용자 정보를 리턴한다.
      * @param userId 등록된 사용자 id
      * @return 등록된 사용자
      */
-    public UserResponseDto getUser(Long userId) throws UserNotFoundException {
+    public UserData getUserInformation(Long userId) throws UserNotFoundException {
         final User user = findUser(userId);
 
-        return UserResponseDto.of(user);
+        return UserData.of(user);
     }
 
     /**
@@ -51,13 +51,13 @@ public class UserService {
      * @return 갱신된 사용자 정보
      */
     @Transactional
-    public UserResponseDto updateUser(long userId,
-                                      UserUpdateRequestDto requestDto) throws UserNotFoundException {
+    public UserData updateUser(long userId,
+                               UserUpdateRequestDto requestDto) throws UserNotFoundException {
         User user = findUser(userId);
 
         user.changeWith(mapper.map(requestDto, User.class));
 
-        return UserResponseDto.of(user);
+        return UserData.of(user);
     }
 
     /**
@@ -66,11 +66,11 @@ public class UserService {
      * @return 등록된 사용자 정보
      */
     @Transactional
-    public UserResponseDto createUser(UserSaveRequestDto requestDto) {
+    public UserData createUser(UserSaveRequestDto requestDto) {
         User user = mapper.map(requestDto, User.class);
         User saved = userRepository.save(user);
 
-        return UserResponseDto.of(saved);
+        return UserData.of(saved);
     }
 
     /**

@@ -2,7 +2,7 @@ package com.codesoom.assignment.user.controllers;
 
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
-import com.codesoom.assignment.user.dto.UserResponseDto;
+import com.codesoom.assignment.user.dto.UserData;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,15 +63,20 @@ class UserMockMvcControllerTest {
         @Nested
         @DisplayName("등록된 사용자가 있으면")
         class Context_with_users {
-            List<UserResponseDto> users;
+            List<UserData> users;
 
             @BeforeEach
             void setUp() {
-                UserResponseDto responseDto = getUserResponse();
+                UserData responseDto = UserData.builder()
+                        .id(USER_ID)
+                        .name(USER_NAME)
+                        .email(USER_EMAIL)
+                        .password(USER_PASSWORD)
+                        .build();
 
                 users = Collections.singletonList(responseDto);
 
-                given(userService.getUsers())
+                given(userService.getUsersInformation())
                         .willReturn(users);
             }
 
@@ -108,7 +113,7 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.getUser(eq(NOT_EXIST_ID)))
+                given(userService.getUserInformation(NOT_EXIST_ID))
                         .willThrow(new UserNotFoundException(NOT_EXIST_ID));
             }
 
@@ -125,12 +130,17 @@ class UserMockMvcControllerTest {
         @Nested
         @DisplayName("등록된 사용자가 있으면")
         class Context_with_user {
-            UserResponseDto responseDto;
+            UserData responseDto;
 
             @BeforeEach
             void setUp() {
-                responseDto = getUserResponse();
-                given(userService.getUser(anyLong())).willReturn(responseDto);
+                responseDto = UserData.builder()
+                        .id(USER_ID)
+                        .name(USER_NAME)
+                        .email(USER_EMAIL)
+                        .password(USER_PASSWORD)
+                        .build();
+                given(userService.getUserInformation(anyLong())).willReturn(responseDto);
             }
 
             @DisplayName("200 OK 상태와 찾고자 하는 사용자를 응답한다.")
@@ -203,7 +213,12 @@ class UserMockMvcControllerTest {
             @BeforeEach
             void setUp() {
                 requestDto = getUpdateRequest();
-                UserResponseDto responseDto = getUserResponse();
+                UserData responseDto = UserData.builder()
+                        .id(USER_ID)
+                        .name(USER_NAME)
+                        .email(USER_EMAIL)
+                        .password(USER_PASSWORD)
+                        .build();
                 given(userService.updateUser(anyLong(), any(UserUpdateRequestDto.class)))
                         .willReturn(responseDto);
             }
@@ -259,7 +274,12 @@ class UserMockMvcControllerTest {
                         .email(USER_EMAIL)
                         .password(USER_PASSWORD)
                         .build();
-                UserResponseDto responseDto = getUserResponse();
+                UserData responseDto = UserData.builder()
+                        .id(USER_ID)
+                        .name(USER_NAME)
+                        .email(USER_EMAIL)
+                        .password(USER_PASSWORD)
+                        .build();
                 given(userService.createUser(any(UserSaveRequestDto.class)))
                         .willReturn(responseDto);
             }
@@ -359,8 +379,8 @@ class UserMockMvcControllerTest {
         }
     }
 
-    private UserResponseDto getUserResponse() {
-        return UserResponseDto.builder()
+    private UserData getUserResponse() {
+        return UserData.builder()
                 .id(USER_ID)
                 .name(USER_NAME)
                 .email(USER_EMAIL)

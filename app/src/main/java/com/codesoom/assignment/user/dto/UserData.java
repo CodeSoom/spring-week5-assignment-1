@@ -7,8 +7,11 @@ import lombok.Getter;
 
 import java.util.Objects;
 
+/**
+ * 사용자 정보.
+ */
 @Getter
-public class UserResponseDto {
+public class UserData {
 
     /**
      * 사용자 식별자.
@@ -39,15 +42,15 @@ public class UserResponseDto {
      * @param password 사용자 비밀번호
      */
     @Builder
-    public UserResponseDto(Long id, String name, String email, String password) {
+    public UserData(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public static UserResponseDto of (User user) {
-        return UserResponseDto.builder()
+    public static UserData of (User user) {
+        return UserData.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
@@ -63,10 +66,10 @@ public class UserResponseDto {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof UserResponseDto)) {
+        if (!(o instanceof UserData)) {
             return false;
         }
-        UserResponseDto dto = (UserResponseDto) o;
+        UserData dto = (UserData) o;
         return getId().equals(dto.getId());
     }
 

@@ -1,7 +1,7 @@
 package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.user.domain.UserRepository;
-import com.codesoom.assignment.user.dto.UserResponseDto;
+import com.codesoom.assignment.user.dto.UserData;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import org.junit.jupiter.api.AfterEach;
@@ -55,10 +55,10 @@ class UserServiceTest {
         @DisplayName("새로운 사용자 추가되고, 사용자 정보를 리턴한다")
         @Test
         void it_returns_user() {
-            UserResponseDto actual = userService.createUser(requestDto);
+            UserData actual = userService.createUser(requestDto);
 
             assertAll(
-                    () -> assertThat(userService.getUsers()).isNotEmpty(),
+                    () -> assertThat(userService.getUsersInformation()).isNotEmpty(),
                     () -> assertThat(actual.getId()).isNotNull(),
                     () -> assertThat(actual.getName()).isEqualTo(USER_NAME),
                     () -> assertThat(actual.getEmail()).isEqualTo(USER_EMAIL),
@@ -84,9 +84,9 @@ class UserServiceTest {
             @DisplayName("등록된 사용자 목록을 리턴한다")
             @Test
             void It_return_users() {
-                assertThat(userService.getUsers().get(0).getName()).isEqualTo(USER_NAME);
-                assertThat(userService.getUsers().get(0).getEmail()).isEqualTo(USER_EMAIL);
-                assertThat(userService.getUsers()).hasSize(1);
+                assertThat(userService.getUsersInformation().get(0).getName()).isEqualTo(USER_NAME);
+                assertThat(userService.getUsersInformation().get(0).getEmail()).isEqualTo(USER_EMAIL);
+                assertThat(userService.getUsersInformation()).hasSize(1);
             }
         }
 
@@ -97,7 +97,7 @@ class UserServiceTest {
             @DisplayName("비어있는 사용자 목록을 리턴한다")
             @Test
             void It_return_empty_users() {
-                assertThat(userService.getUsers()).isEmpty();
+                assertThat(userService.getUsersInformation()).isEmpty();
             }
         }
     }
@@ -114,14 +114,14 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 UserSaveRequestDto requestDto = getUserSaveDto();
-                UserResponseDto savedUser = userService.createUser(requestDto);
+                UserData savedUser = userService.createUser(requestDto);
                 givenId = savedUser.getId();
             }
 
             @DisplayName("등록된 사용자 id로 찾고자하는 사용자를 리턴한다")
             @Test
             void It_return_user() {
-                UserResponseDto actual = userService.getUser(givenId);
+                UserData actual = userService.getUserInformation(givenId);
 
                 assertAll(
                         () -> assertThat(actual.getId()).isEqualTo(givenId),
@@ -145,7 +145,7 @@ class UserServiceTest {
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(UserNotFoundException.class)
-                        .isThrownBy(() -> userService.getUser(givenId));
+                        .isThrownBy(() -> userService.getUserInformation(givenId));
             }
         }
     }
@@ -163,7 +163,7 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 UserSaveRequestDto requestDto = getUserSaveDto();
-                UserResponseDto savedUser = userService.createUser(requestDto);
+                UserData savedUser = userService.createUser(requestDto);
                 givenId = savedUser.getId();
                 updateRequestDto = getUpdateRequest();
             }
@@ -171,7 +171,7 @@ class UserServiceTest {
             @DisplayName("수정된 사용자를 리턴한다")
             @Test
             void It_return_updated_user() {
-                UserResponseDto actual = userService.updateUser(givenId, updateRequestDto);
+                UserData actual = userService.updateUser(givenId, updateRequestDto);
 
                 assertAll(
                         () -> assertThat(actual.getPassword()).isEqualTo(UPDATE_PASSWORD),
@@ -214,7 +214,7 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 UserSaveRequestDto requestDto = getUserSaveDto();
-                UserResponseDto savedProduct = userService.createUser(requestDto);
+                UserData savedProduct = userService.createUser(requestDto);
                 givenId = savedProduct.getId();
             }
 
@@ -223,7 +223,7 @@ class UserServiceTest {
             void It_delete_user() {
                 userService.deleteUser(givenId);
 
-                assertThat(userService.getUsers()).isEmpty();
+                assertThat(userService.getUsersInformation()).isEmpty();
             }
         }
 

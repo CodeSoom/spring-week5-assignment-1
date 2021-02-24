@@ -9,7 +9,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 /**
- * 사용자 갱신요청 정보.
+ * 사용자 생성요청 정보.
  */
 @Getter
 @NoArgsConstructor

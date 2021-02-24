@@ -3,7 +3,7 @@ package com.codesoom.assignment.user.controllers;
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.domain.User;
-import com.codesoom.assignment.user.dto.UserResponseDto;
+import com.codesoom.assignment.user.dto.UserData;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,9 +43,9 @@ class UserControllerTest {
     private User user2;
     private UserSaveRequestDto saveRequestDto;
     private UserUpdateRequestDto updateRequestDto;
-    private List<UserResponseDto> usersResponses;
-    private UserResponseDto userResponseDto1;
-    private UserResponseDto userResponseDto2;
+    private List<UserData> usersResponses;
+    private UserData userData1;
+    private UserData userData2;
 
     @Mock
     private UserService userService;
@@ -61,37 +61,37 @@ class UserControllerTest {
     @Test
     @DisplayName("전체 사용자를 조회하고 사용자 목록을 확인한다.")
     void getUsers() {
-        given(userService.getUsers()).willReturn(usersResponses);
+        given(userService.getUsersInformation()).willReturn(usersResponses);
 
-        List<UserResponseDto> users = userController.getUsers();
+        List<UserData> users = userController.getUsersInformation();
 
         assertThat(users).isNotEmpty();
-        assertThat(users).containsExactly(userResponseDto1, userResponseDto2);
+        assertThat(users).containsExactly(userData1, userData2);
 
-        verify(userService).getUsers();
+        verify(userService).getUsersInformation();
     }
 
     @Test
     @DisplayName("특정 사용자를 조회하고 사용자 정보를 확인한다.")
     void getUser() {
-        given(userService.getUser(anyLong())).willReturn(userResponseDto1);
-        UserResponseDto user = userController.getUser(USER1_ID);
+        given(userService.getUserInformation(anyLong())).willReturn(userData1);
+        UserData user = userController.getUserInformation(USER1_ID);
 
         assertThat(user.getId()).isEqualTo(USER1_ID);
         assertThat(user.getEmail()).isEqualTo(USER1_EMAIL);
         assertThat(user.getPassword()).isEqualTo(USER1_PASSWORD);
         assertThat(user.getName()).isEqualTo(USER1_NAME);
 
-        verify(userService).getUser(anyLong());
+        verify(userService).getUserInformation(anyLong());
     }
 
     @Test
     @DisplayName("특정 사용자를 조회하고 존재하지 않으면 예외를 던진다.")
     void getNotExistedUser() {
-        given(userService.getUser(NOT_EXIST_ID))
+        given(userService.getUserInformation(NOT_EXIST_ID))
                 .willThrow(new UserNotFoundException(NOT_EXIST_ID));
 
-        assertThatThrownBy(() -> userService.getUser(NOT_EXIST_ID))
+        assertThatThrownBy(() -> userService.getUserInformation(NOT_EXIST_ID))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
@@ -99,9 +99,9 @@ class UserControllerTest {
     @DisplayName("사용자를 새로 등록할 수 있다.")
     void createUser() {
         given(userService.createUser(saveRequestDto))
-                .willReturn(userResponseDto1);
+                .willReturn(userData1);
 
-        UserResponseDto actual = userController.createUser(saveRequestDto);
+        UserData actual = userController.createUser(saveRequestDto);
 
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(USER1_NAME),
@@ -115,9 +115,9 @@ class UserControllerTest {
     @DisplayName("특정 사용자 정보를 갱신할 수 있다.")
     void updateUser() {
         given(userService.updateUser(USER1_ID, updateRequestDto))
-                .willReturn(userResponseDto2);
+                .willReturn(userData2);
 
-        UserResponseDto actual = userController.updateUser(USER1_ID, updateRequestDto);
+        UserData actual = userController.updateUser(USER1_ID, updateRequestDto);
 
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(USER2_NAME),
@@ -154,8 +154,8 @@ class UserControllerTest {
                 .password(USER2_PASSWORD)
                 .build();
 
-        userResponseDto1 = UserResponseDto.of(user1);
-        userResponseDto2 = UserResponseDto.of(user2);
-        usersResponses = Arrays.asList(userResponseDto1, userResponseDto2);
+        userData1 = UserData.of(user1);
+        userData2 = UserData.of(user2);
+        usersResponses = Arrays.asList(userData1, userData2);
     }
 }
