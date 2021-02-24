@@ -56,7 +56,7 @@ public class UserRepositoryTest {
 
     @When("user를 remove하는 경우")
     public void removeUser() {
-        repository.remove(user);
+        repository.delete(user);
     }
 
     @Then("user repository에서 id로 user를 찾을 수 없다")
