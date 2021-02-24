@@ -5,9 +5,9 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -23,6 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
 
@@ -37,8 +38,16 @@ public class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        UserResponse userResponse = new UserResponse(1L, "홍길동", "hong@gamil.com", "1234");
-        given(userService.createUser(any(UserRequest.class))).willReturn(userResponse);
+
+        User user = new User()
+            .builder()
+            .id(1L)
+            .name("홍길동")
+            .email("hong@gmail.com")
+            .password("1234")
+            .build();
+
+        given(userService.createUser(any(User.class))).willReturn(user);
         given(userService.updateUser(eq(1L), any(UserRequest.class)))
             .will(invocation -> {
                 Long id = invocation.getArgument(0);
@@ -60,7 +69,7 @@ public class UserControllerTest {
             .andExpect(status().isCreated())
             .andExpect(MockMvcResultMatchers.content().string(containsString("홍길동")));
 
-        verify(userService).createUser(any(UserRequest.class));
+        verify(userService).createUser(any(User.class));
     }
 
     @DisplayName("유효하지 않은 양식으로 서비스에 회원 생성을 요청하였을 떄, 상태코드 400을 응답한다.")

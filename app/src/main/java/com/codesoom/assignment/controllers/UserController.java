@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
 
@@ -29,7 +30,22 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse create(@RequestBody @Valid UserRequest userRequest) {
-        return userService.createUser(userRequest);
+        User user = new User()
+            .builder()
+            .name(userRequest.getName())
+            .email(userRequest.getEmail())
+            .password(userRequest.getPassword())
+            .build();
+
+        User result = userService.createUser(user);
+
+        return new UserResponse()
+            .builder()
+            .id(result.getId())
+            .name(result.getName())
+            .email(result.getEmail())
+            .password(result.getPassword())
+            .build();
     }
 
     @PutMapping("{id}")

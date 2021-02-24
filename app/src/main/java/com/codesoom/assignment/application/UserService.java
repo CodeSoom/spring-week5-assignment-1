@@ -19,23 +19,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public UserResponse createUser(UserRequest userRequest) {
-        User user = new User()
-            .builder()
-            .name(userRequest.getName())
-            .email(userRequest.getEmail())
-            .password(userRequest.getPassword())
-            .build();
-
-        User response = userRepository.save(user);
-
-        return new UserResponse()
-            .builder()
-            .id(response.getId())
-            .name(response.getName())
-            .email(response.getEmail())
-            .password(response.getPassword())
-            .build();
+    public User createUser(User user) {
+        return userRepository.save(user);
     }
 
     public UserResponse updateUser(Long id, UserRequest userRequest) {
