@@ -9,6 +9,8 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import org.junit.jupiter.api.Assertions;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class UserApplicationServiceTest {
@@ -70,5 +72,16 @@ public class UserApplicationServiceTest {
                 UserNotFoundException.class,
                 () -> userApplicationService.changeName(repository.nextId(), newName)
         );
+    }
+
+    @When("회원을 삭제하는 경우")
+    public void deleteUser() {
+        userApplicationService.deleteUser(createdUser.getId());
+    }
+
+    @Then("회원을 찾을 수 없다")
+    public void userNotFount() {
+        Optional<User> foundUser = repository.findById(createdUser.getId());
+        assertThat(foundUser).isEmpty();
     }
 }

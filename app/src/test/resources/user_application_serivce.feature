@@ -12,3 +12,8 @@ Feature: user management
   Scenario: 존재하지 않는 회원 정보 변경하기
     Given 회원이 생성되지 않았을 때
     When 존재하지 않는 회원의 이름을 변경하는 경우 에러가 발생한다
+
+  Scenario: 회원 삭제하기
+    Given 이미 회원이 생성되었다면
+    When 회원을 삭제하는 경우
+    Then 회원을 찾을 수 없다
