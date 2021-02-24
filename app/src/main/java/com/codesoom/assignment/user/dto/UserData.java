@@ -49,7 +49,7 @@ public class UserData {
         this.password = password;
     }
 
-    public static UserData of (User user) {
+    public static UserData of(User user) {
         return UserData.builder()
                 .id(user.getId())
                 .name(user.getName())
