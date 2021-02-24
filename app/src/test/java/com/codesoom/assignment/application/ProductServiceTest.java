@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductBadRequestException;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -184,6 +185,29 @@ class ProductServiceTest {
                         .isEqualTo(createSource.getImageUrl());
 
                 verify(productRepository).save(any(Product.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 이름이 비어있는 고양이 장난감 객체가 주어진다면")
+        class Content_WithCatToyWithOutName {
+            private ProductData createSource;
+
+            @BeforeEach
+            void setUp() {
+                createSource = ProductData.builder()
+                        .name("")
+                        .maker(CREATED_PRODUCT_MAKER)
+                        .price(CREATED_PRODUCT_PRICE)
+                        .imageUrl(CREATED_PRODUCT_IMAGEURL)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("요청이 잘못됐다는 메세지를 응답한다")
+            void itReturnsBadRequestMessage() {
+                assertThatThrownBy(() -> productService.createProduct(createSource))
+                        .isInstanceOf(ProductBadRequestException.class);
             }
         }
     }
