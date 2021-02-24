@@ -1,6 +1,5 @@
 package com.codesoom.assignment.User.application;
 
-import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.common.exception.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.domain.User;
@@ -146,4 +145,54 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("deleteUser()은")
+    class Describe_deleteUser {
+
+        @Nested
+        @DisplayName("등록된 회원의 id가 주어지면")
+        class Context_contains_target_id {
+            @BeforeEach
+            void setUp() {
+                user = User.builder()
+                        .id(EXISTING_ID)
+                        .name(NAME)
+                        .email(EMAIL)
+                        .password(PASSWORD)
+                        .build();
+
+                given(userRepository.findById(EXISTING_ID))
+                        .willReturn(Optional.of(user));
+            }
+
+            @Test
+            @DisplayName("그 id에 해당하는 회원 정보를 삭제한다.")
+            void it_deletes_user() {
+                userService.deleteUser(EXISTING_ID);
+
+                verify(userRepository).delete(any(User.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 회원이 id가 주어지면")
+        class Context_not_contains_target_id {
+
+            @BeforeEach
+            void setUp() {
+                given(userRepository.findById(NOT_EXISTING_ID))
+                        .willReturn(Optional.empty());
+            }
+
+            @Test
+            @DisplayName("예외를 던진다.")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> userService.updateUser(NOT_EXISTING_ID, userUpdate))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+
+    }
+
 }
