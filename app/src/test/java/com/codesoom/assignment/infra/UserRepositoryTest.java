@@ -48,4 +48,21 @@ public class UserRepositoryTest {
 
         assertThat(foundUser).isEmpty();
     }
+
+    @Given("이미 user가 save되었다면")
+    public void alreadySavedUser() {
+        repository.save(user);
+    }
+
+    @When("user를 remove하는 경우")
+    public void removeUser() {
+        repository.remove(user);
+    }
+
+    @Then("user repository에서 id로 user를 찾을 수 없다")
+    public void cantFindUser() {
+        Optional<User> foundUser = repository.findById(user.getId());
+
+        assertThat(foundUser).isEmpty();
+    }
 }
