@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
