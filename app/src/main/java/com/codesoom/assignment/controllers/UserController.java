@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.dto.UserDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * 회원 정보와 관련된 HTTP 요청을 처리합니다.
@@ -30,7 +33,7 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDto createUser(@RequestBody UserDto userDto) {
+    public UserDto createUser(@RequestBody @Valid UserDto userDto) {
         return userService.createUser(userDto);
     }
 
@@ -41,7 +44,7 @@ public class UserController {
      * @return 수정된 회원의 정보
      */
     @PatchMapping("/{id}")
-    public UserDto updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public UserDto updateUser(@PathVariable Long id, @RequestBody @Valid UserDto userDto) {
         return userService.updateUser(id, userDto);
     }
 }

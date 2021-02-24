@@ -23,6 +23,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //        회원 생성하기 - POST /user
@@ -94,6 +95,25 @@ class UserControllerTest {
             void it_return_bad_request() throws Exception {
                 mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
+                        .andDo(print())
+                        .andExpect(status().isBadRequest());
+            }
+        }
+        @Nested
+        @DisplayName("user에 파라미터가 없으면")
+        class Context_user_does_not_have_parameter {
+            User userWithoutName  = User.builder()
+                    .id(1L)
+                    .password("1234")
+                    .email("rhfpdk92@naver.com")
+                    .build();
+
+            @Test
+            @DisplayName("응답코드는 400며 에러메세지를 응답한다.")
+            void it_return_createdUser() throws Exception {
+                mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON_VALUE)
+                        .content(objectMapper.writeValueAsString(userWithoutName)))
                         .andDo(print())
                         .andExpect(status().isBadRequest());
             }
