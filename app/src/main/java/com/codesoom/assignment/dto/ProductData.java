@@ -11,13 +11,13 @@ import javax.validation.constraints.NotNull;
 public class ProductData {
     private Long id;
 
-    @NotBlank(message = "name이 없습니다")
+    @NotBlank(message = "name 값은 필수입니다")
     private String name;
 
-    @NotBlank(message = "maker가 없습니다")
+    @NotBlank(message = "maker 값은 필수입니다")
     private String maker;
 
-    @NotNull(message = "price가 없습니다")
+    @NotNull(message = "price 값은 필수입니다")
     private Integer price;
     
     private String imageUrl;

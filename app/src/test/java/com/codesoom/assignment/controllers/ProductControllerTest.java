@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductBadRequestException;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
@@ -189,12 +188,12 @@ class ProductControllerWebMvcTest {
             @Test
             @DisplayName("요청이 잘못됐다는 메세지와 BAD_REQUEST를 리턴한다")
             void itReturnsBadRequestMessageAndBAD_REQUESTHttpStatus() throws Exception {
-                mockMvc.perform(post("/products")
+                mockMvc.perform(post("/products").accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\" , \"maker\":\"createdMaker\", \"price\":200, \"image\":\"createdImage\"}"))
                         .andDo(print())
                         .andExpect(status().isBadRequest())
-                        .andExpect(content().string(containsString("Product bad request")));
+                        .andExpect(content().string(containsString("name 값은 필수입니다")));
             }
         }
 
@@ -204,12 +203,12 @@ class ProductControllerWebMvcTest {
             @Test
             @DisplayName("요청이 잘못됐다는 메세지와 BAD_REQUEST를 리턴한다")
             void itReturnsBadRequestMessageAndBAD_REQUESTHttpStatus() throws Exception {
-                mockMvc.perform(post("/products")
+                mockMvc.perform(post("/products").accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"createdName\" , \"maker\":\"\", \"price\":200, \"image\":\"createdImage\"}"))
                         .andDo(print())
                         .andExpect(status().isBadRequest())
-                        .andExpect(content().string(containsString("Product bad request")));
+                        .andExpect(content().string(containsString("maker 값은 필수입니다")));
             }
         }
 
@@ -219,12 +218,12 @@ class ProductControllerWebMvcTest {
             @Test
             @DisplayName("요청이 잘못됐다는 메세지와 BAD_REQUEST를 리턴한다")
             void itReturnsBadRequestMessageAndBAD_REQUESTHttpStatus() throws Exception {
-                mockMvc.perform(post("/products")
+                mockMvc.perform(post("/products").accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"price\": null, \"image\":\"createdImage\"}"))
                         .andDo(print())
                         .andExpect(status().isBadRequest())
-                        .andExpect(content().string(containsString("Product bad request")));
+                        .andExpect(content().string(containsString("price 값은 필수입니다")));
             }
         }
     }

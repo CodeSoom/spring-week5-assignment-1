@@ -24,9 +24,13 @@ public class ProductController {
         return productService.getProducts();
     }
 
-    @GetMapping("{id}")
-    public Product detail(@PathVariable Long id) throws ProductNotFoundException {
-        return productService.getProduct(id);
+    @GetMapping("/{id}")
+    public Product detail(@PathVariable Long id) {
+        try {
+            return productService.getProduct(id);
+        } catch(ProductNotFoundException e) {
+            throw new ProductNotFoundException(id);
+        }
     }
 
     @PostMapping
@@ -35,7 +39,7 @@ public class ProductController {
         return productService.createProduct(productData);
     }
 
-    @PatchMapping("{id}")
+    @PatchMapping("/{id}")
     public Product update(
             @PathVariable Long id,
             @RequestBody @Valid ProductData productData
@@ -43,9 +47,13 @@ public class ProductController {
         return productService.updateProduct(id, productData);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Product delete(@PathVariable Long id) {
-        return productService.deleteProduct(id);
+        try {
+            return productService.deleteProduct(id);
+        } catch(ProductNotFoundException e) {
+            throw new ProductNotFoundException(id);
+        }
     }
 }
