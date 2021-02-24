@@ -18,7 +18,7 @@ import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;

@@ -62,7 +62,7 @@ public class UserControllerTest {
     @DisplayName("유효한 양식으로 서비스에 회원 생성을 요청하였을 때, 상태코드 201을 응답한다.")
     @Test
     void createUserWithValidAttributes() throws Exception {
-        mockMvc.perform(post("/user")
+        mockMvc.perform(post("/users")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
             .content("{\"name\":\"홍길동\",\"email\":\"hong@gmail.com\",\"password\":\"1234\"}"))
@@ -75,7 +75,7 @@ public class UserControllerTest {
     @DisplayName("유효하지 않은 양식으로 서비스에 회원 생성을 요청하였을 떄, 상태코드 400을 응답한다.")
     @Test
     void createWithInvalidAttributes() throws Exception {
-        mockMvc.perform(post("/user")
+        mockMvc.perform(post("/users")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
             .content("{\"email\":\"hong@gmail.com\",\"password\":\"1234\"}"))
@@ -85,7 +85,7 @@ public class UserControllerTest {
     @DisplayName("유효한 양식으로 서비스에 회원 수정을 요청하였을 때, 상태코드 200을 리턴한다.")
     @Test
     void updateWithValidAttributes() throws Exception {
-        mockMvc.perform(put("/user/1")
+        mockMvc.perform(put("/users/1")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
             .content("{\"name\":\"임꺽정\",\"email\":\"lim@gmail.com\",\"password\":\"5678\"}"))
@@ -98,7 +98,7 @@ public class UserControllerTest {
     @DisplayName("유효하지 않은 양식으로 서비스에 회원 수정을 요청하였을 때, 상태코드 400을 리턴한다.")
     @Test
     void updateWithInvalidAttributes() throws Exception {
-        mockMvc.perform(put("/user/1")
+        mockMvc.perform(put("/users/1")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
             .content("{\"email\":\"hong@gmail.com\"}"))
@@ -108,7 +108,7 @@ public class UserControllerTest {
     @DisplayName("존재하는 회원에 대해서 서비스에 유효한 양식으로 회원 수정을 요청하였을 떄, 상태코드 200를 응답한다.")
     @Test
     void updateWithExistedUser() throws Exception {
-        mockMvc.perform(put("/user/1")
+        mockMvc.perform(put("/users/1")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
             .content("{\"name\":\"임꺽정\",\"email\":\"sh9519@gmail.com\",\"password\":\"1234\"}"))
@@ -120,7 +120,7 @@ public class UserControllerTest {
     @DisplayName("존재하지 않는 회원에 대해서 서비스에 유효한 양식으로 회원 수정을 요청하였을 떄, 상태코드 404를 응답한다.")
     @Test
     void updateWithNonExistedUser() throws Exception {
-        mockMvc.perform(put("/user/1000")
+        mockMvc.perform(put("/users/1000")
             .accept(MediaType.APPLICATION_JSON_UTF8)
             .contentType("APPLICATION/JSON")
             .content("{\"name\":\"임꺽정\",\"email\":\"lim@gmail.com\",\"password\":\"5678\"}"))
@@ -132,7 +132,7 @@ public class UserControllerTest {
     @DisplayName("존재하는 회원에 대해서 서비스에 회원 삭제를 요청하였을 때, 상태코드 204를 응답한다.")
     @Test
     void deleteUserWithExistedUser() throws Exception {
-        mockMvc.perform(delete("/user/1")
+        mockMvc.perform(delete("/users/1")
             .accept(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isNoContent());
 
@@ -142,7 +142,7 @@ public class UserControllerTest {
     @DisplayName("존재하지 않는 회원에 대해서 서비스에 회원 삭제를 요청하였을 때, 상태코드 404를 응답한다.")
     @Test
     void deleteUserWithNotExistedUser() throws Exception {
-        mockMvc.perform(delete("/user/1000")
+        mockMvc.perform(delete("/users/1000")
             .accept(MediaType.APPLICATION_JSON_UTF8))
             .andExpect(status().isNotFound());
 
