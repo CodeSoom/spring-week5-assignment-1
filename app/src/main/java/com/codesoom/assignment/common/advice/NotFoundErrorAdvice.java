@@ -1,8 +1,8 @@
-package com.codesoom.assignment.product.controllers;
+package com.codesoom.assignment.common.advice;
 
-import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.product.dto.ErrorResponse;
+import com.codesoom.assignment.common.exception.ProductNotFoundException;
+import com.codesoom.assignment.common.exception.UserNotFoundException;
+import com.codesoom.assignment.common.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
