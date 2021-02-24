@@ -5,6 +5,7 @@ import com.codesoom.assignment.dto.UserDto;
 import com.codesoom.assignment.dto.UserRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
  * 회원 정보와 관련된 HTTP 요청을 처리합니다.
  */
 @RestController
+@CrossOrigin
 @RequestMapping("/user")
 @RequiredArgsConstructor
 public class UserController {
