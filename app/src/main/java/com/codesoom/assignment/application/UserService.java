@@ -33,7 +33,6 @@ public class UserService {
     public User createUser(UserRequestDto userRequestDto) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         User user = mapper.map(userRequestDto, User.class);
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 }

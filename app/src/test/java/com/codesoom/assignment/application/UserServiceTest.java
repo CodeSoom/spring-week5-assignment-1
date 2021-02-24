@@ -1,8 +1,10 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.ProductData;
 import com.codesoom.assignment.dto.UserRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,6 +44,7 @@ class UserServiceTest {
 
         given(userRepository.findAll()).willReturn(List.of(user));
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
+
     }
 
     @Test
@@ -76,5 +79,21 @@ class UserServiceTest {
         assertThat(user).isNotNull();
         assertThat(user.getName()).isEqualTo("weno");
     }
+
+    @Test
+    void creatUser_checkAutoIncrementId(){
+        UserRequestDto userRequestDto = UserRequestDto.builder()
+                .name("weno")
+                .password("weno@codesoom.com")
+                .password("pwd111")
+                .build();
+
+        User user = userService.createUser(userRequestDto);
+
+        verify(userRepository).save(any(User.class));
+        assertThat(user.getId()).isEqualTo(2L);
+
+    }
+
 
 }
