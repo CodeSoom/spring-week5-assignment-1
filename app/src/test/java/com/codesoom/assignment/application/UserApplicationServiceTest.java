@@ -1,11 +1,13 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.infra.InMemoryUserRepository;
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
+import org.junit.jupiter.api.Assertions;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -56,5 +58,17 @@ public class UserApplicationServiceTest {
         assertThat(changedUser.getName()).isEqualTo(newName);
         assertThat(changedUser.getMail()).isEqualTo(mail);
         assertThat(changedUser.getPassword()).isEqualTo(password);
+    }
+
+    @Given("회원이 생성되지 않았을 때")
+    public void notCreateUser() {
+    }
+
+    @When("존재하지 않는 회원의 이름을 변경하는 경우 에러가 발생한다")
+    public void changeNameUncreatedUser_raiseError() {
+        Assertions.assertThrows(
+                UserNotFoundException.class,
+                () -> userApplicationService.changeName(repository.nextId(), newName)
+        );
     }
 }
