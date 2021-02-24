@@ -137,7 +137,7 @@ class UserServiceTest {
             @DisplayName("toy를 찾을 수 없다는 exception을 던진다.")
             void it_throw_exception() {
                 assertThatThrownBy(
-                        () -> UserService.getUser(givenId),
+                        () -> userService.getUser(givenId),
                         "toy를 찾을 수 없다는 예외를 던져야 합니다."
                 ).isInstanceOf(UserNotFoundException.class);
             }

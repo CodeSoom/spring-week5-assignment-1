@@ -25,7 +25,7 @@ public class UserService {
     }
 
     public User getUser(Long id) {
-        return null;
+        return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
     public User createUser(UserData userData) {
