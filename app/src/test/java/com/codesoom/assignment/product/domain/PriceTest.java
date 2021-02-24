@@ -22,8 +22,9 @@ class PriceTest {
     @DisplayName("잘못된 금액을 입력받아 가격객체를 생성한다")
     @Test
     void create_with_invalid_price() {
+        BigDecimal input = BigDecimal.valueOf(-1000);
         assertThatExceptionOfType(IllegalArgumentException.class)
-                .isThrownBy(() -> Price.of(BigDecimal.valueOf(-1000)));
+                .isThrownBy(() -> Price.of(input));
     }
 
     @DisplayName("잘못된 금액을 입력받아 가격객체를 생성한다")

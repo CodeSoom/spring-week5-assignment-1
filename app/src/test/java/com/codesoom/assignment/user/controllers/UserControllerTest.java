@@ -65,7 +65,6 @@ class UserControllerTest {
 
         List<UserData> users = userController.getUsersInformation();
 
-        assertThat(users).isNotEmpty();
         assertThat(users).containsExactly(userData1, userData2);
 
         verify(userService).getUsersInformation();
