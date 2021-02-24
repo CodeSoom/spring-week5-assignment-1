@@ -25,10 +25,10 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User updateUser(Long id, UserData source) {
+    public User updateUser(Long id, User source) {
         User user = findUser(id);
 
-        user.update(source.toUser());
+        user.update(source);
 
         return user;
     }

@@ -11,7 +11,7 @@
 줄 수 있습니다. 유효성을 검사하여 올바른 에러 응답을 만들어주세요.
 
 * 고양이 장난감 목록 얻기 - `GET /products`
-* 고양이 장난감 상세 조회하기 - `GET /products/{id}**`**
+* 고양이 장난감 상세 조회하기 - `GET /products/{id}`
 * 고양이 장난감 등록하기 - `POST /products`
 * 고양이 장난감 수정하기 - `PATCH /products/{id}`
 * 고양이 장난감 삭제하기 - `DELETE /products/{id}`
