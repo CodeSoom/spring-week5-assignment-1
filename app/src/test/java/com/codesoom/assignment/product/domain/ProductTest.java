@@ -29,12 +29,14 @@ class ProductTest {
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
+                .imageUrl("http://localhost:8080/cat")
                 .build();
 
         Product source = Product.builder()
                 .name("쥐순이")
                 .maker("코드숨")
                 .price(10000)
+                .imageUrl("http://localhost:8080/rat")
                 .build();
 
         product.changeWith(source);
