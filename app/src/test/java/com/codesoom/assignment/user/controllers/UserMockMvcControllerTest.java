@@ -75,7 +75,7 @@ class UserMockMvcControllerTest {
                         .willReturn(users);
             }
 
-            @DisplayName("200 상태 코드, OK 상태와 사용자 목록을 응답한다.")
+            @DisplayName("200 OK 상태와 사용자 목록을 응답한다.")
             @Test
             void It_responds_ok_with_users() throws Exception {
                 mockMvc.perform(get("/users"))
@@ -88,7 +88,7 @@ class UserMockMvcControllerTest {
         @DisplayName("등록된 사용자가 없으면")
         class Context_without_users {
 
-            @DisplayName("200 상태코드, OK 상태와 비어있는 사용자 목록을 응답한다.")
+            @DisplayName("200 OK 상태와 비어있는 사용자 목록을 응답한다.")
             @Test
             void It_responds_ok_with_empty_users() throws Exception {
                 mockMvc.perform(get("/users"))
@@ -112,7 +112,7 @@ class UserMockMvcControllerTest {
                         .willThrow(new UserNotFoundException(NOT_EXIST_ID));
             }
 
-            @DisplayName("404 상태코드, Not Found 상태를 응답한다.")
+            @DisplayName("404 Not Found 상태를 응답한다.")
             @Test
             void It_responds_not_found() throws Exception {
                 mockMvc.perform(get("/users/{id}", NOT_EXIST_ID)
@@ -133,7 +133,7 @@ class UserMockMvcControllerTest {
                 given(userService.getUser(anyLong())).willReturn(responseDto);
             }
 
-            @DisplayName("200 상태코드, OK 상태와 찾고자 하는 사용자를 응답한다.")
+            @DisplayName("200 OK 상태와 찾고자 하는 사용자를 응답한다.")
             @Test
             void it_responds_ok_with_user() throws Exception {
                 mockMvc.perform(get("/users/{id}", anyLong())
@@ -164,7 +164,7 @@ class UserMockMvcControllerTest {
                         .willThrow(new UserNotFoundException(NOT_EXIST_ID));
             }
 
-            @DisplayName("404 상태코드, Not Found 상태를 응답한다.")
+            @DisplayName("404 Not Found 상태를 응답한다.")
             @Test
             void It_responds_not_found() throws Exception {
                 mockMvc.perform(patch("/users/{id}", NOT_EXIST_ID)
@@ -185,7 +185,7 @@ class UserMockMvcControllerTest {
                         .build();
             }
 
-            @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
+            @DisplayName("400 Bad Request 상태를 응답한다.")
             @Test
             void It_responds_bad_request() throws Exception {
                 mockMvc.perform(patch("/users/{id}", NOT_EXIST_ID)
@@ -208,7 +208,7 @@ class UserMockMvcControllerTest {
                         .willReturn(responseDto);
             }
 
-            @DisplayName("200 상태코드, OK 상태와 갱신된 사용자 정보를 응답한다.")
+            @DisplayName("200 OK 상태와 갱신된 사용자 정보를 응답한다.")
             @Test
             void It_responds_user_id() throws Exception {
                 mockMvc.perform(patch("/users/{id}", USER_ID)
@@ -233,7 +233,7 @@ class UserMockMvcControllerTest {
                         .build();
             }
 
-            @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
+            @DisplayName("400 Bad Request 상태를 응답한다.")
             @Test
             void It_responds_bad_request() throws Exception {
                 mockMvc.perform(patch("/users/{id}", USER_ID)
@@ -264,7 +264,7 @@ class UserMockMvcControllerTest {
                         .willReturn(responseDto);
             }
 
-            @DisplayName("201 상태코드, Created 상태를 응답한다.")
+            @DisplayName("201 Created 상태를 응답한다.")
             @Test
             void It_responds_user() throws Exception {
                 mockMvc.perform(post("/users")
@@ -286,7 +286,7 @@ class UserMockMvcControllerTest {
                         .build();
             }
 
-            @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
+            @DisplayName("400 Bad Request 상태를 응답한다.")
             @Test
             void It_responds_bad_request() throws Exception {
                 mockMvc.perform(post("/users")
@@ -308,7 +308,7 @@ class UserMockMvcControllerTest {
                         .build();
             }
 
-            @DisplayName("400 상태코드, Bad Request 상태를 응답한다.")
+            @DisplayName("400 Bad Request 상태를 응답한다.")
             @Test
             void It_responds_bad_request() throws Exception {
                 mockMvc.perform(post("/users")
@@ -332,7 +332,7 @@ class UserMockMvcControllerTest {
                         .willThrow(new UserNotFoundException(NOT_EXIST_ID));
             }
 
-            @DisplayName("404 상태코드와 Not Found 상태를 응답한다.")
+            @DisplayName("404 Not Found 상태를 응답한다.")
             @Test
             void It_responds_not_found() throws Exception {
                 mockMvc.perform(delete("/users/{id}", anyLong()))
@@ -349,7 +349,7 @@ class UserMockMvcControllerTest {
                 given(userService.deleteUser(anyLong())).willReturn(USER_ID);
             }
 
-            @DisplayName("204 상태코드와 NO CONTENT 상태를 응답한다.")
+            @DisplayName("204 NO CONTENT 상태를 응답한다.")
             @Test
             void It_responds_no_content_with_user() throws Exception {
                 mockMvc.perform(delete("/users/{id}", anyLong())
