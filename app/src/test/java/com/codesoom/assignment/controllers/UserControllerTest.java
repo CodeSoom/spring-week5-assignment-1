@@ -24,7 +24,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.model;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 //        회원 생성하기 - POST /user
@@ -46,7 +45,8 @@ class UserControllerTest {
 
     private User user;
 
-    private UserDto validUpdateUserDto;
+    private UserRequestDto validUpdateUserDto;
+    private UserDto userDto;
 
     @BeforeEach
     void setUp() {
@@ -57,7 +57,14 @@ class UserControllerTest {
                 .email("rhfpdk92@naver.com")
                 .build();
 
-        validUpdateUserDto = UserDto.builder()
+        validUpdateUserDto = UserRequestDto.builder()
+                .name("양철수")
+                .email("newId@naver.com")
+                .password("12341234")
+                .build();
+
+        userDto = UserDto.builder()
+                .id(1L)
                 .name("양철수")
                 .email("newId@naver.com")
                 .password("12341234")
@@ -73,13 +80,13 @@ class UserControllerTest {
             @BeforeEach
             void setUp() {
                 given(userService.createUser(any(UserRequestDto.class)))
-                        .willReturn(dozerMapper.map(user, UserDto.class));
+                        .willReturn(userDto);
             }
 
             @Test
             @DisplayName("응답코드는 201이며 생성한 회원를 응답한다.")
             void it_return_createdUser() throws Exception {
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(user)))
                         .andDo(print())
@@ -94,7 +101,7 @@ class UserControllerTest {
             @Test
             @DisplayName("응답코드는 400을 응답한다")
             void it_return_bad_request() throws Exception {
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE))
                         .andDo(print())
                         .andExpect(status().isBadRequest());
@@ -113,7 +120,7 @@ class UserControllerTest {
             @Test
             @DisplayName("응답코드는 400며 에러메세지를 응답한다.")
             void it_return_createdUser() throws Exception {
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(userWithoutName)))
                         .andDo(print())
@@ -123,7 +130,7 @@ class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("PATCH /user/{id} 요청은")
+    @DisplayName("PATCH /users/{id} 요청은")
     class Describe_updateUser {
         @Nested
         @DisplayName("id가 존재하고 requestbody에 회원의 정보가 있으면")
@@ -131,13 +138,13 @@ class UserControllerTest {
             @BeforeEach
             void setUp() {
                 given(userService.updateUser(eq(1L), any(UserRequestDto.class)))
-                        .willReturn(validUpdateUserDto);
+                        .willReturn(userDto);
             }
 
             @Test
             @DisplayName("응답코드는 200이며 수정된 회원를 응답한다.")
             void it_return_updatedUser() throws Exception {
-                mockMvc.perform(patch("/user/{id}", 1L)
+                mockMvc.perform(patch("/users/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(validUpdateUserDto)))
                         .andDo(print())
@@ -161,7 +168,7 @@ class UserControllerTest {
             @Test
             @DisplayName("응답코드는 404이며 에러메세지를 응답한다")
             void it_return_not_found() throws Exception {
-                mockMvc.perform(patch("/user/{id}", 100L)
+                mockMvc.perform(patch("/users/{id}", 100L)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(validUpdateUserDto)))
                         .andDo(print())
@@ -181,7 +188,7 @@ class UserControllerTest {
             @Test
             @DisplayName("응답코드는 400며 에러메세지를 응답한다.")
             void it_return_createdUser() throws Exception {
-                mockMvc.perform(patch("/user/{id}", 1L)
+                mockMvc.perform(patch("/users/{id}", 1L)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(objectMapper.writeValueAsString(userWithoutName)))
                         .andDo(print())
