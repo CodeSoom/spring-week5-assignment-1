@@ -2,7 +2,6 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,15 +24,14 @@ class UserServiceTest {
     final String PASSWORD = "My Password";
 
     final String UPDATE_NAME = "Your Name";
-    final String UPDATE_EMAIL = "user@gmail.com";
     final String UPDATE_PASSWORD = "Your Password";
 
     @Autowired
     private UserService userService;
 
     //subject
-    UserData createUser() {
-        return UserData.builder()
+    User createUser() {
+        return User.builder()
                 .name(NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
@@ -57,11 +55,11 @@ class UserServiceTest {
         @Nested
         @DisplayName("유저 정보가 주어진다면")
         class Context_with_user {
-            UserData givenUser;
+            User givenUser;
 
             @BeforeEach
             void setUp() {
-                givenUser = UserData.builder()
+                givenUser = User.builder()
                         .name(NAME)
                         .email(EMAIL)
                         .password(PASSWORD)
@@ -91,7 +89,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                UserData source = createUser();
+                User source = createUser();
                 User givenUser = userService.createUser(source);
                 givenUserId = givenUser.getId();
             }
@@ -120,7 +118,7 @@ class UserServiceTest {
     @DisplayName("updateUser()")
     @Nested
     class Describe_update {
-        User subject(Long id, UserData source) {
+        User subject(Long id, User source) {
             return userService.updateUser(id, source);
         }
 
@@ -128,15 +126,14 @@ class UserServiceTest {
         @DisplayName("존재하는 user id와 user가 주어진다면")
         class Context_with_exist_user_id {
             Long givenId;
-            UserData source;
+            User source;
 
             @BeforeEach
             void setUp() {
-                UserData givenUser = createUser();
+                User givenUser = createUser();
                 givenId = userService.createUser(givenUser).getId();
-                source = UserData.builder()
+                source = User.builder()
                         .name(UPDATE_NAME)
-                        .email(UPDATE_EMAIL)
                         .password(UPDATE_PASSWORD)
                         .build();
             }
@@ -147,7 +144,6 @@ class UserServiceTest {
                 User user = subject(givenId, source);
 
                 assertThat(user.getName()).isEqualTo(UPDATE_NAME);
-                assertThat(user.getEmail()).isEqualTo(UPDATE_EMAIL);
                 assertThat(user.getPassword()).isEqualTo(UPDATE_PASSWORD);
             }
         }
@@ -156,14 +152,13 @@ class UserServiceTest {
         @DisplayName("존재하지 않는 user id와 user가 주어진다면")
         class Context_with_not_exist_user_id {
             Long givenId;
-            UserData source;
+            User source;
 
             @BeforeEach
             void setUp() {
                 givenId = NOT_EXIST_ID;
-                source = UserData.builder()
+                source = User.builder()
                         .name(UPDATE_NAME)
-                        .email(UPDATE_EMAIL)
                         .password(UPDATE_PASSWORD)
                         .build();
             }
@@ -190,7 +185,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                UserData givenUser = createUser();
+                User givenUser = createUser();
                 givenId = userService.createUser(givenUser).getId();
             }
 

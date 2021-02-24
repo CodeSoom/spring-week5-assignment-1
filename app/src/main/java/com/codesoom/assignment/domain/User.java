@@ -28,7 +28,6 @@ public class User {
 
     public void update(User source) {
         this.name = source.getName();
-        this.email = source.getEmail();
         this.password = source.getPassword();
     }
 }

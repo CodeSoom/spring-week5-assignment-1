@@ -2,7 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.CreateUserRequest;
+import com.codesoom.assignment.dto.UpdateUserRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,8 +27,13 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid UserData userData) {
-        return userService.createUser(userData);
+    public User create(@RequestBody @Valid CreateUserRequest createUserRequest) {
+        User user = User.builder()
+                .name(createUserRequest.getName())
+                .email(createUserRequest.getEmail())
+                .password(createUserRequest.getPassword())
+                .build();
+        return userService.createUser(user);
     }
 
     @DeleteMapping("/{id}")
@@ -37,7 +43,11 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody @Valid UserData userData) {
-        return userService.updateUser(id, userData);
+    public User update(@PathVariable Long id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
+        User user = User.builder()
+                .name(updateUserRequest.getName())
+                .password(updateUserRequest.getPassword())
+                .build();
+        return userService.updateUser(id, user);
     }
 }

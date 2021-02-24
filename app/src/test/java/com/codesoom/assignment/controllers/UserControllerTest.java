@@ -3,7 +3,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.CreateUserRequest;
+import com.codesoom.assignment.dto.UpdateUserRequest;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -35,7 +36,6 @@ class UserControllerTest {
     final String INVALID_EMAIL = "gmail.com";
 
     final String UPDATE_NAME = "Your Name";
-    final String UPDATE_EMAIL = "user@gmail.com";
     final String UPDATE_PASSWORD = "Your Password";
 
     @Autowired
@@ -47,35 +47,41 @@ class UserControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    UserData createUser() {
-        return UserData.builder()
+    CreateUserRequest createUser() {
+        return CreateUserRequest.builder()
                 .name(NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
     }
 
-    UserData createUpdateUser() {
-        return UserData.builder()
-                .name(UPDATE_NAME)
-                .email(UPDATE_EMAIL)
-                .password(UPDATE_PASSWORD)
-                .build();
-    }
-
-    UserData createAllBlackDataUser() {
-        return UserData.builder()
+    CreateUserRequest createAllBlackDataUser() {
+        return CreateUserRequest.builder()
                 .name("")
                 .email("")
                 .password("")
                 .build();
     }
 
-    UserData createInvalidEmailUser() {
-        return UserData.builder()
+    CreateUserRequest createInvalidEmailUser() {
+        return CreateUserRequest.builder()
                 .name(NAME)
                 .email(INVALID_EMAIL)
                 .password(PASSWORD)
+                .build();
+    }
+
+    UpdateUserRequest createUpdateUser() {
+        return UpdateUserRequest.builder()
+                .name(UPDATE_NAME)
+                .password(UPDATE_PASSWORD)
+                .build();
+    }
+
+    UpdateUserRequest createAllBlackDataUpdateUser() {
+        return UpdateUserRequest.builder()
+                .name("")
+                .password("")
                 .build();
     }
 
@@ -87,23 +93,16 @@ class UserControllerTest {
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
-        given(userService.createUser(any(UserData.class))).willReturn(user);
+        given(userService.createUser(any(User.class))).willReturn(user);
 
         given(userService.findUser(EXIST_ID)).willReturn(user);
 
         given(userService.findUser(NOT_EXIST_ID))
                 .willThrow(new UserNotFoundException(NOT_EXIST_ID));
 
-        given(userService.updateUser(eq(EXIST_ID), any(UserData.class)))
-                .will(invocation -> {
-                    UserData userData = invocation.getArgument(1);
-                    return User.builder()
-                            .name(userData.getName())
-                            .email(userData.getEmail())
-                            .password(userData.getPassword())
-                            .build();
-                });
-        given(userService.updateUser(eq(NOT_EXIST_ID), any(UserData.class)))
+        given(userService.updateUser(eq(EXIST_ID), any(User.class)))
+                .will(invocation -> invocation.getArgument(1));
+        given(userService.updateUser(eq(NOT_EXIST_ID), any(User.class)))
                 .willThrow(new UserNotFoundException(NOT_EXIST_ID));
 
         given(userService.deleteUser(EXIST_ID)).willReturn(user);
@@ -118,7 +117,7 @@ class UserControllerTest {
         @Nested
         @DisplayName("유효한 user가 주어진다면")
         class Context_with_valid_user_data {
-            UserData givenUser = createUser();
+            CreateUserRequest givenUser = createUser();
 
             @DisplayName("201코드와 생성된 user를 응답한다")
             @Test
@@ -138,7 +137,7 @@ class UserControllerTest {
         @Nested
         @DisplayName("모든 데이터가 공백인 user가 주어진다면")
         class Context_with_all_blank_user_data {
-            UserData givenUser = createAllBlackDataUser();
+            CreateUserRequest givenUser = createAllBlackDataUser();
 
             @DisplayName("400코드를 응답한다")
             @Test
@@ -155,7 +154,7 @@ class UserControllerTest {
         @Nested
         @DisplayName("email 데이터가 유효하지 않은 user가 주어진다면")
         class Context_with_invalid_email_user_data {
-            UserData givenUser = createInvalidEmailUser();
+            CreateUserRequest givenUser = createInvalidEmailUser();
 
             @DisplayName("400코드를 응답한다")
             @Test
@@ -177,7 +176,7 @@ class UserControllerTest {
         @DisplayName("존재하는 user id와 user가 주어진다면")
         class Context_with_exist_user_id_and_valid_user {
             Long givenId = EXIST_ID;
-            UserData source = createUpdateUser();
+            UpdateUserRequest source = createUpdateUser();
 
             @DisplayName("200코드와 수정된 user를 응답한다")
             @Test
@@ -188,7 +187,6 @@ class UserControllerTest {
                         .content(objectMapper.writeValueAsString(source))
                 )
                         .andExpect(jsonPath("name").value(UPDATE_NAME))
-                        .andExpect(jsonPath("email").value(UPDATE_EMAIL))
                         .andExpect(jsonPath("password").value(UPDATE_PASSWORD));
             }
         }
@@ -197,7 +195,7 @@ class UserControllerTest {
         @DisplayName("존재하지 않는 user id와 user가 주어진다면")
         class Context_with_not_exist_user_id_and_valid_user {
             Long givenId = NOT_EXIST_ID;
-            UserData source = createUser();
+            UpdateUserRequest source = createUpdateUser();
 
             @DisplayName("404코드를 응답한다")
             @Test
@@ -216,25 +214,7 @@ class UserControllerTest {
         @DisplayName("모든 데이터가 공백인 user가 주어진다면")
         class Context_with_all_blank_user_data {
             Long givenId = EXIST_ID;
-            UserData source = createAllBlackDataUser();
-
-            @DisplayName("400코드를 응답한다")
-            @Test
-            void it_returns_400_code() throws Exception {
-                mockMvc.perform(patch("/users/{id}", givenId)
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(source))
-                )
-                        .andExpect(status().isBadRequest());
-            }
-        }
-
-        @Nested
-        @DisplayName("email 데이터가 유효하지 않은 user가 주어진다면")
-        class Context_with_invalid_email_user_data {
-            Long givenId = EXIST_ID;
-            UserData source = createInvalidEmailUser();
+            UpdateUserRequest source = createAllBlackDataUpdateUser();
 
             @DisplayName("400코드를 응답한다")
             @Test
