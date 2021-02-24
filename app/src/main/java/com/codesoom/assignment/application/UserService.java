@@ -1,9 +1,12 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserRequestDto;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +31,9 @@ public class UserService {
     }
 
     public User createUser(UserRequestDto userRequestDto) {
-        return null;
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        User user = mapper.map(userRequestDto, User.class);
+        userRepository.save(user);
+        return user;
     }
 }

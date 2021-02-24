@@ -42,7 +42,6 @@ class UserServiceTest {
 
         given(userRepository.findAll()).willReturn(List.of(user));
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
-
     }
 
     @Test
@@ -75,7 +74,7 @@ class UserServiceTest {
         User user = userService.createUser(userRequestDto);
 
         assertThat(user).isNotNull();
-
+        assertThat(user.getName()).isEqualTo("weno");
     }
 
 }
