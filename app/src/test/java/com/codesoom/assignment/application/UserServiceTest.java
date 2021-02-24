@@ -2,22 +2,23 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
-import org.junit.jupiter.api.AfterEach;
+import com.codesoom.assignment.domain.UserRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
+import org.mockito.Mockito;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
-@SpringBootTest
-@ActiveProfiles("test")
 @DisplayName("UserService 클래스")
 class UserServiceTest {
+    final Long EXIST_ID = 1L;
     final Long NOT_EXIST_ID = 1000L;
     final String NAME = "My Name";
     final String EMAIL = "my@gmail.com";
@@ -26,8 +27,9 @@ class UserServiceTest {
     final String UPDATE_NAME = "Your Name";
     final String UPDATE_PASSWORD = "Your Password";
 
-    @Autowired
     private UserService userService;
+
+    private UserRepository userRepository = mock(UserRepository.class);
 
     //subject
     User createUser() {
@@ -44,9 +46,20 @@ class UserServiceTest {
         assertThat(user.getPassword()).isEqualTo(PASSWORD);
     }
 
-    @AfterEach
-    void tearDown() {
-        userService.clearData();
+    @BeforeEach
+    void setUp() {
+        Mockito.reset(userRepository);
+        userService = new UserService(userRepository);
+
+        User givenUser = User.builder()
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+
+        given(userRepository.save(any(User.class))).willReturn(givenUser);
+        given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(givenUser));
+        given(userRepository.findById(NOT_EXIST_ID)).willReturn(Optional.empty());
     }
 
     @DisplayName("createUser()")
@@ -85,14 +98,7 @@ class UserServiceTest {
         @Nested
         @DisplayName("존재하는 user id가 주어진다면")
         class Context_with_exist_user_id {
-            Long givenUserId;
-
-            @BeforeEach
-            void setUp() {
-                User source = createUser();
-                User givenUser = userService.createUser(source);
-                givenUserId = givenUser.getId();
-            }
+            Long givenUserId = EXIST_ID;
 
             @DisplayName("주어진 id와 일치하는 user를 반환한다")
             @Test
@@ -125,13 +131,11 @@ class UserServiceTest {
         @Nested
         @DisplayName("존재하는 user id와 user가 주어진다면")
         class Context_with_exist_user_id {
-            Long givenId;
+            Long givenUserId = EXIST_ID;
             User source;
 
             @BeforeEach
             void setUp() {
-                User givenUser = createUser();
-                givenId = userService.createUser(givenUser).getId();
                 source = User.builder()
                         .name(UPDATE_NAME)
                         .password(UPDATE_PASSWORD)
@@ -141,7 +145,7 @@ class UserServiceTest {
             @DisplayName("수정된 user를 반환한다")
             @Test
             void it_returns_user() {
-                User user = subject(givenId, source);
+                User user = subject(givenUserId, source);
 
                 assertThat(user.getName()).isEqualTo(UPDATE_NAME);
                 assertThat(user.getPassword()).isEqualTo(UPDATE_PASSWORD);
@@ -151,12 +155,11 @@ class UserServiceTest {
         @Nested
         @DisplayName("존재하지 않는 user id와 user가 주어진다면")
         class Context_with_not_exist_user_id {
-            Long givenId;
+            Long givenId = NOT_EXIST_ID;
             User source;
 
             @BeforeEach
             void setUp() {
-                givenId = NOT_EXIST_ID;
                 source = User.builder()
                         .name(UPDATE_NAME)
                         .password(UPDATE_PASSWORD)
@@ -181,13 +184,7 @@ class UserServiceTest {
         @Nested
         @DisplayName("존재하는 user id와 user가 주어진다면")
         class Context_with_exist_user_id {
-            Long givenId;
-
-            @BeforeEach
-            void setUp() {
-                User givenUser = createUser();
-                givenId = userService.createUser(givenUser).getId();
-            }
+            Long givenId = EXIST_ID;
 
             @DisplayName("삭제된 user를 반환한다")
             @Test
