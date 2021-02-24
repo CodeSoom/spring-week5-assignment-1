@@ -30,7 +30,10 @@ public class UserApplicationService {
     }
 
     public void deleteUser(Long id) {
-        User user = userRepository.findById(id).get();
+        User user = userRepository.findById(id)
+                .orElseThrow(
+                        () -> new UserNotFoundException(id)
+                );
         userRepository.delete(user);
     }
 }
