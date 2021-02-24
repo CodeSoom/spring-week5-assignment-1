@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductBadRequestException;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -28,15 +29,15 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-//        if(productData.getName().isBlank())
-//            throw new ProductBadRequestException("이름", "NotBlank");
-//
-//        if(productData.getMaker().isBlank())
-//            throw new ProductBadRequestException("메이커", "NotBlank");
-//
-//        if(productData.getPrice() == null) {
-//            throw new ProductBadRequestException("가격", "NotNull");
-//        }
+        if(productData.getName().isBlank())
+            throw new ProductBadRequestException("name");
+
+        if(productData.getMaker().isBlank())
+            throw new ProductBadRequestException("maker");
+
+        if(productData.getPrice() == null) {
+            throw new ProductBadRequestException("price");
+        }
 
         Product product = Product.builder()
                 .name(productData.getName())
