@@ -44,7 +44,14 @@ class UserServiceTest {
 
         given(userRepository.findAll()).willReturn(List.of(user));
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
-
+        given(userRepository.save(any(User.class))).will(invocation -> {
+            User source = invocation.getArgument(0);
+            return User.builder()
+                    .id(2L)
+                    .name(source.getName())
+                    .email(source.getEmail())
+                    .build();
+        });
     }
 
     @Test
@@ -92,7 +99,6 @@ class UserServiceTest {
 
         verify(userRepository).save(any(User.class));
         assertThat(user.getId()).isEqualTo(2L);
-
     }
 
 
