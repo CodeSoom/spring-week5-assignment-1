@@ -33,4 +33,12 @@ public class UserService {
         User user = mapper.map(userData, User.class);
         return userRepository.save(user);
     }
+
+    public User updateUser(UserData userData) {
+        return null;
+    }
+
+    public void deleteUser(Long id) {
+        //
+    }
 }
