@@ -24,6 +24,10 @@ public class UserService {
         return userRepository.findAll();
     }
 
+    public User getUser(Long id) {
+        return null;
+    }
+
     public User createUser(UserData userData) {
         User user = mapper.map(userData, User.class);
         return userRepository.save(user);
