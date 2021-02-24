@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Getter
 @NoArgsConstructor
@@ -23,13 +24,13 @@ public class ProductData {
 
     @NotNull
     @Mapping("price")
-    private Integer price;
+    private BigDecimal price;
 
     @Mapping("imageUrl")
     private String imageUrl;
 
     @Builder
-    public ProductData(Long id, String name, String maker, Integer price, String imageUrl) {
+    public ProductData(Long id, String name, String maker, BigDecimal price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;

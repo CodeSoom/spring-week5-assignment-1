@@ -1,6 +1,5 @@
 package com.codesoom.assignment.user.dto;
 
-import com.codesoom.assignment.product.domain.Product;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -29,7 +28,6 @@ class UserDataTest {
         UserData dto2 = getUserResponseDto(USER1_ID);
 
         assertThat(dto1.equals(dto1)).isTrue();
-        assertThat(dto1.equals(dto2)).isTrue();
 
         UserData dto3 = getUserResponseDto(USER2_ID);
         assertThat(dto3.equals(dto2)).isFalse();
@@ -39,7 +37,7 @@ class UserDataTest {
     @Test
     void equalsWithDifferentObject() {
         UserData dto1 = getUserResponseDto(USER1_ID);
-        Product product = Product.builder().build();
+        UserSaveRequestDto product = UserSaveRequestDto.builder().build();
 
         assertThat(dto1.equals(product)).isFalse();
     }

@@ -18,7 +18,6 @@ import java.util.List;
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
-    private final Mapper mapper;
 
     /**
      * 등록된 모든 상품 목록을 가져온다.
@@ -44,7 +43,12 @@ public class ProductService {
      * @return 등록된 상품정보
      */
     public Product createProduct(ProductData productData) {
-        Product product = mapper.map(productData, Product.class);
+        Product product = Product.builder()
+                .name(productData.getName())
+                .maker(productData.getMaker())
+                .price(productData.getPrice())
+                .imageUrl(productData.getImageUrl())
+                .build();
         return productRepository.save(product);
     }
 
@@ -58,7 +62,12 @@ public class ProductService {
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
-        product.changeWith(mapper.map(productData, Product.class));
+        product.change(
+                productData.getName(),
+                productData.getMaker(),
+                productData.getPrice(),
+                productData.getImageUrl()
+        );
 
         return product;
     }

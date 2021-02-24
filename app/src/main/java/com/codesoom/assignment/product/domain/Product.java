@@ -5,9 +5,11 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import java.math.BigDecimal;
 
 /**
  * 상품 정보.
@@ -28,28 +30,32 @@ public class Product {
     private String maker;
 
     /** 상품가격. */
-    private Integer price;
+    @Embedded
+    private Price price;
 
     /** 상품이미지. */
     private String imageUrl;
 
+    public BigDecimal getPrice() {
+        return price.getPrice();
+    }
+
     @Builder
-    public Product(Long id, String name, String maker, Integer price, String imageUrl) {
+    public Product(Long id, String name, String maker, BigDecimal price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
-        this.price = price;
+        this.price = Price.of(price);
         this.imageUrl = imageUrl;
     }
 
     /**
      * 상품의 정보를 갱신합니다.
-     * @param source 갱신 상품 명세서
      */
-    public void changeWith(Product source) {
-        this.name = source.getName();
-        this.maker = source.getMaker();
-        this.price = source.getPrice();
-        this.imageUrl = source.getImageUrl();
+    public void change(String name, String maker, BigDecimal price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = Price.of(price);
+        this.imageUrl = imageUrl;
     }
 }

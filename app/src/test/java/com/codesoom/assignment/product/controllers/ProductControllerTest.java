@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -37,7 +38,7 @@ class ProductControllerTest {
                 .id(1L)
                 .name("쥐돌이")
                 .maker("냥이월드")
-                .price(5000)
+                .price(BigDecimal.valueOf(5000))
                 .build();
 
         given(productService.getProducts()).willReturn(List.of(product));
@@ -64,6 +65,9 @@ class ProductControllerTest {
 
         given(productService.updateProduct(eq(1000L), any(ProductData.class)))
                 .willThrow(new ProductNotFoundException(1000L));
+
+        given(productService.updateProduct(eq(9999L), any(ProductData.class)))
+                .willThrow(new IllegalArgumentException());
 
         given(productService.deleteProduct(1000L))
                 .willThrow(new ProductNotFoundException(1000L));
@@ -163,6 +167,17 @@ class ProductControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(productService).updateProduct(eq(1000L), any(ProductData.class));
+    }
+
+    @Test
+    void updateWithInvalidPriceProduct() throws Exception {
+        mockMvc.perform(
+                patch("/products/9999")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
+                                "\"price\":-1000}")
+        )
+                .andExpect(status().isBadRequest());
     }
 
     @Test

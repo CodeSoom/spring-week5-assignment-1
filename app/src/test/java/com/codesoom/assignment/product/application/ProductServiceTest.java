@@ -3,11 +3,10 @@ package com.codesoom.assignment.product.application;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
 import com.codesoom.assignment.product.dto.ProductData;
-import com.github.dozermapper.core.DozerBeanMapperBuilder;
-import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,14 +24,13 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-        productService = new ProductService(productRepository, mapper);
+        productService = new ProductService(productRepository);
 
         Product product = Product.builder()
                 .id(1L)
                 .name("쥐돌이")
                 .maker("냥이월드")
-                .price(5000)
+                .price(BigDecimal.valueOf(5000))
                 .build();
 
         given(productRepository.findAll()).willReturn(List.of(product));
@@ -87,7 +85,7 @@ class ProductServiceTest {
         ProductData productData = ProductData.builder()
                 .name("쥐돌이")
                 .maker("냥이월드")
-                .price(5000)
+                .price(BigDecimal.valueOf(5000))
                 .build();
 
         Product product = productService.createProduct(productData);
@@ -104,7 +102,7 @@ class ProductServiceTest {
         ProductData productData = ProductData.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
-                .price(5000)
+                .price(BigDecimal.valueOf(5000))
                 .build();
 
         Product product = productService.updateProduct(1L, productData);
@@ -118,7 +116,7 @@ class ProductServiceTest {
         ProductData productData = ProductData.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
-                .price(5000)
+                .price(BigDecimal.valueOf(5000))
                 .build();
 
         assertThatThrownBy(() -> productService.updateProduct(1000L, productData))
