@@ -84,4 +84,12 @@ public class UserApplicationServiceTest {
         Optional<User> foundUser = repository.findById(createdUser.getId());
         assertThat(foundUser).isEmpty();
     }
+
+    @When("존재하지 않는 회원을 삭제하는 경우 에러가 발생한다")
+    public void deleteNotExistUser_raiseError() {
+        Assertions.assertThrows(
+                UserNotFoundException.class,
+                () -> userApplicationService.deleteUser(repository.nextId())
+        );
+    }
 }
