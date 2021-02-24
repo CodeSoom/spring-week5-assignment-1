@@ -52,7 +52,7 @@ public class UserControllerTest {
             .will(invocation -> {
                 Long id = invocation.getArgument(0);
                 UserRequest userRequest = invocation.getArgument(1);
-                return new UserResponse(1L, "임꺽정", "lim@gamil.com", "5678");
+                return new UserResponse(1L, "임꺽정", "lim@gamil.com");
             });
         given(userService.updateUser(eq(1000L), any(UserRequest.class))).willThrow(UserNotFoundException.class);
         given(userService.deleteUser(1000L))

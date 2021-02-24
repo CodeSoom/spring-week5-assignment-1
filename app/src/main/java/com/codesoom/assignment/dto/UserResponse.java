@@ -1,7 +1,6 @@
 package com.codesoom.assignment.dto;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 import com.github.dozermapper.core.Mapping;
 
@@ -26,8 +25,4 @@ public class UserResponse {
     @NotBlank
     @Mapping("name")
     private String email;
-
-    @NotBlank
-    @Mapping("name")
-    private String password;
 }

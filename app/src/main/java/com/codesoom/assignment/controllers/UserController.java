@@ -44,7 +44,6 @@ public class UserController {
             .id(result.getId())
             .name(result.getName())
             .email(result.getEmail())
-            .password(result.getPassword())
             .build();
     }
 
