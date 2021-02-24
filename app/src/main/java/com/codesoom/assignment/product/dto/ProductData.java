@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
@@ -22,7 +22,7 @@ public class ProductData {
     @Mapping("maker")
     private String maker;
 
-    @Positive
+    @NotNull
     @Mapping("price")
     private BigDecimal price;
 
