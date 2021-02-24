@@ -3,7 +3,7 @@ package com.codesoom.assignment.user.controller;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.dto.UserData;
-import lombok.RequiredArgsConstructor;
+import com.codesoom.assignment.user.dto.UserUpdate;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -18,9 +18,12 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
-@RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -31,9 +34,9 @@ public class UserController {
     @PatchMapping("{id}")
     public User update(
             @PathVariable Long id,
-            @RequestBody @Valid UserData userData
+            @RequestBody @Valid UserUpdate userUpdate
     ) {
-        return userService.updateUser(id, userData);
+        return userService.updateUser(id, userUpdate);
     }
 
     @DeleteMapping("{id}")

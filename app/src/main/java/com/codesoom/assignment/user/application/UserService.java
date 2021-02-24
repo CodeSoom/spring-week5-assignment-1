@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.dto.UserData;
+import com.codesoom.assignment.user.dto.UserUpdate;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
@@ -19,10 +20,10 @@ public class UserService {
     private final UserRepository userRepository;
 
     public UserService(
-            Mapper mapper,
+            Mapper dozerMapper,
             UserRepository userRepository
     ) {
-        this.mapper = mapper;
+        this.mapper = dozerMapper;
         this.userRepository = userRepository;
     }
 
@@ -45,7 +46,7 @@ public class UserService {
      * @return 주어진 id에 해당하는 회원
      * @throws UserNotFoundException 주어진 id가 회원 목록에 없는 경우
      */
-    private User findUser(Long id) throws UserNotFoundException {
+    private User findUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
@@ -55,13 +56,13 @@ public class UserService {
      * 주어진 id에 해당하는 회원을 찾은 후 수정합니다.
      *
      * @param id       회원의 식별자
-     * @param userData 수정하려는 회원
+     * @param userUpdate 수정하려는 회원
      * @return 수정된 회원
      * @throws UserNotFoundException 주어진 id가 회원 목록에 없는 경우
      */
-    public User updateUser(Long id, UserData userData) {
+    public User updateUser(Long id, UserUpdate userUpdate) {
         User user = findUser(id);
-        user.changeWith(mapper.map(userData, User.class));
+        user.changeWith(mapper.map(userUpdate, User.class));
 
         return user;
     }
@@ -72,10 +73,9 @@ public class UserService {
      * @param id 회원의 식별자
      * @throws UserNotFoundException 주어진 id가 회원 목록에 없는 경우
      */
-    public User deleteUser(Long id) throws UserNotFoundException {
+    public void deleteUser(Long id) {
         User user = findUser(id);
         userRepository.delete(user);
 
-        return user;
     }
 }
