@@ -1,9 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -11,7 +8,6 @@ import javax.persistence.Id;
 
 @Entity
 @NoArgsConstructor
-@AllArgsConstructor
 @Getter
 @Setter
 public class User {
@@ -25,6 +21,15 @@ public class User {
 
     private String password;
 
+    @Builder
+    public User(Long id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    @Builder
     public User(String name, String email, String password) {
         this.name = name;
         this.email = email;

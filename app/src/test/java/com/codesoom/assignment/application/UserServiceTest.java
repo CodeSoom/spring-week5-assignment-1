@@ -9,6 +9,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
+import java.util.List;
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
@@ -32,15 +35,48 @@ class UserServiceTest {
     private final String UPDATE_USER_EMAIL = "updatedEmail";
     private final String UPDATE_USER_PASSWORD = "updatedPassword";
 
+    private List<User> users;
+    private User setUpUser;
+
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         userService = new UserService(userRepository);
+
+        setUpUser = User.builder()
+                .id(EXISTED_ID)
+                .name(CREATE_USER_NAME)
+                .email(CREATE_USER_EMAIL)
+                .password(CREATE_USER_PASSWORD)
+                .build();
+
+        users = List.of(setUpUser);
     }
 
     @Nested
-    @DisplayName("createProduct 메서드는")
-    class Describe_createProduct {
+    @DisplayName("getUser 메서드는")
+    class Describe_getUser {
+        @Nested
+        @DisplayName("만약 저장되어 있는 유저의 아이디가 주어진다면")
+        class Context_WithExistedId {
+            private final Long givenExistedId = EXISTED_ID;
+
+            @Test
+            @DisplayName("주어진 아이디에 해당하는 유저를 리턴한다")
+            void itReturnsUser() {
+                given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
+
+                User user = userService.getUser(givenExistedId);
+                assertThat(user.getId()).isEqualTo(setUpUser.getId());
+
+                verify(userRepository).findById(givenExistedId);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("createUser 메서드는")
+    class Describe_createUser {
         @Nested
         @DisplayName("만약 유저 객체가 주어진다면")
         class Context_WithUser {
@@ -83,14 +119,35 @@ class UserServiceTest {
             @Test
             @DisplayName("주어진 객체를 업데이트하고 해당 객체를 리턴한다")
             void itUpdatesObjectAndReturnsObject() {
-                given(userRepository.update(eq(givenExistedId), any(User.class))).willReturn(source);
+                given(userRepository.findById(givenExistedId)).willReturn(Optional.of(source));
 
                 User updatedUser = userService.updateUser(givenExistedId, source);
                 assertThat(updatedUser.getName()).isEqualTo(source.getName());
                 assertThat(updatedUser.getEmail()).isEqualTo(source.getEmail());
                 assertThat(updatedUser.getPassword()).isEqualTo(source.getPassword());
 
-                verify(userRepository).update((eq(givenExistedId)),any(User.class));
+                verify(userRepository).findById(givenExistedId);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteUser 메서드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("만약 저장되어 있는 유저의면 아이디가 주어진다")
+        class Context_WithExistedId {
+            private final Long givenExistedId = EXISTED_ID;
+
+            @Test
+            @DisplayName("주어진 아이디에 해당하는 객체를 삭제하고 해당 객체를 리턴한다")
+            void itDeletesObjectAndReturnsObject() {
+                given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
+
+                User user = userService.deleteUser(givenExistedId);
+                assertThat(user.getId()).isEqualTo(setUpUser.getId());
+
+                verify(userRepository).findById(givenExistedId);
             }
         }
     }

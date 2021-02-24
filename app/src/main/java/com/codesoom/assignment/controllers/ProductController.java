@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
@@ -24,7 +25,7 @@ public class ProductController {
     }
 
     @GetMapping("{id}")
-    public Product detail(@PathVariable Long id) {
+    public Product detail(@PathVariable Long id) throws ProductNotFoundException {
         return productService.getProduct(id);
     }
 

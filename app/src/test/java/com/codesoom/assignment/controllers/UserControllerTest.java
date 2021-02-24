@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.junit.jupiter.api.Assertions.*;
@@ -32,11 +35,29 @@ class UserControllerTest {
     @MockBean
     UserService userService;
 
+    private final String CREATE_USER_NAME = "createdName";
+    private final String CREATE_USER_EMAIL = "createdEmail";
+    private final String CREATE_USER_PASSWORD = "createdPassword";
+
     private final String UPDATE_USER_NAME = "updatedName";
     private final String UPDATE_USER_EMAIL = "updatedEmail";
     private final String UPDATE_USER_PASSWORD = "updatedPassword";
 
     private final Long EXISTED_ID = 1L;
+    private List<User> users;
+    private User setUpUser;
+
+    @BeforeEach
+    void setUp() {
+        setUpUser = User.builder()
+                        .id(EXISTED_ID)
+                        .name(CREATE_USER_NAME)
+                        .email(CREATE_USER_EMAIL)
+                        .password(CREATE_USER_PASSWORD)
+                        .build();
+
+        users = List.of(setUpUser);
+    }
 
     @Nested
     @DisplayName("create 메서드는")
@@ -44,11 +65,21 @@ class UserControllerTest {
         @Nested
         @DisplayName("만약 유저 객체가 주어진다면")
         class Context_WithUser {
+            private User source;
+
+            @BeforeEach
+            void setUp() {
+                source = User.builder()
+                        .name(CREATE_USER_NAME)
+                        .email(CREATE_USER_EMAIL)
+                        .password(CREATE_USER_PASSWORD)
+                        .build();
+            }
+
             @Test
             @DisplayName("객체를 저장하고 저장된 객체와 CREATED를 리턴한다")
             void itSavesUserAndReturnsUser() throws Exception {
-                User user = new User(1L, "paik", "melon", "1234");
-                //given(userService.createUser(any(User.class))).willReturn(user);
+                given(userService.createUser(any(User.class))).willReturn(source);
 
                 mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)

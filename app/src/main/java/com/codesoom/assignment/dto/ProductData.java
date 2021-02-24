@@ -11,15 +11,15 @@ import javax.validation.constraints.NotNull;
 public class ProductData {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "name이 없습니다")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "maker가 없습니다")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "price가 없습니다")
     private Integer price;
-
+    
     private String imageUrl;
 
     @Builder

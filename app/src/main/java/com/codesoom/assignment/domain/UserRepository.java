@@ -2,10 +2,12 @@ package com.codesoom.assignment.domain;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface UserRepository {
-    User save(User user);
+import java.util.Optional;
 
-    User update(Long id, User user);
+public interface UserRepository {
+    Optional<User> findById(Long id);
+
+    User save(User user);
 
     void delete(User user);
 }
