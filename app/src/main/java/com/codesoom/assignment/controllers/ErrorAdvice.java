@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.ProductBadRequestException;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.dto.ErrorResponse;
@@ -39,5 +40,12 @@ public class ErrorAdvice {
                 .getDefaultMessage();
 
         return new ErrorResponse(message);
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(ProductBadRequestException.class)
+    public ErrorResponse handleProductBadRequestException(ProductBadRequestException e) {
+        return new ErrorResponse(e.getMessage());
     }
 }
