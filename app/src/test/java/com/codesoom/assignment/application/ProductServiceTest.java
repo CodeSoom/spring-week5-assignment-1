@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -25,10 +26,12 @@ class ProductServiceTest {
     private static final String NAME = "뱀 장난감";
     private static final String MAKER = "야옹이네 장난감";
     private static final Integer PRICE = 3000;
+    private static final String IMAGE = "https://bit.ly/3qzXRME";
 
     private static final String UPDATE_NAME = "물고기 장난감";
     private static final String UPDATE_MAKER = "애옹이네 장난감";
     private static final Integer UPDATE_PRICE = 5000;
+    private static final String UPDATE_IMAGE = "https://bit.ly/2M4YXkw";
 
     private ProductService productService;
 
@@ -46,6 +49,7 @@ class ProductServiceTest {
                 .name(NAME)
                 .maker(MAKER)
                 .price(PRICE)
+                .image(IMAGE)
                 .build();
 
         given(productRepository.findAll()).willReturn(products);
@@ -64,12 +68,14 @@ class ProductServiceTest {
         assertThat(product.getName()).isEqualTo(NAME);
         assertThat(product.getMaker()).isEqualTo(MAKER);
         assertThat(product.getPrice()).isEqualTo(PRICE);
+        assertThat(product.getImage()).isEqualTo(IMAGE);
     }
 
     void updateTest(ProductData update) {
         assertThat(update.getName()).isEqualTo(UPDATE_NAME);
         assertThat(update.getMaker()).isEqualTo(UPDATE_MAKER);
         assertThat(update.getPrice()).isEqualTo(UPDATE_PRICE);
+        assertThat(update.getImage()).isEqualTo(UPDATE_IMAGE);
     }
 
     @Nested
@@ -177,6 +183,7 @@ class ProductServiceTest {
                         .name(UPDATE_NAME)
                         .maker(UPDATE_MAKER)
                         .price(UPDATE_PRICE)
+                        .image(UPDATE_IMAGE)
                         .build();
 
                 Product updatedProduct = productService.createProduct(update);
@@ -218,14 +225,11 @@ class ProductServiceTest {
         @DisplayName("등록된 상품의 ID가 주어진다면")
         class Context_with_valid_id {
 
-            @BeforeEach
-            void setUp() {
-                product = new Product();
-            }
-
             @Test
             @DisplayName("해당 ID를 갖는 장난감을 삭제하고 반환한다")
             void it_returns_deleted_product() {
+                product = new Product();
+
                 productService.deleteProduct(1L);
 
                 verify(productRepository).findById(1L);
