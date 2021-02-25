@@ -109,15 +109,16 @@ class UserServiceTest {
     @Nested
     @DisplayName("getUser 메서드는")
     class Describe_getUser {
-        Long givenId;
 
         @Nested
         @DisplayName("등록된 사용자 id가 존재하면")
         class Context_with_exist_user_id {
+            Long givenId;
+            UserSaveRequestDto requestDto;
 
             @BeforeEach
             void setUp() {
-                UserSaveRequestDto requestDto = getUserSaveDto();
+                requestDto = getUserSaveDto();
                 UserData savedUser = userService.createUser(requestDto);
                 givenId = savedUser.getId();
             }
@@ -129,9 +130,9 @@ class UserServiceTest {
 
                 assertAll(
                         () -> assertThat(actual.getId()).isEqualTo(givenId),
-                        () -> assertThat(actual.getEmail()).isEqualTo(USER_EMAIL),
-                        () -> assertThat(actual.getName()).isEqualTo(USER_NAME),
-                        () -> assertThat(actual.getPassword()).isEqualTo(USER_PASSWORD)
+                        () -> assertThat(actual.getEmail()).isEqualTo(requestDto.getEmail()),
+                        () -> assertThat(actual.getName()).isEqualTo(requestDto.getName()),
+                        () -> assertThat(actual.getPassword()).isEqualTo(requestDto.getPassword())
                 );
             }
         }
@@ -139,17 +140,18 @@ class UserServiceTest {
         @Nested
         @DisplayName("등록된 사용자 id가 존재하지 않으면")
         class Context_with_not_existed_user_id {
+            Long notExistedId;
 
             @BeforeEach
             void setUp() {
-                givenId = NOT_EXIST_ID;
+                notExistedId = NOT_EXIST_ID;
             }
 
             @DisplayName("예외를 던진다.")
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(UserNotFoundException.class)
-                        .isThrownBy(() -> userService.getUserInformation(givenId));
+                        .isThrownBy(() -> userService.getUserInformation(notExistedId));
             }
         }
     }
@@ -178,9 +180,9 @@ class UserServiceTest {
                 UserData actual = userService.updateUser(givenId, updateRequestDto);
 
                 assertAll(
-                        () -> assertThat(actual.getPassword()).isEqualTo(UPDATE_PASSWORD),
-                        () -> assertThat(actual.getEmail()).isEqualTo(UPDATE_EMAIL),
-                        () -> assertThat(actual.getName()).isEqualTo(UPDATE_NAME),
+                        () -> assertThat(actual.getPassword()).isEqualTo(updateRequestDto.getPassword()),
+                        () -> assertThat(actual.getEmail()).isEqualTo(updateRequestDto.getEmail()),
+                        () -> assertThat(actual.getName()).isEqualTo(updateRequestDto.getName()),
                         () -> assertThat(actual.getId()).isEqualTo(givenId)
                 );
             }
