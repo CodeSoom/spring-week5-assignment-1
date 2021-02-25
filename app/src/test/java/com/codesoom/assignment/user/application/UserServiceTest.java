@@ -181,8 +181,7 @@ class UserServiceTest {
                 );
             }
         }
-
-
+        
         @Nested
         @DisplayName("등록된 사용자 id가 존재하지 않으면")
         class Context_with_not_existed_user_id {
