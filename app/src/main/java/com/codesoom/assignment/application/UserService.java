@@ -35,4 +35,8 @@ public class UserService {
         User user = mapper.map(userRequestDto, User.class);
         return userRepository.save(user);
     }
+
+    public void updateUser() {
+
+    }
 }
