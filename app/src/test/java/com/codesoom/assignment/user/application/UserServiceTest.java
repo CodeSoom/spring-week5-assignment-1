@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -84,9 +86,11 @@ class UserServiceTest {
             @DisplayName("등록된 사용자 목록을 리턴한다")
             @Test
             void It_return_users() {
-                assertThat(userService.getUsersInformation().get(0).getName()).isEqualTo(USER_NAME);
-                assertThat(userService.getUsersInformation().get(0).getEmail()).isEqualTo(USER_EMAIL);
-                assertThat(userService.getUsersInformation()).hasSize(1);
+                List<UserData> actual = userService.getUsersInformation();
+
+                assertThat(actual).hasSize(1);
+                assertThat(actual.get(0).getName()).isEqualTo(USER_NAME);
+                assertThat(actual.get(0).getEmail()).isEqualTo(USER_EMAIL);
             }
         }
 
@@ -181,7 +185,7 @@ class UserServiceTest {
                 );
             }
         }
-        
+
         @Nested
         @DisplayName("등록된 사용자 id가 존재하지 않으면")
         class Context_with_not_existed_user_id {
