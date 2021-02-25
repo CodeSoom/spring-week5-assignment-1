@@ -1,6 +1,12 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserRequest;
+import com.codesoom.assignment.dto.UserResponse;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -13,7 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.client.match.MockRestRequestMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -23,9 +29,27 @@ class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private UserService userService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private UserRequest userRequest;
+    private UserResponse userResponse;
+    private static final Long USER_ID = 1L;
+    private static final String NAME = "Min";
+    private static final String EMAIL = "min@gmail.com";
+    private static final String PASSWORD = "1q2w3e!";
+
+    @BeforeEach
+    void setUp() {
+        userRequest = UserRequest.builder()
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+    }
 
     @Nested
     @DisplayName("POST /user 요청은")
@@ -35,34 +59,29 @@ class UserControllerTest {
         class Context_with_user {
             @BeforeEach
             void setUp() {
-                User user = User.builder()
-                        .id(1L)
-                        .name("Min")
-                        .email("min@gmail.com")
-                        .password("1q2w3e!")
+                UserResponse userResponse = UserResponse.builder()
+                        .id(USER_ID)
+                        .name(NAME)
+                        .email(EMAIL)
+                        .password(PASSWORD)
                         .build();
-                given(userService.createUser(any(User.class)))
-                        .willReturn(user);
+
+                given(userService.createUser(any(UserRequest.class)))
+                        .willReturn(userResponse);
             }
 
             @Test
             @DisplayName("201 코드와 생성된 사용자를 응답한다")
-            void it_returns_201_with_created_user() {
+            void it_returns_201_with_created_user() throws Exception {
                 mockMvc.perform(post("/user")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
-                .content())
+                .content(objectMapper.writeValueAsString(userRequest)))
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("name").exists())
                 .andExpect(jsonPath("email").exists())
-                .andExpect(jsonPath("password").exists())
-
+                .andExpect(jsonPath("password").exists());
             }
-
         }
-    }
-
-    @Test
-    void createUser() {
     }
 }
