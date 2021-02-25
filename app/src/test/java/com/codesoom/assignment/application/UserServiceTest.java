@@ -48,29 +48,20 @@ class UserServiceTest {
     @Nested
     @DisplayName("createUser()는")
     class Describe_createUser {
-
         @Nested
         @DisplayName("UserDto를 User로 변경하고")
-        class Context_change_userdto_to_user {
-
-            User gildong = User.builder()
-                    .id(2L)
-                    .name("홍길동")
-                    .email("hong@naver.com")
-                    .password("1234")
-                    .build();
-
+        class Context_change_userDto_to_user {
             @BeforeEach
             void setUp() {
                 given(userRepository.save(any(User.class)))
-                        .willReturn(gildong);
+                        .willReturn(user);
             }
 
             @Test
             @DisplayName("생성된 회원을 리턴한다.")
             void it_return_the_created_user() {
-                UserDto createduser = userService.createUser(new UserCreateRequestDto(gildong));
-                assertThat(createduser.getName()).isEqualTo("홍길동");
+                UserDto createdUser = userService.createUser(new UserCreateRequestDto(user));
+                assertThat(createdUser.getName()).isEqualTo("양승인");
             }
         }
     }
@@ -126,7 +117,6 @@ class UserServiceTest {
         @Nested
         @DisplayName("id에 해당하는 회원이 존재하면")
         class Context_exist_id {
-
             @BeforeEach
             void setUp() {
                 given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(user));
@@ -151,5 +141,4 @@ class UserServiceTest {
             }
         }
     }
-
 }
