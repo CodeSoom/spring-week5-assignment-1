@@ -5,7 +5,12 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.DozerBeanMapper;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
+
+import java.util.stream.Collectors;
 
 /**
  * 사용자의 생성, 수정, 삭제를 수행한다.
@@ -13,6 +18,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -38,7 +44,7 @@ public class UserService {
      * @return 저장 된 사용자
      */
     public User createUser(UserData userData) {
-        User user = userData.toEntity();
+        User user = mapper.map(userData, User.class);
         return userRepository.save(user);
     }
 
@@ -55,9 +61,9 @@ public class UserService {
         User user = getUser(id);
 
         user.update(
-                userData.getName(),
-                userData.getEmail(),
-                userData.getPassword()
+            userData.getName(),
+            userData.getEmail(),
+            userData.getPassword()
         );
 
         return user;

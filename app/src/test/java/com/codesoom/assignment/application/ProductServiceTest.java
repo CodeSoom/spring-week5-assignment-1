@@ -208,7 +208,7 @@ class ProductServiceTest {
             void itReturnsBadRequestMessage() {
                 assertThatThrownBy(() -> productService.createProduct(createSource))
                         .isInstanceOf(ProductBadRequestException.class)
-                        .hasMessageContaining("name 값은 값은 필수입니다");
+                        .hasMessageContaining("name 값은 필수입니다");
             }
         }
 
@@ -232,7 +232,7 @@ class ProductServiceTest {
             void itReturnsBadRequestMessage() {
                 assertThatThrownBy(() -> productService.createProduct(createSource))
                         .isInstanceOf(ProductBadRequestException.class)
-                        .hasMessageContaining("maker 값은 값은 필수입니다");
+                        .hasMessageContaining("maker 값은 필수입니다");
             }
         }
 
@@ -256,7 +256,7 @@ class ProductServiceTest {
             void itReturnsBadRequestMessage() {
                 assertThatThrownBy(() -> productService.createProduct(createSource))
                         .isInstanceOf(ProductBadRequestException.class)
-                        .hasMessageContaining("price 값은 값은 필수입니다");
+                        .hasMessageContaining("price 값은 필수입니다");
             }
         }
     }
