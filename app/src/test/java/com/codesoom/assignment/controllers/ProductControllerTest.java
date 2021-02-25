@@ -4,7 +4,9 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -30,6 +32,14 @@ class ProductControllerTest {
 
     @MockBean
     private ProductService productService;
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private final Long exitedId = 1L;
+    private final Long notExistedId = 1000L;
+
+    private List<Product> products;
 
     @BeforeEach
     void setUp() {
@@ -80,7 +90,8 @@ class ProductControllerTest {
     }
 
     @Test
-    void deatilWithExsitedProduct() throws Exception {
+    @DisplayName("존재하는 상품 id가 주어지면, 찾은 상품과 상태코드 200을 응답한다.")
+    void detailWithExistedProduct() throws Exception {
         mockMvc.perform(
                 get("/products/1")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -90,7 +101,8 @@ class ProductControllerTest {
     }
 
     @Test
-    void deatilWithNotExsitedProduct() throws Exception {
+    @DisplayName("존재하지 않는 상품 id가 주어지면, 상태코드 404를 응답한다.")
+    void detailWithNotExistedProduct() throws Exception {
         mockMvc.perform(get("/products/1000"))
                 .andExpect(status().isNotFound());
     }
@@ -111,6 +123,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("올바른 상품 정보가 주어지면, 생성된 상품과 상태코드 201을 응답한다.")
     void createWithValidAttributes() throws Exception {
         mockMvc.perform(
                 post("/products")
@@ -126,6 +139,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("올바르지 않은 상품 정보가 주어지면, 상태코드 404를 응답한다.")
     void createWithInvalidAttributes() throws Exception {
         mockMvc.perform(
                 post("/products")
@@ -138,6 +152,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("존재하는 상품 id가 주어지면, 수정된 상품 정보와 상태코드 200을 응답한다.")
     void updateWithExistedProduct() throws Exception {
         mockMvc.perform(
                 patch("/products/1")
@@ -153,6 +168,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("존재하지 않는 상품 id가 주어지면, 상태코드 404를 응답한다.")
     void updateWithNotExistedProduct() throws Exception {
         mockMvc.perform(
                 patch("/products/1000")
@@ -166,6 +182,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("올바르지 않은 상품 정보가 주어지면, 생태코드 400을 응답한다.")
     void updateWithInvalidAttributes() throws Exception {
         mockMvc.perform(
                 patch("/products/1")
@@ -178,6 +195,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("존재하는 상품 id가 주어지면, 상태코드 204를 응답한다.")
     void destroyWithExistedProduct() throws Exception {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isNoContent());
@@ -186,6 +204,7 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("존재하지 않는 상품 id가 주어지면, 상태코드 404를 응답한다.")
     void destroyWithNotExistedProduct() throws Exception {
         mockMvc.perform(delete("/products/1000"))
                 .andExpect(status().isNotFound());
