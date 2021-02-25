@@ -31,15 +31,17 @@ public class Product {
     private String image;
 
     @Builder
-    public Product(String name, String maker, Integer price) {
+    public Product(String name, String maker, Integer price, String image) {
         this.name = name;
         this.maker = maker;
         this.price = price;
+        this.image = image;
     }
 
-    public void change(String name, String maker, Integer price) {
-        this.name = getName();
-        this.maker = getMaker();
-        this.price = getPrice();
+    public void change(String name, String maker, Integer price, String image) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.image = image;
     }
 }
