@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -35,7 +36,11 @@ public class UserService {
     }
 
     public User updateUser(UserData userData) {
-        return null;
+        User user = getUser(userData.getId());
+
+        user.changeWith(mapper.map(userData, User.class));
+
+        return user;
     }
 
     public void deleteUser(Long id) {
