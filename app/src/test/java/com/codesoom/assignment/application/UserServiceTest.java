@@ -109,7 +109,7 @@ class UserServiceTest {
                 .password("pwd111")
                 .build();
 
-        userService.updateUser();
+        User user = userService.updateUser(1L, userRequestDto);
 
     }
 

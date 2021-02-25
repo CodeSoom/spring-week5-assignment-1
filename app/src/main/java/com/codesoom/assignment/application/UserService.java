@@ -36,7 +36,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void updateUser() {
-
+    public User updateUser(Long id, UserRequestDto userRequestDto) {
+        return null;
     }
 }
