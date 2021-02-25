@@ -10,8 +10,6 @@ import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
-import java.util.stream.Collectors;
-
 /**
  * 사용자의 생성, 수정, 삭제를 수행한다.
  */
