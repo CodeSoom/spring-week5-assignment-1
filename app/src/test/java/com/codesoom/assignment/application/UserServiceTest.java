@@ -32,6 +32,10 @@ class UserServiceTest {
     private final String givenEmail = "newoo@codesoom.com";
     private final String givenPassword = "codesoom123";
 
+    private final String givenChangedName = "newoo2";
+    private final String givenChangedEmail = "newoo2@codesoom.com";
+    private final String givenChangedPassword = "codesoom789";
+
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
     private User user;
@@ -162,6 +166,77 @@ class UserServiceTest {
             verify(userRepository).save(any(User.class));
 
             assertCreatedUser(created);
+        }
+    }
+
+    @Nested
+    @DisplayName("updateUser 메소드는")
+    class Describe_updateUser {
+        private Long givenId;
+        private User modifying;
+        private UserData modifyingUserData;
+
+        @Nested
+        @DisplayName("저장된 user의 id를 가지고 있다면")
+        class Context_with_saved_user_id {
+            private User modified;
+
+            @BeforeEach
+            void setSavedId() {
+                givenId = givenSavedId;
+
+                modifyingUserData = UserData.builder()
+                        .id(givenId)
+                        .name(givenChangedName)
+                        .email(givenChangedEmail)
+                        .password(givenChangedPassword)
+                        .build();
+
+                final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+                modifying = mapper.map(modifyingUserData, User.class);
+
+                given(userRepository.findById(givenId)).willReturn(Optional.of(modifying));
+            }
+
+            @Test
+            @DisplayName("user를 수정하고, 수정된 user를 리턴한다.")
+            void it_modified_user_and_return_modified_user() {
+                modified = userService.updateUser(modifyingUserData);
+
+                assertThat(modified.getClass()).isEqualTo(User.class);
+                assertThat(modified.getName()).isEqualTo(givenChangedName);
+                assertThat(modified.getEmail()).isEqualTo(givenChangedEmail);
+                assertThat(modified.getPassword()).isEqualTo(givenChangedPassword);
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 user를 수정하려고하면")
+        class Context_when_update_unsaved_user {
+            @BeforeEach
+            void setUnsavedId() {
+                givenId = givenUnsavedId;
+                modifyingUserData = UserData.builder()
+                        .id(givenId)
+                        .name(givenChangedName)
+                        .email(givenChangedEmail)
+                        .password(givenChangedPassword)
+                        .build();
+
+                final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+                modifying = mapper.map(modifyingUserData, User.class);
+
+                given(userRepository.findById(givenId)).willThrow(UserNotFoundException.class);
+            }
+
+            @Test
+            @DisplayName("user를 찾을 수 없다는 exception을 던진다.")
+            void it_throw_user_not_found_exception() {
+                assertThatThrownBy(
+                        () -> userService.updateUser(modifyingUserData),
+                        "user를 찾을 수 없다는 예외를 던져야 합니다."
+                ).isInstanceOf(UserNotFoundException.class);
+            }
         }
     }
 }
