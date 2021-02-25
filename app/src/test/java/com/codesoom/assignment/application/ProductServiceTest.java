@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -17,6 +18,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
+@DisplayName("ProductService 클래")
 class ProductServiceTest {
     private ProductService productService;
 
@@ -49,6 +51,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("제품이 없을 때 제품목록을 get하면 그 목록은 비어있다.")
     void getProductsWithNoProduct() {
         given(productRepository.findAll()).willReturn(List.of());
 
@@ -56,6 +59,7 @@ class ProductServiceTest {
     }
 
     @Test
+    @DisplayName("제품이 있을 때 제품 목록을 get하면 제품 리스트를 응답한다.")
     void getProducts() {
         List<Product> products = productService.getProducts();
 
@@ -67,7 +71,8 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductWithExsitedId() {
+    @DisplayName("있는 ID로 제품을 get하면 그 제품을 응답한다.")
+    void getProductWithExistingId() {
         Product product = productService.getProduct(1L);
 
         assertThat(product).isNotNull();
@@ -75,12 +80,14 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductWithNotExsitedId() {
+    @DisplayName("없는 ID로 제품을 get하면 Exception을 응답한다.")
+    void getProductWithNotExistingId() {
         assertThatThrownBy(() -> productService.getProduct(1000L))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 
     @Test
+    @DisplayName("외부에서 들어오는 ProductData로 제품을 생성한다.")
     void createProduct() {
         ProductData productData = ProductData.builder()
                 .name("쥐돌이")
@@ -98,7 +105,8 @@ class ProductServiceTest {
     }
 
     @Test
-    void updateProductWithExistedId() {
+    @DisplayName("있는 ID로 제품을 update한다.")
+    void updateProductWithExistingId() {
         ProductData productData = ProductData.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
@@ -112,7 +120,8 @@ class ProductServiceTest {
     }
 
     @Test
-    void updateProductWithNotExistedId() {
+    @DisplayName("없는 ID로 제품을 업데이트하면 Exception을 응답한다.")
+    void updateProductWithNotExistingId() {
         ProductData productData = ProductData.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
@@ -124,14 +133,16 @@ class ProductServiceTest {
     }
 
     @Test
-    void deleteProductWithExistedId() {
+    @DisplayName("있는 ID로 제품을 delete한다.")
+    void deleteProductWithExistingId() {
         productService.deleteProduct(1L);
 
         verify(productRepository).delete(any(Product.class));
     }
 
     @Test
-    void deleteProductWithNotExistedId() {
+    @DisplayName("없는 ID로 제품을 delete하면 Exception을 응답한다.")
+    void deleteProductWithNotExistingId() {
         assertThatThrownBy(() -> productService.deleteProduct(1000L))
                 .isInstanceOf(ProductNotFoundException.class);
     }
