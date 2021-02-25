@@ -22,7 +22,7 @@ import static org.mockito.BDDMockito.verify;
 /*
 1. getAllUsers : 완료
 2. getUser : 완료
-3. createUser
+3. createUser : 완료
 4. updateUser
 5. deleteUser
  */
@@ -100,6 +100,22 @@ class UserServiceTest {
         verify(userRepository).save(any(User.class));
         assertThat(user.getId()).isEqualTo(2L);
     }
+
+    @Test
+    void updateWithExistedID(){
+        UserRequestDto userRequestDto = UserRequestDto.builder()
+                .name("weno")
+                .password("weno@codesoom.com")
+                .password("pwd111")
+                .build();
+
+        userService.updateUser();
+
+
+    }
+
+
+
 
 
 }
