@@ -195,7 +195,8 @@ class UserServiceTest {
                 final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
                 modifying = mapper.map(modifyingUserData, User.class);
 
-                given(userRepository.findById(givenId)).willReturn(Optional.of(modifying));
+                given(userRepository.findById(givenId))
+                        .willReturn(Optional.of(modifying));
             }
 
             @Test
@@ -226,7 +227,8 @@ class UserServiceTest {
                 final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
                 modifying = mapper.map(modifyingUserData, User.class);
 
-                given(userRepository.findById(givenId)).willThrow(UserNotFoundException.class);
+                given(userRepository.findById(givenId))
+                        .willThrow(UserNotFoundException.class);
             }
 
             @Test

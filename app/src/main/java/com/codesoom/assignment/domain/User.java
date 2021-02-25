@@ -3,6 +3,7 @@ package com.codesoom.assignment.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,6 +13,7 @@ import javax.persistence.Id;
 @Getter
 @Builder
 @NoArgsConstructor
+@ToString(exclude = "password")
 public class User {
     @Id
     @GeneratedValue
@@ -34,10 +36,5 @@ public class User {
         this.name = source.name;
         this.email = source.email;
         this.password = source.password;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s라는 이름의 사용자", name);
     }
 }

@@ -1,9 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -14,6 +11,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@ToString()
 public class Product {
     @Id
     @GeneratedValue
@@ -32,10 +30,5 @@ public class Product {
         this.maker = source.maker;
         this.price = source.price;
         this.imageUrl = source.imageUrl;
-    }
-
-    @Override
-    public String toString() {
-        return String.format("%s 장난감", name);
     }
 }

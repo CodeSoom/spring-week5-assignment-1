@@ -52,7 +52,9 @@ class UserTest {
 
     @Test
     void toStringTest() {
-        assertThat(user.toString()).isEqualTo("%s라는 이름의 사용자", user.getName());
-        assertThat(User.builder().toString()).isEqualTo("User.UserBuilder(id=null, name=null, email=null, password=null)");
+        assertThat(user.toString())
+                .isEqualTo("User(id=1, name=newoo, email=newoo@codesoom.com)", user.getName());
+        assertThat(User.builder().toString())
+                .isEqualTo("User.UserBuilder(id=null, name=null, email=null, password=null)");
     }
 }
