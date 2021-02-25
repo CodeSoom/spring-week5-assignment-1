@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * 고양이 장난감의 전체조회, 조회, 수정, 삭제를 수행한다.
+ * 상품의 전체조회, 조회, 생성, 수정, 삭제를 수행한다.
  */
 @Service
 @Transactional
@@ -23,19 +23,19 @@ public class ProductService {
     }
 
     /**
-     * 저장되어 있는 모든 고양이 장난감을 리턴한다.
+     * 전체 상품 목록을 리턴한다.
      *
-     * @return 저장되어 있는 모든 고양이 장난감
+     * @return 저장되어 있는 전체 상품 목록
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
     /**
-     * 주어진 아이디에 해당하는 고양이 장난감을 리턴한다.
+     * 주어진 식별자에 해당하는 상품을 리턴한다.
      *
-     * @param id - 조회하고자 하는 고양이 장난감 아이디
-     * @return 주어진 아이디에 해당하는 고양이 장난감
+     * @param id - 조회하고자 하는 상품의 식별자
+     * @return 주어진 식별자에 해당하는 상품
      * @throws ProductNotFoundException 만약 주어진
      *         {@code id}가 저장되어 있지 않은 경우
      */
@@ -45,11 +45,11 @@ public class ProductService {
     }
 
     /**
-     * 주어진 고양이 장난감을 저장하고 해당 객체를 리턴한다.
+     * 주어진 상품을 저장하고 해당 객체를 리턴한다.
      *
-     * @param productData - 새로 저장하고자 하는 고양이 장난감
-     * @return 새로 저장된 고양이 장난감
-     * @throws ProductBadRequestException 만약 주어진 고양이 장난감의
+     * @param productData - 새로 저장하고자 하는 상품
+     * @return 저장 된 상품
+     * @throws ProductBadRequestException 만약 주어진 상품의
      *         이름이 비어있거나, 메이커가 비어있거나, 가격이 비어있는 경우
      */
     public Product createProduct(ProductData productData) {
@@ -74,11 +74,11 @@ public class ProductService {
     }
 
     /**
-     * 주어진 아이디에 해당하는 고양이 장난감을 수정하고 해당 객체를 리턴한다.
+     * 주어진 식별자에 해당하는 상품을 수정하고 해당 객체를 리턴한다.
      *
-     * @param id - 수정하고자 하는 고양이 장난감 아이디
-     * @param productData - 수정 할 새로운 고양이 장난감
-     * @return 수정된 고양이 장난감
+     * @param id - 수정하고자 하는 상품의 식별자
+     * @param productData - 수정 할 새로운 상품
+     * @return 수정 된 상품
      * @throws ProductNotFoundException 만약 주어진
      *         {@code id}가 저장되어 있지 않은 경우
      */
@@ -96,10 +96,10 @@ public class ProductService {
     }
 
     /**
-     * 주어진 아이디에 해당하느 고양이 장난감을 삭제하고 해당 객체를 리턴한다.
+     * 주어진 식별자에 해당하는 상품을 삭제하고 해당 객체를 리턴한다.
      *
-     * @param id - 삭제하고자 하는 고양이 장난감 아이디
-     * @return 삭제 된 고양이 장난감
+     * @param id - 삭제하고자 하는 상품의 식별자
+     * @return 삭제 된 상품
      * @throws ProductNotFoundException 만약
      *         {@code id}가 저장되어 있지 않은 경우
      */

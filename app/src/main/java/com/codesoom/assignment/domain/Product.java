@@ -10,21 +10,30 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 고양이 상품 정보를 다룬다.
+ */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(exclude = "id")
 public class Product {
+
+    /** 상품 식별자 */
     @Id
     @GeneratedValue
     private Long id;
 
+    /** 상품 이름 */
     private String name;
 
+    /** 상품 제조사 */
     private String maker;
 
+    /** 상품 가격 */
     private Integer price;
 
+    /** 상품 제조사 */
     private String imageUrl;
 
     @Builder
@@ -36,6 +45,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
+    /** 상품 정보를 업데이트한다. */
     public void change(String name,
                        String maker,
                        Integer price,

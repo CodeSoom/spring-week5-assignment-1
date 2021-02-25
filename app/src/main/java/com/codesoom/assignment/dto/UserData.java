@@ -35,6 +35,7 @@ public class UserData {
         this.password = password;
     }
 
+    /** 사용자 정보를 Entity로 만든다 */
     public User toEntity() {
         return User.builder()
                 .name(this.name)

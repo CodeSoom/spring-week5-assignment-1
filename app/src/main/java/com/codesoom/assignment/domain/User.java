@@ -11,19 +11,26 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 유저 정보를 다룬다.
+ */
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @ToString(exclude = "id")
 public class User {
+    /** 유저 식별자 */
     @Id
     @GeneratedValue
     private Long id;
 
+    /** 유저 이름 */
     private String name;
 
+    /** 유저 이메일 */
     private String email;
 
+    /** 유저 비밀번호 */
     private String password;
 
     @Builder
@@ -41,6 +48,7 @@ public class User {
         this.password = password;
     }
 
+    /** 유저 정보를 업데이트한다. */
     public void update(String name, String email, String password) {
         this.name = name;
         this.email = email;
