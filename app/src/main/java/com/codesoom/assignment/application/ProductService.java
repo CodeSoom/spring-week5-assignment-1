@@ -23,7 +23,8 @@ public class ProductService {
     }
 
     public Product getProduct(Long id) {
-        return findProduct(id);
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(ProductData productData) {
@@ -31,34 +32,28 @@ public class ProductService {
                 .name(productData.getName())
                 .maker(productData.getMaker())
                 .price(productData.getPrice())
-                .imageUrl(productData.getImageUrl())
                 .build();
         return productRepository.save(product);
     }
 
     public Product updateProduct(Long id, ProductData productData) {
-        Product product = findProduct(id);
+        Product product = getProduct(id);
 
         product.change(
                 productData.getName(),
                 productData.getMaker(),
                 productData.getPrice(),
-                productData.getImageUrl()
+                productData.getImage()
         );
 
         return product;
     }
 
     public Product deleteProduct(Long id) {
-        Product product = findProduct(id);
+        Product product = getProduct(id);
 
         productRepository.delete(product);
 
         return product;
-    }
-
-    private Product findProduct(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
