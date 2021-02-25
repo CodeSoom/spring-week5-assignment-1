@@ -52,6 +52,7 @@ class UserControllerTest {
 
     private UserCreateRequest validUserCreateRequest;
     private UserCreateRequest invalidUserCreateRequest;
+
     private UserUpdateRequest validUserUpdateRequest;
     private UserUpdateRequest invalidUserUpdateRequest;
 
@@ -204,6 +205,7 @@ class UserControllerTest {
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("email").exists())
+                        .andExpect(jsonPath("password").doesNotExist())
                         .andExpect(status().isCreated());
             }
         }
@@ -245,6 +247,7 @@ class UserControllerTest {
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("email").exists())
+                        .andExpect(jsonPath("password").doesNotExist())
                         .andExpect(status().isOk());
             }
         }
