@@ -27,18 +27,15 @@ class UserServiceTest {
     final String UPDATE_NAME = "Your Name";
     final String UPDATE_PASSWORD = "Your Password";
 
-    private UserService userService;
 
+    private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
 
-    //subject
-    User createUser() {
-        return User.builder()
-                .name(NAME)
-                .email(EMAIL)
-                .password(PASSWORD)
-                .build();
-    }
+    private User givenUser = User.builder()
+            .name(NAME)
+            .email(EMAIL)
+            .password(PASSWORD)
+            .build();
 
     void verifyUser(User user) {
         assertThat(user.getName()).isEqualTo(NAME);
@@ -51,12 +48,6 @@ class UserServiceTest {
         Mockito.reset(userRepository);
         userService = new UserService(userRepository);
 
-        User givenUser = User.builder()
-                .name(NAME)
-                .email(EMAIL)
-                .password(PASSWORD)
-                .build();
-
         given(userRepository.save(any(User.class))).willReturn(givenUser);
         given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(givenUser));
         given(userRepository.findById(NOT_EXIST_ID)).willReturn(Optional.empty());
@@ -68,16 +59,6 @@ class UserServiceTest {
         @Nested
         @DisplayName("유저 정보가 주어진다면")
         class Context_with_user {
-            User givenUser;
-
-            @BeforeEach
-            void setUp() {
-                givenUser = User.builder()
-                        .name(NAME)
-                        .email(EMAIL)
-                        .password(PASSWORD)
-                        .build();
-            }
 
             User subject() {
                 return userService.createUser(givenUser);
