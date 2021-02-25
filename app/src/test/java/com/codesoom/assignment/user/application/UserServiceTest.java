@@ -39,8 +39,11 @@ class UserServiceTest {
     @Autowired
     UserRepository userRepository;
 
+    UserSaveRequestDto saveRequest = getUserSaveRequest();
+    UserUpdateRequestDto updateRequest = getUpdateRequest();
+
     @AfterEach
-    public void cleanup() {
+    void cleanup() {
         userRepository.deleteAll();
     }
 
@@ -51,7 +54,7 @@ class UserServiceTest {
 
         @BeforeEach
         void setUp() {
-            requestDto = getUserSaveDto();
+            requestDto = saveRequest;
         }
 
         @DisplayName("새로운 사용자 추가되고, 사용자 정보를 리턴한다")
@@ -79,7 +82,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                UserSaveRequestDto requestDto = getUserSaveDto();
+                UserSaveRequestDto requestDto = saveRequest;
                 userService.createUser(requestDto);
             }
 
@@ -118,7 +121,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                requestDto = getUserSaveDto();
+                requestDto = saveRequest;
                 UserData savedUser = userService.createUser(requestDto);
                 givenId = savedUser.getId();
             }
@@ -168,10 +171,10 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                UserSaveRequestDto requestDto = getUserSaveDto();
+                UserSaveRequestDto requestDto = saveRequest;
                 UserData savedUser = userService.createUser(requestDto);
                 givenId = savedUser.getId();
-                updateRequestDto = getUpdateRequest();
+                updateRequestDto = updateRequest;
             }
 
             @DisplayName("수정된 사용자를 리턴한다")
@@ -218,7 +221,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                UserSaveRequestDto requestDto = getUserSaveDto();
+                UserSaveRequestDto requestDto = saveRequest;
                 UserData savedProduct = userService.createUser(requestDto);
                 givenId = savedProduct.getId();
             }
@@ -250,7 +253,7 @@ class UserServiceTest {
         }
     }
 
-    private UserSaveRequestDto getUserSaveDto() {
+    private UserSaveRequestDto getUserSaveRequest() {
         return UserSaveRequestDto.builder()
                 .name(USER_NAME)
                 .email(USER_EMAIL)
