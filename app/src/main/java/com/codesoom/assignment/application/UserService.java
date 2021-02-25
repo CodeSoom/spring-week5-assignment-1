@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-    private Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+    private final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -58,11 +58,7 @@ public class UserService {
     public User updateUser(Long id, UserData userData) {
         User user = getUser(id);
 
-        user.update(
-            userData.getName(),
-            userData.getEmail(),
-            userData.getPassword()
-        );
+        mapper.map(userData, user);
 
         return user;
     }
