@@ -4,6 +4,9 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserRequest;
 import com.codesoom.assignment.dto.UpdateUserRequest;
+import com.codesoom.assignment.dto.UserResponse;
+import com.github.dozermapper.core.Mapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -19,23 +22,25 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
+@RequiredArgsConstructor
 @CrossOrigin
 public class UserController {
-    private UserService userService;
-
-    public UserController(UserService userService) {
-        this.userService = userService;
-    }
+    private final UserService userService;
+    private final Mapper mapper;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid CreateUserRequest createUserRequest) {
+    public UserResponse create(@RequestBody @Valid CreateUserRequest createUserRequest) {
         User user = User.builder()
                 .name(createUserRequest.getName())
                 .email(createUserRequest.getEmail())
                 .password(createUserRequest.getPassword())
                 .build();
-        return userService.createUser(user);
+        User createdUser = userService.createUser(user);
+        return UserResponse.builder()
+                .name(createdUser.getName())
+                .email(createdUser.getEmail())
+                .build();
     }
 
     @DeleteMapping("/{id}")
@@ -45,11 +50,15 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
+    public UserResponse update(@PathVariable Long id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
         User user = User.builder()
                 .name(updateUserRequest.getName())
                 .password(updateUserRequest.getPassword())
                 .build();
-        return userService.updateUser(id, user);
+        User updatedUser = userService.updateUser(id, user);
+        return UserResponse.builder()
+                .name(updatedUser.getName())
+                .email(updatedUser.getEmail())
+                .build();
     }
 }
