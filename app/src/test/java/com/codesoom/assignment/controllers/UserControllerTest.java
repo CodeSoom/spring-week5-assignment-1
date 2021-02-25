@@ -8,6 +8,7 @@ import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -67,7 +68,7 @@ public class UserControllerTest {
             .contentType("APPLICATION/JSON")
             .content("{\"name\":\"홍길동\",\"email\":\"hong@gmail.com\",\"password\":\"1234\"}"))
             .andExpect(status().isCreated())
-            .andExpect(MockMvcResultMatchers.content().string(containsString("홍길동")));
+            .andExpect(content().string(containsString("홍길동")));
 
         verify(userService).createUser(any(User.class));
     }
@@ -90,7 +91,7 @@ public class UserControllerTest {
             .contentType("APPLICATION/JSON")
             .content("{\"name\":\"임꺽정\",\"email\":\"lim@gmail.com\",\"password\":\"5678\"}"))
             .andExpect(status().isOk())
-            .andExpect(MockMvcResultMatchers.content().string(containsString("임꺽정")));
+            .andExpect(content().string(containsString("임꺽정")));
 
         verify(userService).updateUser(eq(1L), any(UserRequest.class));
     }
