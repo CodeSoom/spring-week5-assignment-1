@@ -66,15 +66,18 @@ class UserControllerTest {
         @Nested
         @DisplayName("만약 유저 객체가 주어진다면")
         class Context_WithUser {
+            private UserData sourceData;
             private User createdUser;
 
             @BeforeEach
             void setUp() {
-                createdUser = User.builder()
+                sourceData = UserData.builder()
                         .name(CREATE_USER_NAME)
                         .email(CREATE_USER_EMAIL)
                         .password(CREATE_USER_PASSWORD)
                         .build();
+
+                createdUser = sourceData.toEntity();
             }
 
             @Test
@@ -102,15 +105,18 @@ class UserControllerTest {
         @DisplayName("만약 저장되어 있는 유저의 아이디와 객체가 주어진다면")
         class Context_WithExistedIdAndObject {
             private final Long givenExistedId = EXISTED_ID;
+            private UserData sourceData;
             private User updatedUser;
 
             @BeforeEach
             void setUp() {
-                updatedUser = User.builder()
+                sourceData = UserData.builder()
                         .name(UPDATE_USER_NAME)
                         .email(UPDATE_USER_EMAIL)
                         .password(UPDATE_USER_PASSWORD)
                         .build();
+
+                updatedUser = sourceData.toEntity();
             }
 
             @Test

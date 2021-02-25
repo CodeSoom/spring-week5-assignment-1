@@ -65,8 +65,8 @@ class UserServiceTest {
                 given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
 
                 User user = userService.getUser(givenExistedId);
-                assertThat(user.getId()).isEqualTo(setUpUser.getId());
 
+                assertThat(user.getId()).isEqualTo(setUpUser.getId());
                 verify(userRepository).findById(givenExistedId);
             }
         }
@@ -79,7 +79,7 @@ class UserServiceTest {
         @DisplayName("만약 유저 객체가 주어진다면")
         class Context_WithUser {
             private UserData sourceData;
-            private User source;
+            private User user;
 
             @BeforeEach
             void setUp() {
@@ -89,19 +89,19 @@ class UserServiceTest {
                         .password(CREATE_USER_PASSWORD)
                         .build();
 
-                source = sourceData.toEntity();
+                user = sourceData.toEntity();
             }
 
             @Test
             @DisplayName("주어진 객체를 저장하고 해당 객체를 리턴한다")
             void itSavesObjectAndReturnsObject() {
-                given(userRepository.save(any(User.class))).willReturn(source);
+                given(userRepository.save(any(User.class))).willReturn(user);
 
                 User createdUser = userService.createUser(sourceData);
-                assertThat(createdUser.getName()).isEqualTo(source.getName());
-                assertThat(createdUser.getEmail()).isEqualTo(source.getEmail());
-                assertThat(createdUser.getPassword()).isEqualTo(source.getPassword());
 
+                assertThat(createdUser.getName()).isEqualTo(sourceData.getName());
+                assertThat(createdUser.getEmail()).isEqualTo(sourceData.getEmail());
+                assertThat(createdUser.getPassword()).isEqualTo(sourceData.getPassword());
                 verify(userRepository).save(any(User.class));
             }
         }
@@ -131,10 +131,10 @@ class UserServiceTest {
                 given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
 
                 User updatedUser = userService.updateUser(givenExistedId, sourceData);
+
                 assertThat(updatedUser.getName()).isEqualTo(sourceData.getName());
                 assertThat(updatedUser.getEmail()).isEqualTo(sourceData.getEmail());
                 assertThat(updatedUser.getPassword()).isEqualTo(sourceData.getPassword());
-
                 verify(userRepository).findById(givenExistedId);
             }
         }
@@ -154,8 +154,8 @@ class UserServiceTest {
                 given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
 
                 User user = userService.deleteUser(givenExistedId);
-                assertThat(user.getId()).isEqualTo(setUpUser.getId());
 
+                assertThat(user.getId()).isEqualTo(setUpUser.getId());
                 verify(userRepository).findById(givenExistedId);
             }
         }
