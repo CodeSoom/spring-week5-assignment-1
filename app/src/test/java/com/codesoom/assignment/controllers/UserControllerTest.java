@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -34,7 +35,7 @@ class UserControllerTest {
             givenName,
             givenPassword
     );
-    
+
     @MockBean
     private UserService userService;
 

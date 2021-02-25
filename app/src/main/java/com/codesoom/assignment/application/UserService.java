@@ -1,4 +1,4 @@
-package com.codesoom.assignment.controllers;
+package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 
