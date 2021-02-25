@@ -35,8 +35,9 @@ public class ProductService {
      * 주어진 아이디에 해당하는 고양이 장난감을 리턴한다.
      *
      * @param id - 조회하고자 하는 고양이 장난감 아이디
-     * @return 주어진 아이디에 해당하는 고양이
-     * @throws ProductNotFoundException 주어진 아이디가 저장되어 있지 않은 경우
+     * @return 주어진 아이디에 해당하는 고양이 장난감
+     * @throws ProductNotFoundException 만약 주어진
+     *         {@code id}가 저장되어 있지 않은 경우
      */
     public Product getProduct(Long id) {
         return productRepository.findById(id)
@@ -48,7 +49,8 @@ public class ProductService {
      *
      * @param productData - 새로 저장하고자 하는 고양이 장난감
      * @return 새로 저장된 고양이 장난감
-     * @throws ProductBadRequestException 이름이 비어있는 경우 "name 값은 필수입니다", 메이커가 비어있는 경우 "maker 값은 필수입니다", 가격이 비어있는 경우 "price 값은 필수입니다"를 리턴한다.
+     * @throws ProductBadRequestException 만약 주어진 고양이 장난감의
+     *         이름이 비어있거나, 메이커가 비어있거나, 가격이 비어있는 경우
      */
     public Product createProduct(ProductData productData) {
         if(productData.getName().isBlank())
@@ -77,7 +79,8 @@ public class ProductService {
      * @param id - 수정하고자 하는 고양이 장난감 아이디
      * @param productData - 수정 할 새로운 고양이 장난감
      * @return 수정된 고양이 장난감
-     * @throws ProductNotFoundException 주어진 아이디가 저장되어 있지 않은 경우
+     * @throws ProductNotFoundException 만약 주어진
+     *         {@code id}가 저장되어 있지 않은 경우
      */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = getProduct(id);
@@ -97,7 +100,8 @@ public class ProductService {
      *
      * @param id - 삭제하고자 하는 고양이 장난감 아이디
      * @return 삭제 된 고양이 장난감
-     * @throws ProductNotFoundException 주어진 아이디가 저장되어 있지 않은 경우
+     * @throws ProductNotFoundException 만약
+     *         {@code id}가 저장되어 있지 않은 경우
      */
     public Product deleteProduct(Long id) {
         Product product = getProduct(id);
