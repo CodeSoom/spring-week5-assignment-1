@@ -14,7 +14,6 @@ import javax.persistence.Id;
 //  ** RDB의 Entity와 다름
 // 2. JPA의 Entity 역할도 같이 함
 @Getter
-@Setter
 @NoArgsConstructor
 @Entity
 public class Product {
@@ -22,12 +21,16 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    @Setter
     private String name;
 
+    @Setter
     private String maker;
 
+    @Setter
     private Integer price;
 
+    @Setter
     private String image;
 
     @Builder
