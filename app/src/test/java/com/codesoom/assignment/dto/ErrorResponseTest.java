@@ -17,5 +17,4 @@ class ErrorResponseTest {
 
         assertThat(errorResponse.getMessage()).isEqualTo("Not Found");
     }
-
 }

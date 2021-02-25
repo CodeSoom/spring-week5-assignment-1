@@ -33,7 +33,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 @WebMvcTest(ProductController.class)
 @DisplayName("ProductController 테스트")
-class ProductControllerWebMvcTest {
+class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
@@ -183,7 +183,7 @@ class ProductControllerWebMvcTest {
         }
 
         @Nested
-        @DisplayName("만약 이름이 blank인 고양이 장난감 객체가 주어진다면")
+        @DisplayName("만약 이름이 비어있는 고양이 장난감 객체가 주어진다면")
         class Context_WithProductWithoutName {
             @Test
             @DisplayName("요청이 잘못됐다는 메세지와 BAD_REQUEST를 리턴한다")

@@ -206,7 +206,6 @@ class ProductServiceTest {
             @Test
             @DisplayName("이름값이 필수라는 메세지를 응답한다")
             void itReturnsBadRequestMessage() {
-                assertThat(createSource.getName()).isBlank();
                 assertThatThrownBy(() -> productService.createProduct(createSource))
                         .isInstanceOf(ProductBadRequestException.class)
                         .hasMessageContaining("name 값은 값은 필수입니다");
