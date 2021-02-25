@@ -16,35 +16,28 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
+import com.github.dozermapper.core.Mapper;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+    private final Mapper mapper;
 
-    public UserController(UserService userService) {
+    public UserController(UserService userService, Mapper mapper) {
         this.userService = userService;
+        this.mapper = mapper;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse create(@RequestBody @Valid UserRequest userRequest) {
-        User user = new User()
-            .builder()
-            .name(userRequest.getName())
-            .email(userRequest.getEmail())
-            .password(userRequest.getPassword())
-            .build();
+        User user = mapper.map(userRequest, User.class);
 
         User createdUser = userService.createUser(user);
 
-        return new UserResponse()
-            .builder()
-            .id(createdUser.getId())
-            .name(createdUser.getName())
-            .email(createdUser.getEmail())
-            .build();
+        return mapper.map(createdUser, UserResponse.class);
     }
 
     @PutMapping("{id}")
