@@ -37,6 +37,8 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserRequestDto userRequestDto) {
-        return null;
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        User user = mapper.map(userRequestDto, User.class);
+        return userRepository.save(user);
     }
 }
