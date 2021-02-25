@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.User;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
@@ -29,7 +30,7 @@ public class UserData {
     String password;
 
     @JsonCreator
-    UserData(
+    public UserData(
             @JsonProperty("id") Long id,
             @JsonProperty("email") String email,
             @JsonProperty("name") String name,
@@ -39,5 +40,13 @@ public class UserData {
         this.email = email;
         this.name = name;
         this.password = password;
+    }
+
+    public User toEntity() {
+        return new User(
+                this.email,
+                this.name,
+                this.password
+        );
     }
 }
