@@ -59,7 +59,7 @@ public class UserControllerTest {
             .willThrow(new ProductNotFoundException(1000L));
     }
 
-    @DisplayName("유효한 양식으로 서비스에 회원 생성을 요청하였을 때, 상태코드 201을 응답한다.")
+    @DisplayName("유효한 양식으로 회원 생성을 요청하였을 때, 상태코드 201을 응답한다.")
     @Test
     void createUserWithValidAttributes() throws Exception {
         mockMvc.perform(post("/users")
@@ -72,7 +72,7 @@ public class UserControllerTest {
         verify(userService).createUser(any(User.class));
     }
 
-    @DisplayName("유효하지 않은 양식으로 서비스에 회원 생성을 요청하였을 떄, 상태코드 400을 응답한다.")
+    @DisplayName("유효하지 않은 양식으로 회원 생성을 요청하였을 떄, 상태코드 400을 응답한다.")
     @Test
     void createWithInvalidAttributes() throws Exception {
         mockMvc.perform(post("/users")
@@ -82,7 +82,7 @@ public class UserControllerTest {
             .andExpect(status().isBadRequest());
     }
 
-    @DisplayName("유효한 양식으로 서비스에 회원 수정을 요청하였을 때, 상태코드 200을 리턴한다.")
+    @DisplayName("유효한 양식으로 회원 수정을 요청하였을 때, 상태코드 200을 리턴한다.")
     @Test
     void updateWithValidAttributes() throws Exception {
         mockMvc.perform(put("/users/1")
@@ -95,7 +95,7 @@ public class UserControllerTest {
         verify(userService).updateUser(eq(1L), any(UserRequest.class));
     }
 
-    @DisplayName("유효하지 않은 양식으로 서비스에 회원 수정을 요청하였을 때, 상태코드 400을 리턴한다.")
+    @DisplayName("유효하지 않은 양식으로 회원 수정을 요청하였을 때, 상태코드 400을 리턴한다.")
     @Test
     void updateWithInvalidAttributes() throws Exception {
         mockMvc.perform(put("/users/1")
@@ -105,7 +105,7 @@ public class UserControllerTest {
             .andExpect(status().isBadRequest());
     }
 
-    @DisplayName("존재하는 회원에 대해서 서비스에 유효한 양식으로 회원 수정을 요청하였을 떄, 상태코드 200를 응답한다.")
+    @DisplayName("존재하는 회원에 대해서 유효한 양식으로 회원 수정을 요청하였을 떄, 상태코드 200를 응답한다.")
     @Test
     void updateWithExistedUser() throws Exception {
         mockMvc.perform(put("/users/1")
@@ -117,7 +117,7 @@ public class UserControllerTest {
         verify(userService).updateUser(eq(1L), any(UserRequest.class));
     }
 
-    @DisplayName("존재하지 않는 회원에 대해서 서비스에 유효한 양식으로 회원 수정을 요청하였을 떄, 상태코드 404를 응답한다.")
+    @DisplayName("존재하지 않는 회원에 대해서 유효한 양식으로 회원 수정을 요청하였을 떄, 상태코드 404를 응답한다.")
     @Test
     void updateWithNonExistedUser() throws Exception {
         mockMvc.perform(put("/users/1000")
@@ -129,7 +129,7 @@ public class UserControllerTest {
         verify(userService).updateUser(eq(1000L), any(UserRequest.class));
     }
 
-    @DisplayName("존재하는 회원에 대해서 서비스에 회원 삭제를 요청하였을 때, 상태코드 204를 응답한다.")
+    @DisplayName("존재하는 회원에 대해서 회원 삭제를 요청하였을 때, 상태코드 204를 응답한다.")
     @Test
     void deleteUserWithExistedUser() throws Exception {
         mockMvc.perform(delete("/users/1")
@@ -139,7 +139,7 @@ public class UserControllerTest {
         verify(userService).deleteUser(eq(1L));
     }
 
-    @DisplayName("존재하지 않는 회원에 대해서 서비스에 회원 삭제를 요청하였을 때, 상태코드 404를 응답한다.")
+    @DisplayName("존재하지 않는 회원에 대해서 회원 삭제를 요청하였을 때, 상태코드 404를 응답한다.")
     @Test
     void deleteUserWithNotExistedUser() throws Exception {
         mockMvc.perform(delete("/users/1000")
