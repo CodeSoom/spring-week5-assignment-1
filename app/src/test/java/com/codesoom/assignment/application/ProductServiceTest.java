@@ -211,6 +211,54 @@ class ProductServiceTest {
                         .hasMessageContaining("name 값은 값은 필수입니다");
             }
         }
+
+        @Nested
+        @DisplayName("만약 메이커값이 비어있는 고양이 장난감 객체가 주어진다면")
+        class Content_WithCatToyWithOutMaker {
+            private ProductData createSource;
+
+            @BeforeEach
+            void setUp() {
+                createSource = ProductData.builder()
+                        .name(CREATED_PRODUCT_NAME)
+                        .maker("")
+                        .price(CREATED_PRODUCT_PRICE)
+                        .imageUrl(CREATED_PRODUCT_IMAGEURL)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("메이커값이 필수라는 메세지를 응답한다")
+            void itReturnsBadRequestMessage() {
+                assertThatThrownBy(() -> productService.createProduct(createSource))
+                        .isInstanceOf(ProductBadRequestException.class)
+                        .hasMessageContaining("maker 값은 값은 필수입니다");
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 가격값이 비어있는 고양이 장난감 객체가 주어진다면")
+        class Content_WithCatToyWithOutPrice {
+            private ProductData createSource;
+
+            @BeforeEach
+            void setUp() {
+                createSource = ProductData.builder()
+                        .name(CREATED_PRODUCT_NAME)
+                        .maker(CREATED_PRODUCT_MAKER)
+                        .price(null)
+                        .imageUrl(CREATED_PRODUCT_IMAGEURL)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("가격값이 필수라는 메세지를 응답한다")
+            void itReturnsBadRequestMessage() {
+                assertThatThrownBy(() -> productService.createProduct(createSource))
+                        .isInstanceOf(ProductBadRequestException.class)
+                        .hasMessageContaining("price 값은 값은 필수입니다");
+            }
+        }
     }
 
     @Nested

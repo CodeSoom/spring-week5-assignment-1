@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -65,11 +66,11 @@ class UserControllerTest {
         @Nested
         @DisplayName("만약 유저 객체가 주어진다면")
         class Context_WithUser {
-            private User source;
+            private User createdUser;
 
             @BeforeEach
             void setUp() {
-                source = User.builder()
+                createdUser = User.builder()
                         .name(CREATE_USER_NAME)
                         .email(CREATE_USER_EMAIL)
                         .password(CREATE_USER_PASSWORD)
@@ -79,18 +80,17 @@ class UserControllerTest {
             @Test
             @DisplayName("객체를 저장하고 저장된 객체와 CREATED를 리턴한다")
             void itSavesUserAndReturnsUser() throws Exception {
-                given(userService.createUser(any(User.class))).willReturn(source);
+                given(userService.createUser(any(UserData.class))).willReturn(createdUser);
 
                 mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"paik\",\"email\":\"melon\",\"password\":\"1234\"}"))
-                        //.andExpect(jsonPath("id").value(1L))
-                        //.andExpect(jsonPath("name").value("paik"))
-                        //.andExpect(jsonPath("mail").value("melon"))
-                        //.andExpect(jsonPath("password").value("1234"))
+                        .content("{\"name\":\"createdName\",\"email\":\"createdEmail\",\"password\":\"createdPassword\"}"))
+                        .andExpect(jsonPath("name").value(createdUser.getName()))
+                        .andExpect(jsonPath("email").value(createdUser.getEmail()))
+                        .andExpect(jsonPath("password").value(createdUser.getPassword()))
                         .andExpect(status().isCreated());
 
-                verify(userService).createUser(any(User.class));
+                verify(userService).createUser(any(UserData.class));
             }
         }
     }
@@ -102,17 +102,32 @@ class UserControllerTest {
         @DisplayName("만약 저장되어 있는 유저의 아이디와 객체가 주어진다면")
         class Context_WithExistedIdAndObject {
             private final Long givenExistedId = EXISTED_ID;
+            private User updatedUser;
+
+            @BeforeEach
+            void setUp() {
+                updatedUser = User.builder()
+                        .name(UPDATE_USER_NAME)
+                        .email(UPDATE_USER_EMAIL)
+                        .password(UPDATE_USER_PASSWORD)
+                        .build();
+            }
 
             @Test
             @DisplayName("주어진 아이디에 해당하는 객체를 업데이트하고 해당 객체와 OK를 리턴한다")
             void itUpdatesObjectAndReturnUpdatedObjectAndOKHttpStatus() throws Exception {
+                given(userService.updateUser(eq(givenExistedId), any(UserData.class))).willReturn(updatedUser);
+
                 mockMvc.perform(patch("/user/" + givenExistedId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"updatedName\",\"email\":\"updatedEmail\",\"password\":\"updatedPassword\"}"))
                         .andDo(print())
+                        .andExpect(jsonPath("name").value(updatedUser.getName()))
+                        .andExpect(jsonPath("email").value(updatedUser.getEmail()))
+                        .andExpect(jsonPath("password").value(updatedUser.getPassword()))
                         .andExpect(status().isOk());
 
-                verify(userService).updateUser(eq(givenExistedId), any(User.class));
+                verify(userService).updateUser(eq(givenExistedId), any(UserData.class));
             }
         }
     }

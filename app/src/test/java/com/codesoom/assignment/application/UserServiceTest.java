@@ -2,12 +2,11 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import org.aspectj.lang.annotation.Before;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,7 +14,6 @@ import java.util.Optional;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -80,11 +78,18 @@ class UserServiceTest {
         @Nested
         @DisplayName("만약 유저 객체가 주어진다면")
         class Context_WithUser {
+            private UserData sourceData;
             private User source;
 
             @BeforeEach
             void setUp() {
-                source = new User(CREATE_USER_NAME,CREATE_USER_EMAIL,CREATE_USER_EMAIL);
+                sourceData = UserData.builder()
+                        .name(CREATE_USER_NAME)
+                        .email(CREATE_USER_EMAIL)
+                        .password(CREATE_USER_PASSWORD)
+                        .build();
+
+                source = sourceData.toEntity();
             }
 
             @Test
@@ -92,7 +97,7 @@ class UserServiceTest {
             void itSavesObjectAndReturnsObject() {
                 given(userRepository.save(any(User.class))).willReturn(source);
 
-                User createdUser = userService.createUser(source);
+                User createdUser = userService.createUser(sourceData);
                 assertThat(createdUser.getName()).isEqualTo(source.getName());
                 assertThat(createdUser.getEmail()).isEqualTo(source.getEmail());
                 assertThat(createdUser.getPassword()).isEqualTo(source.getPassword());
@@ -109,22 +114,26 @@ class UserServiceTest {
         @DisplayName("만약 저장되어 있는 유저의 아이디와 유저 객체가 주어진다면")
         class Context_WithExistedIdAndObject {
             private final Long givenExistedId = EXISTED_ID;
-            private User source;
+            private UserData sourceData;
 
             @BeforeEach
             void setUp() {
-                source = new User(UPDATE_USER_NAME, UPDATE_USER_EMAIL, UPDATE_USER_PASSWORD);
+                sourceData = UserData.builder()
+                        .name(UPDATE_USER_NAME)
+                        .email(UPDATE_USER_EMAIL)
+                        .password(UPDATE_USER_PASSWORD)
+                        .build();
             }
 
             @Test
             @DisplayName("주어진 객체를 업데이트하고 해당 객체를 리턴한다")
             void itUpdatesObjectAndReturnsObject() {
-                given(userRepository.findById(givenExistedId)).willReturn(Optional.of(source));
+                given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
 
-                User updatedUser = userService.updateUser(givenExistedId, source);
-                assertThat(updatedUser.getName()).isEqualTo(source.getName());
-                assertThat(updatedUser.getEmail()).isEqualTo(source.getEmail());
-                assertThat(updatedUser.getPassword()).isEqualTo(source.getPassword());
+                User updatedUser = userService.updateUser(givenExistedId, sourceData);
+                assertThat(updatedUser.getName()).isEqualTo(sourceData.getName());
+                assertThat(updatedUser.getEmail()).isEqualTo(sourceData.getEmail());
+                assertThat(updatedUser.getPassword()).isEqualTo(sourceData.getPassword());
 
                 verify(userRepository).findById(givenExistedId);
             }

@@ -4,6 +4,7 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,16 +20,20 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
-    public User createUser(User source) {
-        return userRepository.save(source);
+    public User createUser(UserData userData) {
+        User user = userData.toEntity();
+
+        return userRepository.save(user);
     }
 
-    public User updateUser(Long id, User source) {
+    public User updateUser(Long id, UserData userData) {
         User user = getUser(id);
 
-        user.setName(source.getName());
-        user.setEmail(source.getEmail());
-        user.setPassword(source.getPassword());
+        user.update(
+                userData.getName(),
+                userData.getEmail(),
+                userData.getPassword()
+        );
 
         return user;
     }

@@ -183,7 +183,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 이름이 비어있는 고양이 장난감 객체가 주어진다면")
+        @DisplayName("만약 이름값이 비어있는 고양이 장난감 객체가 주어진다면")
         class Context_WithProductWithoutName {
             @Test
             @DisplayName("요청이 잘못됐다는 메세지와 BAD_REQUEST를 리턴한다")
@@ -198,7 +198,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 메이커가 blank인 고양이 장난감 객체가 주어진다면")
+        @DisplayName("만약 메이커값이 비어있는 고양이 장난감 객체가 주어진다면")
         class Context_WithProductWithoutMaker {
             @Test
             @DisplayName("요청이 잘못됐다는 메세지와 BAD_REQUEST를 리턴한다")
@@ -213,7 +213,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 가격이 null인 고양이 장난감 객체가 주어진다면")
+        @DisplayName("만약 가격값이 비어있는 고양이 장난감 객체가 주어진다면")
         class Context_WithProductWithoutPrice {
             @Test
             @DisplayName("요청이 잘못됐다는 메세지와 BAD_REQUEST를 리턴한다")
@@ -288,7 +288,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 이름이 blank인 고양이 장난감 객체가 주어진다면")
+        @DisplayName("만약 이름값이 비어있는 고양이 장난감 객체가 주어진다면")
         class Context_WithOutName {
             private final Long givenExistedId = EXISTED_ID;
 
@@ -304,7 +304,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 메이커가 blank인 고양이 장난감 객체가 주어진다면")
+        @DisplayName("만약 메이커값이 비어있는 고양이 장난감 객체가 주어진다면")
         class Context_WithOutMaker {
             private final Long givenExistedId = EXISTED_ID;
 
@@ -320,7 +320,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 가격이 null인 고양이 장난감 객체가 주어진다면")
+        @DisplayName("만약 가격값이 비어있는 고양이 장난감 객체가 주어진다면")
         class Context_WithOutPrice {
             private final Long givenExistedId = EXISTED_ID;
 
