@@ -28,7 +28,7 @@ public class ProductController {
 
     @GetMapping("{id}")
     public Product detail(@PathVariable("id")
-                          @Min(value = 1, message = "id must be greater than equal to 1")
+                          @Min(value = 1, message = "id must be greater than or equal to 1")
                           Long id) {
         return productService.getProduct(id);
     }
@@ -41,7 +41,9 @@ public class ProductController {
 
     @PatchMapping("{id}")
     public Product update(
-            @PathVariable Long id,
+            @PathVariable
+            @Min(value = 1, message = "id must be greater than or equal to 1")
+                    Long id,
             @RequestBody @Valid ProductData productData
     ) {
         return productService.updateProduct(id, productData);
@@ -49,7 +51,9 @@ public class ProductController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable Long id) {
+    public void destroy(@PathVariable
+                        @Min(value = 1, message = "id must be greater than or equal to 1")
+                        Long id) {
         productService.deleteProduct(id);
     }
 }

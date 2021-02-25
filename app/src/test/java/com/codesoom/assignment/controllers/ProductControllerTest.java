@@ -97,7 +97,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("1 미만의 유효하지 않은 Id로 /product/{id}를 요청하면 BadRequest Status를 응답한다")
+    @DisplayName("1 미만의 유효하지 않은 Id로 GET /products/{id}를 요청하면 BadRequest Status를 응답한다")
     void detailWithInvalidProductId() throws Exception {
         mockMvc.perform(get("/products/0"))
                 .andExpect(status().isBadRequest());
@@ -186,6 +186,19 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("1 미만의 유효하지 않은 Id로 Patch /products/{id}를 요청하면 BadRequest Status를 응답한다")
+    void updateWithInvalidId() throws Exception {
+        mockMvc.perform(
+                patch("/products/-1")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"쥐순이\",\"maker\"\"낭이월드\"," +
+                                "\"price\":0}")
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void destroyWithExistedProduct() throws Exception {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isNoContent());
@@ -199,5 +212,12 @@ class ProductControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(productService).deleteProduct(1000L);
+    }
+
+    @Test
+    @DisplayName("1 미만의 유효하지 않은 Id로 delete /products/{id}를 요청하면 BadRequest Status를 응답한다")
+    void destroyWithInvalidId() throws Exception {
+        mockMvc.perform(delete("/products/-1"))
+                .andExpect(status().isBadRequest());
     }
 }
