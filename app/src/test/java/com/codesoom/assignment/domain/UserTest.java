@@ -1,10 +1,9 @@
 package com.codesoom.assignment.domain;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class UserTest {
     final String NAME = "User";
@@ -15,10 +14,10 @@ class UserTest {
     @Test
     void testCreateUserWithBuilder() {
         User user = User.builder()
-            .name(NAME)
-            .email(EMAIL)
-            .password(PASSWORD)
-            .build();
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
 
         assertThat(user.getName()).isEqualTo(NAME);
         assertThat(user.getEmail()).isEqualTo(EMAIL);
