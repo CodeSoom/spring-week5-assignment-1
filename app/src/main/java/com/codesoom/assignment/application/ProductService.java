@@ -39,7 +39,7 @@ public class ProductService {
     public Product updateProduct(Long id, ProductData productData) {
         Product product = getProduct(id);
 
-        product.change(
+        product.update(
                 productData.getName(),
                 productData.getMaker(),
                 productData.getPrice(),
