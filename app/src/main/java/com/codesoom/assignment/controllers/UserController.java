@@ -37,13 +37,13 @@ public class UserController {
             .password(userRequest.getPassword())
             .build();
 
-        User result = userService.createUser(user);
+        User createdUser = userService.createUser(user);
 
         return new UserResponse()
             .builder()
-            .id(result.getId())
-            .name(result.getName())
-            .email(result.getEmail())
+            .id(createdUser.getId())
+            .name(createdUser.getName())
+            .email(createdUser.getEmail())
             .build();
     }
 
