@@ -129,8 +129,7 @@ class UserControllerTest {
                 )
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("name").value(NAME))
-                        .andExpect(jsonPath("email").value(EMAIL))
-                        .andExpect(jsonPath("password").value(PASSWORD));
+                        .andExpect(jsonPath("email").value(EMAIL));
             }
         }
 
@@ -186,8 +185,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(source))
                 )
-                        .andExpect(jsonPath("name").value(UPDATE_NAME))
-                        .andExpect(jsonPath("password").value(UPDATE_PASSWORD));
+                        .andExpect(jsonPath("name").value(UPDATE_NAME));
             }
         }
 

@@ -26,21 +26,19 @@ class UserServiceTest {
 
     final String UPDATE_NAME = "Your Name";
     final String UPDATE_PASSWORD = "Your Password";
-
-
-    private UserService userService;
-    private UserRepository userRepository = mock(UserRepository.class);
-
-    private User givenUser = User.builder()
+    final User givenUser = User.builder()
             .name(NAME)
             .email(EMAIL)
             .password(PASSWORD)
             .build();
 
-    void verifyUser(User user) {
-        assertThat(user.getName()).isEqualTo(NAME);
-        assertThat(user.getEmail()).isEqualTo(EMAIL);
-        assertThat(user.getPassword()).isEqualTo(PASSWORD);
+    private UserService userService;
+    private UserRepository userRepository = mock(UserRepository.class);
+
+    boolean isEquals(User expectedUser, User actualUser) {
+        return actualUser.getName().equals(expectedUser.getName()) &&
+                actualUser.getEmail().equals(expectedUser.getEmail()) &&
+                actualUser.getPassword().equals(expectedUser.getPassword());
     }
 
     @BeforeEach
@@ -60,15 +58,15 @@ class UserServiceTest {
         @DisplayName("유저 정보가 주어진다면")
         class Context_with_user {
 
-            User subject() {
-                return userService.createUser(givenUser);
+            User subject(User user) {
+                return userService.createUser(user);
             }
 
             @DisplayName("생성된 user를 반환한다")
             @Test
             void it_returns_user() {
-                User user = subject();
-                verifyUser(user);
+                User user = subject(givenUser);
+                assertThat(isEquals(givenUser, user)).isTrue();
             }
         }
     }
@@ -85,7 +83,7 @@ class UserServiceTest {
             @Test
             void it_returns_user() {
                 User user = userService.findUser(givenUserId);
-                verifyUser(user);
+                assertThat(isEquals(givenUser, user)).isTrue();
             }
         }
 
@@ -171,7 +169,7 @@ class UserServiceTest {
             @Test
             void it_returns_user() {
                 User user = subject(givenId);
-                verifyUser(user);
+                assertThat(isEquals(givenUser, user)).isTrue();
             }
         }
 

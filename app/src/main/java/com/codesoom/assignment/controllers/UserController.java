@@ -31,16 +31,9 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse create(@RequestBody @Valid CreateUserRequest createUserRequest) {
-        User user = User.builder()
-                .name(createUserRequest.getName())
-                .email(createUserRequest.getEmail())
-                .password(createUserRequest.getPassword())
-                .build();
-        User createdUser = userService.createUser(user);
-        return UserResponse.builder()
-                .name(createdUser.getName())
-                .email(createdUser.getEmail())
-                .build();
+        User source = mapper.map(createUserRequest, User.class);
+        User user = userService.createUser(source);
+        return UserResponse.of(user);
     }
 
     @DeleteMapping("/{id}")
@@ -51,14 +44,8 @@ public class UserController {
 
     @PatchMapping("/{id}")
     public UserResponse update(@PathVariable Long id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
-        User user = User.builder()
-                .name(updateUserRequest.getName())
-                .password(updateUserRequest.getPassword())
-                .build();
-        User updatedUser = userService.updateUser(id, user);
-        return UserResponse.builder()
-                .name(updatedUser.getName())
-                .email(updatedUser.getEmail())
-                .build();
+        User source = mapper.map(updateUserRequest, User.class);
+        User user = userService.updateUser(id, source);
+        return UserResponse.of(user);
     }
 }

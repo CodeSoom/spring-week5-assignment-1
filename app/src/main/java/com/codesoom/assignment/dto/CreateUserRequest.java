@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,13 +12,16 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class CreateUserRequest {
     @NotBlank
+    @Mapping("name")
     private String name;
 
     @NotBlank
     @Email
+    @Mapping("email")
     private String email;
 
     @NotBlank
+    @Mapping("password")
     private String password;
 
     @Builder
