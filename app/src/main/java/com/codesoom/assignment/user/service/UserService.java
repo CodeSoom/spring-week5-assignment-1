@@ -29,6 +29,7 @@ public class UserService {
      *
      * @param id 찾고자 하는 회원의 식별자
      * @return 찾은 회원
+     * @throws UserNotFoundException 주어진 식별자에 해당하는 회원을 찾지 못했을 경우
      */
     public User getUser(Long id) throws UserNotFoundException {
         return findUser(id);
@@ -52,8 +53,7 @@ public class UserService {
      * @return 수정된 회원
      * @throws UserNotFoundException 주어진 식별자에 해당하는 회원을 찾지 못했을 경우
      */
-    public User updateUser(Long id, User user)
-            throws UserNotFoundException {
+    public User updateUser(Long id, User user) throws UserNotFoundException {
         User foundUser = findUser(id);
 
         return foundUser.changeWith(user);
