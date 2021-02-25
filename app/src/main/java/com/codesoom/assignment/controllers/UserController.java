@@ -13,6 +13,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create() {
-        return null;
+        User user = new User(1L, "홍길동", "test@gmail.com", "1234");
+        return user;
     }
 }
