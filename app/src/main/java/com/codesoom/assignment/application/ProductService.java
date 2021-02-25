@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * 고양이 장난감의 전체조회, 조회, 수정, 삭제를 수행한다.
+ */
 @Service
 @Transactional
 public class ProductService {
@@ -19,15 +22,34 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * 저장되어 있는 모든 고양이 장난감을 리턴한다.
+     *
+     * @return 저장되어 있는 모든 고양이 장난감
+     */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
+    /**
+     * 주어진 아이디에 해당하는 고양이 장난감을 리턴한다.
+     *
+     * @param id - 조회하고자 하는 고양이 장난감 아이디
+     * @return 주어진 아이디에 해당하는 고양이
+     * @throws ProductNotFoundException 주어진 아이디가 저장되어 있지 않은 경우
+     */
     public Product getProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
+    /**
+     * 주어진 고양이 장난감을 저장하고 해당 객체를 리턴한다.
+     *
+     * @param productData - 새로 저장하고자 하는 고양이 장난감
+     * @return 새로 저장된 고양이 장난감
+     * @throws ProductBadRequestException 이름이 비어있는 경우 "name 값은 필수입니다", 메이커가 비어있는 경우 "maker 값은 필수입니다", 가격이 비어있는 경우 "price 값은 필수입니다"를 리턴한다.
+     */
     public Product createProduct(ProductData productData) {
         if(productData.getName().isBlank())
             throw new ProductBadRequestException("name");
@@ -49,6 +71,14 @@ public class ProductService {
         return productRepository.save(product);
     }
 
+    /**
+     * 주어진 아이디에 해당하는 고양이 장난감을 수정하고 해당 객체를 리턴한다.
+     *
+     * @param id - 수정하고자 하는 고양이 장난감 아이디
+     * @param productData - 수정 할 새로운 고양이 장난감
+     * @return 수정된 고양이 장난감
+     * @throws ProductNotFoundException 주어진 아이디가 저장되어 있지 않은 경우
+     */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = getProduct(id);
 
@@ -62,6 +92,13 @@ public class ProductService {
         return product;
     }
 
+    /**
+     * 주어진 아이디에 해당하느 고양이 장난감을 삭제하고 해당 객체를 리턴한다.
+     *
+     * @param id - 삭제하고자 하는 고양이 장난감 아이디
+     * @return 삭제 된 고양이 장난감
+     * @throws ProductNotFoundException 주어진 아이디가 저장되어 있지 않은 경우
+     */
     public Product deleteProduct(Long id) {
         Product product = getProduct(id);
 

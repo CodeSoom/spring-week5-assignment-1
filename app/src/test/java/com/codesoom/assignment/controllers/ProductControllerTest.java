@@ -137,8 +137,8 @@ class ProductControllerTest {
 
                 mockMvc.perform(get("/products/"+ givenNotExistedId))
                         .andDo(print())
-                        .andExpect(status().isNotFound())
-                        .andExpect(content().string(containsString("Product not found")));
+                        .andExpect(content().string(containsString("Product not found")))
+                        .andExpect(status().isNotFound());
 
                 verify(productService).getProduct(givenNotExistedId);
             }

@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -16,15 +17,14 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.any;
+import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @AutoConfigureMockMvc
 @WebMvcTest(UserController.class)
@@ -45,6 +45,7 @@ class UserControllerTest {
     private final String UPDATE_USER_PASSWORD = "updatedPassword";
 
     private final Long EXISTED_ID = 1L;
+    private final Long NOT_EXISTED_ID = 100L;
     private List<User> users;
     private User setUpUser;
 
@@ -136,6 +137,28 @@ class UserControllerTest {
                 verify(userService).updateUser(eq(givenExistedId), any(UserData.class));
             }
         }
+
+        @Nested
+        @DisplayName("만약 저장되어 있지 않은 유저의 아이디와 객체가 주어진다면")
+        class Context_WithNotExistedIdAndObject {
+            private final Long givenNotExistedId = NOT_EXISTED_ID;
+
+            @Test
+            @DisplayName("해당 객체를 찾을 수 없다는 메세지와 NOT_FOUND를 리턴한다")
+            void itReturnsNotFoundMessageAndNOT_FOUNDHttpStatus() throws Exception {
+                given(userService.updateUser(eq(givenNotExistedId), any(UserData.class)))
+                        .willThrow(new UserNotFoundException(givenNotExistedId));
+
+                mockMvc.perform(patch("/user/"+givenNotExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"createdUser\" , \"email\":\"createdEmail\", \"password\":\"createdPassword\"}"))
+                        .andDo(print())
+                        .andExpect(content().string(containsString("User not found")))
+                        .andExpect(status().isNotFound());
+
+                verify(userService).updateUser(eq(givenNotExistedId), any(UserData.class));
+            }
+        }
     }
 
     @Nested
@@ -154,6 +177,26 @@ class UserControllerTest {
                         .andExpect(status().isNoContent());
 
                 verify(userService).deleteUser(givenExistedId);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 저장되어 있지 않은 유저의 아이디가 주어진다면")
+        class Context_WithNotExistedId {
+            private final Long givenNotExistedId = NOT_EXISTED_ID;
+
+            @Test
+            @DisplayName("유저를 찾을 수 없다는 메세지와 NOT_FOUND를 리턴한다")
+            void itReturnsNotFoundMessageAndNOT_FOUNDHttpStatus() throws Exception {
+                given(userService.deleteUser(givenNotExistedId))
+                        .willThrow(new UserNotFoundException(givenNotExistedId));
+
+                mockMvc.perform(delete("/user/"+givenNotExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(content().string(containsString("User not found")))
+                        .andExpect(status().isNotFound());
+
+                verify(userService).deleteUser(givenNotExistedId);
             }
         }
     }

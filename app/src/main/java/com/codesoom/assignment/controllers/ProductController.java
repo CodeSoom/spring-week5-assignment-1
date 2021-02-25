@@ -27,11 +27,7 @@ public class ProductController {
 
     @GetMapping("/{id}")
     public Product detail(@PathVariable Long id) {
-        try {
-            return productService.getProduct(id);
-        } catch(ProductNotFoundException e) {
-            throw new ProductNotFoundException(id);
-        }
+        return productService.getProduct(id);
     }
 
     @PostMapping

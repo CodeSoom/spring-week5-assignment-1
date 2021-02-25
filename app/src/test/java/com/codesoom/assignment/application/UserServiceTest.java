@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -24,6 +26,7 @@ class UserServiceTest {
     private UserRepository userRepository;
 
     private final Long EXISTED_ID = 1L;
+    private final Long NOT_EXISTED_ID = 2L;
 
     private final String CREATE_USER_NAME = "createdName";
     private final String CREATE_USER_EMAIL = "createdEmail";
@@ -157,6 +160,25 @@ class UserServiceTest {
 
                 assertThat(user.getId()).isEqualTo(setUpUser.getId());
                 verify(userRepository).findById(givenExistedId);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 저장되어 있지 않은 유저의 아이디가 주어진다면")
+        class Context_WithNotExistedId {
+            private final Long givenNotExistedId = NOT_EXISTED_ID;
+
+            @Test
+            @DisplayName("유저를 찾을 수 없다는 메세지를 리턴한다")
+            void itReturnsUserNotFoundMessage() {
+                given(userRepository.findById(givenNotExistedId))
+                        .willThrow(new UserNotFoundException(givenNotExistedId));
+
+                assertThatThrownBy(() -> userService.deleteUser(givenNotExistedId))
+                        .isInstanceOf(UserNotFoundException.class)
+                        .hasMessageContaining("User not found");
+
+                verify(userRepository).findById(givenNotExistedId);
             }
         }
     }

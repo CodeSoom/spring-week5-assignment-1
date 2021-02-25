@@ -19,14 +19,14 @@ public class ErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
-    public ErrorResponse handleProductNotFound(ProductNotFoundException e) {
+    public ErrorResponse handleProductNotFoundException(ProductNotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleUserNotFound(UserNotFoundException e) {
+    public ErrorResponse handleUserNotFoundException(UserNotFoundException e) {
         return new ErrorResponse(e.getMessage());
     }
 
