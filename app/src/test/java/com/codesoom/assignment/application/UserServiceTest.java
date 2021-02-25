@@ -110,7 +110,7 @@ class UserServiceTest {
                 .build();
 
         User user = userService.updateUser(1L, userRequestDto);
-
+        assertThat(user.getName()).isEqualTo("weno");
     }
 
 
