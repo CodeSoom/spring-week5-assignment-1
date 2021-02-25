@@ -1,8 +1,8 @@
 package com.codesoom.assignment.user.controller;
 
 import com.codesoom.assignment.common.exceptions.UserNotFoundException;
+import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.dto.UserCreateRequest;
-import com.codesoom.assignment.user.dto.UserResponse;
 import com.codesoom.assignment.user.dto.UserUpdateRequest;
 import com.codesoom.assignment.user.service.UserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,25 +46,24 @@ class UserControllerTest {
     private final Long existingId = 1L;
     private final Long notExistingId = 100L;
 
-    private List<UserResponse> users;
-    private UserResponse userResponse1;
-    private UserResponse userResponse2;
+    private List<User> users;
+    private User user1;
+    private User user2;
 
     private UserCreateRequest validUserCreateRequest;
     private UserCreateRequest invalidUserCreateRequest;
     private UserUpdateRequest validUserUpdateRequest;
     private UserUpdateRequest invalidUserUpdateRequest;
-    private UserResponse userResponse;
 
     @BeforeEach
     void setUp() {
-        userResponse1 = UserResponse.builder()
+        user1 = User.builder()
                 .id(1L)
                 .name("이름")
                 .email("이메일")
                 .build();
 
-        userResponse2 = UserResponse.builder()
+        user2 = User.builder()
                 .id(2L)
                 .name("이름2")
                 .email("이메일2")
@@ -91,12 +90,6 @@ class UserControllerTest {
                 .name("")
                 .password("")
                 .build();
-
-        userResponse = UserResponse.builder()
-                .id(1L)
-                .name("이름1")
-                .email("이메일1")
-                .build();
     }
 
     @Nested
@@ -107,7 +100,7 @@ class UserControllerTest {
         class Context_with_users {
             @BeforeEach
             void setUp() {
-                users = List.of(userResponse1, userResponse2);
+                users = List.of(user1, user2);
 
                 given(userService.getUsers())
                         .willReturn(users);
@@ -150,7 +143,7 @@ class UserControllerTest {
             @BeforeEach
             void setUp() {
                 given(userService.getUser(existingId))
-                        .willReturn(userResponse);
+                        .willReturn(user1);
             }
 
             @Test
@@ -197,8 +190,8 @@ class UserControllerTest {
         class Context_with_a_valid_user {
             @BeforeEach
             void setUp() {
-                given(userService.createUser(any(UserCreateRequest.class)))
-                        .willReturn(userResponse);
+                given(userService.createUser(any(User.class)))
+                        .willReturn(user1);
             }
 
             @Test
@@ -238,8 +231,8 @@ class UserControllerTest {
         class Context_with_an_existing_user_id {
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(existingId), any(UserUpdateRequest.class)))
-                        .willReturn(userResponse);
+                given(userService.updateUser(eq(existingId), any(User.class)))
+                        .willReturn(user1);
             }
 
             @Test
@@ -261,7 +254,7 @@ class UserControllerTest {
         class Context_with_not_existing_user_id {
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(notExistingId), any(UserUpdateRequest.class)))
+                given(userService.updateUser(eq(notExistingId), any(User.class)))
                         .willThrow(new UserNotFoundException());
             }
 

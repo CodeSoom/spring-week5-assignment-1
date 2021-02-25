@@ -1,9 +1,11 @@
 package com.codesoom.assignment.user.controller;
 
+import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.dto.UserCreateRequest;
 import com.codesoom.assignment.user.dto.UserResponse;
 import com.codesoom.assignment.user.dto.UserUpdateRequest;
 import com.codesoom.assignment.user.service.UserService;
+import com.github.dozermapper.core.Mapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 회원과 관련된 HTTP 요청 처리를 담당합니다.
@@ -31,12 +34,18 @@ public class UserController {
 
     private final UserService userService;
 
+    private final Mapper mapper;
+
     /**
      * 모든 회원을 응답합니다.
      */
     @GetMapping
     public List<UserResponse> list() {
-        return userService.getUsers();
+        List<User> users = userService.getUsers();
+
+        return users.stream()
+                .map(user -> mapper.map(user, UserResponse.class))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -47,7 +56,9 @@ public class UserController {
      */
     @GetMapping("{id}")
     public UserResponse find(@PathVariable Long id) {
-        return userService.getUser(id);
+        User user = userService.getUser(id);
+
+        return mapper.map(user, UserResponse.class);
     }
 
     /**
@@ -59,7 +70,10 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse create(@RequestBody @Valid UserCreateRequest createRequest) {
-        return userService.createUser(createRequest);
+        User user = mapper.map(createRequest, User.class);
+        User createdUser = userService.createUser(user);
+
+        return mapper.map(createdUser, UserResponse.class);
     }
 
     /**
@@ -73,7 +87,10 @@ public class UserController {
     public UserResponse update(
             @PathVariable Long id,
             @RequestBody @Valid UserUpdateRequest updateRequest) {
-        return userService.updateUser(id, updateRequest);
+        User user = mapper.map(updateRequest, User.class);
+        User updatedUser = userService.updateUser(id, user);
+
+        return mapper.map(updatedUser, UserResponse.class);
     }
 
     /**

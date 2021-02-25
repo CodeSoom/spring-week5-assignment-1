@@ -3,11 +3,6 @@ package com.codesoom.assignment.user.service;
 import com.codesoom.assignment.common.exceptions.UserNotFoundException;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
-import com.codesoom.assignment.user.dto.UserCreateRequest;
-import com.codesoom.assignment.user.dto.UserResponse;
-import com.codesoom.assignment.user.dto.UserUpdateRequest;
-import com.github.dozermapper.core.DozerBeanMapperBuilder;
-import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,38 +32,22 @@ class UserServiceTest {
     private User user1;
     private User user2;
 
-    private UserUpdateRequest userUpdateRequest;
-    private UserCreateRequest userCreateRequest;
-
     @BeforeEach
     void setUp() {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-
-        userService = new UserService(userRepository, mapper);
+        userService = new UserService(userRepository);
 
         user1 = User.builder()
                 .id(1L)
-                .name("이름")
-                .email("이메일")
-                .password("password")
+                .name("user1")
+                .email("user1@example.com")
+                .password("12345678")
                 .build();
 
         user2 = User.builder()
                 .id(2L)
-                .name("이름2")
-                .email("이메일2")
-                .password("password2")
-                .build();
-
-        userCreateRequest = userCreateRequest.builder()
-                .name("새 이름")
-                .email("newEmail@example.com")
+                .name("user2")
+                .email("user2@example.com")
                 .password("12345678")
-                .build();
-
-        userUpdateRequest = userUpdateRequest.builder()
-                .name("이름수정")
-                .password("87654321")
                 .build();
 
         given(userRepository.findById(existingId))
@@ -125,7 +104,7 @@ class UserServiceTest {
             @Test
             @DisplayName("찾은 회원을 리턴한다.")
             void it_returns_the_found_user() {
-                UserResponse foundUser = userService.getUser(existingId);
+                User foundUser = userService.getUser(existingId);
 
                 verify(userRepository).findById(existingId);
 
@@ -152,6 +131,13 @@ class UserServiceTest {
     @Nested
     @DisplayName("createUser")
     class Describe_createUser {
+        private User source = User.builder()
+                .id(1L)
+                .name("new User")
+                .email("newUser@example.com")
+                .password("12345678")
+                .build();
+
         @BeforeEach
         void setUp() {
             given(userRepository.save(any(User.class)))
@@ -161,25 +147,37 @@ class UserServiceTest {
         @Test
         @DisplayName("생성된 회원을 리턴한다.")
         void it_return_the_created_user() {
-            UserResponse createdUser = userService.createUser(userCreateRequest);
+            User createdUser = userService.createUser(source);
 
-            assertThat(createdUser.getName()).isEqualTo(userCreateRequest.getName());
-            assertThat(createdUser.getEmail()).isEqualTo(userCreateRequest.getEmail());
+            assertThat(createdUser.getName()).isEqualTo(source.getName());
+            assertThat(createdUser.getEmail()).isEqualTo(source.getEmail());
+            assertThat(createdUser.getPassword()).isEqualTo(source.getPassword());
         }
     }
 
     @Nested
     @DisplayName("updateUser")
     class Describe_updateUser {
+        private User source;
+
+        @BeforeEach
+        void prepareUser() {
+            source = User.builder()
+                    .name("업데이트")
+                    .password("87654321")
+                    .build();
+        }
+
         @Nested
         @DisplayName("존재하는 회원 id가 주어진다면")
         class Context_with_an_existing_user_id {
             @Test
             @DisplayName("수정된 회원을 리턴한다.")
             void it_returns_the_updated_user() {
-                UserResponse updatedUser = userService.updateUser(existingId, userUpdateRequest);
+                User updatedUser = userService.updateUser(existingId, source);
 
-                assertThat(updatedUser.getName()).isEqualTo(userUpdateRequest.getName());
+                assertThat(updatedUser.getName()).isEqualTo(source.getName());
+                assertThat(updatedUser.getPassword()).isEqualTo(source.getPassword());
             }
         }
 
@@ -190,7 +188,7 @@ class UserServiceTest {
             @DisplayName("'회원을 찾을 수 없다' 는 예외가 발생한다.")
             void it_throws_exception() {
                 assertThrows(UserNotFoundException.class,
-                        () -> userService.updateUser(notExistingId, userUpdateRequest));
+                        () -> userService.updateUser(notExistingId, source));
 
                 verify(userRepository).findById(notExistingId);
             }
