@@ -1,23 +1,63 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.domain.User;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest
+import static org.mockito.ArgumentMatchers.any;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(UserController.class)
 @DisplayName("UserController 클래스")
 class UserControllerTest {
+    @Autowired
+    private MockMvc mockMvc;
+
+    private final String givenEmail = "juuni.ni.i@gmail.com";
+    private final String givenName = "juunini";
+    private final String givenPassword = "secret";
+    private final String givenUserInfoJSON = String.format("{" +
+                    "\"email\":\"%s\"," +
+                    "\"name\":\"%s\"," +
+                    "\"password\":\"%s\"" +
+                    "}",
+            givenEmail,
+            givenName,
+            givenPassword
+    );
+    
+    @MockBean
+    private UserService userService;
+
     @Nested
     @DisplayName("[POST] /users 요청은")
     class Describe_create {
         @Nested
         @DisplayName("올바른 데이터가 주어졌을 때")
         class Context_with_correct_given_data {
+            @BeforeEach
+            void setup() {
+                Mockito.doNothing().when(userService).create(any(User.class));
+            }
+
             @Test
             @DisplayName("생성된 유저 정보를 응답한다.")
-            void It_respond_created_user_info() {
-                
+            void It_respond_created_user_info() throws Exception {
+                mockMvc.perform(
+                        post("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(givenUserInfoJSON)
+                )
+                        .andExpect(status().isCreated());
             }
         }
 
