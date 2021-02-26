@@ -126,10 +126,7 @@ class UserServiceTest {
 
     @Test
     void deleteWithExistedId(){
-        userService.delete();
+        userService.delete(1L);
+
     }
-
-
-
-
 }
