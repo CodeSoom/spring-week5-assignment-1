@@ -30,6 +30,11 @@ public class UserController {
         this.mapper = mapper;
     }
 
+    /**
+     * 유저 생성을 요청합니다.
+     * @param userRequest
+     * @return
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse create(@RequestBody @Valid UserRequest userRequest) {
@@ -40,6 +45,12 @@ public class UserController {
         return mapper.map(createdUser, UserResponse.class);
     }
 
+    /**
+     * 유저 변경을 요청합니다.
+     * @param id
+     * @param userRequest
+     * @return
+     */
     @PutMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserResponse update(@PathVariable Long id, @RequestBody @Valid UserRequest userRequest) {
@@ -50,6 +61,10 @@ public class UserController {
         return mapper.map(updatedUser, UserResponse.class);
     }
 
+    /**
+     * 유저 삭제를 요청합니다.
+     * @param id
+     */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
