@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,8 +13,10 @@ import javax.persistence.Id;
  * 유저 엔티티.
  */
 @Getter
+@Builder
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class User {
     @Id
     @GeneratedValue
@@ -24,14 +27,6 @@ public class User {
     private String email;
 
     private String password;
-
-    @Builder
-    public User(Long id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
 
     public void change(User user) {
         this.name = user.name;
