@@ -4,5 +4,5 @@ public interface UserRepository {
 
     User save(User user);
 
-    void delete(Long id);
+    User delete(Long id);
 }
