@@ -111,6 +111,10 @@ class UserServiceTest {
     class Describe_getUser {
         private Long givenId;
 
+        private User subject(Long id) {
+            return userService.getUser(givenId);
+        }
+
         @Nested
         @DisplayName("저장된 user의 id를 가지고 있다면")
         class Context_with_saved_id {
@@ -126,7 +130,7 @@ class UserServiceTest {
             @Test
             @DisplayName("user를 리턴한다.")
             void it_return_user() {
-                savedUser = userService.getUser(givenId);
+                savedUser = subject(givenId);
 
                 verify(userRepository).findById(givenId);
 
@@ -146,7 +150,7 @@ class UserServiceTest {
             @DisplayName("user를 찾을 수 없다는 exception을 던진다.")
             void it_throw_user_not_found_exception() {
                 assertThatThrownBy(
-                        () -> userService.getUser(givenId),
+                        () -> subject(givenId),
                         "user를 찾을 수 없다는 예외를 던져야 합니다."
                 ).isInstanceOf(UserNotFoundException.class);
             }
