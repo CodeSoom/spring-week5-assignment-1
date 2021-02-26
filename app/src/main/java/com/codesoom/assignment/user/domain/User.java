@@ -13,6 +13,7 @@ import javax.persistence.Id;
  */
 @Entity
 @Getter
+@lombok.Generated
 @NoArgsConstructor
 public class User {
     @Id

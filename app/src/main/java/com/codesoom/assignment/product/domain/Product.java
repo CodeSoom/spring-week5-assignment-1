@@ -11,6 +11,7 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
+@lombok.Generated
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor

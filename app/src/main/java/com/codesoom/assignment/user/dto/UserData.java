@@ -5,6 +5,7 @@ import lombok.Builder;
 
 import javax.validation.constraints.NotBlank;
 
+@lombok.Generated
 @Builder
 public class UserData {
     @NotBlank

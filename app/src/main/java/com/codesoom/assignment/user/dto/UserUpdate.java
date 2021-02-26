@@ -5,6 +5,7 @@ import lombok.Builder;
 
 import javax.validation.constraints.NotBlank;
 
+@lombok.Generated
 public class UserUpdate {
 
     @NotBlank
@@ -18,6 +19,7 @@ public class UserUpdate {
     @NotBlank
     @Mapping("password")
     private String password;
+
 
     @Builder
     public UserUpdate(@NotBlank String name, @NotBlank String email, @NotBlank String password) {

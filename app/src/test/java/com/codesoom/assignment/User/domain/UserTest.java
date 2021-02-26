@@ -38,7 +38,6 @@ class UserTest {
         User user = User.builder()
                 .id(1L)
                 .name(NAME)
-                .name(NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
