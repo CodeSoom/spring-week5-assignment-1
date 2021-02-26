@@ -15,10 +15,13 @@ import java.util.List;
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
+    private final Mapper mapper;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(Mapper dozerMapper, ProductRepository productRepository) {
         this.productRepository = productRepository;
+        this.mapper = dozerMapper;
     }
+
 
     public List<Product> getProducts() {
         return productRepository.findAll();
