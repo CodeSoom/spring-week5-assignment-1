@@ -15,7 +15,7 @@ class PriceTest {
     void create() {
         Price price = Price.of(1000);
 
-        assertThat(price.getPrice()).isEqualTo(BigDecimal.valueOf(1000));
+        assertThat(price.getAmount()).isEqualTo(BigDecimal.valueOf(1000));
     }
 
     @Test
@@ -24,7 +24,7 @@ class PriceTest {
         Price price2 = Price.of(1000);
 
         Price result = price.plus(price2);
-        assertThat(result.getPrice()).isEqualTo(BigDecimal.valueOf(2000));
+        assertThat(result.getAmount()).isEqualTo(BigDecimal.valueOf(2000));
     }
 
     @Test
@@ -33,7 +33,7 @@ class PriceTest {
         Price price2 = Price.of(1000);
 
         Price result = price.minus(price2);
-        assertThat(result.getPrice()).isEqualTo(BigDecimal.valueOf(0));
+        assertThat(result.getAmount()).isEqualTo(BigDecimal.valueOf(0));
     }
 
     @Test
@@ -41,7 +41,7 @@ class PriceTest {
         Price price = Price.of(1000);
 
         Price result = price.times(2);
-        assertThat(result.getPrice()).isEqualTo(BigDecimal.valueOf(2000.0));
+        assertThat(result.getAmount()).isEqualTo(BigDecimal.valueOf(2000.0));
     }
 
     @Test

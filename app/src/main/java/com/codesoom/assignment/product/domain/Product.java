@@ -37,7 +37,7 @@ public class Product {
     private String imageUrl;
 
     public BigDecimal getPrice() {
-        return price.getPrice();
+        return price.getAmount();
     }
 
     @Builder
