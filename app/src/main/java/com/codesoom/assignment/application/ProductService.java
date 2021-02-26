@@ -22,7 +22,6 @@ public class ProductService {
         this.mapper = dozerMapper;
     }
 
-
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
@@ -32,7 +31,6 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         Product product = mapper.map(productData, Product.class);
         return productRepository.save(product);
     }
@@ -40,12 +38,7 @@ public class ProductService {
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
-        product.change(
-                productData.getName(),
-                productData.getMaker(),
-                productData.getPrice(),
-                productData.getImageUrl()
-        );
+        product.changeWith(mapper.map(productData, Product.class));
 
         return product;
     }

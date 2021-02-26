@@ -78,7 +78,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductWithNotExsitedId() {
+    void getProductWithNotExistedId() {
         assertThatThrownBy(() -> productService.getProduct(1000L))
                 .isInstanceOf(ProductNotFoundException.class);
     }
