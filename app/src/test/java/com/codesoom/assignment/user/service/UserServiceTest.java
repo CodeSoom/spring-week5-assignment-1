@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.service;
 
+import com.codesoom.assignment.common.exceptions.DuplicateUserException;
 import com.codesoom.assignment.common.exceptions.UserNotFoundException;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
@@ -135,27 +136,54 @@ class UserServiceTest {
     @Nested
     @DisplayName("createUser")
     class Describe_createUser {
-        private User source = User.builder()
-                .id(1L)
-                .name("new User")
-                .email("newUser@example.com")
-                .password("12345678")
-                .build();
 
-        @BeforeEach
-        void setUp() {
-            given(userRepository.save(any(User.class)))
-                    .will(invocation -> invocation.<User>getArgument(0));
+        @Nested
+        @DisplayName("중복된 회원이 주어진다면")
+        class Context_with_a_duplicated_email {
+            private User duplicatedUser = User.builder()
+                    .name("duplicated User")
+                    .email("duplicatedUser@example.com")
+                    .password("12345678")
+                    .build();
+
+            @BeforeEach
+            void setUp() {
+                given(userRepository.existsByEmail(duplicatedUser.getEmail()))
+                        .willReturn(true);
+            }
+
+            @Test
+            @DisplayName("'중복된 회원 입니다' 라는 예외가 발생한다.'")
+            void it_return_the_created_user() {
+                assertThrows(DuplicateUserException.class,
+                        () -> userService.createUser(duplicatedUser));
+            }
         }
 
-        @Test
-        @DisplayName("생성된 회원을 리턴한다.")
-        void it_return_the_created_user() {
-            User createdUser = userService.createUser(source);
+        @Nested
+        @DisplayName("중복되지 않은 회원이 주어진다면")
+        class Context_with_not_duplicated_email {
+            private User source = User.builder()
+                    .name("new User")
+                    .email("newUser@example.com")
+                    .password("12345678")
+                    .build();
 
-            assertThat(createdUser.getName()).isEqualTo(source.getName());
-            assertThat(createdUser.getEmail()).isEqualTo(source.getEmail());
-            assertThat(createdUser.getPassword()).isEqualTo(source.getPassword());
+            @BeforeEach
+            void setUp() {
+                given(userRepository.save(any(User.class)))
+                        .will(invocation -> invocation.<User>getArgument(0));
+            }
+
+            @Test
+            @DisplayName("생성된 회원을 리턴한다.")
+            void it_return_the_created_user() {
+                User createdUser = userService.createUser(source);
+
+                assertThat(createdUser.getName()).isEqualTo(source.getName());
+                assertThat(createdUser.getEmail()).isEqualTo(source.getEmail());
+                assertThat(createdUser.getPassword()).isEqualTo(source.getPassword());
+            }
         }
     }
 

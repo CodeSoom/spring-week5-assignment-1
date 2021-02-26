@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.service;
 
+import com.codesoom.assignment.common.exceptions.DuplicateUserException;
 import com.codesoom.assignment.common.exceptions.UserNotFoundException;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
@@ -40,8 +41,13 @@ public class UserService {
      *
      * @param user 저장하고자 하는 회원
      * @return 저장된 회원
+     * @throws DuplicateUserException 중복된 회원일 경우
      */
-    public User createUser(User user) {
+    public User createUser(User user) throws DuplicateUserException {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new DuplicateUserException("중복된 이메일이 주어졌으므로 회원을 저장할 수 없습니다. 문제의 email = " + user.getEmail());
+        }
+
         return userRepository.save(user);
     }
 
