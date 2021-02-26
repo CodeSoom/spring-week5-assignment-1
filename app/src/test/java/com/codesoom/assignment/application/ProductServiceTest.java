@@ -4,12 +4,13 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,11 +38,14 @@ class ProductServiceTest {
 
     private ProductRepository productRepository;
 
+    private final Mapper dozerMapper = DozerBeanMapperBuilder.buildDefault();
+
+
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
 
-        productService = new ProductService(productRepository);
+        productService = new ProductService(dozerMapper, productRepository);
 
         List<Product> products = new ArrayList<>();
 
