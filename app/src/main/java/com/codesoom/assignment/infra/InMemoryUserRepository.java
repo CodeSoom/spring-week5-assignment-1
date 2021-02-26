@@ -2,11 +2,13 @@ package com.codesoom.assignment.infra;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
+@Repository
 public class InMemoryUserRepository implements UserRepository {
     private final Map<Long, User> map = new HashMap<>();
     private Long lastId = 0L;
