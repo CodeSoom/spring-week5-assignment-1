@@ -147,7 +147,6 @@ class UserServiceTest2 {
     void createUser() {
         given(userRepository.save(any(User.class)))
                 .willReturn(user1);
-
         UserSaveRequestDto expected = UserSaveRequestDto.builder()
                 .email(USER1_EMAIL)
                 .name(USER1_NAME)

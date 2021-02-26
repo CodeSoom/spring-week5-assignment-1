@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class NotFoundErrorAdvice {
     private static final String PRODUCT_NOT_FOUND = "Product not found";
     private static final String USER_NOT_FOUND = "User not found";
-    public static final String BAD_REQUEST = "Bad Request";
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
@@ -28,10 +27,4 @@ public class NotFoundErrorAdvice {
         return new ErrorResponse(USER_NOT_FOUND);
     }
 
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ErrorResponse handleIllegalArgument() {
-        return new ErrorResponse(BAD_REQUEST);
-    }
 }
