@@ -166,6 +166,13 @@ class UserServiceTest {
             return userService.createUser(userData);
         }
 
+        @BeforeEach
+        void setGivenUser() {
+            given(userRepository.save(any(User.class))).will(invocation -> {
+                return invocation.getArgument(0);
+            });
+        }
+
         @Test
         @DisplayName("user를 추가하고, 추가된 user를 리턴한다.")
         void it_create_user_and_return_created_user() {
