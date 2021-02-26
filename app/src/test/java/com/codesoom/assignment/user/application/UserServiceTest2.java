@@ -60,23 +60,23 @@ class UserServiceTest2 {
     }
 
     @Test
-    @DisplayName("getUsersInformation 메서드는 등록된 모든 사용자 정보를 리턴한다")
-    void getUsersInformation() {
+    @DisplayName("getUsers 메서드는 등록된 모든 사용자 정보를 리턴한다")
+    void getUsers() {
         given(userRepository.findAll()).willReturn(users);
 
-        List<UserData> usersInformation = userService.getUsersInformation();
+        List<UserData> usersInformation = userService.getUsers();
 
         assertThat(usersInformation).containsExactly(userData1, userData2);
         verify(userRepository).findAll();
     }
 
     @Test
-    @DisplayName("getUserInformation 메서드는 등록된 사용자 id에 해당하는 사용자 정보를 리턴한다")
-    void 를WithValidId() {
+    @DisplayName("getUser 메서드는 등록된 사용자 id에 해당하는 사용자 정보를 리턴한다")
+    void getUserWithValidId() {
         given(userRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(user1));
 
-        UserData actual = userService.getUserInformation(anyLong());
+        UserData actual = userService.getUser(anyLong());
 
         assertAll(
                 () -> assertThat(actual).isEqualTo(userData1),
@@ -86,10 +86,10 @@ class UserServiceTest2 {
     }
 
     @Test
-    @DisplayName("getUserInformation 메서드는 등록되지 않은 사용자 id로 조회시 예외를 던진다")
-    void getUserInformationWithInValidId() {
+    @DisplayName("getUser 메서드는 등록되지 않은 사용자 id로 조회시 예외를 던진다")
+    void getUserWithInValidId() {
         assertThatExceptionOfType(UserNotFoundException.class)
-                .isThrownBy(() -> userService.getUserInformation(NOT_EXIST_ID));
+                .isThrownBy(() -> userService.getUser(NOT_EXIST_ID));
         verify(userRepository).findById(NOT_EXIST_ID);
     }
 

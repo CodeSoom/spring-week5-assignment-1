@@ -61,36 +61,36 @@ class UserControllerTest {
     @Test
     @DisplayName("전체 사용자를 조회하고 사용자 목록을 확인한다.")
     void getUsers() {
-        given(userService.getUsersInformation()).willReturn(usersResponses);
+        given(userService.getUsers()).willReturn(usersResponses);
 
-        List<UserData> users = userController.getUsersInformation();
+        List<UserData> users = userController.getUsers();
 
         assertThat(users).containsExactly(userData1, userData2);
 
-        verify(userService).getUsersInformation();
+        verify(userService).getUsers();
     }
 
     @Test
     @DisplayName("특정 사용자를 조회하고 사용자 정보를 확인한다.")
     void getUser() {
-        given(userService.getUserInformation(anyLong())).willReturn(userData1);
-        UserData user = userController.getUserInformation(USER1_ID);
+        given(userService.getUser(anyLong())).willReturn(userData1);
+        UserData user = userController.getUser(USER1_ID);
 
         assertThat(user.getId()).isEqualTo(USER1_ID);
         assertThat(user.getEmail()).isEqualTo(USER1_EMAIL);
         assertThat(user.getPassword()).isEqualTo(USER1_PASSWORD);
         assertThat(user.getName()).isEqualTo(USER1_NAME);
 
-        verify(userService).getUserInformation(anyLong());
+        verify(userService).getUser(anyLong());
     }
 
     @Test
     @DisplayName("특정 사용자를 조회하고 존재하지 않으면 예외를 던진다.")
     void getNotExistedUser() {
-        given(userService.getUserInformation(NOT_EXIST_ID))
+        given(userService.getUser(NOT_EXIST_ID))
                 .willThrow(new UserNotFoundException(NOT_EXIST_ID));
 
-        assertThatThrownBy(() -> userService.getUserInformation(NOT_EXIST_ID))
+        assertThatThrownBy(() -> userService.getUser(NOT_EXIST_ID))
                 .isInstanceOf(UserNotFoundException.class);
     }
 

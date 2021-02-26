@@ -63,7 +63,7 @@ class UserServiceTest {
             UserData actual = userService.createUser(requestDto);
 
             assertAll(
-                    () -> assertThat(userService.getUsersInformation()).isNotEmpty(),
+                    () -> assertThat(userService.getUsers()).isNotEmpty(),
                     () -> assertThat(actual.getId()).isNotNull(),
                     () -> assertThat(actual.getName()).isEqualTo(USER_NAME),
                     () -> assertThat(actual.getEmail()).isEqualTo(USER_EMAIL),
@@ -89,7 +89,7 @@ class UserServiceTest {
             @DisplayName("등록된 사용자 목록을 리턴한다")
             @Test
             void It_return_users() {
-                List<UserData> actual = userService.getUsersInformation();
+                List<UserData> actual = userService.getUsers();
 
                 assertThat(actual).hasSize(1);
                 assertThat(actual.get(0).getName()).isEqualTo(USER_NAME);
@@ -104,7 +104,7 @@ class UserServiceTest {
             @DisplayName("비어있는 사용자 목록을 리턴한다")
             @Test
             void It_return_empty_users() {
-                assertThat(userService.getUsersInformation()).isEmpty();
+                assertThat(userService.getUsers()).isEmpty();
             }
         }
     }
@@ -129,7 +129,7 @@ class UserServiceTest {
             @DisplayName("등록된 사용자 id로 찾고자하는 사용자를 리턴한다")
             @Test
             void It_return_user() {
-                UserData actual = userService.getUserInformation(givenId);
+                UserData actual = userService.getUser(givenId);
 
                 assertAll(
                         () -> assertThat(actual.getId()).isEqualTo(givenId),
@@ -154,7 +154,7 @@ class UserServiceTest {
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(UserNotFoundException.class)
-                        .isThrownBy(() -> userService.getUserInformation(notExistedId));
+                        .isThrownBy(() -> userService.getUser(notExistedId));
             }
         }
     }
@@ -231,7 +231,7 @@ class UserServiceTest {
             void It_delete_user() {
                 userService.deleteUser(givenId);
 
-                assertThat(userService.getUsersInformation()).isEmpty();
+                assertThat(userService.getUsers()).isEmpty();
             }
         }
 

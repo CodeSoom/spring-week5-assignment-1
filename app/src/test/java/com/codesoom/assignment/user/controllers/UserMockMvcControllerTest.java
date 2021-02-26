@@ -76,7 +76,7 @@ class UserMockMvcControllerTest {
 
                 users = Collections.singletonList(responseDto);
 
-                given(userService.getUsersInformation())
+                given(userService.getUsers())
                         .willReturn(users);
             }
 
@@ -113,7 +113,7 @@ class UserMockMvcControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.getUserInformation(NOT_EXIST_ID))
+                given(userService.getUser(NOT_EXIST_ID))
                         .willThrow(new UserNotFoundException(NOT_EXIST_ID));
             }
 
@@ -140,7 +140,7 @@ class UserMockMvcControllerTest {
                         .email(USER_EMAIL)
                         .password(USER_PASSWORD)
                         .build();
-                given(userService.getUserInformation(anyLong())).willReturn(responseDto);
+                given(userService.getUser(anyLong())).willReturn(responseDto);
             }
 
             @DisplayName("200 OK 상태와 찾고자 하는 사용자를 응답한다.")

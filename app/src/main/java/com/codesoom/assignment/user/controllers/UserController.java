@@ -35,8 +35,8 @@ public class UserController {
      * 모든 사용자 정보를 응답합니다.
      */
     @GetMapping
-    public List<UserData> getUsersInformation() {
-        return userService.getUsersInformation();
+    public List<UserData> getUsers() {
+        return userService.getUsers();
     }
 
     /**
@@ -46,8 +46,8 @@ public class UserController {
      * @return 사용자 정보
      */
     @GetMapping("/{id}")
-    public UserData getUserInformation(@PathVariable Long id) {
-        return userService.getUserInformation(id);
+    public UserData getUser(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 
     /**

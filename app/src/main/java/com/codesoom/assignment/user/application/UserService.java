@@ -26,7 +26,7 @@ public class UserService {
     /**
      * 등록된 모든 사용자 정보를 가져온다.
      */
-    public List<UserData> getUsersInformation() {
+    public List<UserData> getUsers() {
         return userRepository.findAll()
                 .stream()
                 .map(UserData::of)
@@ -38,7 +38,7 @@ public class UserService {
      * @param userId 등록된 사용자 id
      * @return 등록된 사용자
      */
-    public UserData getUserInformation(Long userId) throws UserNotFoundException {
+    public UserData getUser(Long userId) throws UserNotFoundException {
         final User user = findUser(userId);
 
         return UserData.of(user);
