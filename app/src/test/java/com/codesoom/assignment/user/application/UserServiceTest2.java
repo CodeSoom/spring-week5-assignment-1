@@ -47,8 +47,6 @@ class UserServiceTest2 {
 
     private User user1;
     private User user2;
-    private UserSaveRequestDto saveRequestDto;
-    private UserUpdateRequestDto updateRequestDto;
     private List<User> users;
 
     private UserData userData1;
