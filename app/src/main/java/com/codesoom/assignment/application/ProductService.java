@@ -10,16 +10,17 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 상품의 전체조회, 조회, 생성, 수정, 삭제를 수행한다.
+ * 상품에 대한 요청을 수행한다.
  */
 @Service
 @Transactional
 public class ProductService {
     private final ProductRepository productRepository;
-    private Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+    private final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;

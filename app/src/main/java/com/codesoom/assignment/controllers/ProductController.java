@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 상품에 대한 전체조회, 조회, 생성, 수정, 삭제 요청을 처리한다.
+ * 상품에 대한 요청을 한다.
  */
 @RestController
 @RequestMapping("/products")
@@ -52,7 +52,7 @@ public class ProductController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody @Valid ProductData productData) {
+    public Product create(@RequestBody ProductData productData) {
         return productService.createProduct(productData);
     }
 
@@ -80,10 +80,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public Product delete(@PathVariable Long id) {
-        try {
-            return productService.deleteProduct(id);
-        } catch(ProductNotFoundException e) {
-            throw new ProductNotFoundException(id);
-        }
+        return productService.deleteProduct(id);
     }
 }

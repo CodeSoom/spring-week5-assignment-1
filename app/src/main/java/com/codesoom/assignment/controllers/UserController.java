@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- * 사용자에 대한 생성, 수정, 삭제 요청을 처리한다.
+ * 사용자에 대한 요청을 한다.
  */
 @RestController
 @RequestMapping("/user")

@@ -1,6 +1,7 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.User;
+import com.github.dozermapper.core.Mapping;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,12 +20,15 @@ public class UserData {
     @GeneratedValue
     private Long id;
 
+    @Mapping("name")
     @NotBlank(message = "name 값은 필수입니다")
     private String name;
 
+    @Mapping("email")
     @NotBlank(message = "email 값은 필수입니다")
     private String email;
 
+    @Mapping("password")
     @NotBlank(message = "password 값은 필수입니다")
     private String password;
 

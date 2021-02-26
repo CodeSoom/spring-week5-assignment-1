@@ -11,7 +11,7 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 /**
- * 사용자의 생성, 수정, 삭제를 수행한다.
+ * 사용자에 대한 요청을 수행한다.
  */
 @Service
 public class UserService {
