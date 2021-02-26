@@ -6,7 +6,6 @@ import com.codesoom.assignment.product.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +29,7 @@ class ProductServiceTest {
                 .id(1L)
                 .name("쥐돌이")
                 .maker("냥이월드")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000)
                 .build();
 
         given(productRepository.findAll()).willReturn(List.of(product));
@@ -43,7 +42,7 @@ class ProductServiceTest {
                     .id(2L)
                     .name(source.getName())
                     .maker(source.getMaker())
-                    .price(source.getPrice())
+                    .price(source.getPrice().longValue())
                     .build();
         });
     }
@@ -85,7 +84,7 @@ class ProductServiceTest {
         ProductData productData = ProductData.builder()
                 .name("쥐돌이")
                 .maker("냥이월드")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000)
                 .build();
 
         Product product = productService.createProduct(productData);
@@ -102,7 +101,7 @@ class ProductServiceTest {
         ProductData productData = ProductData.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000)
                 .build();
 
         Product product = productService.updateProduct(1L, productData);
@@ -116,7 +115,7 @@ class ProductServiceTest {
         ProductData productData = ProductData.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000)
                 .build();
 
         assertThatThrownBy(() -> productService.updateProduct(1000L, productData))

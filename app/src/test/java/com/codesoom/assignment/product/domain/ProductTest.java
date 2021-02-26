@@ -13,7 +13,7 @@ class ProductTest {
                 .id(1L)
                 .name("쥐돌이")
                 .maker("냥이월드")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000)
                 .build();
 
         assertThat(product.getId()).isEqualTo(1L);
@@ -29,21 +29,21 @@ class ProductTest {
                 .id(1L)
                 .name("쥐돌이")
                 .maker("냥이월드")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000)
                 .imageUrl("http://localhost:8080/cat")
                 .build();
 
         Product source = Product.builder()
                 .name("쥐순이")
                 .maker("코드숨")
-                .price(BigDecimal.valueOf(10000))
+                .price(10_000)
                 .imageUrl("http://localhost:8080/rat")
                 .build();
 
         product.change(
                 source.getName(),
                 source.getMaker(),
-                source.getPrice(),
+                source.getPrice().longValue(),
                 source.getImageUrl()
         );
 

@@ -19,14 +19,7 @@ public class Price {
     private BigDecimal price;
 
     private Price(BigDecimal price) {
-        validate(price);
         this.price = price;
-    }
-
-    private void validate(BigDecimal price) {
-        if (Objects.isNull(price) || price.compareTo(ZERO) < 0) {
-            throw new IllegalArgumentException();
-        }
     }
 
     /**
@@ -43,12 +36,23 @@ public class Price {
         return new Price(this.price.subtract(price.price));
     }
 
-    public static Price of(final BigDecimal price) {
+    /**
+     * 가격의 곱을 리턴한다.
+     */
+    public Price times(double percent) {
+        return new Price(this.price.multiply(BigDecimal.valueOf(percent)));
+    }
+
+    public static Price of(BigDecimal price) {
         return new Price(price);
     }
 
+    public static Price of(long price) {
+        return new Price(BigDecimal.valueOf(price));
+    }
+
     /**
-     *  가격객체가 동등한 객체라면 true를 리턴하고, 그렇지 않다면 false를 리턴합니다.
+     * 가격객체가 동등한 객체라면 true를 리턴하고, 그렇지 않다면 false를 리턴합니다.
      */
     public boolean equals(Object object) {
         if (this == object) {

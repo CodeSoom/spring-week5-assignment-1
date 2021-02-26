@@ -41,7 +41,7 @@ public class Product {
     }
 
     @Builder
-    public Product(Long id, String name, String maker, BigDecimal price, String imageUrl) {
+    public Product(Long id, String name, String maker, long price, String imageUrl) {
         this.id = id;
         this.name = name;
         this.maker = maker;
@@ -52,7 +52,7 @@ public class Product {
     /**
      * 상품의 정보를 갱신합니다.
      */
-    public void change(String name, String maker, BigDecimal price, String imageUrl) {
+    public void change(String name, String maker, long price, String imageUrl) {
         this.name = name;
         this.maker = maker;
         this.price = Price.of(price);

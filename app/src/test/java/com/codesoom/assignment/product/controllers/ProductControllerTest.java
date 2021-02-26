@@ -12,7 +12,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -20,7 +19,10 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +40,7 @@ class ProductControllerTest {
                 .id(1L)
                 .name("쥐돌이")
                 .maker("냥이월드")
-                .price(BigDecimal.valueOf(5000))
+                .price(5000)
                 .build();
 
         given(productService.getProducts()).willReturn(List.of(product));
@@ -167,17 +169,6 @@ class ProductControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(productService).updateProduct(eq(1000L), any(ProductData.class));
-    }
-
-    @Test
-    void updateWithInvalidPriceProduct() throws Exception {
-        mockMvc.perform(
-                patch("/products/9999")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":-1000}")
-        )
-                .andExpect(status().isBadRequest());
     }
 
     @Test
