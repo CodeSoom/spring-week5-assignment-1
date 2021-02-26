@@ -1,7 +1,6 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserRequestDto;
@@ -37,8 +36,8 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserRequestDto userRequestDto) {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-        User user = mapper.map(userRequestDto, User.class);
+        User user = userRepository.findById(id).orElseThrow(()-> new UserNotFoundException(id));
+        user.updateUser(userRequestDto.getName(), userRequestDto.getEmail(), userRequestDto.getPassword());
         return userRepository.save(user);
     }
 }

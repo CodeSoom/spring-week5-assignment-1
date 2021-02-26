@@ -36,7 +36,6 @@ class UserServiceTest {
         userService = new UserService(userRepository);
 
         User user = User.builder()
-                .id(1L)
                 .name("weno")
                 .password("weno@codesoom.com")
                 .password("pwd111")
