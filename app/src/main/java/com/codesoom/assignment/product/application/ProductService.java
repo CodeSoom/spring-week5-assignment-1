@@ -54,7 +54,7 @@ public class ProductService {
     /**
      * 등록된 상품의 정보를 갱신하고, 갱신된 정보를 리턴한다.
      *
-     * @param id  등록된 상품 id
+     * @param id 등록된 상품 id
      * @param productData 갱신할 상품 정보
      * @return 갱신된 상품 정보
      */

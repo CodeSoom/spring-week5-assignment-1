@@ -16,31 +16,31 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Price {
     private static final BigDecimal ZERO = BigDecimal.ZERO;
-    private BigDecimal amount;
+    private BigDecimal price;
 
-    private Price(BigDecimal amount) {
-        this.amount = amount;
+    private Price(BigDecimal price) {
+        this.price = price;
     }
 
     /**
      * 가격이 더해진 값을 리턴한다.
      */
     public Price plus(Price price) {
-        return new Price(this.amount.add(price.amount));
+        return new Price(this.price.add(price.price));
     }
 
     /**
      * 가격이 뺴진 값을 리턴한다.
      */
     public Price minus(Price price) {
-        return new Price(this.amount.subtract(price.amount));
+        return new Price(this.price.subtract(price.price));
     }
 
     /**
      * 가격의 곱을 리턴한다.
      */
     public Price times(double percent) {
-        return new Price(this.amount.multiply(BigDecimal.valueOf(percent)));
+        return new Price(this.price.multiply(BigDecimal.valueOf(percent)));
     }
 
     public static Price of(long price) {
@@ -58,13 +58,13 @@ public class Price {
             return false;
         }
         Price other = (Price) object;
-        return Objects.equals(amount, other.amount);
+        return Objects.equals(price, other.price);
     }
 
     /**
      * 가격 객체의 해쉬 정보를 리턴합니다.
      */
     public int hashCode() {
-        return Objects.hashCode(amount);
+        return Objects.hashCode(price);
     }
 }
