@@ -25,8 +25,8 @@ class UserServiceTest {
 
     private UserRepository userRepository = mock(UserRepository.class);
 
-    private Long existingId = 1L;
-    private Long notExistingId = 100L;
+    private Long existingId;
+    private final Long notExistingId = 100L;
 
     private List<User> users;
     private User user1;
@@ -49,6 +49,9 @@ class UserServiceTest {
                 .email("user2@example.com")
                 .password("12345678")
                 .build();
+
+
+        existingId = user1.getId();
 
         given(userRepository.findById(existingId))
                 .willReturn(Optional.of(user1));
@@ -111,6 +114,7 @@ class UserServiceTest {
                 assertThat(foundUser.getId()).isEqualTo(user1.getId());
                 assertThat(foundUser.getName()).isEqualTo(user1.getName());
                 assertThat(foundUser.getEmail()).isEqualTo(user1.getEmail());
+                assertThat(foundUser.getPassword()).isEqualTo(user1.getPassword());
             }
         }
 
