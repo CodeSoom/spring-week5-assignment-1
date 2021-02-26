@@ -133,5 +133,4 @@ class UserServiceTest {
         assertThatThrownBy(()-> userService.delete(1000L))
                 .isInstanceOf(UserNotFoundException.class);
     }
-
 }
