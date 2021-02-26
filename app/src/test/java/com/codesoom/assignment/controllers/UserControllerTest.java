@@ -55,7 +55,7 @@ class UserControllerTest {
                 .build();
     }
 
-    CreateUserRequest createAllBlackDataUser() {
+    CreateUserRequest createAllBlankDataUser() {
         return CreateUserRequest.builder()
                 .name("")
                 .email("")
@@ -78,7 +78,7 @@ class UserControllerTest {
                 .build();
     }
 
-    UpdateUserRequest createAllBlackDataUpdateUser() {
+    UpdateUserRequest createAllBlankDataUpdateUser() {
         return UpdateUserRequest.builder()
                 .name("")
                 .password("")
@@ -136,7 +136,7 @@ class UserControllerTest {
         @Nested
         @DisplayName("모든 데이터가 공백인 user가 주어진다면")
         class Context_with_all_blank_user_data {
-            CreateUserRequest givenUser = createAllBlackDataUser();
+            CreateUserRequest givenUser = createAllBlankDataUser();
 
             @DisplayName("400코드를 응답한다")
             @Test
@@ -212,7 +212,7 @@ class UserControllerTest {
         @DisplayName("모든 데이터가 공백인 user가 주어진다면")
         class Context_with_all_blank_user_data {
             Long givenId = EXIST_ID;
-            UpdateUserRequest source = createAllBlackDataUpdateUser();
+            UpdateUserRequest source = createAllBlankDataUpdateUser();
 
             @DisplayName("400코드를 응답한다")
             @Test
