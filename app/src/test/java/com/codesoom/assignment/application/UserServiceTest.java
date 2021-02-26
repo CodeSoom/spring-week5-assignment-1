@@ -113,6 +113,18 @@ class UserServiceTest {
         assertThat(user.getName()).isEqualTo("weno");
     }
 
+    @Test
+    void updateWithNotExistedID(){
+        UserRequestDto userRequestDto = UserRequestDto.builder()
+                .name("weno")
+                .password("weno@codesoom.com")
+                .password("pwd111")
+                .build();
+
+        assertThatThrownBy(()-> userService.updateUser(1L, userRequestDto))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
 
 
 
