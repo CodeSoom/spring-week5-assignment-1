@@ -32,6 +32,6 @@ public class Product {
         this.maker = source.maker;
         this.price = source.price;
         this.imageUrl = source.imageUrl;
-        
+
     }
 }
