@@ -40,7 +40,6 @@ class ProductServiceTest {
 
     private final Mapper dozerMapper = DozerBeanMapperBuilder.buildDefault();
 
-
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
