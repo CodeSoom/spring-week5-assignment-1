@@ -23,4 +23,9 @@ public class UserService {
         user = userRepository.save(user);
         return mapper.map(user, UserResponse.class);
     }
+
+    public UserResponse updateUser(Long id, UserRequest userRequest) {
+
+        return null;
+    }
 }

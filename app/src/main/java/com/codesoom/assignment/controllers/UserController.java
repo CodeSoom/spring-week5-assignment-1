@@ -32,7 +32,9 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
-    public UserResponse updateUser(@RequestBody @Valid UserRequest userRequest) {
-        return userService.updateUser(userRequest);
+    public UserResponse updateUser(
+            @PathVariable @Valid Long id,
+            @RequestBody @Valid UserRequest userRequest) {
+        return userService.updateUser(id, userRequest);
     }
 }
