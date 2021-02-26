@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * 서비스를 이용하는 사용자들의 정보를 전달받아 처리한다.
+ */
 @Service
 @Transactional
 public class UserService {

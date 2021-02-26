@@ -10,6 +10,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * 판매되는 반려동물 장난감 정보들을 전달받아 처리한다.
+ */
 @Service
 @Transactional
 public class ProductService {
