@@ -264,4 +264,52 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("deleteUser 메소드는")
+    class Describe_deleteUser {
+        private Long givenId;
+
+        private User subject(Long id) {
+            return userService.deleteUser(id);
+        }
+
+        @Nested
+        @DisplayName("저장된 user의 id를 가지고 있다면")
+        class Context_with_saved_user_id {
+            @BeforeEach
+            void setSavedId() {
+                givenId = givenSavedId;
+
+                given(userRepository.findById(givenId))
+                        .willReturn(Optional.of(user));
+            }
+
+            @Test
+            @DisplayName("user를 삭제히고, 삭제한 user를 반환한다.")
+            void it_delete_user_and_return_deleted_user() {
+                final User deleted = subject(givenId);
+
+                assertThat(deleted.getId()).isEqualTo(givenId);
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 user의 id를 가지고 있다면")
+        class Context_with_unsaved_user_id {
+            @BeforeEach
+            void setUnsavedId() {
+                givenId = givenUnsavedId;
+            }
+
+            @Test
+            @DisplayName("user를 찾을 수 없다는 예외를 던집니다.")
+            void it_throw_user_not_found_exception() {
+                assertThatThrownBy(
+                        () -> subject(givenId),
+                        "user를 찾을 수 없다는 예외를 던져야 합니다."
+                ).isInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
 }
