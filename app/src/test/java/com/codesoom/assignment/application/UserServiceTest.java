@@ -127,6 +127,6 @@ class UserServiceTest {
     @Test
     void deleteWithExistedId(){
         userService.delete(1L);
-
+        verify(userRepository).delete(any(User.class));
     }
 }
