@@ -120,7 +120,7 @@ class UserServiceTest {
                 .password("pwd111")
                 .build();
 
-        assertThatThrownBy(()-> userService.updateUser(1L, userRequestDto))
+        assertThatThrownBy(()-> userService.updateUser(1000L, userRequestDto))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
