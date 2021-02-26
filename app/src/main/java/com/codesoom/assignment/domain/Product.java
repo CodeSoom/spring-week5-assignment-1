@@ -38,10 +38,10 @@ public class Product {
         this.image = image;
     }
 
-    public void update(String name, String maker, Integer price, String image) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.image = image;
+    public void updateWith(Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
+        this.image = source.image;
     }
 }

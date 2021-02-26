@@ -31,7 +31,7 @@ class ProductTest {
 
     @Test
     @DisplayName("상품의 정보가 정상적으로 변경되었는지 확인하기 위해 상품 정보를 확인합니다")
-    void update() {
+    void updateWith() {
         Product product = Product.builder()
                 .name(NAME)
                 .maker(MAKER)
@@ -39,10 +39,12 @@ class ProductTest {
                 .image(IMAGE)
                 .build();
 
-        product.update("물고기 장난감",
-                "애옹이네 장난감",
-                5000,
-                "https://bit.ly/2M4YXkw"
+        product.updateWith(Product.builder()
+                .name("물고기 장난감")
+                .maker("애옹이네 장난감")
+                .price(5000)
+                .image("https://bit.ly/2M4YXkw")
+                .build()
         );
 
         assertThat(product.getName()).isEqualTo("물고기 장난감");
