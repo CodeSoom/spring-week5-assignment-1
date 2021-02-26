@@ -131,19 +131,19 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("저장되지 않은 toy를 찾으려고하면")
-        class Context_when_find_unsaved_toy {
+        @DisplayName("저장되지 않은 user를 찾으려고하면")
+        class Context_when_find_unsaved_user {
             @BeforeEach
             void setUnsavedId() {
                 givenId = givenUnsavedId;
             }
 
             @Test
-            @DisplayName("toy를 찾을 수 없다는 exception을 던진다.")
-            void it_throw_exception() {
+            @DisplayName("user를 찾을 수 없다는 exception을 던진다.")
+            void it_throw_user_not_found_exception() {
                 assertThatThrownBy(
                         () -> userService.getUser(givenId),
-                        "toy를 찾을 수 없다는 예외를 던져야 합니다."
+                        "user를 찾을 수 없다는 예외를 던져야 합니다."
                 ).isInstanceOf(UserNotFoundException.class);
             }
         }
