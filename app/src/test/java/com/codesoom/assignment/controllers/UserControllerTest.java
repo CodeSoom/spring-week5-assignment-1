@@ -49,13 +49,11 @@ public class UserControllerTest {
             .build();
 
         given(userService.createUser(any(User.class))).willReturn(user);
-        given(userService.updateUser(eq(1L), any(UserRequest.class)))
+        given(userService.updateUser(eq(1L), any(User.class)))
             .will(invocation -> {
-                Long id = invocation.getArgument(0);
-                UserRequest userRequest = invocation.getArgument(1);
-                return new UserResponse(1L, "임꺽정", "lim@gamil.com");
+                return new User(1L, "임꺽정", "lim@gamil.com", "5678");
             });
-        given(userService.updateUser(eq(1000L), any(UserRequest.class))).willThrow(UserNotFoundException.class);
+        given(userService.updateUser(eq(1000L), any(User.class))).willThrow(UserNotFoundException.class);
         given(userService.deleteUser(1000L))
             .willThrow(new ProductNotFoundException(1000L));
     }
@@ -93,7 +91,7 @@ public class UserControllerTest {
             .andExpect(status().isOk())
             .andExpect(content().string(containsString("임꺽정")));
 
-        verify(userService).updateUser(eq(1L), any(UserRequest.class));
+        verify(userService).updateUser(eq(1L), any(User.class));
     }
 
     @DisplayName("유효하지 않은 양식으로 회원 수정을 요청하였을 때, 상태코드 400을 리턴한다.")
@@ -115,7 +113,7 @@ public class UserControllerTest {
             .content("{\"name\":\"임꺽정\",\"email\":\"sh9519@gmail.com\",\"password\":\"1234\"}"))
             .andExpect(status().isOk());
 
-        verify(userService).updateUser(eq(1L), any(UserRequest.class));
+        verify(userService).updateUser(eq(1L), any(User.class));
     }
 
     @DisplayName("존재하지 않는 회원에 대해서 유효한 양식으로 회원 수정을 요청하였을 떄, 상태코드 404를 응답한다.")
@@ -127,7 +125,7 @@ public class UserControllerTest {
             .content("{\"name\":\"임꺽정\",\"email\":\"lim@gmail.com\",\"password\":\"5678\"}"))
             .andExpect(status().isNotFound());
 
-        verify(userService).updateUser(eq(1000L), any(UserRequest.class));
+        verify(userService).updateUser(eq(1000L), any(User.class));
     }
 
     @DisplayName("존재하는 회원에 대해서 회원 삭제를 요청하였을 때, 상태코드 204를 응답한다.")

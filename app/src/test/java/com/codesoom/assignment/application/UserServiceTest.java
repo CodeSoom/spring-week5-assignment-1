@@ -44,12 +44,11 @@ public class UserServiceTest {
                 .password(source.getPassword())
                 .build();
         });
-
     }
 
     @DisplayName("서비스가 저장소에 생성 요청을 하면, 새로운 유저가 생성된다.")
     @Test
-    void test1() {
+    void createUser() {
         userRepository.save(user);
 
         assertThat(user.getId()).isEqualTo(1L);
@@ -60,32 +59,26 @@ public class UserServiceTest {
         verify(userRepository).save(any(User.class));
     }
 
-    @DisplayName("")
+    @DisplayName("서비스가 저장소에 존재하는 유저에 대해서 수정 요청을 하면, 수정된 유저가 반환된다.")
     @Test
-    void test2() {
+    void updateWithExistedUser() {
+    }
+
+    @DisplayName("서비스가 저장소에 존재하지 않는 유저에 대해서 수정 요청을 하면, 예외를 호출합니다.")
+    @Test
+    void updateWithNonExistedUser() {
 
     }
 
-    @DisplayName("")
+    @DisplayName("서비스가 저장소에 존재하는 유저에 대해서 삭제 요청을 하면, 유저를 삭제합니다.")
     @Test
-    void test3() {
+    void deleteWithExistedUser() {
 
     }
 
-    @DisplayName("")
+    @DisplayName("서비스가 저장소에 존재하지 않는 유저에 대해서 삭제 요청을 하면, 예외를 호출합니다.")
     @Test
-    void test4() {
-
-    }
-
-    @DisplayName("")
-    @Test
-    void test5() {
-
-    }
-
-    @Test
-    void test6() {
+    void deleteWithNotExistedUser() {
 
     }
 }
