@@ -129,4 +129,13 @@ class UserServiceTest {
         userService.delete(1L);
         verify(userRepository).delete(any(User.class));
     }
+
+    @Test
+    void deleteWithNotExistedId() {
+        assertThatThrownBy(()-> userService.delete(1L))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+
+
 }
