@@ -56,7 +56,7 @@ class UserServiceTest {
         user = mapper.map(userData, User.class);
     }
 
-    void assertCreatedUser(User user) {
+    void assertUser(User user) {
         assertThat(user.getClass()).isEqualTo(User.class);
         assertThat(user.getName()).isEqualTo(givenName);
         assertThat(user.getEmail()).isEqualTo(givenEmail);
@@ -136,7 +136,7 @@ class UserServiceTest {
 
                 verify(userRepository).findById(givenId);
 
-                assertCreatedUser(savedUser);
+                assertUser(savedUser);
             }
         }
 
@@ -183,7 +183,7 @@ class UserServiceTest {
 
             verify(userRepository).save(any(User.class));
 
-            assertCreatedUser(created);
+            assertUser(created);
         }
     }
 
@@ -290,7 +290,7 @@ class UserServiceTest {
             void it_delete_user_and_return_deleted_user() {
                 final User deleted = subject(givenId);
 
-                assertThat(deleted.getId()).isEqualTo(givenId);
+                assertUser(deleted);
             }
         }
 
