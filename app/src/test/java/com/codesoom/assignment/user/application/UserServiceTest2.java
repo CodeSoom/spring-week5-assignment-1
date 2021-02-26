@@ -100,7 +100,11 @@ class UserServiceTest2 {
     void updateUserWithValidId() {
         given(userRepository.findById(anyLong()))
                 .willReturn(Optional.of(user1));
-        UserUpdateRequestDto expected = updateRequestDto;
+        UserUpdateRequestDto expected = UserUpdateRequestDto.builder()
+                .email(USER2_EMAIL)
+                .name(USER2_NAME)
+                .password(USER2_PASSWORD)
+                .build();
 
         UserData actual = userService.updateUser(anyLong(), expected);
 
@@ -146,7 +150,11 @@ class UserServiceTest2 {
         given(userRepository.save(any(User.class)))
                 .willReturn(user1);
 
-        UserSaveRequestDto expected = saveRequestDto;
+        UserSaveRequestDto expected = UserSaveRequestDto.builder()
+                .email(USER1_EMAIL)
+                .name(USER1_NAME)
+                .password(USER1_PASSWORD)
+                .build();
 
         UserData actual = userService.createUser(expected);
 
@@ -170,18 +178,6 @@ class UserServiceTest2 {
                 .id(USER2_ID)
                 .name(USER2_NAME)
                 .email(USER2_EMAIL)
-                .password(USER2_PASSWORD)
-                .build();
-
-        saveRequestDto = UserSaveRequestDto.builder()
-                .email(USER1_EMAIL)
-                .name(USER1_NAME)
-                .password(USER1_PASSWORD)
-                .build();
-
-        updateRequestDto = UserUpdateRequestDto.builder()
-                .email(USER2_EMAIL)
-                .name(USER2_NAME)
                 .password(USER2_PASSWORD)
                 .build();
 
