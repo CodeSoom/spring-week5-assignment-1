@@ -1,7 +1,6 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -76,7 +75,8 @@ class UserServiceTest {
         class Context_without_any_saved_user {
             @BeforeEach
             void setEmptyList() {
-                given(userRepository.findAll()).willReturn(List.of());
+                given(userRepository.findAll())
+                        .willReturn(List.of());
             }
 
             @Test
@@ -95,7 +95,8 @@ class UserServiceTest {
             void setSavedUser() {
                 givenUserList = List.of(user);
 
-                given(userRepository.findAll()).willReturn(givenUserList);
+                given(userRepository.findAll())
+                        .willReturn(givenUserList);
             }
 
             @Test
@@ -124,7 +125,8 @@ class UserServiceTest {
             void setSavedId() {
                 givenId = givenSavedId;
 
-                given(userRepository.findById(givenId)).willReturn(Optional.of(user));
+                given(userRepository.findById(givenId))
+                        .willReturn(Optional.of(user));
             }
 
             @Test
@@ -168,9 +170,10 @@ class UserServiceTest {
 
         @BeforeEach
         void setGivenUser() {
-            given(userRepository.save(any(User.class))).will(invocation -> {
-                return invocation.getArgument(0);
-            });
+            given(userRepository.save(any(User.class)))
+                    .will(invocation -> {
+                        return invocation.getArgument(0);
+                    });
         }
 
         @Test
