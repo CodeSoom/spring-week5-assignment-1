@@ -40,16 +40,16 @@ class UserTest {
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
-        User source = User.builder()
+        User expect = User.builder()
                 .name(UPDATE_NAME)
                 .email(UPDATE_EMAIL)
                 .password(UPDATE_PASSWORD)
                 .build();
 
-        user.changeWith(source);
+        user.changeWith(expect);
 
-        assertThat(user.getName()).isEqualTo(UPDATE_NAME);
-        assertThat(user.getEmail()).isEqualTo(UPDATE_EMAIL);
-        assertThat(user.getPassword()).isEqualTo(UPDATE_PASSWORD);
+        assertThat(user.getName()).isEqualTo(expect.getName());
+        assertThat(user.getEmail()).isEqualTo(expect.getEmail());
+        assertThat(user.getPassword()).isEqualTo(expect.getPassword());
     }
 }
