@@ -12,7 +12,7 @@ class UserTest {
     @DisplayName("회원을 생성한다.")
     void createUser() {
         Long givenId = 1L;
-        String givenName = "mikeKang47";
+        String givenName = "mikeKang";
         String givenEmail = "test@github.com";
         String givenPassword = "qwer1234";
 
