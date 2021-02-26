@@ -61,7 +61,7 @@ class UserServiceTest {
             @DisplayName("생성된 회원을 리턴한다.")
             void it_return_the_created_user() {
                 UserDto createdUser = userService.createUser(new UserCreateRequestDto(user));
-                assertThat(createdUser.getName()).isEqualTo("양승인");
+                assertThat(createdUser.getName()).isEqualTo(user.getName());
             }
         }
     }
@@ -94,7 +94,7 @@ class UserServiceTest {
                 UserDto updatedUser = userService.updateUser(EXIST_ID, new UserUpdateRequestDto(source));
                 verify(userRepository).findById(EXIST_ID);
 
-                assertThat(updatedUser.getName()).isEqualTo("새유저");
+                assertThat(updatedUser.getName()).isEqualTo(source.getName());
             }
         }
 
