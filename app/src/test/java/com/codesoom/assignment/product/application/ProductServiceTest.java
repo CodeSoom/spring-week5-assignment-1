@@ -86,9 +86,11 @@ class ProductServiceTest {
     @Test
     void createProduct() {
         ProductData productData = ProductData.builder()
+                .id(2L)
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
+                .imageUrl("url")
                 .build();
 
         Product product = productService.createProduct(productData);

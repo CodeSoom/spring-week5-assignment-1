@@ -10,22 +10,26 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Setter
-@Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductData {
     private Long id;
 
+    @Getter
+    @Setter
     @NotBlank
     @Mapping("name")
     private String name;
 
+    @Getter
+    @Setter
     @NotBlank
     @Mapping("maker")
     private String maker;
 
+    @Getter
+    @Setter
     @NotNull
     @Mapping("price")
     private Integer price;

@@ -6,7 +6,6 @@ import lombok.Builder;
 import javax.validation.constraints.NotBlank;
 
 public class UserUpdate {
-    private Long id;
 
     @NotBlank
     @Mapping("name")
@@ -21,8 +20,7 @@ public class UserUpdate {
     private String password;
 
     @Builder
-    public UserUpdate(Long id, @NotBlank String name, @NotBlank String email, @NotBlank String password) {
-        this.id = id;
+    public UserUpdate(@NotBlank String name, @NotBlank String email, @NotBlank String password) {
         this.name = name;
         this.email = email;
         this.password = password;

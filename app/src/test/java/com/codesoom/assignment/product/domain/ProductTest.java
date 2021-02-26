@@ -28,16 +28,19 @@ class ProductTest {
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
+                .imageUrl("url")
                 .build();
 
         product.changeWith(Product.builder()
                 .name("쥐순이")
                 .maker("코드숨")
                 .price(10000)
+                .imageUrl("newUrl")
                 .build());
 
         assertThat(product.getName()).isEqualTo("쥐순이");
         assertThat(product.getMaker()).isEqualTo("코드숨");
         assertThat(product.getPrice()).isEqualTo(10000);
+        assertThat(product.getImageUrl()).isEqualTo("newUrl");
     }
 }
