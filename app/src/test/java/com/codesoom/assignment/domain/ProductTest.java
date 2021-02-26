@@ -45,7 +45,9 @@ class ProductTest {
 
     @Test
     void toStringTest() {
-        assertThat(product.toString()).isEqualTo("Product(id=1, name=쥐돌이, maker=냥이월드, price=5000, imageUrl=null)");
-        assertThat(Product.builder().toString()).isEqualTo("Product.ProductBuilder(id=null, name=null, maker=null, price=null, imageUrl=null)");
+        assertThat(product.toString())
+                .isEqualTo("Product(id=1, name=쥐돌이, maker=냥이월드, price=5000, imageUrl=null)");
+        assertThat(Product.builder().toString())
+                .isEqualTo("Product.ProductBuilder(id=null, name=null, maker=null, price=null, imageUrl=null)");
     }
 }
