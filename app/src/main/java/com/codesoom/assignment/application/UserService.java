@@ -28,7 +28,7 @@ public class UserService {
         return findUser(id);
     }
 
-    public User createProduct(UserData userData) {
+    public User createUser(UserData userData) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         User user = mapper.map(userData, User.class);
 
