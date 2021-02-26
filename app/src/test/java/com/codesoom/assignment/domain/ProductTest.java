@@ -14,7 +14,8 @@ class ProductTest {
 
     private static final String IMAGE = "https://bit.ly/3qzXRME";
 
-    @DisplayName("상품이 정상적으로 등록되었는지 확인하기 위해 상품 정보를 확인합니다")
+    @Test
+    @DisplayName("상품이 정상적으로 등록되었는지 확인합니다")
     void creationWithBuilder() {
         Product product = Product.builder()
                 .name(NAME)
@@ -30,7 +31,7 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("상품의 정보가 정상적으로 변경되었는지 확인하기 위해 상품 정보를 확인합니다")
+    @DisplayName("상품의 정보가 정상적으로 변경되었는지 확인합니다")
     void updateWith() {
         Product product = Product.builder()
                 .name(NAME)
