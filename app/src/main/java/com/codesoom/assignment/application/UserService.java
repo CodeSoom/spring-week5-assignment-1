@@ -46,7 +46,7 @@ public class UserService {
         return user;
     }
 
-    public void deleteUser(Long id) {
+    public User deleteUser(Long id) {
         //
     }
 }
