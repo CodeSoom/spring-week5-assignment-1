@@ -1,6 +1,5 @@
 package com.codesoom.assignment.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -12,19 +11,15 @@ import javax.validation.constraints.NotBlank;
 @Getter
 @NoArgsConstructor
 public class UserResponse {
-    @JsonProperty
     private Long id;
 
     @NotBlank
-    @JsonProperty
     private String name;
 
     @NotBlank
-    @JsonProperty
     private String email;
 
     @NotBlank
-    @JsonProperty
     private String password;
 
     @Builder

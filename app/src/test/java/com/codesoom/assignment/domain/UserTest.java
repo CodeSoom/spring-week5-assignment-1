@@ -13,7 +13,7 @@ class UserTest {
     private static final String PASSWORD = "1q2w3e!";
 
     @Test
-    @DisplayName("사용자를 생성하고 입력된 값을 리턴한다")
+    @DisplayName("사용자를 생성한다")
     void createWithBuilder() {
         User user = User.builder()
                 .id(ID)

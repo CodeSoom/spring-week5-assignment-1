@@ -37,6 +37,7 @@ class UserControllerTest {
 
     private UserRequest userRequest;
     private UserResponse userResponse;
+
     private static final Long USER_ID = 1L;
     private static final String NAME = "Min";
     private static final String EMAIL = "min@gmail.com";
@@ -45,6 +46,13 @@ class UserControllerTest {
     @BeforeEach
     void setUp() {
         userRequest = UserRequest.builder()
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+
+        userResponse = UserResponse.builder()
+                .id(USER_ID)
                 .name(NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
