@@ -169,10 +169,6 @@ class UserServiceTest {
         @Test
         @DisplayName("user를 추가하고, 추가된 user를 리턴한다.")
         void it_create_user_and_return_created_user() {
-            given(userRepository.save(any(User.class))).will(invocation -> {
-                return invocation.getArgument(0);
-            });
-
             created = subject(userData);
 
             verify(userRepository).save(any(User.class));
@@ -192,6 +188,20 @@ class UserServiceTest {
             return userService.updateUser(userData);
         }
 
+        private void setModifyingUserData() {
+            modifyingUserData = UserData.builder()
+                    .id(givenId)
+                    .name(givenChangedName)
+                    .email(givenChangedEmail)
+                    .password(givenChangedPassword)
+                    .build();
+        }
+
+        private void setModifyingUserByMapper() {
+            final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+            modifying = mapper.map(modifyingUserData, User.class);
+        }
+
         @Nested
         @DisplayName("저장된 user의 id를 가지고 있다면")
         class Context_with_saved_user_id {
@@ -201,15 +211,8 @@ class UserServiceTest {
             void setSavedId() {
                 givenId = givenSavedId;
 
-                modifyingUserData = UserData.builder()
-                        .id(givenId)
-                        .name(givenChangedName)
-                        .email(givenChangedEmail)
-                        .password(givenChangedPassword)
-                        .build();
-
-                final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-                modifying = mapper.map(modifyingUserData, User.class);
+                setModifyingUserData();
+                setModifyingUserByMapper();
 
                 given(userRepository.findById(givenId))
                         .willReturn(Optional.of(modifying));
@@ -233,15 +236,9 @@ class UserServiceTest {
             @BeforeEach
             void setUnsavedId() {
                 givenId = givenUnsavedId;
-                modifyingUserData = UserData.builder()
-                        .id(givenId)
-                        .name(givenChangedName)
-                        .email(givenChangedEmail)
-                        .password(givenChangedPassword)
-                        .build();
 
-                final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-                modifying = mapper.map(modifyingUserData, User.class);
+                setModifyingUserData();
+                setModifyingUserByMapper();
 
                 given(userRepository.findById(givenId))
                         .willThrow(UserNotFoundException.class);
