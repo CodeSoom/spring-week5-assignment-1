@@ -67,6 +67,10 @@ class UserServiceTest {
     @Nested
     @DisplayName("getUsers 메서드는")
     class Describe_getUsers {
+        private List<User> subject() {
+            return userService.getUsers();
+        }
+
         @Nested
         @DisplayName("저장된 user가 없다면")
         class Context_without_any_saved_user {
@@ -78,7 +82,7 @@ class UserServiceTest {
             @Test
             @DisplayName("비어있는 리스트를 리턴한다.")
             void it_return_empty_list() {
-                assertThat(userService.getUsers()).isEmpty();
+                assertThat(subject()).isEmpty();
             }
         }
 
@@ -97,7 +101,7 @@ class UserServiceTest {
             @Test
             @DisplayName("user 리스트를 리턴한다.")
             void it_return_user_list() {
-                assertThat(userService.getUsers()).isEqualTo(givenUserList);
+                assertThat(subject()).isEqualTo(givenUserList);
             }
         }
     }
