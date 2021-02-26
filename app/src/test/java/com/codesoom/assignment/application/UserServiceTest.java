@@ -1,10 +1,8 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.ProductData;
 import com.codesoom.assignment.dto.UserRequestDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,15 +14,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.BDDMockito.verify;
+import static org.mockito.Mockito.mock;
 
 /*
 1. getAllUsers : 완료
 2. getUser : 완료
 3. createUser : 완료
-4. updateUser
-5. deleteUser
+4. updateUser : 완료
+5. deleteUser : 완료
  */
 class UserServiceTest {
 
@@ -135,7 +133,5 @@ class UserServiceTest {
         assertThatThrownBy(()-> userService.delete(1000L))
                 .isInstanceOf(UserNotFoundException.class);
     }
-
-
 
 }
