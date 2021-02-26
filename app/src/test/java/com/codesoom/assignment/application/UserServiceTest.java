@@ -36,6 +36,14 @@ class UserServiceTest {
     }
 
     @Test
+    void getUsersWithNoUser() {
+        given(userRepository.findAll()).willReturn(List.of());
+
+        assertThat(userService.getUsers()).isEmpty();
+    }
+
+    @Test
+    @DisplayName("저장된 회원이 있다면 회원 목록을 리턴한다")
     void getUsers() {
         List<User> users = userService.getUsers();
 
