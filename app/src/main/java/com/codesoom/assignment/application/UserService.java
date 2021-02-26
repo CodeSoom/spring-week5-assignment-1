@@ -40,4 +40,8 @@ public class UserService {
         user.updateUser(userRequestDto.getName(), userRequestDto.getEmail(), userRequestDto.getPassword());
         return userRepository.save(user);
     }
+
+    public void delete() {
+
+    }
 }
