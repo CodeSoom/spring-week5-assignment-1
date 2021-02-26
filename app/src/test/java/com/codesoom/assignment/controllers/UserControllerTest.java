@@ -19,8 +19,12 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -42,8 +46,11 @@ class UserControllerTest {
 
     private static final Long USER_ID = 1L;
     private static final String NAME = "Min";
+    private static final String NEW_NAME = "New Min";
     private static final String EMAIL = "min@gmail.com";
+    private static final String NEW_EMAIL = "new_min@gmail.com";
     private static final String PASSWORD = "1q2w3e!";
+    private static final String NEW_PASSWORD = "new_1q2w3e!";
 
     @BeforeEach
     void setUp() {
@@ -116,6 +123,49 @@ class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userRequest)))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /user/{id} 요청은")
+    class Describe_PATCH_user_id {
+        @Nested
+        @DisplayName("수정할 사용자 정보가, 존재하는 id와 주어지면")
+        class Context_with_update_user {
+
+            UserRequest userUpdateRequest;
+
+            @BeforeEach
+            void setUp() {
+                UserResponse userResponse = UserResponse.builder()
+                        .id(USER_ID)
+                        .name(NEW_NAME)
+                        .email(NEW_EMAIL)
+                        .password(NEW_PASSWORD)
+                        .build();
+
+                userUpdateRequest = UserRequest.builder()
+                        .name(NEW_NAME)
+                        .email(NEW_EMAIL)
+                        .password(NEW_PASSWORD)
+                        .build();
+
+                given(userService.updateUser(eq(USER_ID), any(UserRequest.class)))
+                        .willReturn(userResponse);
+            }
+
+            @DisplayName("사용자 정보를 수정하고 200 코드를 응답한다")
+            @Test
+            void it_updates_user_detail_and_return_200() throws Exception {
+                mockMvc.perform(
+                        patch("/user/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userUpdateRequest)))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(NEW_NAME)));
+                )
             }
         }
     }

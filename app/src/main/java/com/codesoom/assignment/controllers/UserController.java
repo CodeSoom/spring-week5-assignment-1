@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 /**
- * 사용자 생성, 수정, 삭제에 대한 요청을 처리합니다.
+ * 사용자에 관한 요청을 처리합니다.
  */
 @RestController
 @RequestMapping("/user")
@@ -29,5 +29,10 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createUser(@RequestBody @Valid UserRequest userRequest) {
         return userService.createUser(userRequest);
+    }
+
+    @PatchMapping("{id}")
+    public UserResponse updateUser(@RequestBody @Valid UserRequest userRequest) {
+        return userService.updateUser(userRequest);
     }
 }
