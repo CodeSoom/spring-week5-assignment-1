@@ -34,6 +34,7 @@ class ProductServiceTest {
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
+                .imageUrl("url")
                 .build();
 
         given(productRepository.findAll()).willReturn(List.of(product));
@@ -47,6 +48,7 @@ class ProductServiceTest {
                     .name(source.getName())
                     .maker(source.getMaker())
                     .price(source.getPrice())
+                    .imageUrl(source.getImageUrl())
                     .build();
         });
     }

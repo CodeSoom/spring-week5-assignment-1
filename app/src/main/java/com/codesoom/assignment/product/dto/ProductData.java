@@ -10,7 +10,6 @@ import lombok.Setter;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@lombok.Generated
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,6 +34,7 @@ public class ProductData {
     @Mapping("price")
     private Integer price;
 
+    @Getter
     @Mapping("imageUrl")
     private String imageUrl;
 }

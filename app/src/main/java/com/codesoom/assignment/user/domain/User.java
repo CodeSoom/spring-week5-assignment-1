@@ -11,9 +11,9 @@ import javax.persistence.Id;
 /**
  * 사용자 정보.
  */
+@lombok.Generated
 @Entity
 @Getter
-@lombok.Generated
 @NoArgsConstructor
 public class User {
     @Id

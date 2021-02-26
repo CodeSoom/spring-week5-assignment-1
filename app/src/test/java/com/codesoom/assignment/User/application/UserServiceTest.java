@@ -118,6 +118,8 @@ class UserServiceTest {
                 user = userService.updateUser(EXISTING_ID, userUpdate);
 
                 assertThat(user.getName()).isEqualTo(NEW_NAME);
+                assertThat(user.getEmail()).isEqualTo(NEW_EMAIL);
+                assertThat(user.getPassword()).isEqualTo(NEW_PASSWORD);
             }
         }
 
