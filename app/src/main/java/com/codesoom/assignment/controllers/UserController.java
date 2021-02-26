@@ -20,6 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * User에  대한 HTTP 요청 핸들러.
+ *
+ * @see UserService
+ * @see User
+ */
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
@@ -28,6 +34,12 @@ public class UserController {
     private final UserService userService;
     private final Mapper mapper;
 
+    /**
+     * 주어진 user를 저장하고 저장된 user를 응답합니다.
+     *
+     * @param createUserRequest 저장하고자 하는 user
+     * @return 저장된 user
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse create(@RequestBody @Valid CreateUserRequest createUserRequest) {
@@ -36,12 +48,24 @@ public class UserController {
         return UserResponse.of(user);
     }
 
+    /**
+     * 주어진 id와 일치하는 user를 삭제합니다.
+     *
+     * @param id user 식별자
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 
+    /**
+     * 주어진 id와 일치하는 user를 수정하고 수정된 user를 반환합니다.
+     *
+     * @param id                user 식별자
+     * @param updateUserRequest 수정하고자 하는 user
+     * @return 수정된 user
+     */
     @PatchMapping("/{id}")
     public UserResponse update(@PathVariable Long id, @RequestBody @Valid UpdateUserRequest updateUserRequest) {
         User source = mapper.map(updateUserRequest, User.class);

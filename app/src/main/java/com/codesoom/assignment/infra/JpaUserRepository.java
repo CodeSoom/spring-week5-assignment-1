@@ -6,6 +6,9 @@ import java.util.Optional;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;
 
+/**
+ * User JPA 데이터 저장소
+ */
 @Primary
 public interface JpaUserRepository
         extends UserRepository, CrudRepository<User, Long> {

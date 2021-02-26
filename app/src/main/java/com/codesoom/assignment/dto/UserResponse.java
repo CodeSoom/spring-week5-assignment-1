@@ -6,6 +6,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+/**
+ * User 응답 정보.
+ */
 @Getter
 @AllArgsConstructor
 @Builder

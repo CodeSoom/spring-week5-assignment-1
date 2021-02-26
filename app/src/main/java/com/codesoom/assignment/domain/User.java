@@ -8,6 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 유저 정보.
+ */
 @Entity
 @Getter
 @NoArgsConstructor
@@ -26,6 +29,11 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * 주어진 user로 부터 정보를 수정합니다.
+     *
+     * @param source 수정하고자 하는 User
+     */
     public void update(User source) {
         this.name = source.getName();
         this.password = source.getPassword();

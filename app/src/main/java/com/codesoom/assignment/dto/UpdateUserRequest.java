@@ -7,6 +7,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * User 수정 요청 정보.
+ */
 @Getter
 @NoArgsConstructor
 public class UpdateUserRequest {

@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * User 생성 요청 정보.
+ */
 @Getter
 @NoArgsConstructor
 public class CreateUserRequest {
