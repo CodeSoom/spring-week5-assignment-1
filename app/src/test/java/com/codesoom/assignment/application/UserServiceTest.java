@@ -124,6 +124,10 @@ class UserServiceTest {
                 .isInstanceOf(UserNotFoundException.class);
     }
 
+    @Test
+    void deleteWithExistedId(){
+        userService.delete();
+    }
 
 
 
