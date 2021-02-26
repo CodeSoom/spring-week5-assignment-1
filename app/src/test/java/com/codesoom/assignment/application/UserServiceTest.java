@@ -132,7 +132,7 @@ class UserServiceTest {
 
     @Test
     void deleteWithNotExistedId() {
-        assertThatThrownBy(()-> userService.delete(1L))
+        assertThatThrownBy(()-> userService.delete(1000L))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
