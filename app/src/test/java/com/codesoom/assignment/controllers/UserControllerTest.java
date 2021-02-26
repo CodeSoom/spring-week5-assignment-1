@@ -4,7 +4,9 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -57,6 +59,8 @@ class UserControllerTest {
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
+
+        objectMapper.configure(SerializationFeature.FAIL_ON_EMPTY_BEANS, false);
     }
 
     @Nested
@@ -89,6 +93,29 @@ class UserControllerTest {
                 .andExpect(jsonPath("name").exists())
                 .andExpect(jsonPath("email").exists())
                 .andExpect(jsonPath("password").exists());
+            }
+        }
+
+        @Nested
+        @DisplayName("생성할 사용자 정보가 유효하지 않은 경우")
+        class Context_with_empty_value {
+            @BeforeEach
+            void setUp() {
+                userRequest = UserRequest.builder()
+                        .name("")
+                        .email("")
+                        .password("")
+                        .build();
+            }
+
+            @DisplayName("404 상태 코드를 응답한다")
+            @Test
+            void it_returns_404_code() throws Exception {
+                mockMvc.perform(post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(userRequest)))
+                        .andExpect(status().isBadRequest());
             }
         }
     }

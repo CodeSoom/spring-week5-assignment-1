@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 /**
  * 사용자 생성, 수정, 삭제에 대한 요청을 처리합니다.
  */
@@ -18,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @Validated
 public class UserController {
 
-//    회원 생성하기 - POST /user
 //    회원 수정하기 - POST /user/{id}
 //    회원 삭제하기 - DELETE /user/{id}
 
@@ -26,7 +27,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserResponse createUser(@RequestBody UserRequest userRequest) {
+    public UserResponse createUser(@RequestBody @Valid UserRequest userRequest) {
         return userService.createUser(userRequest);
     }
 }
