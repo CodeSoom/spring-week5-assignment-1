@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.controller;
 
+import com.codesoom.assignment.common.exceptions.DuplicateUserException;
 import com.codesoom.assignment.common.exceptions.UserNotFoundException;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.dto.UserCreateRequest;
@@ -221,6 +222,36 @@ class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(invalidUserCreateRequest)))
                         .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("중복된 회원 생성 정보가 주어진다면")
+        class Context_with_an_duplicate_user {
+            private UserCreateRequest duplicateUserCreateRequest;
+
+            @BeforeEach
+            void setUp() {
+                duplicateUserCreateRequest = UserCreateRequest.builder()
+                        .name("duplicated User")
+                        .email("duplicatedUser@example.com")
+                        .password("12345678")
+                        .build();
+
+                given(userService.createUser(any(User.class)))
+                        .willThrow(new DuplicateUserException());
+            }
+
+            @Test
+            @DisplayName("에러메시지와 상태코드 409을 응답한다.")
+            void it_responds_the_error_message_and_status_code_409() throws Exception {
+                mockMvc.perform(post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(duplicateUserCreateRequest)))
+                        .andExpect(jsonPath("name").doesNotExist())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isConflict());
             }
         }
     }

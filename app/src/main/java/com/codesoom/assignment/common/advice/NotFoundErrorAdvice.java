@@ -1,6 +1,7 @@
 package com.codesoom.assignment.common.advice;
 
 import com.codesoom.assignment.common.dto.ErrorResponse;
+import com.codesoom.assignment.common.exceptions.DuplicateUserException;
 import com.codesoom.assignment.common.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.common.exceptions.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -23,6 +24,13 @@ public class NotFoundErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUserNotFound(UserNotFoundException exception) {
+        return new ErrorResponse(exception.getMessage());
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.CONFLICT)
+    @ExceptionHandler(DuplicateUserException.class)
+    public ErrorResponse handleDuplicateUser(DuplicateUserException exception) {
         return new ErrorResponse(exception.getMessage());
     }
 
