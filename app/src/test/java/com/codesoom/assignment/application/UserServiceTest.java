@@ -162,6 +162,10 @@ class UserServiceTest {
     class Describe_createUser {
         private User created;
 
+        private User subject(UserData userData) {
+            return userService.createUser(userData);
+        }
+
         @Test
         @DisplayName("user를 추가하고, 추가된 user를 리턴한다.")
         void it_create_user_and_return_created_user() {
@@ -169,7 +173,7 @@ class UserServiceTest {
                 return invocation.getArgument(0);
             });
 
-            created = userService.createUser(userData);
+            created = subject(userData);
 
             verify(userRepository).save(any(User.class));
 
