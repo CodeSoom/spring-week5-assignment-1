@@ -103,6 +103,11 @@ class UserServiceTest {
     @DisplayName("updateUser()")
     @Nested
     class Describe_update {
+        User source = User.builder()
+                .name(UPDATE_NAME)
+                .password(UPDATE_PASSWORD)
+                .build();
+
         User subject(Long id, User source) {
             return userService.updateUser(id, source);
         }
@@ -111,15 +116,6 @@ class UserServiceTest {
         @DisplayName("존재하는 user id와 user가 주어진다면")
         class Context_with_exist_user_id {
             Long givenUserId = EXIST_ID;
-            User source;
-
-            @BeforeEach
-            void setUp() {
-                source = User.builder()
-                        .name(UPDATE_NAME)
-                        .password(UPDATE_PASSWORD)
-                        .build();
-            }
 
             @DisplayName("수정된 user를 반환한다")
             @Test
@@ -135,15 +131,6 @@ class UserServiceTest {
         @DisplayName("존재하지 않는 user id와 user가 주어진다면")
         class Context_with_not_exist_user_id {
             Long givenId = NOT_EXIST_ID;
-            User source;
-
-            @BeforeEach
-            void setUp() {
-                source = User.builder()
-                        .name(UPDATE_NAME)
-                        .password(UPDATE_PASSWORD)
-                        .build();
-            }
 
             @DisplayName("user를 찾을수 없다는 예외를 던진다")
             @Test
