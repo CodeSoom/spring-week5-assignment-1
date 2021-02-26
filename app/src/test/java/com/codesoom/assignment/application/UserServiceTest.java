@@ -188,6 +188,10 @@ class UserServiceTest {
         private User modifying;
         private UserData modifyingUserData;
 
+        private User subject(UserData userData) {
+            return userService.updateUser(userData);
+        }
+
         @Nested
         @DisplayName("저장된 user의 id를 가지고 있다면")
         class Context_with_saved_user_id {
@@ -214,7 +218,7 @@ class UserServiceTest {
             @Test
             @DisplayName("user를 수정하고, 수정된 user를 리턴한다.")
             void it_modified_user_and_return_modified_user() {
-                modified = userService.updateUser(modifyingUserData);
+                modified = subject(modifyingUserData);
 
                 assertThat(modified.getClass()).isEqualTo(User.class);
                 assertThat(modified.getName()).isEqualTo(givenChangedName);
@@ -247,7 +251,7 @@ class UserServiceTest {
             @DisplayName("user를 찾을 수 없다는 exception을 던진다.")
             void it_throw_user_not_found_exception() {
                 assertThatThrownBy(
-                        () -> userService.updateUser(modifyingUserData),
+                        () -> subject(modifyingUserData),
                         "user를 찾을 수 없다는 예외를 던져야 합니다."
                 ).isInstanceOf(UserNotFoundException.class);
             }
