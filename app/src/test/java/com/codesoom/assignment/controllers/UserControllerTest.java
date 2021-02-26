@@ -34,6 +34,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
     private final long EXIST_ID = 1L;
     private final long NOT_EXIST_ID = 100L;
+
     @Autowired
     private MockMvc mockMvc;
 
