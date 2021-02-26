@@ -23,6 +23,7 @@ public class UserControllerTest {
         mockMvc.perform(
                 post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
                         .content(userJson)
         )
                 .andExpect(status().isCreated())
