@@ -1,14 +1,17 @@
 package com.codesoom.assignment.dto;
 
 import com.github.dozermapper.core.Mapping;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 @NoArgsConstructor
+@ToString(exclude = "id")
 public class UserData {
     private Long id;
 
@@ -22,5 +25,12 @@ public class UserData {
 
     @NotNull
     @Mapping("password")
-    private Integer password;
+    private String password;
+
+    @Builder
+    public UserData(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
