@@ -1,11 +1,8 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserApplicationService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
-import com.codesoom.assignment.infra.InMemoryUserRepository;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -39,6 +37,9 @@ public class UserControllerTest {
 
         given(service.createUser(name, mail, password)).willReturn(user);
         doNothing().when(service).deleteUser(1L);
+        doThrow(new UserNotFoundException(2L))
+                .when(service)
+                .deleteUser(2L);
     }
 
     @Test
@@ -58,5 +59,11 @@ public class UserControllerTest {
     void deleteUser() throws Exception {
         mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isNoContent());
+    }
+
+    @Test
+    void deleteNotExistUser() throws Exception {
+        mockMvc.perform(delete("/users/2"))
+                .andExpect(status().isNotFound());
     }
 }
