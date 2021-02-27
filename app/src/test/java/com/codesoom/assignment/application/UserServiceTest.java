@@ -1,11 +1,11 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.exception.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserCreateRequestDto;
 import com.codesoom.assignment.dto.UserDto;
 import com.codesoom.assignment.dto.UserUpdateRequestDto;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,21 +48,17 @@ class UserServiceTest {
     @Nested
     @DisplayName("createUser()는")
     class Describe_createUser {
-        @Nested
-        @DisplayName("UserDto를 User로 변경하고")
-        class Context_change_userDto_to_user {
-            @BeforeEach
-            void setUp() {
-                given(userRepository.save(any(User.class)))
-                        .willReturn(user);
-            }
+        @BeforeEach
+        void setUp() {
+            given(userRepository.save(any(User.class)))
+                    .willReturn(user);
+        }
 
-            @Test
-            @DisplayName("생성된 회원을 리턴한다.")
-            void it_return_the_created_user() {
-                UserDto createdUser = userService.createUser(new UserCreateRequestDto(user));
-                assertThat(createdUser.getName()).isEqualTo(user.getName());
-            }
+        @Test
+        @DisplayName("생성된 회원을 리턴한다.")
+        void it_return_the_created_user() {
+            UserDto createdUser = userService.createUser(new UserCreateRequestDto(user));
+            assertThat(createdUser.getName()).isEqualTo(user.getName());
         }
     }
 
