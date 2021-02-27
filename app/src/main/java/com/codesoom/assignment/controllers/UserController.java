@@ -28,7 +28,7 @@ public class UserController {
     /**
      * 유저 정보 수정요청을 받고, 요쳥에 대한 결과를 반환한다.
      *
-     * @param id, 수정할 유저의 id
+     * @param id 수정할 유저의 id
      * @param userData 수정할 유저정보
      * @return User 수정한 유저정보
      */
