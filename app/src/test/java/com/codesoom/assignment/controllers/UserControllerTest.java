@@ -81,6 +81,18 @@ public class UserControllerTest {
     }
 
     @Test
+    void updateUserOnlyNameAndPassword() throws Exception {
+        String userJson = "{\"name\": \"Las\", \"password\": \"1234yu90\"}";
+        mockMvc.perform(
+                patch("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(userJson))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Las")));
+    }
+
+    @Test
     void updateUserWithInvalidAttributes() throws Exception {
         mockMvc.perform(
                 patch("/users/1")
