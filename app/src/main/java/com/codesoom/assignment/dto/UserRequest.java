@@ -15,15 +15,15 @@ public class UserRequest {
     @Mapping("id")
     private final Long id;
 
-    @NotBlank
+    @NotBlank(message = "name should not be blank")
     @Mapping("name")
     private final String name;
 
-    @NotBlank
+    @NotBlank(message = "email should not be blank")
     @Mapping("email")
     private final String email;
 
-    @NotBlank
+    @NotBlank(message = "password should not be blank")
     @Mapping("password")
     private final String password;
 }
