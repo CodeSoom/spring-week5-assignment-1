@@ -28,4 +28,5 @@ public class UserController {
     public User detail(@PathVariable Long id) {
         return userService.getUser(id);
     }
+
 }
