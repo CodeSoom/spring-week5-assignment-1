@@ -3,8 +3,11 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 /**
  * 유저 정보를 관리하는 API.
@@ -13,9 +16,14 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
+    private final Mapper mapper;
 
-    public UserController(UserService userService) {
+    public UserController(
+            Mapper dozerMapper,
+            UserService userService
+    ) {
         this.userService = userService;
+        this.mapper = dozerMapper;
     }
 
     /**
@@ -26,8 +34,8 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserData create(@RequestBody UserData userData) {
-        final User user = userData.toEntity();
+    public UserData create(@RequestBody @Valid UserData userData) {
+        final User user = mapper.map(userData, User.class);
 
         userService.create(user);
 
