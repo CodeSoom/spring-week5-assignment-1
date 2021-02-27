@@ -1,8 +1,8 @@
 package com.codesoom.assignment.dto;
 
-import com.codesoom.assignment.domain.User;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.github.dozermapper.core.Mapping;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.experimental.Accessors;
@@ -14,19 +14,22 @@ import javax.validation.constraints.NotBlank;
 @Accessors(fluent = true)
 @Getter
 public class UserData {
-    @JsonProperty
+    @JsonProperty("id")
     Long id;
 
     @NotBlank
-    @JsonProperty
+    @JsonProperty("email")
+    @Mapping("email")
     String email;
 
     @NotBlank
-    @JsonProperty
+    @JsonProperty("name")
+    @Mapping("name")
     String name;
 
     @NotBlank
-    @JsonProperty
+    @JsonProperty("password")
+    @Mapping("password")
     String password;
 
     @JsonCreator
@@ -40,13 +43,5 @@ public class UserData {
         this.email = email;
         this.name = name;
         this.password = password;
-    }
-
-    public User toEntity() {
-        return new User(
-                this.email,
-                this.name,
-                this.password
-        );
     }
 }
