@@ -36,11 +36,11 @@ public class UserData {
     }
 
     /** 사용자 정보를 Entity로 만든다 */
-    public User toEntity() {
-        return User.builder()
-                .name(this.name)
-                .email(this.email)
-                .password(this.password)
-                .build();
-    }
+//    public User toEntity() {
+//        return User.builder()
+//                .name(this.name)
+//                .email(this.email)
+//                .password(this.password)
+//                .build();
+//    }
 }

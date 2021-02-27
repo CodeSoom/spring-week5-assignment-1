@@ -4,6 +4,8 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -44,8 +46,10 @@ class UserControllerTest {
     private final String UPDATE_USER_EMAIL = "updatedEmail";
     private final String UPDATE_USER_PASSWORD = "updatedPassword";
 
+    private final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
     private final Long EXISTED_ID = 1L;
     private final Long NOT_EXISTED_ID = 100L;
+
     private List<User> users;
     private User setUpUser;
 
@@ -65,24 +69,24 @@ class UserControllerTest {
     @DisplayName("create 메서드는")
     class Describe_create {
         @Nested
-        @DisplayName("만약 유저 객체가 주어진다면")
+        @DisplayName("만약 사용자가 주어진다면")
         class Context_WithUser {
-            private UserData sourceData;
+            private UserData userSource;
             private User createdUser;
 
             @BeforeEach
             void setUp() {
-                sourceData = UserData.builder()
+                userSource = UserData.builder()
                         .name(CREATE_USER_NAME)
                         .email(CREATE_USER_EMAIL)
                         .password(CREATE_USER_PASSWORD)
                         .build();
 
-                createdUser = sourceData.toEntity();
+                createdUser = mapper.map(userSource, User.class);
             }
 
             @Test
-            @DisplayName("객체를 저장하고 저장된 객체와 CREATED를 리턴한다")
+            @DisplayName("사용자를 저장하고 저장된 사용자와 CREATED를 리턴한다")
             void itSavesUserAndReturnsUser() throws Exception {
                 given(userService.createUser(any(UserData.class))).willReturn(createdUser);
 
@@ -103,26 +107,26 @@ class UserControllerTest {
     @DisplayName("update 메서드는")
     class Describe_update {
         @Nested
-        @DisplayName("만약 저장되어 있는 유저의 아이디와 객체가 주어진다면")
-        class Context_WithExistedIdAndObject {
+        @DisplayName("만약 저장되어 있는 사용자의 아이디와 수정 할 사용자가 주어진다면")
+        class Context_WithExistedIdAndUser {
             private final Long givenExistedId = EXISTED_ID;
-            private UserData sourceData;
+            private UserData userSource;
             private User updatedUser;
 
             @BeforeEach
             void setUp() {
-                sourceData = UserData.builder()
+                userSource = UserData.builder()
                         .name(UPDATE_USER_NAME)
                         .email(UPDATE_USER_EMAIL)
                         .password(UPDATE_USER_PASSWORD)
                         .build();
 
-                updatedUser = sourceData.toEntity();
+                updatedUser = mapper.map(userSource, User.class);
             }
 
             @Test
-            @DisplayName("주어진 아이디에 해당하는 객체를 업데이트하고 해당 객체와 OK를 리턴한다")
-            void itUpdatesObjectAndReturnUpdatedObjectAndOKHttpStatus() throws Exception {
+            @DisplayName("주어진 아이디에 해당하는 사용자를 수정하고 수정된 사용자와 OK를 리턴한다")
+            void itUpdatesUserAndReturnUpdatedUserAndOKHttpStatus() throws Exception {
                 given(userService.updateUser(eq(givenExistedId), any(UserData.class))).willReturn(updatedUser);
 
                 mockMvc.perform(patch("/user/" + givenExistedId)
@@ -139,12 +143,12 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 저장되어 있지 않은 유저의 아이디와 객체가 주어진다면")
+        @DisplayName("만약 저장되어 있지 않은 사용자의 아이디가 주어진다면")
         class Context_WithNotExistedIdAndObject {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("해당 객체를 찾을 수 없다는 메세지와 NOT_FOUND를 리턴한다")
+            @DisplayName("사용자를 찾을 수 없다는 메세지와 NOT_FOUND를 리턴한다")
             void itReturnsNotFoundMessageAndNOT_FOUNDHttpStatus() throws Exception {
                 given(userService.updateUser(eq(givenNotExistedId), any(UserData.class)))
                         .willThrow(new UserNotFoundException(givenNotExistedId));
@@ -165,13 +169,13 @@ class UserControllerTest {
     @DisplayName("delete 메서드는")
     class Describe_delete {
         @Nested
-        @DisplayName("만약 저장되어 있는 유저의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있는 사용자의 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 아이디에 해당하는 객체를 삭제하고 해당 객체와 NO_CONTENT를 리턴한다")
-            void itDeletesUserAndReturnsUserAndNO_CONTENTHttpStatus() throws Exception {
+            @DisplayName("주어진 아이디에 해당하는 사용자 삭제하고 삭제된 사용자와 NO_CONTENT를 리턴한다")
+            void itDeletesUserAndReturnsDeletedUserAndNO_CONTENTHttpStatus() throws Exception {
                 mockMvc.perform(delete("/user/" + givenExistedId))
                         .andDo(print())
                         .andExpect(status().isNoContent());
@@ -181,12 +185,12 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 저장되어 있지 않은 유저의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있지 않은 사용자의 아이디가 주어진다면")
         class Context_WithNotExistedId {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("유저를 찾을 수 없다는 메세지와 NOT_FOUND를 리턴한다")
+            @DisplayName("사용자를 찾을 수 없다는 메세지와 NOT_FOUND를 리턴한다")
             void itReturnsNotFoundMessageAndNOT_FOUNDHttpStatus() throws Exception {
                 given(userService.deleteUser(givenNotExistedId))
                         .willThrow(new UserNotFoundException(givenNotExistedId));

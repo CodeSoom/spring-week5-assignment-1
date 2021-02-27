@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.UserData;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +16,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(exclude = "id")
+@ToString
 public class User {
     /** 사용자 식별자 */
     @Id
@@ -49,9 +48,9 @@ public class User {
     }
 
     /** 사용자 정보를 업데이트한다. */
-    public void update(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
+//    public void update(String name, String email, String password) {
+//        this.name = name;
+//        this.email = email;
+//        this.password = password;
+//    }
 }

@@ -54,13 +54,13 @@ public class Product {
     }
 
     /** 상품 정보를 업데이트한다. */
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
+//    public void change(String name,
+//                       String maker,
+//                       Integer price,
+//                       String imageUrl) {
+//        this.name = name;
+//        this.maker = maker;
+//        this.price = price;
+//        this.imageUrl = imageUrl;
+//    }
 }

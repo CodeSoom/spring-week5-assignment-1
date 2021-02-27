@@ -5,8 +5,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.empty;
-import static org.hamcrest.CoreMatchers.is;
 
 class ProductTest {
     private Product product;
@@ -28,9 +26,41 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("모든 매개변수를 가지는 고양이 장난감 Builder 검사")
-    void CheckBuilderWithAllArgs() {
+    @DisplayName("모든 매개변수를 가지는 상품 Builder 검사")
+    void BuilderWithAllArgs() {
         assertThat(product.getId()).isEqualTo(PRODUCT_ID);
+        assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
+        assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
+        assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
+        assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGEURL);
+    }
+
+    @Test
+    @DisplayName("아이디를 제외한 모든 매개변수를 가지는 상품 Builder 검사")
+    void BuilderWithArgsWithoutId() {
+        Product product = Product.builder()
+                .name(PRODUCT_NAME)
+                .maker(PRODUCT_MAKER)
+                .price(PRODUCT_PRICE)
+                .imageUrl(PRODUCT_IMAGEURL)
+                .build();
+
+        assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
+        assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
+        assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
+        assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGEURL);
+    }
+
+    @Test
+    @DisplayName("어떤 매개변수도 가지지 않는 상품 Builder 검사")
+    void BuilderWithoutArgs() {
+        Product product = Product.builder()
+                .name(PRODUCT_NAME)
+                .maker(PRODUCT_MAKER)
+                .price(PRODUCT_PRICE)
+                .imageUrl(PRODUCT_IMAGEURL)
+                .build();
+
         assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
         assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
         assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
@@ -49,23 +79,4 @@ class ProductTest {
 //                .contains(String.valueOf(PRODUCT_PRICE))
 //                .contains(PRODUCT_IMAGEURL);
 //    }
-
-    @Test
-    void change() {
-        Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
-
-        product.change("쥐순이", "코드숨", 10000,
-                "http://localhost:8080/rat");
-
-        assertThat(product.getName()).isEqualTo("쥐순이");
-        assertThat(product.getMaker()).isEqualTo("코드숨");
-        assertThat(product.getPrice()).isEqualTo(10000);
-        assertThat(product.getImageUrl())
-                .isEqualTo("http://localhost:8080/rat");
-    }
 }

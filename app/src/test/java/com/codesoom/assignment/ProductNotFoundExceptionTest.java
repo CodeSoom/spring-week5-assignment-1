@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class ProductNotFoundExceptionTest {
     @Test
-    @DisplayName("고양이 장난감을 찾을 수 없다는 예외")
+    @DisplayName("상품을 찾을 수 없다는 예외")
     void productNotFoundException() {
         Long givenNotExistedId = 100L;
 
