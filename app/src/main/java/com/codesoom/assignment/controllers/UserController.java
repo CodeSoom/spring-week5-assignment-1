@@ -1,5 +1,7 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import org.springframework.http.HttpStatus;
@@ -13,6 +15,12 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/users")
 public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     /**
      * 유저 생성 요청을 받고, 요쳥에 대한 결과를 반환한다.
      *
@@ -22,7 +30,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody @Valid UserData userData) {
-        return null;
+        return userService.createUser(userData);
     }
 
     /**
