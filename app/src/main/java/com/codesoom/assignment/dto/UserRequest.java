@@ -1,27 +1,29 @@
 package com.codesoom.assignment.dto;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 
 @Builder
+@Getter
 @ToString
 public class UserRequest {
     @Mapping("id")
-    private Long id;
+    private final Long id;
 
     @NotBlank
     @Mapping("name")
-    private String name;
+    private final String name;
 
     @NotBlank
     @Mapping("email")
-    private String email;
+    private final String email;
 
     @NotBlank
     @Mapping("password")
-    private String password;
+    private final String password;
 }

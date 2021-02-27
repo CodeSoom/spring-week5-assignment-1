@@ -10,17 +10,17 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 
 /**
  * 사용자에 관한 요청을 처리합니다.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 @Validated
 public class UserController {
 
-//    회원 수정하기 - POST /user/{id}
 //    회원 삭제하기 - DELETE /user/{id}
 
     private final UserService userService;
@@ -32,9 +32,21 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
     public UserResponse updateUser(
-            @PathVariable @Valid Long id,
+            @PathVariable
+            @Min(value = 1, message = "id must be greater than or equal to 1")
+            Long id,
             @RequestBody @Valid UserRequest userRequest) {
         return userService.updateUser(id, userRequest);
     }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteUser(@PathVariable
+                           @Min(value = 1, message = "id must be greater than or equal to 1")
+                           Long id) {
+
+    }
+
 }

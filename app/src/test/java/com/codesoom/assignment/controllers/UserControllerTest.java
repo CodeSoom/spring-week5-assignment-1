@@ -71,7 +71,7 @@ class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /user 요청은")
+    @DisplayName("POST /users 요청은")
     class Describe_POST_user {
         @Nested
         @DisplayName("생성할 사용자 정보가 주어지면")
@@ -92,7 +92,7 @@ class UserControllerTest {
             @Test
             @DisplayName("201 코드와 생성된 사용자를 응답한다")
             void it_returns_201_with_created_user() throws Exception {
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/users")
                 .contentType(MediaType.APPLICATION_JSON)
                 .accept(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(userRequest)))
@@ -118,7 +118,7 @@ class UserControllerTest {
             @DisplayName("404 상태 코드를 응답한다")
             @Test
             void it_returns_404_code() throws Exception {
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userRequest)))
@@ -128,7 +128,7 @@ class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("PATCH /user/{id} 요청은")
+    @DisplayName("PATCH /users/{id} 요청은")
     class Describe_PATCH_user_id {
         @Nested
         @DisplayName("수정할 사용자 정보가, 존재하는 id와 주어지면")
@@ -138,7 +138,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                UserResponse userResponse = UserResponse.builder()
+                UserResponse updateResponse = UserResponse.builder()
                         .id(USER_ID)
                         .name(NEW_NAME)
                         .email(NEW_EMAIL)
@@ -152,14 +152,14 @@ class UserControllerTest {
                         .build();
 
                 given(userService.updateUser(eq(USER_ID), any(UserRequest.class)))
-                        .willReturn(userResponse);
+                        .willReturn(updateResponse);
             }
 
             @DisplayName("사용자 정보를 수정하고 200 코드를 응답한다")
             @Test
             void it_updates_user_detail_and_return_200() throws Exception {
                 mockMvc.perform(
-                        patch("/user/1")
+                        patch("/users/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(userUpdateRequest)))
@@ -167,5 +167,11 @@ class UserControllerTest {
                         .andExpect(content().string(containsString(NEW_NAME)));
             }
         }
+    }
+
+    @Nested
+    @DisplayName("DELETE /users/{id} 요청은")
+    class Describe_DELETE_user_id {
+        //TODO
     }
 }
