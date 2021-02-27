@@ -2,10 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -25,5 +22,10 @@ public class UserController {
     @GetMapping
     public List<User> list() {
         return userService.getUsers();
+    }
+
+    @GetMapping("{id}")
+    public User detail(@PathVariable Long id) {
+        return userService.getUser(id);
     }
 }

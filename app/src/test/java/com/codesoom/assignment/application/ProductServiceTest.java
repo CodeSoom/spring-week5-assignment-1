@@ -70,7 +70,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductWithExsitedId() {
+    void getProductWithExistedId() {
         Product product = productService.getProduct(1L);
 
         assertThat(product).isNotNull();

@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -21,10 +22,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UserController.class)
 class UserControllerTest {
     @Autowired
-    MockMvc mockMvc;
+    private MockMvc mockMvc;
 
     @MockBean
     private UserService userService;
+
 
     @BeforeEach
     void setUp() {
@@ -36,6 +38,8 @@ class UserControllerTest {
                 .build();
 
         given(userService.getUsers()).willReturn(List.of(user));
+
+        given(userService.getUser(1L)).willReturn(user);
     }
 
     @Test
@@ -43,6 +47,17 @@ class UserControllerTest {
         mockMvc.perform(
                 get("/user")
                     .accept(MediaType.APPLICATION_JSON_UTF8)
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("mikekang")));
+    }
+
+    @Test
+    @DisplayName("존재하는 회원 id가 주어지면, 찾은 회원과 상태코드 200을 응답한다.")
+    void detailWithExistedUser() throws Exception {
+        mockMvc.perform(
+                get("/user/1")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("mikekang")));

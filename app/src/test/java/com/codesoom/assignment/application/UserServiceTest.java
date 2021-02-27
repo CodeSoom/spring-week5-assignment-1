@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -33,6 +34,8 @@ class UserServiceTest {
                 .build();
 
         given(userRepository.findAll()).willReturn(List.of(user));
+
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
     }
 
     @Test
@@ -51,6 +54,16 @@ class UserServiceTest {
 
         User user = users.get(0);
 
+        assertThat(user.getName()).isEqualTo("mikekang");
+
+    }
+
+    @Test
+    @DisplayName("getUserWithExistedId 는 존재하는 특정 회원을 리턴한다.")
+    void getUserWithExistedId() {
+        User user = userService.getUser(1L);
+
+        assertThat(user).isNotNull();
         assertThat(user.getName()).isEqualTo("mikekang");
 
     }
