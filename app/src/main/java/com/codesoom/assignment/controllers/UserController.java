@@ -6,6 +6,8 @@ import com.codesoom.assignment.dto.UserData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -30,7 +32,10 @@ public class UserController {
     }
 
     @PatchMapping("{id}")
-    UserData updateUser(@PathVariable Long id, @RequestBody UserData userData) {
+    UserData updateUser(
+            @PathVariable Long id,
+            @RequestBody @Valid UserData userData
+    ) {
         User user = service.changeName(id, userData.getName());
         return new UserData(user.getId(), user.getName(), user.getMail(), user.getPassword());
     }

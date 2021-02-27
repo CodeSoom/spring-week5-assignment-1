@@ -3,6 +3,8 @@ package com.codesoom.assignment.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 
+import javax.validation.constraints.NotBlank;
+
 public class UserData {
     public UserData(
             @JsonProperty("id") Long id,
@@ -19,9 +21,12 @@ public class UserData {
     @Getter
     private Long id;
     @Getter
+    @NotBlank
     private String name;
     @Getter
+    @NotBlank
     private String email;
     @Getter
+    @NotBlank
     private String password;
 }
