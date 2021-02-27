@@ -1,6 +1,11 @@
 package com.codesoom.assignment.dto;
 
-import lombok.*;
+import com.github.dozermapper.core.Mapping;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -11,15 +16,19 @@ import javax.validation.constraints.NotNull;
 public class ProductData {
     private Long id;
 
+    @Mapping("name")
     @NotBlank(message = "name 값은 필수입니다")
     private String name;
 
+    @Mapping("maker")
     @NotBlank(message = "maker 값은 필수입니다")
     private String maker;
 
+    @Mapping("price")
     @NotNull(message = "price 값은 필수입니다")
     private Integer price;
-    
+
+    @Mapping("imageUrl")
     private String imageUrl;
 
     @Builder

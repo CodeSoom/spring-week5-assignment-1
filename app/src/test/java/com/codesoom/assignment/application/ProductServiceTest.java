@@ -5,14 +5,13 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.convert.DataSizeUnit;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -48,6 +47,7 @@ class ProductServiceTest {
     private final Long CREATED_ID = 2L;
     private final Long NOT_EXISTED_ID = 100L;
 
+    private final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
     private List<Product> products;
     private Product setupProduct;
     private Product createdProduct;
@@ -80,10 +80,10 @@ class ProductServiceTest {
     @DisplayName("getProducts 메서드는")
     class Describe_getProducts {
         @Nested
-        @DisplayName("만약 고양이 장난감 목록이 존재한다면")
-        class Context_HasListOfProducts {
+        @DisplayName("만약 상품 목록이 존재한다면")
+        class Context_ExistsListOfProducts {
             @Test
-            @DisplayName("저장되어 있는 고양이 장난감 목록을 리턴한다")
+            @DisplayName("저장되어 있는 상품 목록을 리턴한다")
             void itReturnsListOfProducts() {
                 given(productRepository.findAll()).willReturn(products);
 
@@ -95,10 +95,10 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("만약 고양이 목록이 존재하지 않는다면")
-        class Context_HasNotListOfProduct {
+        @DisplayName("만약 상품 목록이 존재하지 않는다면")
+        class Context_NotExistsListOfProduct {
             @Test
-            @DisplayName("비어있는 고양이 장난감 목록을 리턴한다")
+            @DisplayName("비어있는 상품 목록을 리턴한다")
             void itReturnsEmptyListOfProducts() {
                 given(productRepository.findAll()).willReturn(List.of());
 
@@ -115,12 +115,12 @@ class ProductServiceTest {
     @DisplayName("getProduct 메서드는")
     class Describe_getProduct {
         @Nested
-        @DisplayName("만약 저장되어 있는 고양이 장난감의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있는 상품의 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 아이디에 해당하는 고양이 장난감을 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 상품을 리턴한다")
             void itReturnsWithExistedProduct() {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
@@ -132,15 +132,19 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("만약 저장되어 있지 않는 고양이 장난감의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있지 않는 상품의 아이디가 주어진다면")
         class Context_WithNotExistedId {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 던진다")
-            void itThrowsProductNotFoundException() {
+            @DisplayName("상품을 찾을 수 없다는 메시지를 리턴한다")
+            void itReturnsProductNotFoundMessage() {
+                given(productRepository.findById(givenNotExistedId))
+                        .willThrow(new ProductNotFoundException(givenNotExistedId));
+
                 assertThatThrownBy(() -> productService.getProduct(givenNotExistedId))
-                        .isInstanceOf(ProductNotFoundException.class);
+                        .isInstanceOf(ProductNotFoundException.class)
+                        .hasMessageContaining("Product not found");
 
                 verify(productRepository).findById(givenNotExistedId);
             }
@@ -151,51 +155,54 @@ class ProductServiceTest {
     @DisplayName("createProduct 메서드는")
     class Describe_class {
         @Nested
-        @DisplayName("만약 고양이 장난감 객체가 주어진다면")
-        class Content_WithNameAndMakerAndPriceAndImageUrl {
-            private ProductData createSource;
+        @DisplayName("만약 상품이 주어진다면")
+        class Content_WithProduct {
+            private ProductData productSource;
+            private Product savedProduct;
 
             @BeforeEach
             void setUp() {
-                createSource = ProductData.builder()
+                productSource = ProductData.builder()
                         .name(CREATED_PRODUCT_NAME)
                         .maker(CREATED_PRODUCT_MAKER)
                         .price(CREATED_PRODUCT_PRICE)
                         .imageUrl(CREATED_PRODUCT_IMAGEURL)
                         .build();
+
+                savedProduct = mapper.map(productSource, Product.class);
             }
 
             @Test
-            @DisplayName("장난감 고양이 객체를 저장하고 저장된 객체를 리턴한다")
-            void itCreatesProductAndReturnsCreatedProduct() {
-                given(productRepository.save(any(Product.class))).willReturn(createdProduct);
+            @DisplayName("상품을 저장하고 저장된 상품를 리턴한다")
+            void itSavesProductAndReturnsSavedProduct() {
+                given(productRepository.save(any(Product.class))).willReturn(savedProduct);
 
-                Product createdProduct = productService.createProduct(createSource);
+                Product createdProduct = productService.createProduct(productSource);
                 assertThat(createdProduct.getName())
-                        .as("객체의 이름은 %s 이어야 한다", createSource.getName())
-                        .isEqualTo(createSource.getName());
+                        .as("상품의 이름은 %s 이어야 한다", productSource.getName())
+                        .isEqualTo(productSource.getName());
                 assertThat(createdProduct.getMaker())
-                        .as("객체의 메이커는 %s 이어야 한다", createSource.getMaker())
-                        .isEqualTo(createSource.getMaker());
+                        .as("상품의 메이커는 %s 이어야 한다", productSource.getMaker())
+                        .isEqualTo(productSource.getMaker());
                 assertThat(createdProduct.getPrice())
-                        .as("객체의 가격은 %d 이어야 한다", createSource.getPrice())
-                        .isEqualTo(createSource.getPrice());
+                        .as("상품의 가격은 %d 이어야 한다", productSource.getPrice())
+                        .isEqualTo(productSource.getPrice());
                 assertThat(createdProduct.getImageUrl())
-                        .as("객체의 이미지는 %s 이어야 한다", createSource.getImageUrl())
-                        .isEqualTo(createSource.getImageUrl());
+                        .as("상품의 이미지는 %s 이어야 한다", productSource.getImageUrl())
+                        .isEqualTo(productSource.getImageUrl());
 
                 verify(productRepository).save(any(Product.class));
             }
         }
 
         @Nested
-        @DisplayName("만약 이름이 비어있는 고양이 장난감 객체가 주어진다면")
-        class Content_WithCatToyWithOutName {
-            private ProductData createSource;
+        @DisplayName("만약 이름값이 비어있는 상품이 주어진다면")
+        class Content_WithProductWithOutName {
+            private ProductData productSource;
 
             @BeforeEach
             void setUp() {
-                createSource = ProductData.builder()
+                productSource = ProductData.builder()
                         .name("")
                         .maker(CREATED_PRODUCT_MAKER)
                         .price(CREATED_PRODUCT_PRICE)
@@ -206,20 +213,20 @@ class ProductServiceTest {
             @Test
             @DisplayName("이름값이 필수라는 메세지를 응답한다")
             void itReturnsBadRequestMessage() {
-                assertThatThrownBy(() -> productService.createProduct(createSource))
+                assertThatThrownBy(() -> productService.createProduct(productSource))
                         .isInstanceOf(ProductBadRequestException.class)
                         .hasMessageContaining("name 값은 필수입니다");
             }
         }
 
         @Nested
-        @DisplayName("만약 메이커값이 비어있는 고양이 장난감 객체가 주어진다면")
-        class Content_WithCatToyWithOutMaker {
-            private ProductData createSource;
+        @DisplayName("만약 메이커값이 비어있는 상품이 주어진다면")
+        class Content_WithProductWithOutMaker {
+            private ProductData productSource;
 
             @BeforeEach
             void setUp() {
-                createSource = ProductData.builder()
+                productSource = ProductData.builder()
                         .name(CREATED_PRODUCT_NAME)
                         .maker("")
                         .price(CREATED_PRODUCT_PRICE)
@@ -230,20 +237,20 @@ class ProductServiceTest {
             @Test
             @DisplayName("메이커값이 필수라는 메세지를 응답한다")
             void itReturnsBadRequestMessage() {
-                assertThatThrownBy(() -> productService.createProduct(createSource))
+                assertThatThrownBy(() -> productService.createProduct(productSource))
                         .isInstanceOf(ProductBadRequestException.class)
                         .hasMessageContaining("maker 값은 필수입니다");
             }
         }
 
         @Nested
-        @DisplayName("만약 가격값이 비어있는 고양이 장난감 객체가 주어진다면")
-        class Content_WithCatToyWithOutPrice {
-            private ProductData createSource;
+        @DisplayName("만약 가격값이 비어있는 상품이 주어진다면")
+        class Content_WithProductWithOutPrice {
+            private ProductData productSource;
 
             @BeforeEach
             void setUp() {
-                createSource = ProductData.builder()
+                productSource = ProductData.builder()
                         .name(CREATED_PRODUCT_NAME)
                         .maker(CREATED_PRODUCT_MAKER)
                         .price(null)
@@ -254,7 +261,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("가격값이 필수라는 메세지를 응답한다")
             void itReturnsBadRequestMessage() {
-                assertThatThrownBy(() -> productService.createProduct(createSource))
+                assertThatThrownBy(() -> productService.createProduct(productSource))
                         .isInstanceOf(ProductBadRequestException.class)
                         .hasMessageContaining("price 값은 필수입니다");
             }
@@ -265,14 +272,14 @@ class ProductServiceTest {
     @DisplayName("updateProduct 메서드는")
     class Describe_update {
         @Nested
-        @DisplayName("만약 저징되어 있는 고양이 장난감의 아이디와 업데이트 될 이름, 메이커, 가격, 이미지가 주어진다면")
-        class Context_WithExistedIdAndNameAndMakerAndPriceAndImageUrl {
+        @DisplayName("만약 저징되어 있는 상품의 아이디와 수정 할 상품이 주어진다면")
+        class Context_WithExistedIdAndProduct {
             private final Long givenExistedId = EXISTED_ID;
-            private ProductData updatedSource;
+            private ProductData productSource;
 
             @BeforeEach
             void setUp() {
-                updatedSource = ProductData.builder()
+                productSource = ProductData.builder()
                         .name(UPDATED_PRODUCT_NAME)
                         .maker(UPDATED_PRODUCT_MAKER)
                         .price(UPDATED_PRODUCT_PRICE)
@@ -281,23 +288,24 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("주어진 아이디에 해당하는 고양이 장난감 객체를 업데이트하고 해당 객체를 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 상품을 수정하고 수정된 상품을 리턴한다")
             void itUpdatesProductAndReturnsUpdatedProduct() {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
-                Product updatedProduct = productService.updateProduct(givenExistedId, updatedSource);
+                Product updatedProduct = productService.updateProduct(givenExistedId, productSource);
+
                 assertThat(updatedProduct.getName())
-                        .as("객체의 이름은 %s 이어야 한다", updatedSource.getName())
-                        .isEqualTo(updatedSource.getName());
+                        .as("상품의 이름은 %s 이어야 한다", productSource.getName())
+                        .isEqualTo(productSource.getName());
                 assertThat(updatedProduct.getMaker())
-                        .as("객체의 메이커는 %s 이어야 한다", updatedSource.getMaker())
-                        .isEqualTo(updatedSource.getMaker());
+                        .as("상품의 메이커는 %s 이어야 한다", productSource.getMaker())
+                        .isEqualTo(productSource.getMaker());
                 assertThat(updatedProduct.getPrice())
-                        .as("객체의 가격은 %d 이어야 한다", updatedSource.getPrice())
-                        .isEqualTo(updatedSource.getPrice());
+                        .as("상품의 가격은 %d 이어야 한다", productSource.getPrice())
+                        .isEqualTo(productSource.getPrice());
                 assertThat(updatedProduct.getImageUrl())
-                        .as("객체의 이미지는 %s 이어야 한다", updatedSource.getImageUrl())
-                        .isEqualTo(updatedSource.getImageUrl());
+                        .as("상품의 이미지는 %s 이어야 한다", productSource.getImageUrl())
+                        .isEqualTo(productSource.getImageUrl());
 
                 verify(productRepository).findById(givenExistedId);
             }
@@ -308,30 +316,30 @@ class ProductServiceTest {
     @DisplayName("deleteProduct 메서드는")
     class Describe_delete {
         @Nested
-        @DisplayName("만약 저장되어 있는 고양이 장난감의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있는 상품의 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 아이디에 해당하는 고양이 장난감 객체를 삭제하고 해당 객체를 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 상품을 삭제하고 삭제된 상품을 리턴한다")
             void itDeletesProductAndReturnsDeletedProduct() {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
                 Product deletedProduct = productService.deleteProduct(givenExistedId);
                 assertThat(deletedProduct.getId())
-                        .as("객체의 아이디는 %f 이어야 한다", EXISTED_ID)
+                        .as("상품의 아이디는 %f 이어야 한다", EXISTED_ID)
                         .isEqualTo(EXISTED_ID);
                 assertThat(deletedProduct.getName())
-                        .as("객체의 이름은 %s 이어야 한다", SETUP_PRODUCT_NAME)
+                        .as("상품의 이름은 %s 이어야 한다", SETUP_PRODUCT_NAME)
                         .isEqualTo(SETUP_PRODUCT_NAME);
                 assertThat(deletedProduct.getMaker())
-                        .as("객체의 메이커는 %s 이어야 한다", SETUP_PRODUCT_MAKER)
+                        .as("상품의 메이커는 %s 이어야 한다", SETUP_PRODUCT_MAKER)
                         .isEqualTo(SETUP_PRODUCT_MAKER);
                 assertThat(deletedProduct.getPrice())
-                        .as("객체의 가격은 %d 이어야 한다", SETUP_PRODUCT_PRICE)
+                        .as("상품의 가격은 %d 이어야 한다", SETUP_PRODUCT_PRICE)
                         .isEqualTo(SETUP_PRODUCT_PRICE);
                 assertThat(deletedProduct.getImageUrl())
-                        .as("객체의 이미지는 %s 이어야 한다", SETUP_PRODUCT_IMAGEURL)
+                        .as("상품의 이미지는 %s 이어야 한다", SETUP_PRODUCT_IMAGEURL)
                         .isEqualTo(SETUP_PRODUCT_IMAGEURL);
 
                 verify(productRepository).delete(setupProduct);
@@ -339,18 +347,19 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("만약 저장되어 있지 않은 고양이 장난감의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있지 않은 상품의 아이디가 주어진다면")
         class Context_WithNotExistedId {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("고양이 장난감을 찾을 수 없다는 예외를 던진다")
-            void itThrowsProductNotFoundException() {
+            @DisplayName("상품을 찾을 수 없다는 메세지를 리턴한다")
+            void itReturnsProductNotFoundMessage() {
                 given(productRepository.findById(givenNotExistedId))
-                        .willThrow(ProductNotFoundException.class);
+                        .willThrow(new ProductNotFoundException(givenNotExistedId));
 
                 assertThatThrownBy(() -> productService.deleteProduct(givenNotExistedId))
-                        .isInstanceOf(ProductNotFoundException.class);
+                        .isInstanceOf(ProductNotFoundException.class)
+                        .hasMessageContaining("Product not found");
 
                 verify(productRepository).findById(givenNotExistedId);
             }

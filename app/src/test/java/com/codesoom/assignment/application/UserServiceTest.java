@@ -4,6 +4,8 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -36,8 +38,10 @@ class UserServiceTest {
     private final String UPDATE_USER_EMAIL = "updatedEmail";
     private final String UPDATE_USER_PASSWORD = "updatedPassword";
 
+    private final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
     private List<User> users;
     private User setUpUser;
+
 
     @BeforeEach
     void setUp() {
@@ -58,19 +62,39 @@ class UserServiceTest {
     @DisplayName("getUser 메서드는")
     class Describe_getUser {
         @Nested
-        @DisplayName("만약 저장되어 있는 유저의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있는 사용자의 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 아이디에 해당하는 유저를 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 사용자를 리턴한다")
             void itReturnsUser() {
                 given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
 
                 User user = userService.getUser(givenExistedId);
 
                 assertThat(user.getId()).isEqualTo(setUpUser.getId());
+
                 verify(userRepository).findById(givenExistedId);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 저장되어 있지 않은 사용자의 아이디가 주어진다면")
+        class Context_WithNotExistedId {
+            private final Long givenNotExistedId = NOT_EXISTED_ID;
+
+            @Test
+            @DisplayName("유저를 찾을 수 없다는 메세지를 리턴한다")
+            void itReturnsUserNotFoundMessage() {
+                given(userRepository.findById(givenNotExistedId))
+                        .willThrow(new UserNotFoundException(givenNotExistedId));
+
+                assertThatThrownBy(() -> userRepository.findById(givenNotExistedId))
+                        .isInstanceOf(UserNotFoundException.class)
+                        .hasMessageContaining("User not found");
+
+                verify(userRepository).findById(givenNotExistedId);
             }
         }
     }
@@ -79,32 +103,33 @@ class UserServiceTest {
     @DisplayName("createUser 메서드는")
     class Describe_createUser {
         @Nested
-        @DisplayName("만약 유저 객체가 주어진다면")
+        @DisplayName("만약 사용자가 주어진다면")
         class Context_WithUser {
-            private UserData sourceData;
-            private User user;
+            private UserData userSource;
+            private User savedUser;
 
             @BeforeEach
             void setUp() {
-                sourceData = UserData.builder()
+                userSource = UserData.builder()
                         .name(CREATE_USER_NAME)
                         .email(CREATE_USER_EMAIL)
                         .password(CREATE_USER_PASSWORD)
                         .build();
 
-                user = sourceData.toEntity();
+                savedUser = mapper.map(userSource, User.class);
             }
 
             @Test
-            @DisplayName("주어진 객체를 저장하고 해당 객체를 리턴한다")
-            void itSavesObjectAndReturnsObject() {
-                given(userRepository.save(any(User.class))).willReturn(user);
+            @DisplayName("주어진 사용자를 저장하고 저장된 사용자를 리턴한다")
+            void itSavesUserAndReturnsSavedUser() {
+                given(userRepository.save(any(User.class))).willReturn(savedUser);
 
-                User createdUser = userService.createUser(sourceData);
+                User createdUser = userService.createUser(userSource);
 
-                assertThat(createdUser.getName()).isEqualTo(sourceData.getName());
-                assertThat(createdUser.getEmail()).isEqualTo(sourceData.getEmail());
-                assertThat(createdUser.getPassword()).isEqualTo(sourceData.getPassword());
+                assertThat(createdUser.getName()).isEqualTo(userSource.getName());
+                assertThat(createdUser.getEmail()).isEqualTo(userSource.getEmail());
+                assertThat(createdUser.getPassword()).isEqualTo(userSource.getPassword());
+
                 verify(userRepository).save(any(User.class));
             }
         }
@@ -114,14 +139,14 @@ class UserServiceTest {
     @DisplayName("updateUser 메서드는")
     class Describe_updateUser {
         @Nested
-        @DisplayName("만약 저장되어 있는 유저의 아이디와 유저 객체가 주어진다면")
-        class Context_WithExistedIdAndObject {
+        @DisplayName("만약 저장되어 있는 사용자의 아이디와 수정 할 사용자가 주어진다면")
+        class Context_WithExistedIdAndUser {
             private final Long givenExistedId = EXISTED_ID;
-            private UserData sourceData;
+            private UserData userSource;
 
             @BeforeEach
             void setUp() {
-                sourceData = UserData.builder()
+                userSource = UserData.builder()
                         .name(UPDATE_USER_NAME)
                         .email(UPDATE_USER_EMAIL)
                         .password(UPDATE_USER_PASSWORD)
@@ -129,15 +154,16 @@ class UserServiceTest {
             }
 
             @Test
-            @DisplayName("주어진 객체를 업데이트하고 해당 객체를 리턴한다")
-            void itUpdatesObjectAndReturnsObject() {
+            @DisplayName("사용자를 수정하고 수정된 사용자를 리턴한다")
+            void itUpdatesUserAndReturnsUpdatedUser() {
                 given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
 
-                User updatedUser = userService.updateUser(givenExistedId, sourceData);
+                User updatedUser = userService.updateUser(givenExistedId, userSource);
 
-                assertThat(updatedUser.getName()).isEqualTo(sourceData.getName());
-                assertThat(updatedUser.getEmail()).isEqualTo(sourceData.getEmail());
-                assertThat(updatedUser.getPassword()).isEqualTo(sourceData.getPassword());
+                assertThat(updatedUser.getName()).isEqualTo(userSource.getName());
+                assertThat(updatedUser.getEmail()).isEqualTo(userSource.getEmail());
+                assertThat(updatedUser.getPassword()).isEqualTo(userSource.getPassword());
+                
                 verify(userRepository).findById(givenExistedId);
             }
         }
@@ -147,29 +173,30 @@ class UserServiceTest {
     @DisplayName("deleteUser 메서드는")
     class Describe_delete {
         @Nested
-        @DisplayName("만약 저장되어 있는 유저의면 아이디가 주어진다")
+        @DisplayName("만약 저장되어 있는 사용자의 아이디가 주어진다묜")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 아이디에 해당하는 객체를 삭제하고 해당 객체를 리턴한다")
-            void itDeletesObjectAndReturnsObject() {
+            @DisplayName("주어진 아이디에 해당하는 사용자를 삭제하고 삭제된 사용자를 리턴한다")
+            void itDeletesUserAndReturnsDeletedUser() {
                 given(userRepository.findById(givenExistedId)).willReturn(Optional.of(setUpUser));
 
                 User user = userService.deleteUser(givenExistedId);
 
                 assertThat(user.getId()).isEqualTo(setUpUser.getId());
+                
                 verify(userRepository).findById(givenExistedId);
             }
         }
 
         @Nested
-        @DisplayName("만약 저장되어 있지 않은 유저의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있지 않은 사용자의 아이디가 주어진다면")
         class Context_WithNotExistedId {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("유저를 찾을 수 없다는 메세지를 리턴한다")
+            @DisplayName("사용자를 찾을 수 없다는 메세지를 리턴한다")
             void itReturnsUserNotFoundMessage() {
                 given(userRepository.findById(givenNotExistedId))
                         .willThrow(new UserNotFoundException(givenNotExistedId));
