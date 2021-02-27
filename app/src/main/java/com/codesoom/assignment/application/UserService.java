@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application;
 
-import java.util.Optional;
+import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
 
@@ -8,6 +8,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.github.dozermapper.core.Mapper;
 
+@Transactional
 @Service
 public class UserService {
 
