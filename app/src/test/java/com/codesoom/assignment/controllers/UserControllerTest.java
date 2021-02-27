@@ -28,15 +28,22 @@ class UserControllerTest {
     private final String givenEmail = "juuni.ni.i@gmail.com";
     private final String givenName = "juunini";
     private final String givenPassword = "secret";
-    private final String givenUserInfoJSON = String.format("{" +
-                    "\"email\":\"%s\"," +
-                    "\"name\":\"%s\"," +
-                    "\"password\":\"%s\"" +
-                    "}",
-            givenEmail,
-            givenName,
-            givenPassword
-    );
+
+    private String userDataJSON(
+            String email,
+            String name,
+            String password
+    ) {
+        return String.format("{" +
+                        "\"email\":\"%s\"," +
+                        "\"name\":\"%s\"," +
+                        "\"password\":\"%s\"" +
+                        "}",
+                email,
+                name,
+                password
+        );
+    }
 
     @MockBean
     private UserService userService;
@@ -58,7 +65,11 @@ class UserControllerTest {
                 mockMvc.perform(
                         post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(givenUserInfoJSON)
+                                .content(userDataJSON(
+                                        givenEmail,
+                                        givenName,
+                                        givenPassword
+                                ))
                 )
                         .andExpect(status().isCreated())
                         .andExpect(content().string(containsString(givenEmail)));
@@ -68,10 +79,21 @@ class UserControllerTest {
         @Nested
         @DisplayName("필요한 정보가 오지 않았을 때")
         class Context_without_required_parameter {
+            private final String givenEmptyEmail = "";
+
             @Test
             @DisplayName("bad request 를 응답한다.")
-            void It_respond_bad_request() {
-
+            void It_respond_bad_request() throws Exception {
+                mockMvc.perform(
+                        post("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userDataJSON(
+                                        givenEmptyEmail,
+                                        givenName,
+                                        givenPassword
+                                ))
+                )
+                        .andExpect(status().isBadRequest());
             }
         }
     }
