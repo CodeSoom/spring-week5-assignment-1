@@ -1,21 +1,45 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.UserApplicationService;
+import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.infra.InMemoryUserRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
 public class UserControllerTest {
-
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private UserApplicationService service;
+
+    @BeforeEach
+    void setUp() {
+        String name = "라스";
+        String mail = "las@magical.dev";
+        String password = "pK1RZRUAgExuFYfr0qHY";
+        User user = new User(1L, name, mail, password);
+
+        given(service.createUser(name, mail, password)).willReturn(user);
+        doNothing().when(service).deleteUser(1L);
+    }
 
     @Test
     void createUser() throws Exception {
@@ -28,5 +52,11 @@ public class UserControllerTest {
         )
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("라스")));
+    }
+
+    @Test
+    void deleteUser() throws Exception {
+        mockMvc.perform(delete("/users/1"))
+                .andExpect(status().isNoContent());
     }
 }
