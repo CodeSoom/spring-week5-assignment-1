@@ -16,8 +16,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -162,10 +161,13 @@ class UserControllerTest {
         @Nested
         @DisplayName("주어진 id의 user 가 존재할 때")
         class Context_when_exists_given_id_user {
+            private final Long givenID = 1L;
+
             @Test
             @DisplayName("no content 를 응답한다.")
-            void It_respond_no_content() {
-
+            void It_respond_no_content() throws Exception {
+                mockMvc.perform(delete("/users/{id}", givenID))
+                        .andExpect(status().isNoContent());
             }
         }
 
