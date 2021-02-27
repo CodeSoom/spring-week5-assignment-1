@@ -9,4 +9,7 @@ public class UserService {
 
     public void modify(long id, User user) throws UserNotFoundException {
     }
+
+    public void delete(Long id) throws UserNotFoundException {
+    }
 }
