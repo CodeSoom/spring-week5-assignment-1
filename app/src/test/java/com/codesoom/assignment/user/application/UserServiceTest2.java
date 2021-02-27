@@ -59,6 +59,27 @@ class UserServiceTest2 {
         setUpFixtures();
     }
 
+    void setUpFixtures() {
+        user1 = User.builder()
+                .id(USER1_ID)
+                .name(USER1_NAME)
+                .email(USER1_EMAIL)
+                .password(USER1_PASSWORD)
+                .build();
+
+        user2 = User.builder()
+                .id(USER2_ID)
+                .name(USER2_NAME)
+                .email(USER2_EMAIL)
+                .password(USER2_PASSWORD)
+                .build();
+
+        userData1 = UserData.of(user1);
+        userData2 = UserData.of(user2);
+
+        users = Arrays.asList(user1, user2);
+    }
+
     @Test
     @DisplayName("getUsers 메서드는 등록된 모든 사용자 정보를 리턴한다")
     void getUsers() {
@@ -161,26 +182,5 @@ class UserServiceTest2 {
                 () -> assertThat(actual.getEmail()).isEqualTo(expected.getEmail())
         );
         verify(userRepository).save(any(User.class));
-    }
-
-    void setUpFixtures() {
-        user1 = User.builder()
-                .id(USER1_ID)
-                .name(USER1_NAME)
-                .email(USER1_EMAIL)
-                .password(USER1_PASSWORD)
-                .build();
-
-        user2 = User.builder()
-                .id(USER2_ID)
-                .name(USER2_NAME)
-                .email(USER2_EMAIL)
-                .password(USER2_PASSWORD)
-                .build();
-
-        userData1 = UserData.of(user1);
-        userData2 = UserData.of(user2);
-
-        users = Arrays.asList(user1, user2);
     }
 }
