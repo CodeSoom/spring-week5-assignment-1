@@ -5,4 +5,7 @@ import com.codesoom.assignment.domain.User;
 public class UserService {
     public void create(User user) {
     }
+
+    public void modify(long id, User user) {
+    }
 }
