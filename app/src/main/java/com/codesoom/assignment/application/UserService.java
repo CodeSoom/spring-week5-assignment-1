@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * 회원 정보와 관련된 비지니스 로직을 처리
+ */
 @Service
 @Transactional
 public class UserService {

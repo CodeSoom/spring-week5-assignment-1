@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+/**
+ * 사용자의 생성, 업데이트, 삭제를 처리
+ */
 @RestController
 @CrossOrigin
 @RequestMapping("/user")
