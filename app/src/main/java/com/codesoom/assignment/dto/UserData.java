@@ -21,10 +21,7 @@ public class UserData {
     private String name;
 
     @Mapping("email")
-<<<<<<< HEAD
-=======
     @NotBlank(message = "email 값은 필수입니다")
->>>>>>> 3c21da3 (Revise feeback)
     private String email;
 
     @Mapping("password")
