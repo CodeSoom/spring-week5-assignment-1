@@ -85,12 +85,9 @@ class UserServiceTest {
             private final Long givenNotExistedId = NOT_EXISTED_ID;
 
             @Test
-            @DisplayName("유저를 찾을 수 없다는 메세지를 리턴한다")
+            @DisplayName("사용자를 찾을 수 없다는 메세지를 리턴한다")
             void itReturnsUserNotFoundMessage() {
-                given(userRepository.findById(givenNotExistedId))
-                        .willThrow(new UserNotFoundException(givenNotExistedId));
-
-                assertThatThrownBy(() -> userRepository.findById(givenNotExistedId))
+                assertThatThrownBy(() -> userService.getUser(givenNotExistedId))
                         .isInstanceOf(UserNotFoundException.class)
                         .hasMessageContaining("User not found");
 

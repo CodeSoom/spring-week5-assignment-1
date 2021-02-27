@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -13,7 +14,7 @@ import javax.validation.Valid;
  * 사용자에 대한 요청을 한다.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -45,8 +46,10 @@ public class UserController {
      *         이름이 비어있거나, 이메일이 비어있거나, 비밀번호가 비어있는 경우
      */
     @PatchMapping("/{id}")
-    public User update(@PathVariable Long id,
-                       @RequestBody @Valid UserData userData) {
+    public User update(
+            @PathVariable Long id,
+            @RequestBody @Valid UserData userData) {
+
         return userService.updateUser(id, userData);
     }
 

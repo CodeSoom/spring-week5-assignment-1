@@ -10,6 +10,7 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 /**

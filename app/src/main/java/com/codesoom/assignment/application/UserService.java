@@ -1,5 +1,7 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductBadRequestException;
+import com.codesoom.assignment.UserBadRequestException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
@@ -55,6 +57,16 @@ public class UserService {
      */
     public User updateUser(Long id, UserData userData) {
         User user = getUser(id);
+
+        if(userData.getName().equals(""))
+            throw new UserBadRequestException("name");
+
+        if(userData.getEmail().equals(""))
+            throw new UserBadRequestException("email");
+
+        if(userData.getPassword().equals("")) {
+            throw new UserBadRequestException("password");
+        }
 
         mapper.map(userData, user);
 

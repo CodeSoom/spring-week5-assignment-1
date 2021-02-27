@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.ProductBadRequestException;
 import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.UserBadRequestException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -36,7 +37,7 @@ public class ErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ErrorResponse handleProductBadRequestException(MethodArgumentNotValidException e) {
+    public ErrorResponse handleProductMethodArgumentNotValidException(MethodArgumentNotValidException e) {
         String message = e.getBindingResult()
                 .getAllErrors()
                 .get(0)
@@ -50,6 +51,13 @@ public class ErrorAdvice {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ProductBadRequestException.class)
     public ErrorResponse handleProductBadRequestException(ProductBadRequestException e) {
+        return new ErrorResponse(e.getMessage());
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserBadRequestException.class)
+    public ErrorResponse handleUserBadRequestException(UserBadRequestException e) {
         return new ErrorResponse(e.getMessage());
     }
 }

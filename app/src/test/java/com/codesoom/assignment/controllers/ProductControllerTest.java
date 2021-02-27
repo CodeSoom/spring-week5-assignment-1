@@ -246,7 +246,7 @@ class ProductControllerTest {
     class Describe_update {
         @Nested
         @DisplayName("만약 저장되어 있는 상품의 아이디와 수정 할 상품이 주어진다면")
-        class Context_WithExistedIdAndNameAndMakerAndPriceAndImage {
+        class Context_WithExistedIdAndProduct {
             private final Long givenExistedId = EXISTED_ID;
             private ProductData productSource;
             private Product updatedProduct;
@@ -312,6 +312,9 @@ class ProductControllerTest {
             @Test
             @DisplayName("요청이 잘못 됐다는 메세지와 BAD_REQUEST를 응답한다")
             void itReturnsNotFoundMessageAndBAD_REQUESTHttpStatus() throws Exception {
+                given(productService.updateProduct(eq(givenExistedId), any(ProductData.class)))
+                        .willThrow(new ProductBadRequestException("name"));
+
                 mockMvc.perform(patch("/products/" + givenExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\" , \"maker\":\"updatedMaker\", \"price\":300, \"image\":\"updatedImage\"}"))
@@ -329,6 +332,9 @@ class ProductControllerTest {
             @Test
             @DisplayName("요청이 잘못 됐다는 메세지와 BAD_REQUEST를 응답한다")
             void itThrowsProductNotFoundExceptionAndBAD_REQUESTHttpStatus() throws Exception {
+                given(productService.updateProduct(eq(givenExistedId), any(ProductData.class)))
+                        .willThrow(new ProductBadRequestException("maker"));
+
                 mockMvc.perform(patch("/products/" + givenExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"updatedName\" , \"maker\":\"\", \"price\":300, \"image\":\"updatedImage\"}"))
@@ -345,10 +351,13 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("요청이 잘못 됐다는 메세지와 BAD_REQUEST를 응답한다")
-            void itReturnsNotFounMessageAndBAD_REQUESTHttpStatus() throws Exception {
+            void itReturnsNotFoundMessageAndBAD_REQUESTHttpStatus() throws Exception {
+                given(productService.updateProduct(eq(givenExistedId), any(ProductData.class)))
+                        .willThrow(new ProductBadRequestException("price"));
+
                 mockMvc.perform(patch("/products/" + givenExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"updatedName\" , \"maker\":\"\", \"price\": null, \"image\":\"updatedImage\"}"))
+                        .content("{\"name\":\"updatedName\" , \"maker\":\"updatedMaker\", \"price\": null, \"image\":\"updatedImage\"}"))
                         .andDo(print())
                         .andExpect(status().isBadRequest())
                         .andExpect(content().string(containsString("price 값은 필수입니다")));
@@ -365,7 +374,7 @@ class ProductControllerTest {
             private final Long givenExistedId = EXISTED_ID;
 
             @Test
-            @DisplayName("주어진 아이디에 해당하는 상품을 삭제된 상품과 NO_CONTENT를 리턴한다")
+            @DisplayName("주어진 아이디에 해당하는 상품을 삭제하고 삭제된 상품과 NO_CONTENT를 리턴한다")
             void itDeleteProductAndReturnsNO_CONTENTHttpStatus() throws Exception {
                 given(productService.deleteProduct(givenExistedId)).willReturn(setupProduct);
 

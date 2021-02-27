@@ -40,13 +40,6 @@ public class User {
         this.password = password;
     }
 
-    @Builder
-    public User(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-    }
-
     /** 사용자 정보를 업데이트한다. */
 //    public void update(String name, String email, String password) {
 //        this.name = name;

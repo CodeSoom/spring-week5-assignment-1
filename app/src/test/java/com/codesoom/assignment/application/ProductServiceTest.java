@@ -139,9 +139,6 @@ class ProductServiceTest {
             @Test
             @DisplayName("상품을 찾을 수 없다는 메시지를 리턴한다")
             void itReturnsProductNotFoundMessage() {
-                given(productRepository.findById(givenNotExistedId))
-                        .willThrow(new ProductNotFoundException(givenNotExistedId));
-
                 assertThatThrownBy(() -> productService.getProduct(givenNotExistedId))
                         .isInstanceOf(ProductNotFoundException.class)
                         .hasMessageContaining("Product not found");

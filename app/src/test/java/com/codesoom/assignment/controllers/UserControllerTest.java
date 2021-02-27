@@ -23,6 +23,7 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -90,7 +91,7 @@ class UserControllerTest {
             void itSavesUserAndReturnsUser() throws Exception {
                 given(userService.createUser(any(UserData.class))).willReturn(createdUser);
 
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"createdName\",\"email\":\"createdEmail\",\"password\":\"createdPassword\"}"))
                         .andExpect(jsonPath("name").value(createdUser.getName()))
@@ -129,7 +130,7 @@ class UserControllerTest {
             void itUpdatesUserAndReturnUpdatedUserAndOKHttpStatus() throws Exception {
                 given(userService.updateUser(eq(givenExistedId), any(UserData.class))).willReturn(updatedUser);
 
-                mockMvc.perform(patch("/user/" + givenExistedId)
+                mockMvc.perform(patch("/users/" + givenExistedId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"updatedName\",\"email\":\"updatedEmail\",\"password\":\"updatedPassword\"}"))
                         .andDo(print())
@@ -153,7 +154,7 @@ class UserControllerTest {
                 given(userService.updateUser(eq(givenNotExistedId), any(UserData.class)))
                         .willThrow(new UserNotFoundException(givenNotExistedId));
 
-                mockMvc.perform(patch("/user/"+givenNotExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(patch("/users/"+givenNotExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"createdUser\" , \"email\":\"createdEmail\", \"password\":\"createdPassword\"}"))
                         .andDo(print())
@@ -176,7 +177,9 @@ class UserControllerTest {
             @Test
             @DisplayName("주어진 아이디에 해당하는 사용자 삭제하고 삭제된 사용자와 NO_CONTENT를 리턴한다")
             void itDeletesUserAndReturnsDeletedUserAndNO_CONTENTHttpStatus() throws Exception {
-                mockMvc.perform(delete("/user/" + givenExistedId))
+                given(userService.deleteUser(givenExistedId)).willReturn(setUpUser);
+
+                mockMvc.perform(delete("/users/" + givenExistedId))
                         .andDo(print())
                         .andExpect(status().isNoContent());
 
@@ -195,7 +198,7 @@ class UserControllerTest {
                 given(userService.deleteUser(givenNotExistedId))
                         .willThrow(new UserNotFoundException(givenNotExistedId));
 
-                mockMvc.perform(delete("/user/"+givenNotExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(delete("/users/"+givenNotExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(content().string(containsString("User not found")))
                         .andExpect(status().isNotFound());

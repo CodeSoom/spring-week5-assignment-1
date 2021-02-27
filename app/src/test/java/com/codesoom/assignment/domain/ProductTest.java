@@ -36,35 +36,14 @@ class ProductTest {
     }
 
     @Test
-    @DisplayName("아이디를 제외한 모든 매개변수를 가지는 상품 Builder 검사")
-    void BuilderWithArgsWithoutId() {
-        Product product = Product.builder()
-                .name(PRODUCT_NAME)
-                .maker(PRODUCT_MAKER)
-                .price(PRODUCT_PRICE)
-                .imageUrl(PRODUCT_IMAGEURL)
-                .build();
-
-        assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
-        assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
-        assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
-        assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGEURL);
-    }
-
-    @Test
     @DisplayName("어떤 매개변수도 가지지 않는 상품 Builder 검사")
     void BuilderWithoutArgs() {
-        Product product = Product.builder()
-                .name(PRODUCT_NAME)
-                .maker(PRODUCT_MAKER)
-                .price(PRODUCT_PRICE)
-                .imageUrl(PRODUCT_IMAGEURL)
-                .build();
+        Product product = Product.builder().build();
 
-        assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
-        assertThat(product.getMaker()).isEqualTo(PRODUCT_MAKER);
-        assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
-        assertThat(product.getImageUrl()).isEqualTo(PRODUCT_IMAGEURL);
+        assertThat(product.getName()).isEqualTo(null);
+        assertThat(product.getMaker()).isEqualTo(null);
+        assertThat(product.getPrice()).isEqualTo(null);
+        assertThat(product.getImageUrl()).isEqualTo(null);
     }
 
 //    @Test
