@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserApplicationService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UpdateUserData;
 import com.codesoom.assignment.dto.UserData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -34,7 +35,7 @@ public class UserController {
     @PatchMapping("{id}")
     UserData updateUser(
             @PathVariable Long id,
-            @RequestBody @Valid UserData userData
+            @RequestBody @Valid UpdateUserData userData
     ) {
         User user = service.changeName(id, userData.getName());
         return new UserData(user.getId(), user.getName(), user.getMail(), user.getPassword());
