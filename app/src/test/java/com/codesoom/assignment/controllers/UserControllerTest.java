@@ -15,8 +15,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doThrow;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,5 +64,17 @@ public class UserControllerTest {
     void deleteNotExistUser() throws Exception {
         mockMvc.perform(delete("/users/2"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateUser() throws Exception {
+        String userJson = "{\"name\": \"Las\", \"email\": \"las2@magical.dev\", \"password\": \"1234yu90\"}";
+        mockMvc.perform(
+                patch("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8")
+                        .content(userJson))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("Las")));
     }
 }
