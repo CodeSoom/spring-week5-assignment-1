@@ -13,8 +13,7 @@ import org.junit.jupiter.api.Test;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -47,7 +46,7 @@ class UserServiceTest {
 
         given(userRepository.save(any(User.class))).will(invocation -> {
             User source = invocation.getArgument(0);
-            return User .builder()
+            return User.builder()
                     .id(2L)
                     .name(source.getName())
                     .email(source.getEmail())
@@ -110,5 +109,45 @@ class UserServiceTest {
         assertThat(user.getEmail()).isEqualTo("test@github.com");
         assertThat(user.getPassword()).isEqualTo("qwer1234");
 
+    }
+
+    @Test
+    void updateUserWithExistedId() {
+        UserData userData = UserData.builder()
+                .id(1L)
+                .name("jason")
+                .email("test@github.com")
+                .password("qwer1234")
+                .build();
+
+        User user = userService.updateUser(1L, userData);
+
+        assertThat(user.getId()).isEqualTo(1L);
+        assertThat(user.getName()).isEqualTo("jason");
+    }
+
+    @Test
+    void updateUserWithNotExistedId() {
+        UserData userData = UserData.builder()
+                .name("jason")
+                .email("test@gitbhub.com")
+                .password("qwer1234")
+                .build();
+
+        assertThatThrownBy(() -> userService.updateUser(1000L, userData))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void deleteWithExistedId() {
+        userService.deleteUser(1L);
+
+        verify(userRepository).delete(any(User.class));
+    }
+
+    @Test
+    void deleteUserWithNotExistedId() {
+        assertThatThrownBy(() -> userService.deleteUser(1000L))
+                .isInstanceOf(UserNotFoundException.class);
     }
 }

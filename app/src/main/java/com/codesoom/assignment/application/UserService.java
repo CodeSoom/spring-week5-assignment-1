@@ -37,10 +37,27 @@ public class UserService {
         return userRepository.save(user);
     }
 
+
+    public User updateUser(Long id, UserData userData) {
+        User user = findUser(id);
+
+        user.changWith(mapper.map(userData, User.class));
+
+        return user;
+    }
+
+    public User deleteUser(Long id) {
+        User user = findUser(id);
+
+        userRepository.delete(user);
+
+        return user;
+    }
+
+
     private User findUser(Long id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
-
 
 }

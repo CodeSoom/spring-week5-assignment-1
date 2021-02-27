@@ -38,4 +38,27 @@ public class UserController {
     public User create(@RequestBody @Valid UserData userData) {
         return userService.createUser(userData);
     }
+
+    @PatchMapping("{id}")
+    public User update(
+            @PathVariable Long id,
+            @RequestBody @Valid UserData userData
+    ) {
+        return userService.updateUser(id, userData);
+    }
+
+    @PutMapping("{id}")
+    public User put(
+            @PathVariable Long id,
+            @RequestBody @Valid UserData userData
+    ) {
+        return userService.updateUser(id, userData);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void destroy(@PathVariable Long id) {
+        userService.deleteUser(id);
+    }
+
 }

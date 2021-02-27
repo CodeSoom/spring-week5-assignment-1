@@ -2,7 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.ProductData;
 import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +20,9 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -55,6 +59,24 @@ class UserControllerTest {
                 .willThrow(new UserNotFoundException(NotExistedId));
 
         given(userService.createUser(any(UserData.class))).willReturn(user);
+
+        given(userService.updateUser(eq(1L), any(UserData.class)))
+                .will(invocation -> {
+                    Long id = invocation.getArgument(0);
+                    UserData userData = invocation.getArgument(1);
+                    return User.builder()
+                            .id(id)
+                            .name(userData.getName())
+                            .email(userData.getEmail())
+                            .password(userData.getPassword())
+                            .build();
+                });
+
+        given(userService.updateUser(eq(1000L), any(UserData.class)))
+                .willThrow(new UserNotFoundException(1000L));
+
+        given(userService.deleteUser(1000L))
+                .willThrow(new UserNotFoundException(1000L));
     }
 
     @Test
@@ -101,6 +123,7 @@ class UserControllerTest {
         verify(userService).createUser(any(UserData.class));
     }
 
+//    @Test
 //    @DisplayName("올바르지 않은 회원 정보가 주어지면, 상태코드 404를 리턴한다.")
 //    void createWithInvalidAttributes() throws Exception {
 //        mockMvc.perform(
@@ -112,9 +135,50 @@ class UserControllerTest {
 //        )
 //                .andExpect(status().isBadRequest());
 //
-//    }   @Test
+//    }
+
+    @Test
+    void updateWithExistedUser() throws Exception {
+        mockMvc.perform(
+                patch("/user/1")
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name\" : \"jason\", \"email\" : \"test@github.com\", \"password\" : \"qwer1234\"}")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("jason")));
+
+        verify(userService).updateUser(eq(1L), any(UserData.class));
+    }
+
+    @Test
+    void updateWithNotExistedUser() throws Exception {
+        mockMvc.perform(
+                patch("/user/1000")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\" : \"jason\", \"email\" : \"test@github.com\", \"password\" : \"qwer1234\"}")
+        )
+                .andExpect(status().isNotFound());
 
 
+        verify(userService).updateUser(eq(1000L), any(UserData.class));
 
+    }
 
+    @Test
+    void destroyWithExistedUser() throws Exception {
+        mockMvc.perform(delete("/user/1"))
+                .andExpect(status().isNoContent());
+
+        verify(userService).deleteUser(1L);
+    }
+
+    @Test
+    void destroyWithNotExistedUser() throws Exception {
+        mockMvc.perform(delete("/user/1000"))
+                .andExpect(status().isNotFound());
+
+        verify(userService).deleteUser(1000L);
+    }
 }

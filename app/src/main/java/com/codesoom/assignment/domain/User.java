@@ -1,17 +1,17 @@
 package com.codesoom.assignment.domain;
 
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Builder
 public class User {
 
     @Id
@@ -24,11 +24,10 @@ public class User {
 
     private String password;
 
-    @Builder
-    private User(Long id, String name, String email, String password) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public void changWith(User source) {
+        this.id = source.id;
+        this.name = source.name;
+        this.email = source.email;
+        this.password = source.password;
     }
 }
