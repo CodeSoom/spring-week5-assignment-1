@@ -102,11 +102,12 @@ class UserControllerTest {
     @Nested
     @DisplayName("[PATCH] /users/{id} 요청은")
     class Describe_modify {
+        private final String givenChangedName = "juuni Ni";
+
         @Nested
         @DisplayName("주어진 id에 해당하는 유저가 존재할 때")
         class Context_when_exists_given_id_user {
             private final long givenID = 1;
-            private final String givenChangedName = "juuni Ni";
 
             @Test
             @DisplayName("변경된 유저 정보와 함께 status ok 를 응답한다.")
@@ -128,10 +129,21 @@ class UserControllerTest {
         @Nested
         @DisplayName("주어진 id의 user 가 없을 때")
         class Context_when_not_exists_given_id_user {
+            private final long givenID = 1000;
+
             @Test
             @DisplayName("not found 를 응답한다.")
-            void It_respond_not_found() {
-
+            void It_respond_not_found() throws Exception {
+                mockMvc.perform(
+                        patch("/users/{id}", givenID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userDataJSON(
+                                        givenEmail,
+                                        givenChangedName,
+                                        givenPassword
+                                ))
+                )
+                        .andExpect(status().isNotFound());
             }
         }
     }
