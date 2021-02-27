@@ -79,4 +79,13 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Las")));
     }
+
+    @Test
+    void updateUserWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                patch("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8"))
+                .andExpect(status().isBadRequest());
+    }
 }
