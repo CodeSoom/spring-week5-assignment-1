@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
@@ -50,6 +51,9 @@ class UserServiceTest {
 
         given(userRepository.save(any(User.class)))
                 .will(invocation -> invocation.<Product>getArgument(0));
+
+        given(userRepository.findById(1L))
+                .willReturn(Optional.of(user));
     }
 
     void updateTest(UserData update) {
@@ -98,7 +102,7 @@ class UserServiceTest {
             }
 
             @Test
-            @DisplayName("해당 ID를 갖는 사용자의 정보를 수정하고 반환한다")
+            @DisplayName("해당 ID를 갖는 사용자의 정보를 수정한다")
             void it_returns_updated_product() {
                 userService.updateUser(1L, update);
 
@@ -116,6 +120,40 @@ class UserServiceTest {
             @DisplayName("수정할 사용자를 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
                 assertThatThrownBy(() -> userService.updateUser(100L, update))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteProduct 메소드는")
+    class Describe_deleteProduct {
+        User user;
+
+        @Nested
+        @DisplayName("등록된 사용자의 ID가 주어진다면")
+        class Context_with_valid_id {
+
+            @Test
+            @DisplayName("해당 ID를 갖는 사용자를 삭제한다")
+            void it_returns_deleted_user() {
+                user = new User();
+
+                userService.deleteUser(1L);
+
+                verify(userRepository).findById(1L);
+                verify(userRepository).delete(any(User.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 사용자의 ID가 주어진다면")
+        class Context_without_invalid_id {
+
+            @Test
+            @DisplayName("삭제할 사용자를 찾을 수 없다는 예외를 던진다")
+            void it_returns_warning_message() {
+                assertThatThrownBy(() -> userService.deleteUser(100L))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
