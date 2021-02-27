@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping(produces = "application/json;charset=UTF-8")
     @ResponseStatus(HttpStatus.CREATED)
-    UserData createUser(@RequestBody UserData userData) {
+    UserData createUser(@RequestBody @Valid UserData userData) {
         User user = service.createUser(userData.getName(), userData.getEmail(), userData.getPassword());
         return new UserData(user.getId(), user.getName(), user.getMail(), user.getPassword());
     }
