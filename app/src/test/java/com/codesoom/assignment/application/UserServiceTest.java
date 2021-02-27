@@ -1,9 +1,9 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.ProductData;
 import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -104,6 +105,18 @@ class UserServiceTest {
                 verify(userRepository).findById(1L);
 
                 updateTest(update);
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 사용자의 ID가 주어진다면")
+        class Context_with_invalid_id {
+
+            @Test
+            @DisplayName("수정할 사용자를 찾을 수 없다는 예외를 던진다")
+            void it_returns_warning_message() {
+                assertThatThrownBy(() -> userService.updateUser(100L, update))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
