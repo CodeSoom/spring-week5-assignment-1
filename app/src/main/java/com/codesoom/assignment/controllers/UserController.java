@@ -45,7 +45,7 @@ public class UserController {
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserData modify(
-            @PathVariable long id,
+            @PathVariable Long id,
             @RequestBody UserData userData
     ) {
         final User user = mapper.map(userData, User.class);

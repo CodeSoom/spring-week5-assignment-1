@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -130,6 +131,13 @@ class UserControllerTest {
         @DisplayName("주어진 id의 user 가 없을 때")
         class Context_when_not_exists_given_id_user {
             private final long givenID = 1000;
+
+            @BeforeEach
+            void setup() {
+                Mockito.doThrow(UserNotFoundException.class)
+                        .when(userService)
+                        .modify(any(Long.class), any(User.class));
+            }
 
             @Test
             @DisplayName("not found 를 응답한다.")
