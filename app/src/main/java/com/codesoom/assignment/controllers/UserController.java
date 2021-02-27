@@ -42,6 +42,13 @@ public class UserController {
         return userData;
     }
 
+    /**
+     * 유저의 정보를 변경합니다.
+     *
+     * @param id       변경할 유저의 id.
+     * @param userData 변경할 유저의 데이터.
+     * @return 변경된 유저의 데이터.
+     */
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public UserData modify(
@@ -55,6 +62,11 @@ public class UserController {
         return userData;
     }
 
+    /**
+     * 유저를 삭제합니다.
+     *
+     * @param id 삭제할 유저의 id.
+     */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
