@@ -112,11 +112,11 @@ class UserServiceTest {
     @Nested
     @DisplayName("getUser 메서드는")
     class Describe_getUser {
+        Long givenId;
 
         @Nested
         @DisplayName("등록된 사용자 id가 존재하면")
         class Context_with_exist_user_id {
-            Long givenId;
             UserSaveRequestDto requestDto;
 
             @BeforeEach
@@ -143,18 +143,16 @@ class UserServiceTest {
         @Nested
         @DisplayName("등록된 사용자 id가 존재하지 않으면")
         class Context_with_not_existed_user_id {
-            Long notExistedId;
-
             @BeforeEach
             void setUp() {
-                notExistedId = NOT_EXIST_ID;
+                givenId = NOT_EXIST_ID;
             }
 
             @DisplayName("예외를 던진다.")
             @Test
             void It_throws_exception() {
                 assertThatExceptionOfType(UserNotFoundException.class)
-                        .isThrownBy(() -> userService.getUser(notExistedId));
+                        .isThrownBy(() -> userService.getUser(givenId));
             }
         }
     }
