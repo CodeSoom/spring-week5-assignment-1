@@ -88,4 +88,13 @@ public class UserControllerTest {
                         .characterEncoding("UTF-8"))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    void createUserWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                post("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .characterEncoding("UTF-8"))
+                .andExpect(status().isBadRequest());
+    }
 }
