@@ -33,8 +33,10 @@ public class UserControllerTest {
         String mail = "las@magical.dev";
         String password = "pK1RZRUAgExuFYfr0qHY";
         User user = new User(1L, name, mail, password);
+        User nameChangedUser = new User(1L, "Las", mail, password);
 
         given(service.createUser(name, mail, password)).willReturn(user);
+        given(service.changeName(1L, "Las")).willReturn(nameChangedUser);
         doNothing().when(service).deleteUser(1L);
         doThrow(new UserNotFoundException(2L))
                 .when(service)

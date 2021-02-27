@@ -28,4 +28,10 @@ public class UserController {
     void deleteUser(@PathVariable Long id) {
         service.deleteUser(id);
     }
+
+    @PatchMapping("{id}")
+    UserData updateUser(@PathVariable Long id, @RequestBody UserData userData) {
+        User user = service.changeName(id, userData.getName());
+        return new UserData(user.getId(), user.getName(), user.getMail(), user.getPassword());
+    }
 }
