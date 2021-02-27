@@ -11,7 +11,7 @@ import java.util.Objects;
  * 사용자 정보.
  */
 @Getter
-public class UserData {
+public class UserResponse {
 
     /**
      * 사용자 식별자.
@@ -42,15 +42,15 @@ public class UserData {
      * @param password 사용자 비밀번호
      */
     @Builder
-    public UserData(Long id, String name, String email, String password) {
+    public UserResponse(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
     }
 
-    public static UserData of(User user) {
-        return UserData.builder()
+    public static UserResponse of(User user) {
+        return UserResponse.builder()
                 .id(user.getId())
                 .name(user.getName())
                 .email(user.getEmail())
@@ -66,10 +66,10 @@ public class UserData {
         if (this == o) {
             return true;
         }
-        if (!(o instanceof UserData)) {
+        if (!(o instanceof UserResponse)) {
             return false;
         }
-        UserData dto = (UserData) o;
+        UserResponse dto = (UserResponse) o;
         return getId().equals(dto.getId());
     }
 

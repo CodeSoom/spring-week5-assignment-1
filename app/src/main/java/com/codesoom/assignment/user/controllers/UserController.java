@@ -1,7 +1,7 @@
 package com.codesoom.assignment.user.controllers;
 
 import com.codesoom.assignment.user.application.UserService;
-import com.codesoom.assignment.user.dto.UserData;
+import com.codesoom.assignment.user.dto.UserResponse;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +35,7 @@ public class UserController {
      * 모든 사용자 정보를 응답합니다.
      */
     @GetMapping
-    public List<UserData> getUsers() {
+    public List<UserResponse> getUsers() {
         return userService.getUsers();
     }
 
@@ -46,7 +46,7 @@ public class UserController {
      * @return 사용자 정보
      */
     @GetMapping("/{id}")
-    public UserData getUser(@PathVariable Long id) {
+    public UserResponse getUser(@PathVariable Long id) {
         return userService.getUser(id);
     }
 
@@ -58,8 +58,8 @@ public class UserController {
      * @return 갱신된 사용자 정보
      */
     @PatchMapping("/{id}")
-    public UserData updateUser(@PathVariable Long id,
-                               @Valid @RequestBody UserUpdateRequestDto requestDto) {
+    public UserResponse updateUser(@PathVariable Long id,
+                                   @Valid @RequestBody UserUpdateRequestDto requestDto) {
         return userService.updateUser(id, requestDto);
     }
 
@@ -71,7 +71,7 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserData createUser(@Valid @RequestBody UserSaveRequestDto requestDto) {
+    public UserResponse createUser(@Valid @RequestBody UserSaveRequestDto requestDto) {
         return userService.createUser(requestDto);
     }
 

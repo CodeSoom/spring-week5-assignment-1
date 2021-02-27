@@ -1,7 +1,7 @@
 package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.user.domain.UserRepository;
-import com.codesoom.assignment.user.dto.UserData;
+import com.codesoom.assignment.user.dto.UserResponse;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import org.junit.jupiter.api.AfterEach;
@@ -54,13 +54,17 @@ class UserServiceTest {
 
         @BeforeEach
         void setUp() {
-            requestDto = saveRequest;
+            requestDto = UserSaveRequestDto.builder()
+                    .name(USER_NAME)
+                    .email(USER_EMAIL)
+                    .password(USER_PASSWORD)
+                    .build();
         }
 
         @DisplayName("새로운 사용자 추가되고, 사용자 정보를 리턴한다")
         @Test
         void it_returns_user() {
-            UserData actual = userService.createUser(requestDto);
+            UserResponse actual = userService.createUser(requestDto);
 
             assertAll(
                     () -> assertThat(userService.getUsers()).isNotEmpty(),
@@ -89,7 +93,7 @@ class UserServiceTest {
             @DisplayName("등록된 사용자 목록을 리턴한다")
             @Test
             void It_return_users() {
-                List<UserData> actual = userService.getUsers();
+                List<UserResponse> actual = userService.getUsers();
 
                 assertThat(actual).hasSize(1);
                 assertThat(actual.get(0).getName()).isEqualTo(USER_NAME);
@@ -122,14 +126,14 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 requestDto = saveRequest;
-                UserData savedUser = userService.createUser(requestDto);
+                UserResponse savedUser = userService.createUser(requestDto);
                 givenId = savedUser.getId();
             }
 
             @DisplayName("등록된 사용자 id로 찾고자하는 사용자를 리턴한다")
             @Test
             void It_return_user() {
-                UserData actual = userService.getUser(givenId);
+                UserResponse actual = userService.getUser(givenId);
 
                 assertAll(
                         () -> assertThat(actual.getId()).isEqualTo(givenId),
@@ -170,7 +174,7 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 UserSaveRequestDto requestDto = saveRequest;
-                UserData savedUser = userService.createUser(requestDto);
+                UserResponse savedUser = userService.createUser(requestDto);
                 givenId = savedUser.getId();
                 updateRequestDto = updateRequest;
             }
@@ -178,7 +182,7 @@ class UserServiceTest {
             @DisplayName("수정된 사용자를 리턴한다")
             @Test
             void It_return_updated_user() {
-                UserData actual = userService.updateUser(givenId, updateRequestDto);
+                UserResponse actual = userService.updateUser(givenId, updateRequestDto);
 
                 assertAll(
                         () -> assertThat(actual.getPassword()).isEqualTo(updateRequestDto.getPassword()),
@@ -220,7 +224,7 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 UserSaveRequestDto requestDto = saveRequest;
-                UserData savedProduct = userService.createUser(requestDto);
+                UserResponse savedProduct = userService.createUser(requestDto);
                 givenId = savedProduct.getId();
             }
 

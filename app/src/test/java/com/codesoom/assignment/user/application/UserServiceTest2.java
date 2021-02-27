@@ -2,7 +2,7 @@ package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
-import com.codesoom.assignment.user.dto.UserData;
+import com.codesoom.assignment.user.dto.UserResponse;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
@@ -49,8 +49,8 @@ class UserServiceTest2 {
     private User user2;
     private List<User> users;
 
-    private UserData userData1;
-    private UserData userData2;
+    private UserResponse userResponse1;
+    private UserResponse userResponse2;
 
     @BeforeEach
     void setUp() {
@@ -74,8 +74,8 @@ class UserServiceTest2 {
                 .password(USER2_PASSWORD)
                 .build();
 
-        userData1 = UserData.of(user1);
-        userData2 = UserData.of(user2);
+        userResponse1 = UserResponse.of(user1);
+        userResponse2 = UserResponse.of(user2);
 
         users = Arrays.asList(user1, user2);
     }
@@ -85,9 +85,9 @@ class UserServiceTest2 {
     void getUsers() {
         given(userRepository.findAll()).willReturn(users);
 
-        List<UserData> usersInformation = userService.getUsers();
+        List<UserResponse> actual = userService.getUsers();
 
-        assertThat(usersInformation).containsExactly(userData1, userData2);
+        assertThat(actual).containsExactly(userResponse1, userResponse2);
         verify(userRepository).findAll();
     }
 
@@ -97,10 +97,10 @@ class UserServiceTest2 {
         given(userRepository.findById(anyLong()))
                 .willReturn(Optional.ofNullable(user1));
 
-        UserData actual = userService.getUser(anyLong());
+        UserResponse actual = userService.getUser(anyLong());
 
         assertAll(
-                () -> assertThat(actual).isEqualTo(userData1),
+                () -> assertThat(actual).isEqualTo(userResponse1),
                 () -> assertThat(actual.getId()).isEqualTo(USER1_ID)
         );
         verify(userRepository).findById(anyLong());
@@ -125,7 +125,7 @@ class UserServiceTest2 {
                 .password(USER2_PASSWORD)
                 .build();
 
-        UserData actual = userService.updateUser(anyLong(), expected);
+        UserResponse actual = userService.updateUser(anyLong(), expected);
 
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName()),
@@ -137,10 +137,10 @@ class UserServiceTest2 {
     @Test
     @DisplayName("updateUser 메서드는 등록되지 않은 사용자 id로 사용자정보를 갱신시 예외를 던진다.")
     void updateUserWithInValidId() {
-        UserUpdateRequestDto requestDto = UserUpdateRequestDto.builder().build();
+        UserUpdateRequestDto updateRequestDto = UserUpdateRequestDto.builder().build();
 
         assertThatExceptionOfType(UserNotFoundException.class)
-                .isThrownBy(() -> userService.updateUser(NOT_EXIST_ID, requestDto));
+                .isThrownBy(() -> userService.updateUser(NOT_EXIST_ID, updateRequestDto));
     }
 
     @Test
@@ -174,7 +174,7 @@ class UserServiceTest2 {
                 .password(USER1_PASSWORD)
                 .build();
 
-        UserData actual = userService.createUser(expected);
+        UserResponse actual = userService.createUser(expected);
 
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(expected.getName()),

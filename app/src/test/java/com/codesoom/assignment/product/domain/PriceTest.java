@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.domain;
 
-import com.codesoom.assignment.user.dto.UserData;
+import com.codesoom.assignment.user.dto.UserResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -61,7 +61,7 @@ class PriceTest {
         assertThat(price.equals(price)).isTrue();
         assertThat(price.equals(price2)).isTrue();
 
-        UserData dto = UserData.builder().build();
+        UserResponse dto = UserResponse.builder().build();
         assertThat(price.equals(dto)).isFalse();
     }
 }

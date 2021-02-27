@@ -3,7 +3,7 @@ package com.codesoom.assignment.user.controllers;
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
 import com.codesoom.assignment.user.domain.User;
-import com.codesoom.assignment.user.dto.UserData;
+import com.codesoom.assignment.user.dto.UserResponse;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,9 +43,9 @@ class UserControllerTest {
     private User user2;
     private UserSaveRequestDto saveRequestDto;
     private UserUpdateRequestDto updateRequestDto;
-    private List<UserData> usersResponses;
-    private UserData userData1;
-    private UserData userData2;
+    private List<UserResponse> usersResponses;
+    private UserResponse userResponse1;
+    private UserResponse userResponse2;
 
     @Mock
     private UserService userService;
@@ -63,9 +63,9 @@ class UserControllerTest {
     void getUsers() {
         given(userService.getUsers()).willReturn(usersResponses);
 
-        List<UserData> users = userController.getUsers();
+        List<UserResponse> users = userController.getUsers();
 
-        assertThat(users).containsExactly(userData1, userData2);
+        assertThat(users).containsExactly(userResponse1, userResponse2);
 
         verify(userService).getUsers();
     }
@@ -73,8 +73,8 @@ class UserControllerTest {
     @Test
     @DisplayName("특정 사용자를 조회하고 사용자 정보를 확인한다.")
     void getUser() {
-        given(userService.getUser(anyLong())).willReturn(userData1);
-        UserData user = userController.getUser(USER1_ID);
+        given(userService.getUser(anyLong())).willReturn(userResponse1);
+        UserResponse user = userController.getUser(USER1_ID);
 
         assertThat(user.getId()).isEqualTo(USER1_ID);
         assertThat(user.getEmail()).isEqualTo(USER1_EMAIL);
@@ -98,9 +98,9 @@ class UserControllerTest {
     @DisplayName("사용자를 새로 등록할 수 있다.")
     void createUser() {
         given(userService.createUser(saveRequestDto))
-                .willReturn(userData1);
+                .willReturn(userResponse1);
 
-        UserData actual = userController.createUser(saveRequestDto);
+        UserResponse actual = userController.createUser(saveRequestDto);
 
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(USER1_NAME),
@@ -114,9 +114,9 @@ class UserControllerTest {
     @DisplayName("특정 사용자 정보를 갱신할 수 있다.")
     void updateUser() {
         given(userService.updateUser(USER1_ID, updateRequestDto))
-                .willReturn(userData2);
+                .willReturn(userResponse2);
 
-        UserData actual = userController.updateUser(USER1_ID, updateRequestDto);
+        UserResponse actual = userController.updateUser(USER1_ID, updateRequestDto);
 
         assertAll(
                 () -> assertThat(actual.getName()).isEqualTo(USER2_NAME),
@@ -153,8 +153,8 @@ class UserControllerTest {
                 .password(USER2_PASSWORD)
                 .build();
 
-        userData1 = UserData.of(user1);
-        userData2 = UserData.of(user2);
-        usersResponses = Arrays.asList(userData1, userData2);
+        userResponse1 = UserResponse.of(user1);
+        userResponse2 = UserResponse.of(user2);
+        usersResponses = Arrays.asList(userResponse1, userResponse2);
     }
 }

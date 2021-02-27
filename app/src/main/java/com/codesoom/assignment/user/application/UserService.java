@@ -2,7 +2,7 @@ package com.codesoom.assignment.user.application;
 
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
-import com.codesoom.assignment.user.dto.UserData;
+import com.codesoom.assignment.user.dto.UserResponse;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import com.github.dozermapper.core.Mapper;
@@ -26,10 +26,10 @@ public class UserService {
     /**
      * 등록된 모든 사용자 정보를 가져온다.
      */
-    public List<UserData> getUsers() {
+    public List<UserResponse> getUsers() {
         return userRepository.findAll()
                 .stream()
-                .map(UserData::of)
+                .map(UserResponse::of)
                 .collect(Collectors.toList());
     }
 
@@ -38,10 +38,10 @@ public class UserService {
      * @param userId 등록된 사용자 id
      * @return 등록된 사용자
      */
-    public UserData getUser(Long userId) throws UserNotFoundException {
+    public UserResponse getUser(Long userId) throws UserNotFoundException {
         final User user = findUser(userId);
 
-        return UserData.of(user);
+        return UserResponse.of(user);
     }
 
     /**
@@ -51,13 +51,13 @@ public class UserService {
      * @return 갱신된 사용자 정보
      */
     @Transactional
-    public UserData updateUser(long userId,
-                               UserUpdateRequestDto requestDto) throws UserNotFoundException {
+    public UserResponse updateUser(long userId,
+                                   UserUpdateRequestDto requestDto) throws UserNotFoundException {
         User user = findUser(userId);
 
         user.changeWith(mapper.map(requestDto, User.class));
 
-        return UserData.of(user);
+        return UserResponse.of(user);
     }
 
     /**
@@ -66,11 +66,11 @@ public class UserService {
      * @return 등록된 사용자 정보
      */
     @Transactional
-    public UserData createUser(UserSaveRequestDto requestDto) {
+    public UserResponse createUser(UserSaveRequestDto requestDto) {
         User user = mapper.map(requestDto, User.class);
         User saved = userRepository.save(user);
 
-        return UserData.of(saved);
+        return UserResponse.of(saved);
     }
 
     /**

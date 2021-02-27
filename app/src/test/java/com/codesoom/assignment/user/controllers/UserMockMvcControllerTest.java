@@ -2,7 +2,7 @@ package com.codesoom.assignment.user.controllers;
 
 import com.codesoom.assignment.user.application.UserNotFoundException;
 import com.codesoom.assignment.user.application.UserService;
-import com.codesoom.assignment.user.dto.UserData;
+import com.codesoom.assignment.user.dto.UserResponse;
 import com.codesoom.assignment.user.dto.UserSaveRequestDto;
 import com.codesoom.assignment.user.dto.UserUpdateRequestDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,11 +63,11 @@ class UserMockMvcControllerTest {
         @Nested
         @DisplayName("등록된 사용자가 있으면")
         class Context_with_users {
-            List<UserData> users;
+            List<UserResponse> users;
 
             @BeforeEach
             void setUp() {
-                UserData responseDto = UserData.builder()
+                UserResponse responseDto = UserResponse.builder()
                         .id(USER_ID)
                         .name(USER_NAME)
                         .email(USER_EMAIL)
@@ -130,11 +130,11 @@ class UserMockMvcControllerTest {
         @Nested
         @DisplayName("등록된 사용자가 있으면")
         class Context_with_user {
-            UserData responseDto;
+            UserResponse responseDto;
 
             @BeforeEach
             void setUp() {
-                responseDto = UserData.builder()
+                responseDto = UserResponse.builder()
                         .id(USER_ID)
                         .name(USER_NAME)
                         .email(USER_EMAIL)
@@ -213,7 +213,7 @@ class UserMockMvcControllerTest {
             @BeforeEach
             void setUp() {
                 requestDto = getUpdateRequest();
-                UserData responseDto = UserData.builder()
+                UserResponse responseDto = UserResponse.builder()
                         .id(USER_ID)
                         .name(USER_NAME)
                         .email(USER_EMAIL)
@@ -274,7 +274,7 @@ class UserMockMvcControllerTest {
                         .email(USER_EMAIL)
                         .password(USER_PASSWORD)
                         .build();
-                UserData responseDto = UserData.builder()
+                UserResponse responseDto = UserResponse.builder()
                         .id(USER_ID)
                         .name(USER_NAME)
                         .email(USER_EMAIL)
@@ -379,8 +379,8 @@ class UserMockMvcControllerTest {
         }
     }
 
-    private UserData getUserResponse() {
-        return UserData.builder()
+    private UserResponse getUserResponse() {
+        return UserResponse.builder()
                 .id(USER_ID)
                 .name(USER_NAME)
                 .email(USER_EMAIL)
