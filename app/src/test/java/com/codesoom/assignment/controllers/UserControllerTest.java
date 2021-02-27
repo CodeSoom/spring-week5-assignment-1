@@ -76,7 +76,7 @@ class UserControllerTest {
     @DisplayName("POST /user 요청은")
     class Describe_createUser {
         @Nested
-        @DisplayName("requestbody에 회원의 정보가 있으면")
+        @DisplayName("생성할 회원의 정보가 있으면")
         class Context_exist_user {
             @BeforeEach
             void setUp() {
@@ -85,7 +85,7 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("응답코드는 201이며 생성한 회원를 응답한다.")
+            @DisplayName("응답코드는 201이며 생성한 회원을 응답한다.")
             void it_return_createdUser() throws Exception {
                 mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -97,7 +97,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("requestbody에 user가 없으면")
+        @DisplayName("생성할 회원의 정보가 없으면")
         class Context_does_not_exist_user {
             @Test
             @DisplayName("응답코드는 400을 응답한다")
@@ -110,7 +110,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("user에 파라미터가 없으면")
+        @DisplayName("사용자의 이름이 없으면")
         class Context_user_does_not_have_parameter {
             User userWithoutName = User.builder()
                     .id(EXIST_ID)
@@ -119,7 +119,7 @@ class UserControllerTest {
                     .build();
 
             @Test
-            @DisplayName("응답코드는 400며 에러메세지를 응답한다.")
+            @DisplayName("응답코드는 400이며 에러메세지를 응답한다.")
             void it_return_createdUser() throws Exception {
                 mockMvc.perform(post("/users")
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -134,7 +134,7 @@ class UserControllerTest {
     @DisplayName("PATCH /users/{id} 요청은")
     class Describe_updateUser {
         @Nested
-        @DisplayName("id가 존재하고 requestbody에 회원의 정보가 있으면")
+        @DisplayName("id가 존재하고 변경할 회원의 정보가 모두 있으면")
         class Context_exist_id_and_userdto {
             @BeforeEach
             void setUp() {
@@ -143,7 +143,7 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("응답코드는 200이며 수정된 회원를 응답한다.")
+            @DisplayName("응답코드는 200이며 수정된 회원을 응답한다.")
             void it_return_updatedUser() throws Exception {
                 mockMvc.perform(patch("/users/{id}", EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
@@ -178,7 +178,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("존재하는 회원이나 requestbody에 파라미터가 없으면")
+        @DisplayName("존재하는 회원이나 사용자의 이름없이 요청하면")
         class Context_user_does_not_have_parameter {
             User userWithoutName = User.builder()
                     .id(EXIST_ID)
@@ -187,7 +187,7 @@ class UserControllerTest {
                     .build();
 
             @Test
-            @DisplayName("응답코드는 400며 에러메세지를 응답한다.")
+            @DisplayName("응답코드는 400이며 에러메세지를 응답한다.")
             void it_return_createdUser() throws Exception {
                 mockMvc.perform(patch("/users/{id}", EXIST_ID)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
