@@ -171,9 +171,7 @@ class UserServiceTest {
         @BeforeEach
         void setGivenUser() {
             given(userRepository.save(any(User.class)))
-                    .will(invocation -> {
-                        return invocation.getArgument(0);
-                    });
+                    .will(invocation -> invocation.getArgument(0));
         }
 
         @Test
