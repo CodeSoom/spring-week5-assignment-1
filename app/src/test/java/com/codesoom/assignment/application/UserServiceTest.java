@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.UserNotfoundException;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -90,7 +90,7 @@ class UserServiceTest {
     @DisplayName("getUserWithNotExistedId는 존재하지 않을때 예외를 리턴한다.")
     void getUserWithNotExistedId() {
         assertThatThrownBy(() -> userService.getUser(NotExistedId))
-                .isInstanceOf(UserNotfoundException.class);
+                .isInstanceOf(UserNotFoundException.class);
     }
 
     @Test
