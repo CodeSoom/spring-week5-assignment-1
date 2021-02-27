@@ -16,8 +16,8 @@ public class UserData {
         this.password = password;
     }
 
+    @Getter
     private Long id;
-
     @Getter
     private String name;
     @Getter

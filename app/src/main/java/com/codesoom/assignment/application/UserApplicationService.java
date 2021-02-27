@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserApplicationService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     public UserApplicationService(UserRepository userRepository) {
         this.userRepository = userRepository;
