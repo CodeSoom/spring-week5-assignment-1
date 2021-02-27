@@ -9,7 +9,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@DisplayName("UserRepository 클래")
+@DisplayName("UserRepository 클래스")
 public class UserRepositoryTest {
 
     @Autowired
