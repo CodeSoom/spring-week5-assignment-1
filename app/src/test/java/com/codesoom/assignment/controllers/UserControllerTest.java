@@ -102,13 +102,12 @@ class UserControllerTest {
     @Nested
     @DisplayName("[PATCH] /users/{id} 요청은")
     class Describe_modify {
+        private final long givenID = 1;
         private final String givenChangedName = "juuni Ni";
 
         @Nested
         @DisplayName("주어진 id에 해당하는 유저가 존재할 때")
         class Context_when_exists_given_id_user {
-            private final long givenID = 1;
-
             @Test
             @DisplayName("변경된 유저 정보와 함께 status ok 를 응답한다.")
             void It_respond_modify_user_info() throws Exception {
@@ -129,8 +128,6 @@ class UserControllerTest {
         @Nested
         @DisplayName("주어진 id의 user 가 없을 때")
         class Context_when_not_exists_given_id_user {
-            private final long givenID = 1000;
-
             @BeforeEach
             void setup() {
                 Mockito.doThrow(UserNotFoundException.class)
@@ -158,11 +155,11 @@ class UserControllerTest {
     @Nested
     @DisplayName("[DELETE] /users/{id} 요청은")
     class Describe_delete {
+        private final Long givenID = 1L;
+
         @Nested
         @DisplayName("주어진 id의 user 가 존재할 때")
         class Context_when_exists_given_id_user {
-            private final Long givenID = 1L;
-
             @Test
             @DisplayName("no content 를 응답한다.")
             void It_respond_no_content() throws Exception {
@@ -174,10 +171,18 @@ class UserControllerTest {
         @Nested
         @DisplayName("주어진 id의 user 가 없을 때")
         class Context_when_not_exists_given_id_user {
+            @BeforeEach
+            void setup() {
+                Mockito.doThrow(UserNotFoundException.class)
+                        .when(userService)
+                        .delete(any(Long.class));
+            }
+
             @Test
             @DisplayName("not found 를 응답한다.")
-            void It_respond_not_found() {
-
+            void It_respond_not_found() throws Exception {
+                mockMvc.perform(delete("/users/{id}", givenID))
+                        .andExpect(status().isNotFound());
             }
         }
     }
