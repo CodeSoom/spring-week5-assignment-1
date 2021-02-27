@@ -41,4 +41,17 @@ public class UserController {
 
         return userData;
     }
+
+    @PatchMapping("{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public UserData modify(
+            @RequestParam long id,
+            @RequestBody UserData userData
+    ) {
+        final User user = mapper.map(userData, User.class);
+
+        userService.modify(id, user);
+
+        return userData;
+    }
 }
