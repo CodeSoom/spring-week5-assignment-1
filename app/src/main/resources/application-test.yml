@@ -4,3 +4,15 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
+
+test:
+  id-info:
+    exist-id: 1
+    not-exist-id: 1000
+  create-info:
+    name: My Name
+    email: my@gmail.com
+    password: My Password
+  update-info:
+    name: Your Name
+    password: Your Password

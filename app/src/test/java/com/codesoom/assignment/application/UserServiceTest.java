@@ -9,6 +9,9 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -17,20 +20,31 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @DisplayName("UserService 클래스")
+@SpringBootTest
+@ActiveProfiles("test")
 class UserServiceTest {
-    final Long EXIST_ID = 1L;
-    final Long NOT_EXIST_ID = 1000L;
-    final String NAME = "My Name";
-    final String EMAIL = "my@gmail.com";
-    final String PASSWORD = "My Password";
+    @Value("${test.id-info.exist-id}")
+    private Long EXIST_ID;
 
-    final String UPDATE_NAME = "Your Name";
-    final String UPDATE_PASSWORD = "Your Password";
-    final User givenUser = User.builder()
-            .name(NAME)
-            .email(EMAIL)
-            .password(PASSWORD)
-            .build();
+    @Value("${test.id-info.not-exist-id}")
+    private Long NOT_EXIST_ID;
+
+    @Value("${test.create-info.name}")
+    private String NAME;
+
+    @Value("${test.create-info.email}")
+    private String EMAIL;
+
+    @Value("${test.create-info.password}")
+    private String PASSWORD;
+
+    @Value("${test.update-info.name}")
+    private String UPDATE_NAME;
+
+    @Value("${test.update-info.password}")
+    private String UPDATE_PASSWORD;
+
+    User givenUser;
 
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
@@ -45,6 +59,12 @@ class UserServiceTest {
     void setUp() {
         Mockito.reset(userRepository);
         userService = new UserService(userRepository);
+
+        givenUser = User.builder()
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
 
         given(userRepository.save(any(User.class))).willReturn(givenUser);
         given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(givenUser));
