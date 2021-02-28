@@ -1,9 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,12 +16,15 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    @Setter
     private String name;
 
+    @Setter
     private String maker;
 
+    @Setter
     private Integer price;
-
+    @Setter
     private String imageUrl;
 
     public void changeWith(Product source) {
