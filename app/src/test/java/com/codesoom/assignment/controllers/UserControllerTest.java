@@ -27,8 +27,8 @@ import java.io.OutputStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.doThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -180,6 +180,50 @@ class UserControllerTest {
 
                 given(userService.updateUser(any(UserData.class)))
                         .willThrow(new UserNotFoundException(givenId));
+            }
+
+            @Test
+            @DisplayName("404 Not Found를 응답한다.")
+            void it_respond_404_not_found() throws Exception {
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /users/{id} 요청에 대한 응답")
+    class Describe_response_of_delete_users_id_request {
+        private Long givenId;
+
+        @Nested
+        @DisplayName("저장된 user의 id를 가지고 있다면")
+        class Context_with_saved_user_id {
+            @BeforeEach
+            void setRequest() {
+                givenId = givenSavedId;
+
+                requestBuilder = delete("/users/{id}", givenId);
+            }
+
+            @Test
+            @DisplayName("204 No Content를 응답한다.")
+            void it_respond_204_no_content() throws Exception {
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 user의 id를 가지고 있다면")
+        class Context_with_unsaved_user_id {
+            @BeforeEach
+            void setRequest() {
+                givenId = givenUnsavedId;
+
+                requestBuilder = delete("/users/{id}", givenId);
+
+                doThrow(UserNotFoundException.class).when(userService).deleteUser(givenId);
             }
 
             @Test
