@@ -24,8 +24,8 @@ public class UserService {
      *
      * @param user 생성할 정보가 담긴 유저 객체.
      */
-    public void create(User user) {
-        userRepository.save(user);
+    public User create(User user) {
+        return userRepository.save(user);
     }
 
     /**

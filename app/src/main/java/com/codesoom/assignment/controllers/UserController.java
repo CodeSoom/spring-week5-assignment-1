@@ -36,10 +36,13 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserData create(@RequestBody @Valid UserData userData) {
         final User user = mapper.map(userData, User.class);
-
-        userService.create(user);
-
-        return userData;
+        final User createdUser = userService.create(user);
+        return new UserData(
+                createdUser.id(),
+                createdUser.email(),
+                createdUser.name(),
+                createdUser.password()
+        );
     }
 
     /**
