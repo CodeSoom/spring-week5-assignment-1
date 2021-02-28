@@ -3,7 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.CreatingUserData;
+import com.codesoom.assignment.dto.UpdatingUserData;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
@@ -50,7 +51,7 @@ public class UserService {
      * @param userData 저장할 유저의 데이터
      * @return User, 저장한 유저정보
      */
-    public User createUser(UserData userData) {
+    public User createUser(CreatingUserData userData) {
         User user = mapper.map(userData, User.class);
         return userRepository.save(user);
     }
@@ -61,7 +62,7 @@ public class UserService {
      * @param userData 수정할 유저정보
      * @return User, 수정한 유저정보
      */
-    public User updateUser(UserData userData) {
+    public User updateUser(UpdatingUserData userData) {
         User user = getUser(userData.getId());
 
         user.changeWith(mapper.map(userData, User.class));

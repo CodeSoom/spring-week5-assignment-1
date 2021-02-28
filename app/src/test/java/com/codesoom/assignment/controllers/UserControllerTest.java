@@ -3,7 +3,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.CreatingUserData;
+import com.codesoom.assignment.dto.UpdatingUserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -57,7 +58,7 @@ class UserControllerTest {
     private RequestBuilder requestBuilder;
 
     private User user;
-    private UserData userData;
+    private CreatingUserData creatingUserData;
 
     private OutputStream outputStream;
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -71,14 +72,14 @@ class UserControllerTest {
 
         final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 
-        userData = UserData.builder()
+        creatingUserData = CreatingUserData.builder()
                 .id(givenSavedId)
                 .name(givenName)
                 .email(givenEmail)
                 .password(givenPassword)
                 .build();
 
-        user = mapper.map(userData, User.class);
+        user = mapper.map(creatingUserData, User.class);
 
         setUserJsonString(user);
     }
@@ -103,7 +104,7 @@ class UserControllerTest {
         @Test
         @DisplayName("201 Created와 생성된 유저정보를 가지고 있다.")
         void it_has_201_created_and_created_user() throws Exception {
-            given(userService.createUser(any(UserData.class)))
+            given(userService.createUser(any(CreatingUserData.class)))
                     .willReturn(user);
 
             mockMvc.perform(requestBuilder)
@@ -116,6 +117,7 @@ class UserControllerTest {
     @DisplayName("PATCH /users/{id} 요청에 대한 응답")
     class Describe_response_od_patch_users_id_request {
         private Long givenId;
+        private UpdatingUserData updatingUserData;
 
         @Nested
         @DisplayName("저장된 user의 id를 가지고 있다면")
@@ -124,7 +126,7 @@ class UserControllerTest {
             void setRequest() throws IOException {
                 givenId = givenSavedId;
 
-                userData = UserData.builder()
+                updatingUserData = UpdatingUserData.builder()
                         .id(givenId)
                         .name(givenChangedName)
                         .email(givenChangedEmail)
@@ -132,7 +134,7 @@ class UserControllerTest {
                         .build();
 
                 final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-                user = mapper.map(userData, User.class);
+                user = mapper.map(updatingUserData, User.class);
 
                 setUserJsonString(user);
 
@@ -145,7 +147,7 @@ class UserControllerTest {
             @Test
             @DisplayName("200 Ok와 수정된 user를 응답한다.")
             void it_has_200_ok_and_updated_user() throws Exception {
-                given(userService.updateUser(any(UserData.class)))
+                given(userService.updateUser(any(UpdatingUserData.class)))
                         .willReturn(user);
 
                 mockMvc.perform(requestBuilder)
@@ -161,7 +163,7 @@ class UserControllerTest {
             void setRequest() throws IOException {
                 givenId = givenUnsavedId;
 
-                userData = UserData.builder()
+                updatingUserData = UpdatingUserData.builder()
                         .id(givenId)
                         .name(givenChangedName)
                         .email(givenChangedEmail)
@@ -169,7 +171,7 @@ class UserControllerTest {
                         .build();
 
                 final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-                user = mapper.map(userData, User.class);
+                user = mapper.map(updatingUserData, User.class);
 
                 setUserJsonString(user);
 
@@ -178,7 +180,7 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userJsonString);
 
-                given(userService.updateUser(any(UserData.class)))
+                given(userService.updateUser(any(UpdatingUserData.class)))
                         .willThrow(new UserNotFoundException(givenId));
             }
 

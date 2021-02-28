@@ -3,7 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.CreatingUserData;
+import com.codesoom.assignment.dto.UpdatingUserData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -38,7 +39,7 @@ class UserServiceTest {
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
     private User user;
-    private UserData userData;
+    private CreatingUserData creatingUserData;
 
     @BeforeEach
     void setUp() {
@@ -46,14 +47,14 @@ class UserServiceTest {
 
         userService = new UserService(mapper, userRepository);
 
-        userData = UserData.builder()
+        creatingUserData = CreatingUserData.builder()
                 .id(givenSavedId)
                 .name(givenName)
                 .email(givenEmail)
                 .password(givenPassword)
                 .build();
 
-        user = mapper.map(userData, User.class);
+        user = mapper.map(creatingUserData, User.class);
     }
 
     void assertUser(User user) {
@@ -164,8 +165,8 @@ class UserServiceTest {
     class Describe_createUser {
         private User created;
 
-        private User subject(UserData userData) {
-            return userService.createUser(userData);
+        private User subject(CreatingUserData creatingUserData) {
+            return userService.createUser(creatingUserData);
         }
 
         @BeforeEach
@@ -177,7 +178,7 @@ class UserServiceTest {
         @Test
         @DisplayName("user를 추가하고, 추가된 user를 리턴한다.")
         void it_create_user_and_return_created_user() {
-            created = subject(userData);
+            created = subject(creatingUserData);
 
             verify(userRepository).save(any(User.class));
 
@@ -190,14 +191,14 @@ class UserServiceTest {
     class Describe_updateUser {
         private Long givenId;
         private User modifying;
-        private UserData modifyingUserData;
+        private UpdatingUserData updatingUserData;
 
-        private User subject(UserData userData) {
-            return userService.updateUser(userData);
+        private User subject(UpdatingUserData updatingUserData) {
+            return userService.updateUser(updatingUserData);
         }
 
         private void setModifyingUserData() {
-            modifyingUserData = UserData.builder()
+            updatingUserData = UpdatingUserData.builder()
                     .id(givenId)
                     .name(givenChangedName)
                     .email(givenChangedEmail)
@@ -207,7 +208,7 @@ class UserServiceTest {
 
         private void setModifyingUserByMapper() {
             final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-            modifying = mapper.map(modifyingUserData, User.class);
+            modifying = mapper.map(updatingUserData, User.class);
         }
 
         @Nested
@@ -229,7 +230,7 @@ class UserServiceTest {
             @Test
             @DisplayName("user를 수정하고, 수정된 user를 리턴한다.")
             void it_modified_user_and_return_modified_user() {
-                modified = subject(modifyingUserData);
+                modified = subject(updatingUserData);
 
                 assertThat(modified.getClass()).isEqualTo(User.class);
                 assertThat(modified.getName()).isEqualTo(givenChangedName);
@@ -256,7 +257,7 @@ class UserServiceTest {
             @DisplayName("user를 찾을 수 없다는 exception을 던진다.")
             void it_throw_user_not_found_exception() {
                 assertThatThrownBy(
-                        () -> subject(modifyingUserData),
+                        () -> subject(updatingUserData),
                         "user를 찾을 수 없다는 예외를 던져야 합니다."
                 ).isInstanceOf(UserNotFoundException.class);
             }
