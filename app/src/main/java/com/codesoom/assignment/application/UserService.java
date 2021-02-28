@@ -2,17 +2,25 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
 
 /**
  * 유저 정보를 관리하는 서비스.
  */
 public class UserService {
+    private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
+
     /**
      * 주어진 유저를 생성합니다.
      *
      * @param user 생성할 정보가 담긴 유저 객체.
      */
     public void create(User user) {
+        userRepository.save(user);
     }
 
     /**
