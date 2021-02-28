@@ -53,7 +53,6 @@ public class UserController {
      * 유저 정보 삭제요청을 받고, 요쳥에 대한 결과를 반환한다.
      *
      * @param id 삭제할 유저의 id
-     * @return User 삭제된 유저정보
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
