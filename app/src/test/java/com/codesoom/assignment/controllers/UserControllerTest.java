@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -26,6 +27,7 @@ import java.io.OutputStream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -101,11 +103,91 @@ class UserControllerTest {
         @Test
         @DisplayName("201 Created와 생성된 유저정보를 가지고 있다.")
         void it_has_201_created_and_created_user() throws Exception {
-            given(userService.createUser(any(UserData.class))).willReturn(user);
+            given(userService.createUser(any(UserData.class)))
+                    .willReturn(user);
 
             mockMvc.perform(requestBuilder)
                     .andExpect(status().isCreated())
                     .andExpect(content().json(userJsonString));
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /users/{id} 요청에 대한 응답")
+    class Describe_response_od_patch_users_id_request {
+        private Long givenId;
+
+        @Nested
+        @DisplayName("저장된 user의 id를 가지고 있다면")
+        class Context_with_saved_user_id {
+            @BeforeEach
+            void setRequest() throws IOException {
+                givenId = givenSavedId;
+
+                userData = UserData.builder()
+                        .id(givenId)
+                        .name(givenChangedName)
+                        .email(givenChangedEmail)
+                        .password(givenChangedPassword)
+                        .build();
+
+                final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+                user = mapper.map(userData, User.class);
+
+                setUserJsonString(user);
+
+                requestBuilder = patch("/users/{id}", givenId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJsonString);
+            }
+
+            @Test
+            @DisplayName("200 Ok와 수정된 user를 응답한다.")
+            void it_has_200_ok_and_updated_user() throws Exception {
+                given(userService.updateUser(any(UserData.class)))
+                        .willReturn(user);
+
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isOk())
+                        .andExpect(content().json(userJsonString));
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 user의 id를 가지고 있다면")
+        class Context_with_unsaved_user_id {
+            @BeforeEach
+            void setRequest() throws IOException {
+                givenId = givenUnsavedId;
+
+                userData = UserData.builder()
+                        .id(givenId)
+                        .name(givenChangedName)
+                        .email(givenChangedEmail)
+                        .password(givenChangedPassword)
+                        .build();
+
+                final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+                user = mapper.map(userData, User.class);
+
+                setUserJsonString(user);
+
+                requestBuilder = patch("/users/{id}", givenId)
+                        .accept(MediaType.APPLICATION_JSON)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userJsonString);
+
+                given(userService.updateUser(any(UserData.class)))
+                        .willThrow(new UserNotFoundException(givenId));
+            }
+
+            @Test
+            @DisplayName("404 Not Found를 응답한다.")
+            void it_respond_404_not_found() throws Exception {
+                mockMvc.perform(requestBuilder)
+                        .andExpect(status().isNotFound());
+            }
         }
     }
 }
