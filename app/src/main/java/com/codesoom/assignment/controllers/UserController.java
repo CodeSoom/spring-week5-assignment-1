@@ -22,7 +22,7 @@ public class UserController {
     }
 
     /**
-     * 유저 생성 요청을 받고, 요쳥에 대한 결과를 반환한다.
+     * 유저 생성 요청을 받고, 요청에 대한 결과를 반환한다.
      *
      * @param userData 생성할 유저의 데이터
      * @return User 생성한 유저정보
