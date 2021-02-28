@@ -95,4 +95,34 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("delete 메서드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("주어진 id에 해당하는 유저가 존재할 때")
+        class Context_with_exists_given_id_user {
+            @BeforeEach
+            void setup() {
+                userRepository.save(givenUser);
+            }
+
+            @Test
+            @DisplayName("id에 해당하는 유저를 변경한다.")
+            void It_delete_user() {
+                userService.delete(givenID);
+            }
+        }
+
+        @Nested
+        @DisplayName("주어진 id에 해당하는 유저가 존재할 때")
+        class Context_without_exists_given_id_user {
+            @Test
+            @DisplayName("UserNotFoundException 을 던진다.")
+            void It_throws_UserNotFoundException() {
+                assertThatThrownBy(() -> userService.delete(givenID))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
 }
