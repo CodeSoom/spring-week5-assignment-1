@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
@@ -28,15 +29,30 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 @WebMvcTest(controllers = UserController.class)
 class UserControllerTest {
-    final Long EXIST_ID = 1L;
-    final Long NOT_EXIST_ID = 1000L;
-    final String NAME = "My Name";
-    final String EMAIL = "my@gmail.com";
-    final String PASSWORD = "My Password";
-    final String INVALID_EMAIL = "gmail.com";
+    @Value("${test.id-info.exist-id}")
+    private Long EXIST_ID;
 
-    final String UPDATE_NAME = "Your Name";
-    final String UPDATE_PASSWORD = "Your Password";
+    @Value("${test.id-info.not-exist-id}")
+    private Long NOT_EXIST_ID;
+
+    @Value("${test.create-info.name}")
+    private String NAME;
+
+    @Value("${test.create-info.email}")
+    private String EMAIL;
+
+    @Value("${test.create-info.invalid-email}")
+    private String INVALID_EMAIL;
+
+    @Value("${test.create-info.password}")
+    private String PASSWORD;
+
+    @Value("${test.update-info.name}")
+    private String UPDATE_NAME;
+
+    @Value("${test.update-info.password}")
+    private String UPDATE_PASSWORD;
+
 
     @Autowired
     private MockMvc mockMvc;

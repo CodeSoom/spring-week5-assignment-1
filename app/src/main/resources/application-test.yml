@@ -12,6 +12,7 @@ test:
   create-info:
     name: My Name
     email: my@gmail.com
+    invalid-email: gmail.com
     password: My Password
   update-info:
     name: Your Name
