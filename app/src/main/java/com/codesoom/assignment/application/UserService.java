@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserEmailDuplicationException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
@@ -29,7 +30,19 @@ public class UserService {
      * @return 저장된 user
      */
     public User createUser(User user) {
+        validateUser(user);
         return userRepository.save(user);
+    }
+
+    /**
+     * 주어진 user가 유효한 정보인지 확인합니다.
+     *
+     * @param user 저장하고자 하는 user
+     */
+    private void validateUser(User user) {
+        if (userRepository.existsByEmail(user.getEmail())) {
+            throw new UserEmailDuplicationException(user);
+        }
     }
 
     /**

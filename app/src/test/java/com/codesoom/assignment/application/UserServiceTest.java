@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserEmailDuplicationException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
@@ -74,19 +75,38 @@ class UserServiceTest {
     @DisplayName("createUser()")
     @Nested
     class Describe_create {
+
+        User subject(User user) {
+            return userService.createUser(user);
+        }
+
         @Nested
         @DisplayName("유저 정보가 주어진다면")
         class Context_with_user {
-
-            User subject(User user) {
-                return userService.createUser(user);
-            }
 
             @DisplayName("생성된 user를 반환한다")
             @Test
             void it_returns_user() {
                 User user = subject(givenUser);
                 assertThat(isEquals(givenUser, user)).isTrue();
+            }
+        }
+
+        @Nested
+        @DisplayName("중복된 이메일 정보가 주어진다면")
+        class Context_with_duplicate_email {
+
+            @BeforeEach
+            void setUp() {
+                given(userRepository.existsByEmail(EMAIL))
+                        .willReturn(true);
+            }
+
+            @DisplayName("중복된 이메일로 인하여 유저 생성에 실패했다는 예외를 던진다")
+            @Test
+            void it_returns_duplicate_exception() {
+                assertThrows(UserEmailDuplicationException.class,
+                        () -> subject(givenUser));
             }
         }
     }

@@ -19,4 +19,6 @@ public interface JpaUserRepository
     void delete(User user);
 
     void deleteAll();
+
+    boolean existsByEmail(String email);
 }

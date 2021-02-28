@@ -30,4 +30,12 @@ public interface UserRepository {
      * @param user 삭제하고자 하는 user
      */
     void delete(User user);
+
+    /**
+     * 주어진 email의 존재유무를 반환합니다.
+     *
+     * @param email 확인하고자 하는 email
+     * @return 존재 여부
+     */
+    boolean existsByEmail(String email);
 }
