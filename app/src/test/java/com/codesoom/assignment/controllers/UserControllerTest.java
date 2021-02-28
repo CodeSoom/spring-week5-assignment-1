@@ -55,9 +55,15 @@ class UserControllerTest {
         @Nested
         @DisplayName("올바른 데이터가 주어졌을 때")
         class Context_with_correct_given_data {
+            private final User givenCorrectUser = new User(
+                    givenEmail,
+                    givenName,
+                    givenPassword
+            );
+
             @BeforeEach
             void setup() {
-                Mockito.doNothing().when(userService).create(any(User.class));
+                Mockito.doNothing().when(userService).create(givenCorrectUser);
             }
 
             @Test
