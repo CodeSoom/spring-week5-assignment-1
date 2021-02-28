@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.WrongUserParameterException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -58,6 +59,9 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody UserData userData
     ) {
+        if (userData.isBlank()) {
+            throw new WrongUserParameterException("입력된 값이 없습니다.");
+        }
         final User user = mapper.map(userData, User.class);
 
         userService.modify(id, user);

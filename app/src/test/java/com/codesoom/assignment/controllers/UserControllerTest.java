@@ -156,6 +156,21 @@ class UserControllerTest {
                         .andExpect(status().isNotFound());
             }
         }
+
+        @Nested
+        @DisplayName("잘못된 값이 주어졌을 때")
+        class Context_when_given_invalid_params {
+            @Test
+            @DisplayName("bad request 를 응답한다.")
+            void It_respond_bad_request() throws Exception {
+                mockMvc.perform(
+                        patch("/users/{id}", givenID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userDataJSON("", "", ""))
+                )
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 
     @Nested

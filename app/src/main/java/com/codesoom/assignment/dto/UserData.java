@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.experimental.Accessors;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
@@ -17,17 +18,18 @@ public class UserData {
     @JsonProperty("id")
     Long id;
 
-    @NotBlank
+    @NotBlank(message = "email 은 빈칸일 수 없습니다.")
     @JsonProperty("email")
     @Mapping("email")
+    @Email
     String email;
 
-    @NotBlank
+    @NotBlank(message = "name 은 빈칸일 수 없습니다.")
     @JsonProperty("name")
     @Mapping("name")
     String name;
 
-    @NotBlank
+    @NotBlank(message = "password 는 빈칸일 수 없습니다.")
     @JsonProperty("password")
     @Mapping("password")
     String password;
@@ -40,8 +42,14 @@ public class UserData {
             @JsonProperty("password") String password
     ) {
         this.id = id;
-        this.email = email;
-        this.name = name;
-        this.password = password;
+        this.email = email == null ? "" : email;
+        this.name = name == null ? "" : name;
+        this.password = password == null ? "" : password;
+    }
+
+    public boolean isBlank() {
+        return this.email.isBlank() &&
+                this.name.isBlank() &&
+                this.password.isBlank();
     }
 }
