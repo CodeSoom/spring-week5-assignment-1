@@ -123,19 +123,17 @@ class UserControllerTest {
         verify(userService).createUser(any(UserData.class));
     }
 
-//    @Test
-//    @DisplayName("올바르지 않은 회원 정보가 주어지면, 상태코드 404를 리턴한다.")
-//    void createWithInvalidAttributes() throws Exception {
-//        mockMvc.perform(
-//                post("/user")
-//                        .accept(MediaType.APPLICATION_JSON_UTF8)
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(
-//                                "{\"name\" : \"mikekang\", \"email\" : \"test@github.com\", \"password\" : \"qwer1234\"}")
-//        )
-//                .andExpect(status().isBadRequest());
-//
-//    }
+    @Test
+    @DisplayName("올바르지 않은 회원 정보가 주어지면, 상태코드 404를 리턴한다.")
+    void createWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                post("/user")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isBadRequest());
+
+    }
 
     @Test
     void updateWithExistedUser() throws Exception {
