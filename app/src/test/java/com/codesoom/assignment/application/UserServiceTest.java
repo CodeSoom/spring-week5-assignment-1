@@ -6,6 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @DisplayName("UserService 클래스")
 class UserServiceTest {
     private final UserRepository userRepository = new UserRepository.Fake();
@@ -26,13 +28,16 @@ class UserServiceTest {
     @DisplayName("create 메서드는")
     class Describe_create {
         @Test
-        @DisplayName("유저를 생성한 뒤 아무일도 일어나지 않는다.")
+        @DisplayName("유저를 생성한 뒤 생성된 유저를 리턴한다.")
         void It_makes_user_and_nothing() {
-            userService.create(makeUser(
+            final User user = userService.create(makeUser(
                     givenEmail,
                     givenName,
                     givenPassword
             ));
+            assertThat(user.email()).isEqualTo(givenEmail);
+            assertThat(user.name()).isEqualTo(givenName);
+            assertThat(user.password()).isEqualTo(givenPassword);
         }
     }
 }
