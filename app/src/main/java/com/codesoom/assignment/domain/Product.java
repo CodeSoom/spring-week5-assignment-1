@@ -1,10 +1,7 @@
 package com.codesoom.assignment.domain;
 
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -38,10 +35,12 @@ public class Product {
         this.image = image;
     }
 
-    public void updateWith(Product source) {
+    public Product updateWith(Product source) {
         this.name = source.name;
         this.maker = source.maker;
         this.price = source.price;
         this.image = source.image;
+
+        return this;
     }
 }
