@@ -41,7 +41,7 @@ public class UserService {
     public User updateUser(Long id, UserData userData) {
         User user = findUser(id);
 
-        user.changWith(mapper.map(userData, User.class));
+        user.changeWith(mapper.map(userData, User.class));
 
         return user;
     }

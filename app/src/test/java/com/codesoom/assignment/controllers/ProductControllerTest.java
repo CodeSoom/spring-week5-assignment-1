@@ -33,14 +33,6 @@ class ProductControllerTest {
     @MockBean
     private ProductService productService;
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
-    private final Long exitedId = 1L;
-    private final Long notExistedId = 1000L;
-
-    private List<Product> products;
-
     @BeforeEach
     void setUp() {
         Product product = Product.builder()

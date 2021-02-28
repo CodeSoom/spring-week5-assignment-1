@@ -16,15 +16,12 @@ public class Product {
     @GeneratedValue
     private Long id;
 
-    @Setter
     private String name;
 
-    @Setter
     private String maker;
 
-    @Setter
     private Integer price;
-    @Setter
+
     private String imageUrl;
 
     public void changeWith(Product source) {

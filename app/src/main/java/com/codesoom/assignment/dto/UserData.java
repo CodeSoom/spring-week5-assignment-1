@@ -5,7 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
+
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,16 +14,19 @@ public class UserData {
 
     @NotBlank
     @Setter
+    @Getter
     @Mapping("name")
     private String name;
 
     @NotBlank
     @Setter
+    @Getter
     @Mapping("email")
     private String email;
 
     @NotBlank
     @Setter
+    @Getter
     @Mapping("password")
     private String password;
 

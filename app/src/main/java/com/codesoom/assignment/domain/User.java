@@ -6,10 +6,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+@lombok.Generated
 @Getter
-@Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 @Builder
 public class User {
@@ -24,8 +23,15 @@ public class User {
 
     private String password;
 
-    public void changWith(User source) {
-        this.id = source.id;
+    @Builder
+    public User(Long id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    public void changeWith(User source) {
         this.name = source.name;
         this.email = source.email;
         this.password = source.password;
