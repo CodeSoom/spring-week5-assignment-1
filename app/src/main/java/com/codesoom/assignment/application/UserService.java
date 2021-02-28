@@ -31,11 +31,15 @@ public class UserService {
     /**
      * 주어진 id에 해당하는 유저를 변경합니다.
      *
-     * @param id   대상 유저 id.
-     * @param user 변경할 정보가 담긴 유저 객체.
+     * @param id     대상 유저 id.
+     * @param source 변경할 정보가 담긴 유저 객체.
      * @throws UserNotFoundException 대상 유저 id를 찾지 못했을 때.
      */
-    public void modify(long id, User user) throws UserNotFoundException {
+    public void modify(long id, User source) throws UserNotFoundException {
+        User user = userRepository
+                .findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+        user.Change(source);
     }
 
     /**

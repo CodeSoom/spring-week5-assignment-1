@@ -44,4 +44,10 @@ public class User {
         this.name = name;
         this.password = password;
     }
+
+    public void Change(User source) {
+        this.email = source.email();
+        this.name = source.name();
+        this.password = source.password();
+    }
 }
