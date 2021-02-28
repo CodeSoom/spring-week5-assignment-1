@@ -47,9 +47,8 @@ public class UserData {
         this.password = password == null ? "" : password;
     }
 
-    public boolean isBlank() {
-        return this.email.isBlank() &&
-                this.name.isBlank() &&
+    public boolean isValid() {
+        return this.name.isBlank() ||
                 this.password.isBlank();
     }
 }
