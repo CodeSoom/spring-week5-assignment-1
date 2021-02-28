@@ -23,6 +23,8 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 class ProductServiceTest {
+    private static final Long EXIST_ID = 1L;
+    private static final Long NOT_EXIST_ID = 123L;
 
     private static final String NAME = "뱀 장난감";
     private static final String MAKER = "야옹이네 장난감";
@@ -57,13 +59,13 @@ class ProductServiceTest {
 
         given(productRepository.findAll()).willReturn(products);
 
-        given(productRepository.findById(1L))
+        given(productRepository.findById(EXIST_ID))
                 .willReturn(Optional.of(product));
 
         given(productRepository.save(any(Product.class)))
                 .will(invocation -> invocation.<Product>getArgument(0));
 
-        given(productRepository.findById(1L))
+        given(productRepository.findById(EXIST_ID))
                 .willReturn(Optional.of(product));
     }
 
@@ -134,9 +136,9 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 ID를 갖는 상품을 반환한다")
             void it_returns_product() {
-                product = productService.getProduct(1L);
+                product = productService.getProduct(EXIST_ID);
 
-                verify(productRepository).findById(1L);
+                verify(productRepository).findById(EXIST_ID);
 
                 getProductTest(product);
             }
@@ -149,7 +151,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("해당 상품을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
-                assertThatThrownBy(() -> productService.getProduct(100L))
+                assertThatThrownBy(() -> productService.getProduct(NOT_EXIST_ID))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -191,16 +193,16 @@ class ProductServiceTest {
 
                 Product updatedProduct = productService.createProduct(update);
 
-                given(productRepository.findById(1L))
+                given(productRepository.findById(EXIST_ID))
                         .willReturn(Optional.of(updatedProduct));
             }
 
             @Test
             @DisplayName("해당 ID를 갖는 상품의 정보를 수정하고 반환한다")
             void it_returns_updated_product() {
-                productService.updateProduct(1L, update);
+                productService.updateProduct(EXIST_ID, update);
 
-                verify(productRepository).findById(1L);
+                verify(productRepository).findById(EXIST_ID);
 
                 updateTest(update);
             }
@@ -213,7 +215,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("수정할 상품을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
-                assertThatThrownBy(() -> productService.updateProduct(100L, update))
+                assertThatThrownBy(() -> productService.updateProduct(NOT_EXIST_ID, update))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }
@@ -233,12 +235,12 @@ class ProductServiceTest {
             void it_returns_deleted_product() {
                 product = new Product();
 
-                productService.deleteProduct(1L);
+                productService.deleteProduct(EXIST_ID);
 
-                verify(productRepository).findById(1L);
+                verify(productRepository).findById(EXIST_ID);
                 verify(productRepository).delete(any(Product.class));
 
-                assertThat(productRepository.findAll()).isNotIn(1L);
+                assertThat(productRepository.findAll()).isNotIn(EXIST_ID);
             }
         }
 
@@ -249,7 +251,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("삭제할 상품을 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
-                assertThatThrownBy(() -> productService.deleteProduct(100L))
+                assertThatThrownBy(() -> productService.deleteProduct(NOT_EXIST_ID))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }

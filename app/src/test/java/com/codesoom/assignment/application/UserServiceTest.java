@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
@@ -23,6 +22,9 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 class UserServiceTest {
+    private static final Long EXIST_ID = 1L;
+    private static final Long NOT_EXIST_ID = 123L;
+
     private static final String NAME = "양효주";
     private static final String EMAIL = "yhyojoo@codesoom.com";
     private static final String PASSWORD = "112233!!";
@@ -52,7 +54,7 @@ class UserServiceTest {
         given(userRepository.save(any(User.class)))
                 .will(invocation -> invocation.<Product>getArgument(0));
 
-        given(userRepository.findById(1L))
+        given(userRepository.findById(EXIST_ID))
                 .willReturn(Optional.of(user));
     }
 
@@ -97,16 +99,16 @@ class UserServiceTest {
 
                 User updatedUser = userService.createUser(update);
 
-                given(userRepository.findById(1L))
+                given(userRepository.findById(EXIST_ID))
                         .willReturn(Optional.of(updatedUser));
             }
 
             @Test
             @DisplayName("해당 ID를 갖는 사용자의 정보를 수정한다")
             void it_returns_updated_product() {
-                userService.updateUser(1L, update);
+                userService.updateUser(EXIST_ID, update);
 
-                verify(userRepository).findById(1L);
+                verify(userRepository).findById(EXIST_ID);
 
                 updateTest(update);
             }
@@ -119,7 +121,7 @@ class UserServiceTest {
             @Test
             @DisplayName("수정할 사용자를 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
-                assertThatThrownBy(() -> userService.updateUser(100L, update))
+                assertThatThrownBy(() -> userService.updateUser(NOT_EXIST_ID, update))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
@@ -139,9 +141,9 @@ class UserServiceTest {
             void it_returns_deleted_user() {
                 user = new User();
 
-                userService.deleteUser(1L);
+                userService.deleteUser(EXIST_ID);
 
-                verify(userRepository).findById(1L);
+                verify(userRepository).findById(EXIST_ID);
                 verify(userRepository).delete(any(User.class));
             }
         }
@@ -153,7 +155,7 @@ class UserServiceTest {
             @Test
             @DisplayName("삭제할 사용자를 찾을 수 없다는 예외를 던진다")
             void it_returns_warning_message() {
-                assertThatThrownBy(() -> userService.deleteUser(100L))
+                assertThatThrownBy(() -> userService.deleteUser(NOT_EXIST_ID))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
