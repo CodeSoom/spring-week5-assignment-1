@@ -32,10 +32,14 @@ class UserControllerTest {
         User user = new User(1L,"홍길동", "test@gmail.com", "1234");
         given(userService.createUser(any(User.class))).willReturn(user);
 
+
         mockMvc.perform(post("/users")
                 .accept(MediaType.APPLICATION_PROBLEM_JSON_UTF8)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{\"name:홍길동\", \"email:test@gmail.com\", \"password:1234\"}")
         )
                 .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("홍길동")));
+                .andExpect(content().string(containsString("\"name\":\"홍길동\"")))
+                .andExpect(content().string(containsString("\"email\":\"test@gmail.com\"")));
     }
 }
