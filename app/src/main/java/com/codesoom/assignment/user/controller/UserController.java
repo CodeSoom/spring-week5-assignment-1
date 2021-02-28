@@ -55,7 +55,7 @@ public class UserController {
      * @return 찾은 회원
      */
     @GetMapping("{id}")
-    public UserResponse find(@PathVariable Long id) {
+    public UserResponse findOne(@PathVariable Long id) {
         User user = userService.getUser(id);
 
         return mapper.map(user, UserResponse.class);
