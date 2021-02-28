@@ -31,7 +31,7 @@ public class ProductData {
     @Mapping("imageUrl")
     private String imageUrl;
 
-    @Builder
+    @Builder(toBuilder = true)
     public ProductData(String name, String maker, Integer price, String imageUrl) {
         this.name = name;
         this.maker = maker;

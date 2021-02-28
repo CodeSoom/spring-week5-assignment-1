@@ -23,12 +23,12 @@ public class UserService {
     }
 
     /**
-     * 주어진 식별자 해당하는 사용자를 리턴한다.
+     * 주어진 식별자에 해당하는 사용자를 리턴한다.
      *
      * @param id - 조회하려는 사용자의 식별자
-     * @return 주어진 {@code id}에 해당하는 식별자
+     * @return 주어진 {@code id}에 해당하는 사용자
      * @throws UserNotFoundException 만약
-     *         {@code id}가 저장되어 있지 않은 경우
+     *         {@code id}에 해당되는 사용자가 저장되어 있지 않은 경우
      */
     public User getUser(Long id) {
         return userRepository.findById(id)
@@ -53,20 +53,22 @@ public class UserService {
      * @param userData - 수정 할 새로운 사용자
      * @return 수정 된 사용자
      * @throws UserNotFoundException 만약
-     *         {@code id}가 저장되어 있지 않은 경우
+     *         {@code id}에 해당되는 사용자가 저장되어 있지 않은 경우
      */
     public User updateUser(Long id, UserData userData) {
-        User user = getUser(id);
-
-        if(userData.getName().equals(""))
+        if(userData.isNameWrong()) {
             throw new UserBadRequestException("name");
+        }
 
-        if(userData.getEmail().equals(""))
+        if(userData.isEmailWrong()) {
             throw new UserBadRequestException("email");
+        }
 
-        if(userData.getPassword().equals("")) {
+        if(userData.isPasswordWrong()) {
             throw new UserBadRequestException("password");
         }
+
+        User user = getUser(id);
 
         mapper.map(userData, user);
 
@@ -79,7 +81,7 @@ public class UserService {
      * @param id - 삭제하고자 하는 사용자의 식별자
      * @return 삭제 된 사용자
      * @throws UserNotFoundException 만약 주어진
-     *         {@code id}가 저장되어 있지 않은 경우
+     *         {@code id}에 해당되는 사용자가 저장되어 있지 않은 경우
      */
     public User deleteUser(Long id) {
         User user = getUser(id);

@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @AutoConfigureMockMvc
 @WebMvcTest(UserController.class)
@@ -38,6 +39,9 @@ class UserControllerTest {
 
     @MockBean
     UserService userService;
+
+    @Autowired
+    private WebApplicationContext wac;
 
     private final String CREATE_USER_NAME = "createdName";
     private final String CREATE_USER_EMAIL = "createdEmail";
@@ -56,6 +60,11 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
+        mockMvc = webAppContextSetup(wac).addFilter(((request, response, chain) -> {
+            response.setCharacterEncoding("UTF-8");
+            chain.doFilter(request, response);
+        })).build();
+
         setUpUser = User.builder()
                         .id(EXISTED_ID)
                         .name(CREATE_USER_NAME)
@@ -154,7 +163,7 @@ class UserControllerTest {
                 given(userService.updateUser(eq(givenNotExistedId), any(UserData.class)))
                         .willThrow(new UserNotFoundException(givenNotExistedId));
 
-                mockMvc.perform(patch("/users/"+givenNotExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(patch("/users/"+givenNotExistedId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"createdUser\" , \"email\":\"createdEmail\", \"password\":\"createdPassword\"}"))
                         .andDo(print())
@@ -198,7 +207,7 @@ class UserControllerTest {
                 given(userService.deleteUser(givenNotExistedId))
                         .willThrow(new UserNotFoundException(givenNotExistedId));
 
-                mockMvc.perform(delete("/users/"+givenNotExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(delete("/users/"+givenNotExistedId)
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(content().string(containsString("User not found")))
                         .andExpect(status().isNotFound());

@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -27,8 +26,6 @@ public class UserController {
      *
      * @param userData - 새로 저장하고자 하는 사용자
      * @return 저장 된 사용자
-     * @throws MethodArgumentNotValidException 만약 주어진 사용자의
-     *         이름이 비어있거나, 이메일이 비어있거나, 비밀번호가 비어있는 경우
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -42,13 +39,11 @@ public class UserController {
      * @param id - 수정하고자 하는 사용자의 식별자
      * @param userData - 수정 할 새로운 사용자
      * @return 수정 된 사용자
-     * @throws MethodArgumentNotValidException 만약 주어진 사용자
-     *         이름이 비어있거나, 이메일이 비어있거나, 비밀번호가 비어있는 경우
      */
     @PatchMapping("/{id}")
     public User update(
             @PathVariable Long id,
-            @RequestBody @Valid UserData userData) {
+            @RequestBody UserData userData) {
 
         return userService.updateUser(id, userData);
     }

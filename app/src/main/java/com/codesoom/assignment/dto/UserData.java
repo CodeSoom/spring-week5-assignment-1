@@ -35,6 +35,33 @@ public class UserData {
         this.password = password;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        if (!(o instanceof UserData))
+            return false;
+
+        UserData userData = (UserData) o;
+
+        return (userData.name).equals(this.name) && (userData.email).equals(this.email)
+                && (userData.password).equals(this.password);
+    }
+
+    public boolean isNameWrong() {
+        return this.name != null && this.name.equals("");
+    }
+
+    public boolean isEmailWrong() {
+        return this.email != null && this.email.equals("");
+    }
+
+    public boolean isPasswordWrong() {
+        return this.password != null && this.password.equals("");
+    }
+
     /** 사용자 정보를 Entity로 만든다 */
 //    public User toEntity() {
 //        return User.builder()

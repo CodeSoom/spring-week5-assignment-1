@@ -10,7 +10,6 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -41,7 +40,7 @@ public class ProductService {
      * @param id - 조회하고자 하는 상품의 식별자
      * @return 주어진 식별자에 해당하는 상품
      * @throws ProductNotFoundException 만약 주어진
-     *         {@code id}가 저장되어 있지 않은 경우
+     *         {@code id}에 해당되는 상품이 저장되어 있지 않은 경우
      */
     public Product getProduct(Long id) {
         return productRepository.findById(id)
@@ -79,7 +78,7 @@ public class ProductService {
      * @param productData - 수정 할 새로운 상품
      * @return 수정 된 상품
      * @throws ProductNotFoundException 만약 주어진
-     *         {@code id}가 저장되어 있지 않은 경우
+     *         @code id}에 해당되는 상품이 저장되어 있지 않은 경우
      */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = getProduct(id);
@@ -95,7 +94,7 @@ public class ProductService {
      * @param id - 삭제하고자 하는 상품의 식별자
      * @return 삭제 된 상품
      * @throws ProductNotFoundException 만약
-     *         {@code id}가 저장되어 있지 않은 경우
+     *         @code id}에 해당되는 상품이 저장되어 있지 않은 경우
      */
     public Product deleteProduct(Long id) {
         Product product = getProduct(id);

@@ -17,6 +17,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +31,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.setup.MockMvcBuilders.webAppContextSetup;
 
 @AutoConfigureMockMvc
 @WebMvcTest(ProductController.class)
@@ -40,6 +42,9 @@ class ProductControllerTest {
 
     @MockBean
     private ProductService productService;
+
+    @Autowired
+    private WebApplicationContext wac;
 
     private final String SETUP_PRODUCT_NAME = "setupName";
     private final String SETUP_PRODUCT_MAKER = "setupMaker";
@@ -67,6 +72,11 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
+        mockMvc = webAppContextSetup(wac).addFilter(((request, response, chain) -> {
+            response.setCharacterEncoding("UTF-8");
+            chain.doFilter(request, response);
+        })).build();
+
         setupProduct = Product.builder()
                 .id(EXISTED_ID)
                 .name(SETUP_PRODUCT_NAME)
@@ -195,7 +205,7 @@ class ProductControllerTest {
                 given(productService.createProduct(any(ProductData.class)))
                         .willThrow(new ProductBadRequestException("name"));
 
-                mockMvc.perform(post("/products").accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\" , \"maker\":\"createdMaker\", \"price\":200, \"image\":\"createdImage\"}"))
                         .andDo(print())
@@ -213,7 +223,7 @@ class ProductControllerTest {
                 given(productService.createProduct(any(ProductData.class)))
                         .willThrow(new ProductBadRequestException("maker"));
 
-                mockMvc.perform(post("/products").accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"createdName\" , \"maker\":\"\", \"price\":200, \"image\":\"createdImage\"}"))
                         .andDo(print())
@@ -231,7 +241,7 @@ class ProductControllerTest {
                 given(productService.createProduct(any(ProductData.class)))
                         .willThrow(new ProductBadRequestException("price"));
 
-                mockMvc.perform(post("/products").accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"createdName\" , \"maker\":\"createdMaker\", \"price\": null, \"image\":\"createdImage\"}"))
                         .andDo(print())
@@ -315,7 +325,7 @@ class ProductControllerTest {
                 given(productService.updateProduct(eq(givenExistedId), any(ProductData.class)))
                         .willThrow(new ProductBadRequestException("name"));
 
-                mockMvc.perform(patch("/products/" + givenExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(patch("/products/" + givenExistedId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\" , \"maker\":\"updatedMaker\", \"price\":300, \"image\":\"updatedImage\"}"))
                         .andDo(print())
@@ -335,7 +345,7 @@ class ProductControllerTest {
                 given(productService.updateProduct(eq(givenExistedId), any(ProductData.class)))
                         .willThrow(new ProductBadRequestException("maker"));
 
-                mockMvc.perform(patch("/products/" + givenExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(patch("/products/" + givenExistedId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"updatedName\" , \"maker\":\"\", \"price\":300, \"image\":\"updatedImage\"}"))
                         .andDo(print())
@@ -355,7 +365,7 @@ class ProductControllerTest {
                 given(productService.updateProduct(eq(givenExistedId), any(ProductData.class)))
                         .willThrow(new ProductBadRequestException("price"));
 
-                mockMvc.perform(patch("/products/" + givenExistedId).accept(MediaType.APPLICATION_JSON_UTF8)
+                mockMvc.perform(patch("/products/" + givenExistedId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"updatedName\" , \"maker\":\"updatedMaker\", \"price\": null, \"image\":\"updatedImage\"}"))
                         .andDo(print())
