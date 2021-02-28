@@ -48,7 +48,7 @@ public class UserData {
     }
 
     public boolean isValid() {
-        return this.name.isBlank() ||
-                this.password.isBlank();
+        return !this.name.isBlank() ||
+                !this.password.isBlank();
     }
 }

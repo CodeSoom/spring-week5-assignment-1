@@ -61,7 +61,7 @@ public class UserController {
     ) {
         System.out.printf("email: %s, name: %s, password: %s\n", userData.email(), userData.name(), userData.password());
 
-        if (userData.isValid()) {
+        if (!userData.isValid()) {
             throw new WrongUserParameterException("입력된 값이 없습니다.");
         }
         final User user = mapper.map(userData, User.class);
