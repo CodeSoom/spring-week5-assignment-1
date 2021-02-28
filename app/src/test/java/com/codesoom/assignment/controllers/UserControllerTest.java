@@ -16,6 +16,8 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,7 +57,8 @@ class UserControllerTest {
         @Nested
         @DisplayName("올바른 데이터가 주어졌을 때")
         class Context_with_correct_given_data {
-            private final User givenCorrectUser = new User(
+            private final User createdUser = new User(
+                    1L,
                     givenEmail,
                     givenName,
                     givenPassword
@@ -63,7 +66,8 @@ class UserControllerTest {
 
             @BeforeEach
             void setup() {
-                Mockito.doNothing().when(userService).create(givenCorrectUser);
+                given(userService.create(any(User.class)))
+                        .willReturn(createdUser);
             }
 
             @Test
@@ -114,6 +118,19 @@ class UserControllerTest {
         @Nested
         @DisplayName("주어진 id에 해당하는 유저가 존재할 때")
         class Context_when_exists_given_id_user {
+            private final User givenUser = new User(
+                    givenEmail,
+                    givenChangedName,
+                    givenPassword
+            );
+
+            @BeforeEach
+            void setup() {
+                Mockito.doNothing()
+                        .when(userService)
+                        .modify(eq(givenID), any(User.class));
+            }
+
             @Test
             @DisplayName("변경된 유저 정보와 함께 status ok 를 응답한다.")
             void It_respond_modify_user_info() throws Exception {
@@ -181,6 +198,13 @@ class UserControllerTest {
         @Nested
         @DisplayName("주어진 id의 user 가 존재할 때")
         class Context_when_exists_given_id_user {
+            @BeforeEach
+            void setup() {
+                Mockito.doNothing()
+                        .when(userService)
+                        .delete(givenID);
+            }
+
             @Test
             @DisplayName("no content 를 응답한다.")
             void It_respond_no_content() throws Exception {
