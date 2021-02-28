@@ -6,23 +6,17 @@ import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class UserService {
     private final Mapper mapper;
     private final UserRepository userRepository;
-
-    public UserService(
-            Mapper dozerMapper,
-            UserRepository userRepository
-    ) {
-        this.mapper = dozerMapper;
-        this.userRepository = userRepository;
-    }
 
     public User getUser(Long id) {
         return findUser(id);
