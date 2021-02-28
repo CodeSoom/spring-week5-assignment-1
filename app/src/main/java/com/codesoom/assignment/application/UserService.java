@@ -49,5 +49,10 @@ public class UserService {
      * @throws UserNotFoundException 대상 유저 id를 찾지 못했을 때.
      */
     public void delete(Long id) throws UserNotFoundException {
+        try {
+            userRepository.deleteById(id);
+        } catch (Exception ignored) {
+            throw new UserNotFoundException(id);
+        }
     }
 }

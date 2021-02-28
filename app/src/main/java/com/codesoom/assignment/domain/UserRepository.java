@@ -9,7 +9,7 @@ public interface UserRepository {
 
     User save(User user);
 
-    void delete(User user);
+    void deleteById(Long id);
 
     public class Fake implements UserRepository {
         private final List<User> users = new ArrayList<>();
@@ -36,8 +36,8 @@ public interface UserRepository {
         }
 
         @Override
-        public void delete(User user) {
-
+        public void deleteById(Long id) {
+            users.remove(id.intValue() - 1);
         }
     }
 }
