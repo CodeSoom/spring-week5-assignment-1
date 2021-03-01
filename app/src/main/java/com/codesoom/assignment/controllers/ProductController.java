@@ -2,7 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductRequest;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,16 +31,16 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody @Valid ProductData productData) {
-        return productService.createProduct(productData);
+    public Product create(@RequestBody @Valid ProductRequest productRequest) {
+        return productService.createProduct(productRequest);
     }
 
     @PatchMapping("{id}")
     public Product update(
-            @PathVariable Long id,
-            @RequestBody @Valid ProductData productData
+        @PathVariable Long id,
+        @RequestBody @Valid ProductRequest productRequest
     ) {
-        return productService.updateProduct(id, productData);
+        return productService.updateProduct(id, productRequest);
     }
 
     @DeleteMapping("{id}")

@@ -3,7 +3,9 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductRequest;
+import com.github.dozermapper.core.Mapper;
+
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,9 +14,11 @@ import java.util.List;
 @Service
 @Transactional
 public class ProductService {
+    private final Mapper mapper;
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(Mapper dozerMapper, ProductRepository productRepository) {
+        this.mapper = dozerMapper;
         this.productRepository = productRepository;
     }
 
@@ -26,25 +30,15 @@ public class ProductService {
         return findProduct(id);
     }
 
-    public Product createProduct(ProductData productData) {
-        Product product = Product.builder()
-                .name(productData.getName())
-                .maker(productData.getMaker())
-                .price(productData.getPrice())
-                .imageUrl(productData.getImageUrl())
-                .build();
+    public Product createProduct(ProductRequest productRequest) {
+        Product product = mapper.map(productRequest, Product.class);
         return productRepository.save(product);
     }
 
-    public Product updateProduct(Long id, ProductData productData) {
+    public Product updateProduct(Long id, ProductRequest productRequest) {
         Product product = findProduct(id);
 
-        product.change(
-                productData.getName(),
-                productData.getMaker(),
-                productData.getPrice(),
-                productData.getImageUrl()
-        );
+        product.changeWith(mapper.map(productRequest, Product.class));
 
         return product;
     }
@@ -59,6 +53,6 @@ public class ProductService {
 
     private Product findProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+            .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
