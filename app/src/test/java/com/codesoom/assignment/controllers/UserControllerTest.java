@@ -150,9 +150,38 @@ class UserControllerTest {
     }
 
     @Test
+    void putWithExistedUser() throws Exception {
+        mockMvc.perform(
+                put("/users/1")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\" : \"jason\", \"email\" : \"test@github.com\", \"password\" : \"qwer1234\"}")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("jason")));
+
+        verify(userService).updateUser(eq(1L), any(UserData.class));
+    }
+
+    @Test
     void updateWithNotExistedUser() throws Exception {
         mockMvc.perform(
                 patch("/users/1000")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\" : \"jason\", \"email\" : \"test@github.com\", \"password\" : \"qwer1234\"}")
+        )
+                .andExpect(status().isNotFound());
+
+
+        verify(userService).updateUser(eq(1000L), any(UserData.class));
+
+    }
+
+    @Test
+    void putWithNotExistedUser() throws Exception {
+        mockMvc.perform(
+                put("/users/1000")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\" : \"jason\", \"email\" : \"test@github.com\", \"password\" : \"qwer1234\"}")
