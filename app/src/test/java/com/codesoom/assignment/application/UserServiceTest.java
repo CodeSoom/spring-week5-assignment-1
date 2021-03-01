@@ -138,6 +138,32 @@ class UserServiceTest {
     }
 
     @Test
+    void putUserWithExistedId() {
+        UserData userData = UserData.builder()
+                .name("jason")
+                .email("test@github.com")
+                .password("qwer1234")
+                .build();
+
+        User user = userService.putUser(1L, userData);
+
+        assertThat(user.getId()).isEqualTo(1L);
+        assertThat(user.getName()).isEqualTo("jason");
+    }
+
+    @Test
+    void putUserWithNotExistedId() {
+        UserData userData = UserData.builder()
+                .name("jason")
+                .email("test@gitbhub.com")
+                .password("qwer1234")
+                .build();
+
+        assertThatThrownBy(() -> userService.putUser(1000L, userData))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
     void deleteWithExistedId() {
         userService.deleteUser(1L);
 
