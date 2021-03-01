@@ -1,35 +1,30 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.User;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
-@Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductData {
-    private Long id;
+public class UserUpdateRequestDto {
 
     @NotBlank
     @Mapping("name")
     private String name;
 
     @NotBlank
-    @Mapping("maker")
-    private String maker;
+    @Mapping("password")
+    private String password;
 
-    @NotNull
-    @Mapping("price")
-    private Integer price;
-
-    @Mapping("imageUrl")
-    private String imageUrl;
+    public UserUpdateRequestDto(User user) {
+        this.name = user.getName();
+        this.password = user.getPassword();
+    }
 }

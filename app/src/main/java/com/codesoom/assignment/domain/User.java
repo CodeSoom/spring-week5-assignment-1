@@ -9,29 +9,27 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
+/**
+ * 유저 엔티티.
+ */
 @Getter
 @Builder
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class User {
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
 
-    private String maker;
+    private String email;
 
-    private Integer price;
+    private String password;
 
-    private String imageUrl;
-
-    public void change(Product product) {
-        this.name = product.name;
-        this.maker = product.maker;
-        this.price = product.price;
-        this.imageUrl = product.imageUrl;
+    public void change(User user) {
+        this.name = user.name;
+        this.password = user.password;
     }
-
 }

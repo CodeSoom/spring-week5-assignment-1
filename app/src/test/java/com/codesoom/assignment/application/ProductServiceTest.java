@@ -1,9 +1,11 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,11 +22,13 @@ import static org.mockito.Mockito.verify;
 class ProductServiceTest {
     private ProductService productService;
 
+    private Mapper dozerMapper = DozerBeanMapperBuilder.buildDefault();
+
     private ProductRepository productRepository = mock(ProductRepository.class);
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository);
+        productService = new ProductService(productRepository, dozerMapper);
 
         Product product = Product.builder()
                 .id(1L)

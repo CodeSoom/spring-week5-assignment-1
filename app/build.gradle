@@ -51,6 +51,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
+    // Dozer
+    implementation 'com.github.dozermapper:dozer-core:6.4.0'
+
     // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
