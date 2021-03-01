@@ -68,6 +68,9 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    //Dozer Mapper
+    implementation 'com.github.dozermapper:dozer-core:6.4.0'
 }
 
 application {
