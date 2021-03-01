@@ -22,8 +22,10 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
@@ -33,6 +35,13 @@ class ProductControllerTest {
     @MockBean
     private ProductService productService;
 
+    @Autowired
+    private ObjectMapper objectMapper;
+
+    private ProductData validProductData;
+    private ProductData invalidProductData;
+
+
     @BeforeEach
     void setUp() {
         Product product = Product.builder()
@@ -40,6 +49,7 @@ class ProductControllerTest {
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
+                .imageUrl("url")
                 .build();
 
         given(productService.getProducts()).willReturn(List.of(product));
@@ -106,7 +116,7 @@ class ProductControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
+                                "\"price\":5000,\"imageUrl\":\"www.nyang.com\"}")
         )
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("쥐돌이")));
@@ -122,7 +132,7 @@ class ProductControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
+                                "\"price\":5000,\"imageUrl\":\"www.nyang.com\"}")
         )
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("쥐돌이")));
@@ -151,7 +161,7 @@ class ProductControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
+                                "\"price\":5000,\"imageUrl\":\"www.nyang.com\"}")
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("쥐순이")));
@@ -166,7 +176,7 @@ class ProductControllerTest {
                 patch("/products/1000")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
+                                "\"price\":5000,\"imageUrl\":\"www.nyang.com\"}")
         )
                 .andExpect(status().isNotFound());
 
