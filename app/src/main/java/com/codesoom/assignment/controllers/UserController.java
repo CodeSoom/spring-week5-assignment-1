@@ -15,7 +15,7 @@ import java.util.Objects;
  */
 @RestController
 @CrossOrigin
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 

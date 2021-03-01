@@ -114,7 +114,6 @@ class UserServiceTest {
     @Test
     void updateUserWithExistedId() {
         UserData userData = UserData.builder()
-                .id(1L)
                 .name("jason")
                 .email("test@github.com")
                 .password("qwer1234")

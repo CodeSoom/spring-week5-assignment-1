@@ -82,7 +82,7 @@ class UserControllerTest {
     @Test
     void list() throws Exception{
         mockMvc.perform(
-                get("/user")
+                get("/users")
                     .accept(MediaType.APPLICATION_JSON_UTF8)
         )
                 .andExpect(status().isOk())
@@ -93,7 +93,7 @@ class UserControllerTest {
     @DisplayName("존재하는 회원 id가 주어지면, 찾은 회원과 상태코드 200을 응답한다.")
     void detailWithExistedUser() throws Exception {
         mockMvc.perform(
-                get("/user/1")
+                get("/users/1")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         )
                 .andExpect(status().isOk())
@@ -111,7 +111,7 @@ class UserControllerTest {
     @DisplayName("create는 회원정보를 주면 회원을 생성하고, 상태코드 201을 응답한다.")
     void create() throws Exception {
         mockMvc.perform(
-                post("/user")
+                post("/users")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(
@@ -127,7 +127,7 @@ class UserControllerTest {
     @DisplayName("올바르지 않은 회원 정보가 주어지면, 상태코드 404를 리턴한다.")
     void createWithInvalidAttributes() throws Exception {
         mockMvc.perform(
-                post("/user")
+                post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
         )
@@ -138,7 +138,7 @@ class UserControllerTest {
     @Test
     void updateWithExistedUser() throws Exception {
         mockMvc.perform(
-                patch("/user/1")
+                patch("/users/1")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content("{\"name\" : \"jason\", \"email\" : \"test@github.com\", \"password\" : \"qwer1234\"}")
@@ -152,7 +152,7 @@ class UserControllerTest {
     @Test
     void updateWithNotExistedUser() throws Exception {
         mockMvc.perform(
-                patch("/user/1000")
+                patch("/users/1000")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\" : \"jason\", \"email\" : \"test@github.com\", \"password\" : \"qwer1234\"}")
@@ -166,7 +166,7 @@ class UserControllerTest {
 
     @Test
     void destroyWithExistedUser() throws Exception {
-        mockMvc.perform(delete("/user/1"))
+        mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isNoContent());
 
         verify(userService).deleteUser(1L);
@@ -174,7 +174,7 @@ class UserControllerTest {
 
     @Test
     void destroyWithNotExistedUser() throws Exception {
-        mockMvc.perform(delete("/user/1000"))
+        mockMvc.perform(delete("/users/1000"))
                 .andExpect(status().isNotFound());
 
         verify(userService).deleteUser(1000L);
