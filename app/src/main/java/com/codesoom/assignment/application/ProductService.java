@@ -15,7 +15,6 @@ import java.util.List;
 /**
  * 상품 관련 비즈니스 로직을 담당합니다.
  */
-
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -24,11 +23,10 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     /**
-     * 저장된 상품 목록을 반환합니다.
+     * 등록된 상품 목록을 반환합니다.
      *
      * @return 저장된 상품 목록
      */
-
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
@@ -39,7 +37,6 @@ public class ProductService {
      * @param id
      * @return 해당 id를 갖는 상품
      */
-
     public Product getProduct(Long id) {
         return findProduct(id);
     }
@@ -50,7 +47,6 @@ public class ProductService {
      * @param productData
      * @return 등록된 상품
      */
-
     public Product createProduct(ProductData productData) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         Product product = mapper.map(productData, Product.class);
@@ -65,7 +61,6 @@ public class ProductService {
      * @param productData
      * @return 수정된 상품
      */
-
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
@@ -80,7 +75,6 @@ public class ProductService {
      * @param id
      * @return 삭제된 상품
      */
-
     public Product deleteProduct(Long id) {
         Product product = findProduct(id);
 
@@ -95,7 +89,6 @@ public class ProductService {
      * @param id
      * @return 해당 id를 갖는 상품
      */
-
     private Product findProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));

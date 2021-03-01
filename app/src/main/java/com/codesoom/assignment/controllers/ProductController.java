@@ -25,7 +25,6 @@ public class ProductController {
      *
      * @return 등록된 상품 목록
      */
-
     @GetMapping
     public List<Product> list() {
         return productService.getProducts();
@@ -37,7 +36,6 @@ public class ProductController {
      * @param id
      * @return 해당 상품 정보
      */
-
     @GetMapping("{id}")
     public Product detail(@PathVariable Long id) {
         return productService.getProduct(id);
@@ -49,7 +47,6 @@ public class ProductController {
      * @param productData
      * @return 등록된 상품 정보
      */
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody @Valid ProductData productData) {
@@ -63,7 +60,6 @@ public class ProductController {
      * @param productData
      * @return
      */
-
     @RequestMapping(value = "{id}", method = { RequestMethod.PUT, RequestMethod.PATCH })
     public Product update(@PathVariable Long id, @RequestBody @Valid ProductData productData) {
         return productService.updateProduct(id, productData);
@@ -74,7 +70,6 @@ public class ProductController {
      *
      * @param id
      */
-
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public void delete(@PathVariable Long id) {

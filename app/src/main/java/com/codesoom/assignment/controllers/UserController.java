@@ -25,7 +25,6 @@ public class UserController {
      * @param userData
      * @return 등록된 사용자 정보
      */
-
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody @Valid UserData userData) {
@@ -39,7 +38,6 @@ public class UserController {
      * @param userData
      * @return 수정된 사용자 정보
      */
-
     @PatchMapping("{id}")
     public User updateUser(@PathVariable Long id, @RequestBody @Valid UserData userData) {
         return userService.updateUser(id, userData);
@@ -50,7 +48,6 @@ public class UserController {
      *
      * @param id
      */
-
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public void deleteUser(@PathVariable Long id) {
