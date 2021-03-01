@@ -31,7 +31,7 @@ public class UserService {
     }
 
     /**
-     * 새로운 사용자를 등록합니다.
+     * 새로운 사용자를 등록하고, 등록된 사용자를 반환합니다.
      *
      * @param userData
      * @return 등록된 사용자

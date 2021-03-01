@@ -42,7 +42,7 @@ public class ProductService {
     }
 
     /**
-     * 새로운 상품을 등록합니다.
+     * 새로운 상품을 등록하고, 등록된 상품을 반환합니다.
      *
      * @param productData
      * @return 등록된 상품
