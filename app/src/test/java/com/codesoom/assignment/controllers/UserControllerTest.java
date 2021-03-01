@@ -75,6 +75,22 @@ class UserControllerTest {
         given(userService.updateUser(eq(1000L), any(UserData.class)))
                 .willThrow(new UserNotFoundException(1000L));
 
+        given(userService.putUser(eq(1L), any(UserData.class)))
+                .will(invocation -> {
+                    Long id = invocation.getArgument(0);
+                    UserData userData = invocation.getArgument(1);
+                    return User.builder()
+                            .id(id)
+                            .name(userData.getName())
+                            .email(userData.getEmail())
+                            .password(userData.getPassword())
+                            .build();
+                });
+
+        given(userService.putUser(eq(1000L), any(UserData.class)))
+                .willThrow(new UserNotFoundException(1000L));
+
+
         given(userService.deleteUser(1000L))
                 .willThrow(new UserNotFoundException(1000L));
     }
@@ -160,7 +176,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("jason")));
 
-        verify(userService).updateUser(eq(1L), any(UserData.class));
+        verify(userService).putUser(eq(1L), any(UserData.class));
     }
 
     @Test
@@ -189,7 +205,7 @@ class UserControllerTest {
                 .andExpect(status().isNotFound());
 
 
-        verify(userService).updateUser(eq(1000L), any(UserData.class));
+        verify(userService).putUser(eq(1000L), any(UserData.class));
 
     }
 
