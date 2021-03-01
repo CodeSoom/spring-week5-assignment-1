@@ -13,7 +13,6 @@ import java.util.List;
 
 @Service
 @Transactional
-@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
     private final Mapper mapper;
