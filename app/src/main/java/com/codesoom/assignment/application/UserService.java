@@ -60,4 +60,11 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public User putUser(Long id, UserData userData) {
+        User user = findUser(id);
+
+        user.changeWith(mapper.map(userData, User.class));
+
+        return user;
+    }
 }

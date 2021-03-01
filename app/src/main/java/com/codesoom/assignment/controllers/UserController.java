@@ -52,7 +52,7 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody @Valid UserData userData
     ) {
-        return userService.updateUser(id, userData);
+        return userService.putUser(id, userData);
     }
 
     @DeleteMapping("{id}")
