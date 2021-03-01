@@ -13,14 +13,15 @@ import javax.validation.constraints.NotNull;
 public class ProductData {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "name 은 빈칸일 수 없습니다.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "maker 는 빈칸일 수 없습니다.")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "price 는 null 일 수 없습니다.")
     private Integer price;
 
+    @NotBlank(message = "imageUrl 은 빈칸일 수 없습니다.")
     private String imageUrl;
 }
