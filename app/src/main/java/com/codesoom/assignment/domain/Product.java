@@ -1,19 +1,19 @@
 package com.codesoom.assignment.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
+// 1. Entity (domain)
+//  ** RDB의 Entity와 다름
+// 2. JPA의 Entity 역할도 같이 함
 @Getter
-@Builder
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class Product {
     @Id
     @GeneratedValue
@@ -25,15 +25,22 @@ public class Product {
 
     private Integer price;
 
-    private String imageUrl;
+    private String image;
 
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
+    @Builder
+    public Product(String name, String maker, Integer price, String image) {
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.imageUrl = imageUrl;
+        this.image = image;
+    }
+
+    public Product updateWith(Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
+        this.image = source.image;
+
+        return this;
     }
 }

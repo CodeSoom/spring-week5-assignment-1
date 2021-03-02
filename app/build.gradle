@@ -51,6 +51,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
+    // DozerMapper
+    implementation 'com.github.dozermapper:dozer-core:6.4.0'
+
     // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -59,7 +62,7 @@ dependencies {
 
     // Spring Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.h2database:h2'
+    implementation 'com.h2database:h2'
 
     // Spring Developer Tools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
@@ -97,12 +100,12 @@ jacocoTestCoverageVerification {
 
             limit {
                 counter = 'LINE'
-                minimum = 1
+                minimum = 0.5
             }
 
             limit {
                 counter = 'BRANCH'
-                minimum = 1
+                minimum = 0.5
             }
 
             excludes = [
