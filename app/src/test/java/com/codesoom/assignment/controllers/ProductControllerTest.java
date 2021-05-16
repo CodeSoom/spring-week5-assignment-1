@@ -1,10 +1,11 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -80,7 +81,7 @@ class ProductControllerTest {
     }
 
     @Test
-    void deatilWithExsitedProduct() throws Exception {
+    void detailWithExistedProduct() throws Exception {
         mockMvc.perform(
                 get("/products/1")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -90,9 +91,16 @@ class ProductControllerTest {
     }
 
     @Test
-    void deatilWithNotExsitedProduct() throws Exception {
+    void detailWithNotExistedProduct() throws Exception {
         mockMvc.perform(get("/products/1000"))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("1 미만의 유효하지 않은 Id로 GET /products/{id}를 요청하면 BadRequest Status를 응답한다")
+    void detailWithInvalidProductId() throws Exception {
+        mockMvc.perform(get("/products/0"))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -178,6 +186,19 @@ class ProductControllerTest {
     }
 
     @Test
+    @DisplayName("1 미만의 유효하지 않은 Id로 Patch /products/{id}를 요청하면 BadRequest Status를 응답한다")
+    void updateWithInvalidId() throws Exception {
+        mockMvc.perform(
+                patch("/products/-1")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"쥐순이\",\"maker\"\"낭이월드\"," +
+                                "\"price\":0}")
+        )
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void destroyWithExistedProduct() throws Exception {
         mockMvc.perform(delete("/products/1"))
                 .andExpect(status().isNoContent());
@@ -191,5 +212,12 @@ class ProductControllerTest {
                 .andExpect(status().isNotFound());
 
         verify(productService).deleteProduct(1000L);
+    }
+
+    @Test
+    @DisplayName("1 미만의 유효하지 않은 Id로 delete /products/{id}를 요청하면 BadRequest Status를 응답한다")
+    void destroyWithInvalidId() throws Exception {
+        mockMvc.perform(delete("/products/-1"))
+                .andExpect(status().isBadRequest());
     }
 }
