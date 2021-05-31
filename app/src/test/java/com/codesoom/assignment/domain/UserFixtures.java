@@ -31,7 +31,23 @@ public class UserFixtures {
         return User.builder()
                    .id(2L)
                    .name("Bob")
+                   .email("bob@codesoom.com")
                    .password("pw-bob")
                    .build();
+    }
+
+    public static UserData validBobData() {
+        return UserData.builder()
+                       .name("Bob")
+                       .email("bob@codesoom.com")
+                       .password("pw-bob")
+                       .build();
+    }
+
+    public static UserData invalidBobData() {
+        return UserData.builder()
+                       .name("Bob")
+                       .email("bob@codesoom.com")
+                       .build();
     }
 }

@@ -15,15 +15,15 @@ public class ErrorControllerAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
-    public ErrorResponse handleProductNotFound() {
-        return new ErrorResponse("Product Not Found");
+    public ErrorResponse handleProductNotFound(ProductNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage());
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleUserNotFound() {
-        return new ErrorResponse("User Not Found");
+    public ErrorResponse handleUserNotFound(UserNotFoundException ex) {
+        return new ErrorResponse(ex.getMessage());
     }
 
     @ResponseBody
