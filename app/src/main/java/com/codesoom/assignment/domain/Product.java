@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -27,13 +29,10 @@ public class Product {
 
     private String imageUrl;
 
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public void changeWith(Product source) {
+        this.name = source.getName();
+        this.maker = source.getMaker();
+        this.price = source.getPrice();
+        this.imageUrl = source.getImageUrl();
     }
 }
