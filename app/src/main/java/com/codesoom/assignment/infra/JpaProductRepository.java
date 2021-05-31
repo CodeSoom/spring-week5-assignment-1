@@ -8,6 +8,9 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * 상품 관련 Jpa를 처리하는 인터페이스.
+ */
 @Primary
 public interface JpaProductRepository
         extends ProductRepository, CrudRepository<Product, Long> {
