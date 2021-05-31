@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductFixtures;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
@@ -31,12 +32,7 @@ class ProductServiceTest {
     void setUp() {
         productService = new ProductService(productRepository, mapper);
 
-        Product product = Product.builder()
-                                 .id(1L)
-                                 .name("쥐돌이")
-                                 .maker("냥이월드")
-                                 .price(5000)
-                                 .build();
+        Product product = ProductFixtures.mouseDol();
 
         given(productRepository.findAll()).willReturn(List.of(product));
 
@@ -49,6 +45,7 @@ class ProductServiceTest {
                           .name(source.getName())
                           .maker(source.getMaker())
                           .price(source.getPrice())
+                          .imageUrl(source.getImageUrl())
                           .build();
         });
     }
@@ -87,11 +84,7 @@ class ProductServiceTest {
 
     @Test
     void createProduct() {
-        ProductData productData = ProductData.builder()
-                                             .name("쥐돌이")
-                                             .maker("냥이월드")
-                                             .price(5000)
-                                             .build();
+        ProductData productData = ProductFixtures.dataMouseDol();
 
         Product product = productService.createProduct(productData);
 
@@ -104,11 +97,7 @@ class ProductServiceTest {
 
     @Test
     void updateProductWithExistedId() {
-        ProductData productData = ProductData.builder()
-                                             .name("쥐순이")
-                                             .maker("냥이월드")
-                                             .price(5000)
-                                             .build();
+        ProductData productData = ProductFixtures.dataMouseSun();
 
         Product product = productService.updateProduct(1L, productData);
 
@@ -118,11 +107,7 @@ class ProductServiceTest {
 
     @Test
     void updateProductWithNotExistedId() {
-        ProductData productData = ProductData.builder()
-                                             .name("쥐순이")
-                                             .maker("냥이월드")
-                                             .price(5000)
-                                             .build();
+        ProductData productData = ProductFixtures.dataMouseSun();
 
         assertThatThrownBy(() -> productService.updateProduct(1000L, productData))
                 .isInstanceOf(ProductNotFoundException.class);

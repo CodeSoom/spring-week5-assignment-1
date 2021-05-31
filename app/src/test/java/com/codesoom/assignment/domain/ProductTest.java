@@ -23,12 +23,7 @@ class ProductTest {
 
     @Test
     void changeWith() {
-        Product product = Product.builder()
-                                 .id(1L)
-                                 .name("쥐돌이")
-                                 .maker("냥이월드")
-                                 .price(5000)
-                                 .build();
+        Product product = ProductFixtures.mouseDol();
 
         product.changeWith(Product.builder()
                                   .name("쥐순이")

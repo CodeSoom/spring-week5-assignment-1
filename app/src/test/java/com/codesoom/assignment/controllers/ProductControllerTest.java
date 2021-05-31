@@ -41,7 +41,7 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        Product product = ProductFixtures.mouse();
+        Product product = ProductFixtures.mouseDol();
 
         given(productService.getProducts()).willReturn(List.of(product));
 
@@ -62,6 +62,7 @@ class ProductControllerTest {
                                   .name(productData.getName())
                                   .maker(productData.getMaker())
                                   .price(productData.getPrice())
+                                  .imageUrl(productData.getImageUrl())
                                   .build();
                 });
 
