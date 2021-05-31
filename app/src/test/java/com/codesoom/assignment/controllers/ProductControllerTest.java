@@ -40,7 +40,7 @@ class ProductControllerTest {
                 .price(5000)
                 .build();
 
-        given(productService.getProducts()).willReturn(List.of(product));
+        given(productService.findAll()).willReturn(List.of(product));
 
         given(productService.getProduct(1L)).willReturn(product);
 

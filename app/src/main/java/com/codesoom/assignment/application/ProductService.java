@@ -9,6 +9,11 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * @author 유동관
+ * @version 1.0
+ * @description 상품 관련 CRUD
+ */
 @Service
 @Transactional
 public class ProductService {
@@ -18,12 +23,13 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getProducts() {
+    public List<Product> findAll() {
         return productRepository.findAll();
     }
 
     public Product getProduct(Long id) {
-        return findProduct(id);
+        return productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(ProductData productData) {
@@ -37,7 +43,7 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, ProductData productData) {
-        Product product = findProduct(id);
+        Product product = getProduct(id);
 
         product.change(
                 productData.getName(),
@@ -50,15 +56,10 @@ public class ProductService {
     }
 
     public Product deleteProduct(Long id) {
-        Product product = findProduct(id);
+        Product product = getProduct(id);
 
         productRepository.delete(product);
 
         return product;
-    }
-
-    private Product findProduct(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 }

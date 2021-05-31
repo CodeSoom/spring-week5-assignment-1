@@ -20,7 +20,7 @@ public class ProductController {
 
     @GetMapping
     public List<Product> list() {
-        return productService.getProducts();
+        return productService.findAll();
     }
 
     @GetMapping("{id}")
@@ -44,7 +44,7 @@ public class ProductController {
 
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable Long id) {
-        productService.deleteProduct(id);
+    public Product destroy(@PathVariable Long id) {
+        return productService.deleteProduct(id);
     }
 }
