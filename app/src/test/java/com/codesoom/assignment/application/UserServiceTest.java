@@ -20,7 +20,10 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 
 @DisplayName("UserService 클래스의")
 @ExtendWith(MockitoExtension.class)
@@ -144,8 +147,54 @@ public class UserServiceTest {
 
             @Test
             @DisplayName("사용자를 찾을 수 없다는 예외를 던진다")
-            void It_returns_user() {
+            void It_throws_user_not_found_exception() {
                 assertThatThrownBy(() -> userService.patch(invalidUserId, validUserDataBob))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete 메서드는")
+    class Describe_delete {
+
+        @Nested
+        @DisplayName("만약 주어진 ID의 사용자가 저장되어 있다면")
+        class Context_with_existed_user_id {
+
+            @BeforeEach
+            void mocking() {
+                given(userRepository.findById(userAlice.getId()))
+                        .willReturn(Optional.ofNullable(userAlice));
+
+                doNothing().when(userRepository)
+                           .delete(userAlice);
+            }
+
+            @Test
+            @DisplayName("해당 사용자를 제거한다")
+            void It_deletes_the_user() {
+                userService.delete(userAlice.getId());
+
+                verify(userRepository).delete(any(User.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 주어진 ID의 사용자가 저장되어 있지 않을 경우")
+        class Context_with_not_existed_user_id {
+            private final Long invalidUserId = -1L;
+
+            @BeforeEach
+            void mocking() {
+                given(userRepository.findById(invalidUserId))
+                        .willThrow(UserNotFoundException.class);
+            }
+
+            @Test
+            @DisplayName("사용자를 찾을 수 없다는 예외를 던진다")
+            void It_throws_user_not_found_exception() {
+                assertThatThrownBy(() -> userService.delete(invalidUserId))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }

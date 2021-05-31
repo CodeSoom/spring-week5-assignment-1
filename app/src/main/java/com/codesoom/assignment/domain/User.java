@@ -18,7 +18,6 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@ToString
 public class User {
     @Id
     @GeneratedValue

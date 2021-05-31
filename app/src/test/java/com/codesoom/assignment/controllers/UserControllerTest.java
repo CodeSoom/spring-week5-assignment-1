@@ -21,7 +21,11 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -197,6 +201,58 @@ class UserControllerTest {
                 result.andExpect(status().isBadRequest())
                       .andExpect(jsonPath("$.message",
                                           containsString("비밀번호는 필수 입력 항목입니다")));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /users/{id}")
+    class Describe_delete_user {
+
+        @Nested
+        @DisplayName("만약 저장되어 있는 사용자의 식별자가 주어진다면")
+        class Context_with_existed_user_id {
+
+            @BeforeEach
+            void mocking() {
+                doNothing().when(userService)
+                           .delete(eq(userAlice.getId()));
+            }
+
+            @Test
+            @DisplayName("해당 식별자의 사용자를 제거한다")
+            void It_deletes_the_user() throws Exception {
+                var result = mockMvc.perform(
+                        delete("/users/" + userAlice.getId()));
+
+                result.andExpect(status().isNoContent());
+
+                verify(userService, times(1))
+                        .delete(eq(userAlice.getId()));
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 유효하지 않은 사용자 데이터가 주어진다면")
+        class Context_with_invalid_user_data {
+            private final Long invalidUserId = -1L;
+
+            @BeforeEach
+            void mocking() {
+                doThrow(new UserNotFoundException(invalidUserId))
+                        .when(userService)
+                        .delete(eq(invalidUserId));
+            }
+
+            @Test
+            @DisplayName("사용자를 찾을 수 없다는 메시지를 응답한다")
+            void It_responds_not_found_with_error_message() throws Exception {
+                var result = mockMvc.perform(
+                        delete("/users/" + invalidUserId));
+
+                result.andExpect(status().isNotFound())
+                      .andExpect(jsonPath("$.message",
+                                          containsString("User not found: " + invalidUserId)));
             }
         }
     }
