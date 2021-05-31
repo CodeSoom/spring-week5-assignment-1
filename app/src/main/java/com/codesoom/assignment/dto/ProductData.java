@@ -6,6 +6,9 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 상품 데이터.
+ */
 @Setter
 @Getter
 @Builder
@@ -14,15 +17,15 @@ import javax.validation.constraints.NotNull;
 public class ProductData {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "제품명은 필수 입력 항목입니다.")
     @Mapping("name")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "제조사는 필수 입력 항목입니다.")
     @Mapping("maker")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "가격은 필수 입력 항목입니다.")
     @Mapping("price")
     private Integer price;
 
