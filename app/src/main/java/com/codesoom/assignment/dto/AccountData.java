@@ -1,6 +1,8 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Account;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import com.github.dozermapper.core.Mapping;
 import lombok.*;
 
@@ -12,18 +14,22 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountData {
-    private Long acc_uid;
+    private Long id;
 
     @NotBlank
-    @Mapping("acc_id")
-    private String acc_id;
+    @Mapping("name")
+    private String name;
 
     @NotBlank
-    @Mapping("acc_password")
-    private String acc_password;
+    @Mapping("password")
+    private String password;
 
-    public Account changeData(Account acc, AccountData source) {
-        
-        return acc;
+    @NotBlank
+    @Mapping("email")
+    private String email;
+
+    public Account changeData(AccountData source) {
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        return mapper.map(source, Account.class);
     }
 }

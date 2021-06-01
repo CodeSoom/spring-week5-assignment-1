@@ -15,12 +15,20 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Account {
-    // Unique Identifier
+
     @Id
     @GeneratedValue
-    private Long acc_uid;
+    private Long id;
 
-    private String acc_id;
+    private String name;
 
-    private String acc_password;
+    private String password;
+
+    private String email;
+
+    public void changeAccData(Account source) {
+        this.email = source.getEmail();
+        this.name = source.getName();
+        this.password = source.getPassword();
+    }
 }

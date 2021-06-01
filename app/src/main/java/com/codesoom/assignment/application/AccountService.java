@@ -15,7 +15,6 @@ import java.util.List;
 public class AccountService {
     private final AccountRepository accRepo;
     private final Mapper mapper;
-    private Object AccountData;
 
     public AccountService(AccountRepository accRepo, Mapper dozerMapper) {
         this.accRepo = accRepo;
@@ -26,23 +25,36 @@ public class AccountService {
         return accRepo.findAll();
     }
 
-    public Account getAccount(Long uid) {
-        return findAccount(uid);
+    public Account getAccount(Long id) {
+        return findAccount(id);
     }
 
     public Account createAccount(AccountData accData) {
         return accRepo.save(
-                mapper.map(AccountData, Account.class)
+                mapper.map(accData, Account.class)
         );
     }
 
-    public Account updateAccount(Long uid, AccountData accData) {
-        Account acc = findAccount(uid);
-        return accData.changeData(acc, accData);
+    // TODO : Entity를 변경하기 위해서는 꼭 Entity 내에 Presentation Logic을 넣어서 사용해야 하는가?
+    public Account updateAccount(Long id, AccountData source) {
+        Account acc = findAccount(id);
+        acc.changeAccData(mapper.map(source, Account.class));
+
+//        // Testing
+//        source.setId(id);
+//        Account acc = source.changeData(source);
+        return acc;
     }
 
-    public Account findAccount(Long uid) {
-        return accRepo.findById(uid)
-                .orElseThrow(() -> new AccountNotFoundException(uid));
+    public Account deleteAccount(Long id) {
+        Account acc = findAccount(id);
+        accRepo.delete(acc);
+
+        return acc;
+    }
+
+    public Account findAccount(Long id) {
+        return accRepo.findById(id)
+                .orElseThrow(() -> new AccountNotFoundException(id));
     }
 }
