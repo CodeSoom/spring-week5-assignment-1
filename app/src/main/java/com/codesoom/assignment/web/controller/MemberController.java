@@ -1,5 +1,6 @@
 package com.codesoom.assignment.web.controller;
 
+import com.codesoom.assignment.core.application.MemberService;
 import com.codesoom.assignment.core.domain.Member;
 import com.codesoom.assignment.web.dto.MemberData;
 import org.springframework.http.HttpStatus;
@@ -12,27 +13,46 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("/user")
 public class MemberController {
+    private final MemberService memberService;
 
-    // TODO 1. 회원 생성하기
-    @PostMapping
-    public Member registerMember(@RequestBody MemberData member) {
-        return null;
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
-    // TODO 2. 회원 삭제하기
+    /**
+     * 신규 회원을 등록합니다.
+     * @param member
+     * @return 신규 회원
+     */
+    @PostMapping
+    public Member registerMember(@RequestBody @Valid MemberData member) {
+        return memberService.saveMember(member);
+    }
+
+    /**
+     * 요청 ID에 대한 회원을 삭제합니다.
+     * @param id
+     */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMember(@PathVariable Long id) {
-
+        memberService.deleteMember(id);
     }
 
-    // TODO 3. 회원 수정하기
+    /**
+     * 요청 ID에 대한 회원 정보를 수정합니다.
+     * @param id
+     * @param member
+     * @return 수정한 회원
+     */
     @PatchMapping("{id}")
     public Member modifyMember(@PathVariable Long id, @RequestBody MemberData member) {
-        return null;
+        return memberService.updateMember(id, member);
     }
 
 }

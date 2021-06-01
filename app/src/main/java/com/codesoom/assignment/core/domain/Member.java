@@ -25,4 +25,9 @@ public class Member {
 
     private String email;
 
+    public void changeWith(String name, String password, String email) {
+        this.name = name;
+        this.password = password;
+        this.email = email;
+    }
 }
