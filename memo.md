@@ -98,3 +98,10 @@ public Product updateProduct(Long id, ProductData productData) {
 - 객체 생성 시점부터 원하는 초기값 설정 위해 생성자를 사용
 
 - 객체 생성시 생성자가 호출되지 않으면 예외가 발생
+
+
+### 0601 trouble shooting
+문제 상황: UserServiceTest의 createUser() 테스트 실패
+상세 상황: user.getName() 의 값이 null로 출력
+해결 방법: domain class의 필드에 @Mapping() 어노테이션 지정
+- @Mapping()을 지정하지 않아 발생한 문제였다. 

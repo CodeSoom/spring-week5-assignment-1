@@ -52,7 +52,6 @@ class UserServiceTest {
                 .email("123@google.com")
                 .password("3000")
                 .build();
-
         User user = userService.createUser(userData);
         assertThat(user.getName()).isEqualTo("Kim");
     }
