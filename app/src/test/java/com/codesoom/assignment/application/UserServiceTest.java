@@ -4,6 +4,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDto;
+import com.codesoom.assignment.exception.NotFoundUserException;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -101,7 +102,7 @@ class UserServiceTest {
             void it_creates_and_returns_user() {
                 User user = userService.createUser(givenUserDto);
 
-                verify(userRepository).save(sampleUser);
+                verify(userRepository).save(any(User.class));
 
                 assertThat(user.getName()).isEqualTo(givenUserDto.getName());
             }
@@ -179,7 +180,7 @@ class UserServiceTest {
             @DisplayName("유저를 찾지 못 했다는 예외를 던진다")
             void it_throws_exception() {
                 assertThatThrownBy(() -> userService.deleteUser(givenId))
-                        .isInstanceOf(EmptyResultDataAccessException.class);
+                        .isInstanceOf(NotFoundUserException.class);
             }
         }
     }
