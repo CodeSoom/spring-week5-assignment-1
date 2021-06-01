@@ -23,11 +23,12 @@ public class ProductService {
      * ProductService 생성자.
      *
      * @param productRepository 상품 도메인의 퍼시스턴스 레이어.
-     * @param dozerMapper       상품 데이터와 상품 도메인을 매핑시키기 위한 매퍼.
+     * @param mapper            객체 매퍼.
      */
-    public ProductService(ProductRepository productRepository, Mapper dozerMapper) {
-        this.mapper = dozerMapper;
+    public ProductService(ProductRepository productRepository,
+                          Mapper mapper) {
         this.productRepository = productRepository;
+        this.mapper = mapper;
     }
 
     /**
@@ -44,6 +45,7 @@ public class ProductService {
      *
      * @param id 식별자.
      * @return 상품.
+     * @throws ProductNotFoundException
      */
     public Product getProduct(Long id) {
         return productRepository.findById(id)

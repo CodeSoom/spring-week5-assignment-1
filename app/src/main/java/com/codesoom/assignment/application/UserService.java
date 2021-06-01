@@ -22,12 +22,12 @@ public class UserService {
      * UserService 생성자.
      *
      * @param userRepository 사용자 도메인의 퍼시스턴스 레이어.
-     * @param dozerMapper    사용자 데이터와 사용자 도메인 매퍼.
+     * @param mapper         객체 매퍼.
      */
     public UserService(UserRepository userRepository,
-                       Mapper dozerMapper) {
+                       Mapper mapper) {
         this.userRepository = userRepository;
-        this.mapper = dozerMapper;
+        this.mapper = mapper;
     }
 
     /**
