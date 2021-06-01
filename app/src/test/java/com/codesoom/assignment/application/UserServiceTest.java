@@ -114,15 +114,17 @@ class UserServiceTest {
     class Describe_of_updateUser {
 
         @Nested
-        @DisplayName("유저 정보가 주어지면")
-        class Context_of_valid_user {
+        @DisplayName("존재하는 유저 id와 갱신할 유저 정보가 주어지면")
+        class Context_of_exsitent_user {
 
+            private Long givenId;
             private UserDto givenUserDto;
 
             @BeforeEach
             void setup() {
+                givenId = EXISTENT_ID;
                 givenUserDto = UserDto.builder()
-                        .id(EXISTENT_ID)
+                        .id(givenId)
                         .name("updatedName")
                         .email("updatedEmail")
                         .password("updatedPassword")
@@ -132,11 +134,37 @@ class UserServiceTest {
             @Test
             @DisplayName("유저를 갱신하고, 갱신한 유저를 반환한다")
             void it_updates_and_returns_user() {
-                User user = userService.updateUser(EXISTENT_ID, givenUserDto);
+                User user = userService.updateUser(givenId, givenUserDto);
 
                 assertThat(user.getName()).isEqualTo(givenUserDto.getName());
-                verify(userRepository).findById(EXISTENT_ID);
+                verify(userRepository).findById(givenId);
                 verify(userRepository).save(any(User.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 id와 갱신할 유저 정보가 주어지면")
+        class Context_of_non_existent_user {
+
+            private Long givenId;
+            private UserDto givenUserDto;
+
+            @BeforeEach
+            void setup() {
+                givenId = NON_EXISTENT_ID;
+                givenUserDto = UserDto.builder()
+                        .id(givenId)
+                        .name("updatedName")
+                        .email("updatedEmail")
+                        .password("updatedPassword")
+                        .build();
+            }
+
+            @Test
+            @DisplayName("유저를 찾을 수 없다는 예외를 던진다")
+            void it_updates_and_returns_user() {
+                assertThatThrownBy(() -> userService.updateUser(givenId, givenUserDto))
+                        .isInstanceOf(NotFoundUserException.class);
             }
         }
     }
