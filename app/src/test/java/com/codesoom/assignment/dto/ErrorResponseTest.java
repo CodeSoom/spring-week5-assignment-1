@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ErrorResponseTest {
 
     @Test
-    @DisplayName("에러메세지 init test")
+    @DisplayName("ErrorResponse는 에러 메세지를 가지고 있습니다.")
     public void setUp(){
         ErrorResponse errorResponse = new ErrorResponse("test");
         assertThat(errorResponse.getMessage()).isEqualTo("test");

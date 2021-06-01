@@ -116,7 +116,7 @@ class ProductServiceTest {
     @DisplayName("getProduct 메서드는")
     class Describe_getProduct {
         @Nested
-        @DisplayName("만약 저장되어 있는 상의 아이디가 주어진다면")
+        @DisplayName("만약 저장되어 있는 고양이 장난감 아이디가 주어진다면")
         class Context_WithExistedId {
             private final Long givenExistedId = EXISTED_ID;
 
@@ -126,6 +126,7 @@ class ProductServiceTest {
                 given(productRepository.findById(givenExistedId)).willReturn(Optional.of(setupProduct));
 
                 Product product = productService.getProduct(givenExistedId);
+
                 assertThat(product.getId()).isEqualTo(givenExistedId);
 
                 verify(productRepository).findById(givenExistedId);
