@@ -103,7 +103,6 @@ class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userDataJson))
                         .andExpect(status().isBadRequest());
-
             }
 
         }

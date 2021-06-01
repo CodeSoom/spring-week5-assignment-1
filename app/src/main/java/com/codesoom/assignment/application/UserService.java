@@ -24,4 +24,12 @@ public class UserService {
                 .password(user.getPassword())
                 .build();
     }
+
+    public UserData updateUser(UserData userData) {
+        return null;
+    }
+
+    public UserData deleteUser(UserData userData) {
+        return null;
+    }
 }

@@ -24,4 +24,15 @@ public class UserController {
     public UserData createUser(@RequestBody @Valid UserData userData){
         return userService.createUser(userData);
     }
+
+    @PatchMapping("{id}")
+    public UserData updateUser(@PathVariable Long id,@RequestBody UserData userData){
+        return userService.updateUser(userData);
+    }
+
+    @DeleteMapping
+    public UserData deleteUser(@RequestBody UserData userData){
+        return userService.deleteUser(userData);
+    }
+
 }
