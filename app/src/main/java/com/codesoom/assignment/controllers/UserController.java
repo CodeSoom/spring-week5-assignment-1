@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * 사용자 도메인의 프레젠테이션 레이어.
+ * 사용자 API 요청 처리.
  */
 @RestController
 @RequestMapping("/users")

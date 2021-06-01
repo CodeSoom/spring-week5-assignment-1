@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 상품 도메인의 프레젠테이션 레이어.
+ * 상품 API 요청 처리.
  */
 @RestController
 @RequestMapping("/products")
