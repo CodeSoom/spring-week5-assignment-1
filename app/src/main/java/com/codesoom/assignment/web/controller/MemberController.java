@@ -3,7 +3,9 @@ package com.codesoom.assignment.web.controller;
 import com.codesoom.assignment.core.application.MemberService;
 import com.codesoom.assignment.core.domain.Member;
 import com.codesoom.assignment.web.dto.MemberData;
+import com.codesoom.assignment.web.dto.MemberDataValidation;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,7 +33,9 @@ public class MemberController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Member registerMember(@RequestBody @Valid MemberData member) {
+    public Member registerMember(
+            @RequestBody @Validated(MemberDataValidation.create.class) MemberData member
+    ) {
         return memberService.saveMember(member);
     }
 
@@ -52,7 +56,10 @@ public class MemberController {
      * @return 수정한 회원
      */
     @PatchMapping("{id}")
-    public Member modifyMember(@PathVariable Long id, @RequestBody MemberData member) {
+    public Member modifyMember(
+            @PathVariable Long id,
+            @RequestBody @Validated(MemberDataValidation.update.class) MemberData member
+    ) {
         return memberService.updateMember(id, member);
     }
 

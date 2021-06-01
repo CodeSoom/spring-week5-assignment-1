@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
@@ -16,15 +15,15 @@ import javax.validation.constraints.NotBlank;
 public class MemberData {
     private Long id;
 
-    @NotBlank
+    @NotBlank(groups = {MemberDataValidation.create.class, MemberDataValidation.update.class})
     @Mapping("name")
     private String name;
 
-    @NotBlank
+    @NotBlank(groups = {MemberDataValidation.create.class, MemberDataValidation.update.class})
     @Mapping("password")
     private String password;
 
-    @NotBlank
+    @NotBlank(groups = {MemberDataValidation.create.class})
     @Mapping("email")
     private String email;
 
