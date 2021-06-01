@@ -18,17 +18,20 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class UserDto {
 
+    public interface ValidateCreate {};
+    public interface ValidateUpdate {};
+
     private Long id;
 
-    @NotBlank
+    @NotBlank(groups = { ValidateCreate.class, ValidateUpdate.class })
     @Mapping("name")
     private String name;
 
-    @NotBlank
+    @NotBlank(groups = ValidateCreate.class)
     @Mapping("email")
     private String email;
 
-    @NotBlank
+    @NotBlank(groups = { ValidateCreate.class, ValidateUpdate.class })
     @Mapping("password")
     private String password;
 }

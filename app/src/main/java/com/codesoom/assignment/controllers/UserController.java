@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserDto;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -13,8 +14,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-
-import javax.validation.Valid;
 
 @CrossOrigin
 @RequestMapping("/users")
@@ -29,14 +28,14 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid UserDto source) {
+    public User create(@RequestBody @Validated(UserDto.ValidateCreate.class) UserDto source) {
         return userService.createUser(source);
     }
 
     @PatchMapping("/{id}")
     public User update(
             @PathVariable Long id,
-            @RequestBody @Valid UserDto userDto) {
+            @RequestBody @Validated(UserDto.ValidateUpdate.class) UserDto userDto) {
         return userService.updateUser(id, userDto);
     }
 
