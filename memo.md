@@ -29,5 +29,62 @@ java bean validation
 ### Q. ProductService class의 createProduct() 에서 굳이 product 로 builder 과정을 거쳐 save() 를 할 필요가 있나..?
 - 곧장 ProductData 를 save() 하면 안되는가..?
 
+- dozer mapper
+
+- DozerBeanMapperBuilder.buildDefault();
+
+- changeWith() 을 도입한 것은 service 코드를 단순화 하기 위함.
+
+```java
+    public Product createProduct(ProductData productData) {
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        Product product = mapper.map(productData, Product.class);
+
+        // mappper 를 사용하면 아래의 과정을 간소화 할 수 있다.
+//        Product product = Product.builder()
+//                .name(productData.getName())
+//                .maker(productData.getMaker())
+//                .price(productData.getPrice())
+//                .imageUrl(productData.getImageUrl())
+//                .build();
+        return productRepository.save(product);
+    }
+```
+
+```java
+public Product updateProduct(Long id, ProductData productData) {
+        Product product = findProduct(id);
+
+//        product.change(
+//                productData.getName(),
+//                productData.getMaker(),
+//                productData.getPrice(),
+//                productData.getImageUrl()
+//        );
+
+        product.changeWith(mapper.map(productData, Product.class));
+
+        return product;
+    }
+```
 
 
+
+```java
+    public void change(String name,
+                       String maker,
+                       Integer price,
+                       String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public void changeWith(Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
+
+    }
+```
