@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -32,7 +31,7 @@ public class User {
     /**
      * 사용자 데이터를 수정한다.
      *
-     * @param source 수정된 사용자 데이터
+     * @param source 수정 데이터
      */
     public void changeWith(User source) {
         this.name = source.name;

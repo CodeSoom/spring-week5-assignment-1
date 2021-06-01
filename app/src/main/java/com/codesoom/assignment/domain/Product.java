@@ -33,7 +33,7 @@ public class Product {
     /**
      * 상품 데이터를 수정한다.
      *
-     * @param source 수정된 상품 데이터
+     * @param source 수정 데이터
      */
     public void changeWith(Product source) {
         this.name = source.name;
