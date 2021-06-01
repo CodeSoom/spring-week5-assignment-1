@@ -17,27 +17,32 @@ import javax.persistence.Id;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import java.io.Serializable;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class User implements Serializable {
+public class User{
 
     @Id
     @GeneratedValue
     private Long id;
 
-    @NotBlank
     @Email(message = "이메일 형식을 맞춰주세요")
     private String email;
 
-    @NotBlank
     private String name;
 
-    @NotBlank
+    private int age;
+
     @Pattern(regexp="[a-zA-z1-9]{6,12}")
     private String password;
+
+    public void changeWith(User source) {
+        this.name = source.name;
+        this.email = source.email;
+        this.password = source.password;
+        this.age = source.age;
+    }
 }
