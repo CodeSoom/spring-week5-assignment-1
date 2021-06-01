@@ -85,6 +85,10 @@ tasks.named('test') {
     finalizedBy jacocoTestReport
 }
 
+javadoc {
+    options.encoding = 'UTF-8'
+}
+
 jacoco {
     toolVersion = "0.8.6"
 }
