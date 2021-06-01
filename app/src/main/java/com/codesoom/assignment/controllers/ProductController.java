@@ -64,7 +64,7 @@ public class ProductController {
     }
 
     /**
-     * 기존 장난감의 정보를 수정합니다.
+     * 장난감의 정보를 수정합니다.
      * @param id 수정할 장난감의 id
      * @param productData 장난감 수정 내용
      * @return 수정된 장난감
