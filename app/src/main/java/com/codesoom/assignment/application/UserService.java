@@ -8,6 +8,8 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 public class UserService {
 
@@ -25,10 +27,13 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserDto source) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundUserException(id));
-        user.change(mapper.map(source, User.class));
-        return userRepository.save(user);
+        try {
+            User user = userRepository.findById(id).get();
+            user.change(mapper.map(source, User.class));
+            return userRepository.save(user);
+        } catch(EmptyResultDataAccessException e) {
+            throw new NotFoundUserException(id);
+        }
     }
 
     public void deleteUser(Long id) {
