@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 /**
  * 상품 데이터.
@@ -29,6 +30,7 @@ public class ProductData {
     private String maker;
 
     @NotNull(message = "가격은 필수 입력 항목입니다.")
+    @PositiveOrZero(message = "가격은 0 이상의 정수여야 합니다.")
     @Mapping("price")
     private Integer price;
 
