@@ -8,7 +8,7 @@ public class UserFixtures {
                    .id(1L)
                    .name("Alice")
                    .email("alice@codesoom.com")
-                   .password("pw-alice")
+                   .password("password-alice")
                    .build();
     }
 
@@ -16,14 +16,14 @@ public class UserFixtures {
         return UserData.builder()
                        .name("Alice")
                        .email("alice@codesoom.com")
-                       .password("pw-alice")
+                       .password("password-alice")
                        .build();
     }
 
     public static UserData invalidAliceData() {
         return UserData.builder()
                        .name("Alice")
-                       .password("pw-alice")
+                       .password("password-alice")
                        .build();
     }
 
@@ -32,7 +32,7 @@ public class UserFixtures {
                    .id(2L)
                    .name("Bob")
                    .email("bob@codesoom.com")
-                   .password("pw-bob")
+                   .password("password-bob")
                    .build();
     }
 
@@ -40,7 +40,7 @@ public class UserFixtures {
         return UserData.builder()
                        .name("Bob")
                        .email("bob@codesoom.com")
-                       .password("pw-bob")
+                       .password("password-bob")
                        .build();
     }
 

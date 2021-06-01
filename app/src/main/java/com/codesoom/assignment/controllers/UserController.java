@@ -3,7 +3,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
-import com.codesoom.assignment.dto.UserValidationGroups;
+import com.codesoom.assignment.dto.UserPatchValidation;
+import com.codesoom.assignment.dto.UserPostValidation;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,7 +30,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(
-            @RequestBody @Validated(UserValidationGroups.post.class)
+            @RequestBody @Validated(UserPostValidation.class)
                     UserData userData) {
         return userService.create(userData);
     }
@@ -37,7 +38,7 @@ public class UserController {
     @PatchMapping("{id}")
     public User updateUser(
             @PathVariable Long id,
-            @RequestBody @Validated(UserValidationGroups.patch.class)
+            @RequestBody @Validated(UserPatchValidation.class)
                     UserData userData) {
         return userService.patch(id, userData);
     }
