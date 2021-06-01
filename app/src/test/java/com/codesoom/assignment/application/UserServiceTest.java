@@ -65,7 +65,7 @@ class UserServiceTest {
                 .willReturn(Optional.ofNullable(sampleUser));
 
         given(userRepository.findById(NON_EXISTENT_ID))
-                .willThrow(EmptyResultDataAccessException.class);
+                .willReturn(Optional.empty());
 
         willThrow(EmptyResultDataAccessException.class)
                 .given(userRepository).deleteById(NON_EXISTENT_ID);
