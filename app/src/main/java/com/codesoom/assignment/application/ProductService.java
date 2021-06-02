@@ -32,9 +32,9 @@ public class ProductService {
     }
 
     /**
-     * 모든 장난감을 리턴합니다.
+     * 모든 장난감들을 리턴합니다.
      *
-     * @return 모든 장난감 목록
+     * @return 장난감 목록
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
