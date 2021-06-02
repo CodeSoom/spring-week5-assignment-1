@@ -41,10 +41,10 @@ public class ProductService {
     }
 
     /**
-     * 요청한 id 값의 장난감을 리턴합니다.
+     * 요청한 식별자를 가진 장난감을 찾아, 찾은 장난감을 반환합니다.
      *
-     * @param id 요청한 장난감의 id
-     * @return 해당 id 의 장난감
+     * @param id 장난감 식별자
+     * @return 장난감
      */
     public Product getProduct(Long id) {
         return findProduct(id);
