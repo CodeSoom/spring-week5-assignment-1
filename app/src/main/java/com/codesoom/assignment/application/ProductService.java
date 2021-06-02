@@ -32,29 +32,29 @@ public class ProductService {
     }
 
     /**
-     * 모든 장난감을 리턴합니다.
+     * 모든 장난감들을 리턴합니다.
      *
-     * @return 모든 장난감 목록
+     * @return 장난감 목록
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
     /**
-     * 요청한 id 값의 장난감을 리턴합니다.
+     * 요청한 식별자를 가진 장난감을 찾아, 찾은 장난감을 반환합니다.
      *
-     * @param id 요청한 장난감의 id
-     * @return 해당 id 의 장난감
+     * @param id 장난감 식별자
+     * @return 장난감
      */
     public Product getProduct(Long id) {
         return findProduct(id);
     }
 
     /**
-     * 새로운 장난감을 생성합니다.
+     * 새로운 장난감을 만들고, 만들어진 장난감을 반환합니다.
      *
-     * @param productData 새로운 장난감의 정보
-     * @return 새로운 장난감
+     * @param productData 장난감을 만드는데 필요한 정보들
+     * @return 장난감
      */
     public Product createProduct(ProductData productData) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
@@ -64,9 +64,9 @@ public class ProductService {
     }
 
     /**
-     * 장난감의 정보를 수정합니다.
+     * 장난감의 정보를 수정하고, 수정된 장난감을 반환합니다.
      *
-     * @param id          수정할 장난감 id
+     * @param id          수정할 장난감의 식별자
      * @param productData 수정할 장난감 내용
      * @return 수정된 장난감
      */
