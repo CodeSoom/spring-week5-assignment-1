@@ -21,7 +21,7 @@ class UserTest {
     class Describe_changeWith {
 
         @Test
-        @DisplayName("사용자의 속성을 주어진 사용자 데이터로 수정한다")
+        @DisplayName("사용자의 속성을 주어진 사용자 데이터로 수정한 후 리턴한다")
         void sut_changeWith() {
             User userAlice = UserFixtures.alice();
 

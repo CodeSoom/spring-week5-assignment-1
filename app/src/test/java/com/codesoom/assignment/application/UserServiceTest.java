@@ -57,7 +57,7 @@ public class UserServiceTest {
             }
 
             @Test
-            @DisplayName("해당 사용자를 반환한다")
+            @DisplayName("해당 사용자를 리턴한다")
             void It_returns_user() {
                 User user = userService.get(userBob.getId());
 
@@ -77,7 +77,7 @@ public class UserServiceTest {
 
             @Test
             @DisplayName("사용자를 찾을 수 없다는 예외를 던진다")
-            void It_returns_user() {
+            void It_throws_user_not_found_exception() {
                 assertThatThrownBy(() -> userService.get(userBob.getId()))
                         .isInstanceOf(UserNotFoundException.class);
             }
@@ -97,7 +97,7 @@ public class UserServiceTest {
         }
 
         @Test
-        @DisplayName("주어진 사용자 데이터로 사용자를 저장한다")
+        @DisplayName("주어진 사용자 데이터로 사용자를 생성한 후 생성된 사용자를 리턴한다")
         void It_returns_created_user() {
             User user = userService.create(validUserDataAlice);
 
@@ -124,13 +124,17 @@ public class UserServiceTest {
             }
 
             @Test
-            @DisplayName("해당 사용자를 주어진 사용자 데이터로 수정한다")
+            @DisplayName("해당 사용자를 주어진 사용자 데이터로 수정한 후 리턴한다")
             void It_patches_the_user_with_user_data() {
                 User userAliceToBob = userService.patch(userAlice.getId(),
                                                         validUserDataBob);
 
                 assertThat(userAliceToBob.getName())
                         .isEqualTo(validUserDataBob.getName());
+                assertThat(userAliceToBob.getEmail())
+                        .isEqualTo(validUserDataBob.getEmail());
+                assertThat(userAliceToBob.getPassword())
+                        .isEqualTo(validUserDataBob.getPassword());
             }
         }
 

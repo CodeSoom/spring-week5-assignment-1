@@ -41,12 +41,11 @@ class ProductServiceTest {
         given(productRepository.save(any(Product.class))).will(invocation -> {
             Product source = invocation.getArgument(0);
             return Product.builder()
-                          .id(2L)
-                          .name(source.getName())
-                          .maker(source.getMaker())
-                          .price(source.getPrice())
-                          .imageUrl(source.getImageUrl())
-                          .build();
+                    .id(2L)
+                    .name(source.getName())
+                    .maker(source.getMaker())
+                    .price(source.getPrice())
+                    .build();
         });
     }
 
