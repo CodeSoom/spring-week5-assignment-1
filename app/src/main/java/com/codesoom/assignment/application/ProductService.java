@@ -78,7 +78,7 @@ public class ProductService {
     }
 
     /**
-     * 장난감을 삭제합니다.
+     * 주어진 식별자를 가진 장난감을 삭제하고, 삭제된 장난감을 반환합니다.
      *
      * @param id 삭제할 장난감 id
      * @return 삭제된 장난감
