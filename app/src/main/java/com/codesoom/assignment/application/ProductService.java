@@ -64,9 +64,9 @@ public class ProductService {
     }
 
     /**
-     * 장난감의 정보를 수정합니다.
+     * 장난감의 정보를 수정하고, 수정된 장난감을 반환합니다.
      *
-     * @param id          수정할 장난감 id
+     * @param id          수정할 장난감의 식별자
      * @param productData 수정할 장난감 내용
      * @return 수정된 장난감
      */
