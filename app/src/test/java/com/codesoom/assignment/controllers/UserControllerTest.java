@@ -1,27 +1,30 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.contains;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.BDDMockito.then;
+import static org.mockito.Mockito.times;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
+@DisplayName("UserController")
 class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
@@ -33,8 +36,12 @@ class UserControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
-    UserData setUser(Long id) {
+    @BeforeEach
+    void setUp(){
+        MockitoAnnotations.initMocks(this);
+    }
 
+    UserData setUser(Long id) {
         return UserData.builder()
                 .id(id)
                 .email("test" + id + "@gamil.com")
@@ -64,26 +71,29 @@ class UserControllerTest {
             void setUpValidCreate() throws JsonProcessingException {
                 UserData sourceUserData = setUser(id);
                 userDataJSON = setJSONUserByObj(sourceUserData);
-                given(userService.createUser(any(UserData.class))).willReturn(sourceUserData);
+                given(userService.createUser(any(UserData.class)))
+                        .willReturn(sourceUserData);
             }
 
             @Test
             @DisplayName("Respose Status를 201를 반환한다.")
             void create_valid() throws Exception {
+                System.out.println(userDataJSON);
                 mockMvc.perform(post(userUrl)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(userDataJSON))
                         .andExpect(status().isCreated());
+                then(userService).should(times(1))
+                        .createUser(any(UserData.class));
             }
         }
 
         @Nested
         @DisplayName("입력되지 않은 값이 있다면")
-        class Context_Invalid_Create{
+        class Context_Invalid_Create {
             private String userDataJson;
             private Long id = 100L;
-//            private String errorMessage = "잘못된 요청입니다. 파라미터를 확인해 주세요.1";
 
             @BeforeEach
             void setUpInvalidCreate() throws JsonProcessingException {
@@ -104,8 +114,143 @@ class UserControllerTest {
                         .content(userDataJson))
                         .andExpect(status().isBadRequest());
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("userUpdate() 메소드는")
+    class Describe_Update {
+        @Nested
+        @DisplayName("유저 목록이 있다면")
+        class Context_Valid_Update {
+            private Long id = 1L;
+            private String userDataJSON;
+            private UserData userData;
+            private String userPatchUrl = userUrl + "/" + id;
+
+            @BeforeEach
+            void setUpValidUpdate() throws JsonProcessingException {
+
+                userData = setUser(id);
+                userDataJSON = setJSONUserByObj(userData);
+                given(userService.updateUser(eq(id), any(UserData.class)))
+                        .willReturn(userData);
+            }
+
+            @Test
+            @DisplayName("수정된 유저를 반환한다.")
+            void user_valid_update_return() throws Exception {
+                System.out.println(userDataJSON);
+                mockMvc.perform(patch(userPatchUrl)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userDataJSON))
+                        .andExpect(content().string(containsString(userDataJSON)));
+
+                then(userService).should(times(1))
+                        .updateUser(eq(id),any(UserData.class));
+            }
+        }
+        @Nested
+        @DisplayName("유저 목록이 없다면")
+        class Context_Invalid_Update{
+            private Long id = 100L;
+            private UserData userData;
+            private String userDataJSON;
+
+            @BeforeEach
+            void setUpInvalidUpdate() throws JsonProcessingException {
+                userData = setUser(id);
+                userDataJSON = setJSONUserByObj(userData);
+                given(userService.updateUser(eq(id), any(UserData.class)))
+                        .willThrow(new UserNotFoundException(id));
+            }
+
+            @Test
+            @DisplayName("UserNotFoundException이 발생한다.")
+            void user_invalid_update_exception() throws Exception {
+                mockMvc.perform(patch(userUrl)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(userDataJSON))
+                        .andExpect(result -> {
+                            result.getResponse()
+                                    .getClass()
+                                    .isInstance(UserNotFoundException.class);
+                        });
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete() 메소드는")
+    class Describe_Delete{
+        @Nested
+        @DisplayName("유저 목록에 있으면")
+        class Context_Valid_Delete{
+            private Long id = 1L;
+            private UserData userData;
+            private String userUrlDel = userUrl + "/" + id;
+            private int time = 0;
+            @BeforeEach
+            void setUpValidDelete() {
+                userData = setUser(id);
+                given(userService.deleteUser(eq(id)))
+                        .willReturn(userData);
+            }
+
+            @Test
+            @DisplayName("ResponseStatus 204를 반환한다.")
+            @Order(1)
+            void valid_delete_status() throws Exception {
+                System.out.println(userUrlDel);
+                mockMvc.perform(delete(userUrlDel)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNoContent());
+                then(userService).should(times(1))
+                        .deleteUser(eq(id));
+            }
+            @Test
+            @DisplayName("유저를 삭제한다.")
+            @Order(2)
+            void valid_delete_user() throws Exception {
+                mockMvc.perform(delete(userUrlDel)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(content().string(containsString(String
+                                .valueOf(userData.getId()))));
+                then(userService).should(times(2))
+                        .deleteUser(eq(id));
+            }
+        }
+
+        @Nested
+        @DisplayName("유저 목록에 없으면")
+        class Context_Invalid_Delete{
+            private Long id = 100L;
+            private String userDelUrl = userUrl + "/" + id;
+            @BeforeEach
+            void setUPInvalidDelete(){
+                given(userService.deleteUser(eq(id)))
+                        .willThrow(new UserNotFoundException(id));
+            }
+
+            @Test
+            @DisplayName("UserNotFoundException이 발생한다.")
+            void invalid_delete_user_exception() throws Exception {
+                mockMvc.perform(delete(userDelUrl)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect((result) -> {
+                            result.getResponse()
+                                    .getClass()
+                                    .isInstance(UserNotFoundException.class);
+                        });
+            }
 
         }
+
     }
 
 }

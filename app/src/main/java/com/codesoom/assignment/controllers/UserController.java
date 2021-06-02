@@ -27,12 +27,13 @@ public class UserController {
 
     @PatchMapping("{id}")
     public UserData updateUser(@PathVariable Long id,@RequestBody UserData userData){
-        return userService.updateUser(userData);
+        return userService.updateUser(id, userData);
     }
 
-    @DeleteMapping
-    public UserData deleteUser(@RequestBody UserData userData){
-        return userService.deleteUser(userData);
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public UserData deleteUser(@PathVariable Long id){
+        return userService.deleteUser(id);
     }
 
 }

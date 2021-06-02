@@ -1,9 +1,9 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
-import com.fasterxml.jackson.databind.cfg.MapperBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,6 +17,22 @@ public class UserService {
     public UserData createUser(UserData userData) {
 
         User user = userRepository.save(new User().chageData(userData));
+        return changeUserData(user);
+    }
+
+    public UserData updateUser(Long id, UserData sourceData) {
+        User user = userRepository.save(findUser(id)
+                .chageData(sourceData));
+        return changeUserData(user);
+    }
+
+    public UserData deleteUser(Long id) {
+        User user = findUser(id);
+        userRepository.deleteUserById(id);
+        return changeUserData(user);
+    }
+
+    private UserData changeUserData(User user) {
         return UserData.builder()
                 .id(user.getId())
                 .email(user.getEmail())
@@ -25,11 +41,8 @@ public class UserService {
                 .build();
     }
 
-    public UserData updateUser(UserData userData) {
-        return null;
-    }
-
-    public UserData deleteUser(UserData userData) {
-        return null;
+    private User findUser(Long id) {
+        return userRepository.findUserById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
