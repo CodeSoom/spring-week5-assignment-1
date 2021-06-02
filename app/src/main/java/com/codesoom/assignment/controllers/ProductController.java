@@ -19,7 +19,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 상품 API 요청 처리.
+ * 상품 API 요청을 처리합니다.
  */
 @RestController
 @RequestMapping("/products")
@@ -27,19 +27,14 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
-    /**
-     * ProductController 생성자.
-     *
-     * @param productService 상품 도메인의 서비스 클래스.
-     */
     public ProductController(ProductService productService) {
         this.productService = productService;
     }
 
     /**
-     * 전체 상품을 조회한다.
+     * 전체 상품을 조회합니다.
      *
-     * @return 상품 목록.
+     * @return 상품 목록
      */
     @GetMapping
     public List<Product> list() {
@@ -47,10 +42,10 @@ public class ProductController {
     }
 
     /**
-     * 상품을 조회한다.
+     * 식별자로 상품을 조회한 후 리턴합니다.
      *
-     * @param id 식별자.
-     * @return 상품.
+     * @param id 식별자
+     * @return 상품
      */
     @GetMapping("{id}")
     public Product detail(@PathVariable Long id) {
@@ -58,10 +53,10 @@ public class ProductController {
     }
 
     /**
-     * 상품을 생성한다.
+     * 상품을 생성한 후 생성된 상품을 리턴합니다.
      *
-     * @param productData 상품 데이터.
-     * @return 상품.
+     * @param productData 상품 데이터
+     * @return 상품
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -70,11 +65,11 @@ public class ProductController {
     }
 
     /**
-     * 상품을 수정한다.
+     * 상품을 수정한 후 수정된 상품을 리턴합니다.
      *
-     * @param id          식별자.
-     * @param productData 상품 데이터.
-     * @return 수정된 상품.
+     * @param id          식별자
+     * @param productData 상품 데이터
+     * @return 수정된 상품
      */
     @PatchMapping("{id}")
     public Product update(
@@ -85,9 +80,9 @@ public class ProductController {
     }
 
     /**
-     * 상품을 제거한다.
+     * 상품을 제거합니다.
      *
-     * @param id 식별자.
+     * @param id 식별자
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

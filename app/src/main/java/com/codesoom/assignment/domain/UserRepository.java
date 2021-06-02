@@ -3,7 +3,7 @@ package com.codesoom.assignment.domain;
 import java.util.Optional;
 
 /**
- * 사용자 도메인의 퍼시스턴스 레이어.
+ * 저장소의 사용자 정보 관리를 담당합니다.
  */
 public interface UserRepository {
     User save(User user);

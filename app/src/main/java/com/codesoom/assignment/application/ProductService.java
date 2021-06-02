@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * 상품 도메인의 서비스 레이어.
+ * 상품 정보 관리를 담당합니다.
  */
 @Service
 @Transactional
@@ -19,12 +19,6 @@ public class ProductService {
     private final Mapper mapper;
     private final ProductRepository productRepository;
 
-    /**
-     * ProductService 생성자.
-     *
-     * @param productRepository 상품 도메인의 퍼시스턴스 레이어.
-     * @param mapper            객체 매퍼.
-     */
     public ProductService(ProductRepository productRepository,
                           Mapper mapper) {
         this.productRepository = productRepository;
@@ -32,20 +26,20 @@ public class ProductService {
     }
 
     /**
-     * 상품 목록을 조회한다.
+     * 전체 상품을 조회한 후 리턴합니다.
      *
-     * @return 상품 목록.
+     * @return 상품 목록
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
     /**
-     * 상품을 조회한다.
+     * 식별자로 상품을 조회한 후 리턴합니다.
      *
-     * @param id 식별자.
-     * @return 상품.
-     * @throws ProductNotFoundException
+     * @param id 식별자
+     * @return 상품
+     * @throws ProductNotFoundException 상품을 찾을 수 없는 경우
      */
     public Product getProduct(Long id) {
         return productRepository.findById(id)
@@ -53,10 +47,10 @@ public class ProductService {
     }
 
     /**
-     * 상품을 생성한다.
+     * 상품을 생성한 후 생성된 상품을 리턴합니다.
      *
-     * @param productData 상품 데이터.
-     * @return 상품.
+     * @param productData 상품 데이터
+     * @return 상품
      */
     public Product createProduct(ProductData productData) {
         Product product = mapper.map(productData, Product.class);
@@ -64,11 +58,11 @@ public class ProductService {
     }
 
     /**
-     * 상품을 수정한다.
+     * 상품을 수정한 후 수정된 상품을 리턴합니다.
      *
-     * @param id          식별자.
-     * @param productData 상품 데이터.
-     * @return 수정된 상품.
+     * @param id          식별자
+     * @param productData 상품 데이터
+     * @return 수정된 상품
      */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = getProduct(id);
@@ -79,10 +73,10 @@ public class ProductService {
     }
 
     /**
-     * 상품을 제거한다.
+     * 상품을 제거한 후 제거된 상품을 리턴합니다.
      *
-     * @param id 식별자.
-     * @return 상품.
+     * @param id 식별자
+     * @return 상품
      */
     public Product deleteProduct(Long id) {
         Product product = getProduct(id);

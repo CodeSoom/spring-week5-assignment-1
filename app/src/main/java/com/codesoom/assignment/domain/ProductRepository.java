@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 상품 도메인의 퍼시스턴스 레이어.
+ * 저장소의 상품 정보 관리를 담당합니다.
  */
 public interface ProductRepository {
     List<Product> findAll();
