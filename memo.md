@@ -105,3 +105,7 @@ public Product updateProduct(Long id, ProductData productData) {
 상세 상황: user.getName() 의 값이 null로 출력
 해결 방법: domain class의 필드에 @Mapping() 어노테이션 지정
 - @Mapping()을 지정하지 않아 발생한 문제였다. 
+
+#### @Email, password regex 조건은 왜 User 가 아닌, UserData 에 걸어야 동작하는가 ?
+
+

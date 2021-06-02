@@ -41,7 +41,7 @@ public class UserControllerTest {
     }
 
     @Test
-    void create() throws Exception {
+    void createWithValidAttributes() throws Exception {
         mockMvc.perform(
                 post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -50,5 +50,16 @@ public class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("LIM")));
         verify(userService).createUser(any(UserData.class));
+    }
+
+    @Test
+    void createWithInvalidAttributes() throws Exception {
+        String invalidContent = "{\"name\":\"LIM\",\"email\":\"limcode.com\",\"password\":\"123456\"}";
+        mockMvc.perform(
+                post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidContent))
+                .andExpect(status().isBadRequest());
     }
 }

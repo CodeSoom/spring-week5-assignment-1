@@ -29,14 +29,12 @@ public class User{
     @GeneratedValue
     private Long id;
 
-    @Email(message = "이메일 형식을 맞춰주세요")
     private String email;
 
     private String name;
 
     private int age;
 
-    @Pattern(regexp="[a-zA-z1-9]{6,12}")
     private String password;
 
     public void changeWith(User source) {
