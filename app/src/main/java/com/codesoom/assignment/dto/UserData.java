@@ -3,6 +3,7 @@ package com.codesoom.assignment.dto;
 import com.github.dozermapper.core.Mapping;
 import lombok.*;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Setter
@@ -18,6 +19,7 @@ public class UserData {
     private String name;
 
     @NotBlank
+    @Email
     @Mapping("email")
     private String email;
 

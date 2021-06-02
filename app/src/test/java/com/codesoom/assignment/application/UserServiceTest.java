@@ -8,8 +8,6 @@ import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -24,14 +22,6 @@ class UserServiceTest {
     void setUp(){
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         userService = new UserService(mapper, userRepository);
-
-        User user = User.builder()
-                .id(1L)
-                .name("Kim")
-                .email("123@google.com")
-                .password("3000")
-                .age(21)
-                .build();
 
         given(userRepository.save(any(User.class))).will(invocation -> {
             User source = invocation.getArgument(0);
