@@ -51,10 +51,10 @@ public class ProductService {
     }
 
     /**
-     * 새로운 장난감을 생성합니다.
+     * 새로운 장난감을 만들고, 만들어진 장난감을 반환합니다.
      *
-     * @param productData 새로운 장난감의 정보
-     * @return 새로운 장난감
+     * @param productData 장난감을 만드는데 필요한 정보들
+     * @return 장난감
      */
     public Product createProduct(ProductData productData) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
