@@ -24,6 +24,25 @@ public class ProductFixtures {
                           .build();
     }
 
+    public static Product mouseSunWithoutImageUrl() {
+        return Product.builder()
+                      .id(2L)
+                      .name("쥐순이")
+                      .maker("코드숨")
+                      .price(10_000)
+                      .build();
+    }
+
+    public static Product mouseSunWithImageUrl() {
+        return Product.builder()
+                      .id(2L)
+                      .name("쥐순이")
+                      .maker("코드숨")
+                      .price(10_000)
+                      .imageUrl("http://localhost:8080/rat")
+                      .build();
+    }
+
     public static ProductData dataMouseSun() {
         return ProductData.builder()
                           .name("쥐순이")

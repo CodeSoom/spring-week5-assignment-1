@@ -5,19 +5,15 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
+
     @Test
     void creationWithBuilder() {
-        Product product = Product.builder()
-                                 .id(1L)
-                                 .name("쥐돌이")
-                                 .maker("냥이월드")
-                                 .price(5000)
-                                 .build();
+        Product product = ProductFixtures.mouseSunWithoutImageUrl();
 
-        assertThat(product.getId()).isEqualTo(1L);
-        assertThat(product.getName()).isEqualTo("쥐돌이");
-        assertThat(product.getMaker()).isEqualTo("냥이월드");
-        assertThat(product.getPrice()).isEqualTo(5000);
+        assertThat(product.getId()).isEqualTo(2L);
+        assertThat(product.getName()).isEqualTo("쥐순이");
+        assertThat(product.getMaker()).isEqualTo("코드숨");
+        assertThat(product.getPrice()).isEqualTo(10000);
         assertThat(product.getImageUrl()).isNull();
     }
 
@@ -25,12 +21,7 @@ class ProductTest {
     void changeWith() {
         Product product = ProductFixtures.mouseDol();
 
-        product.changeWith(Product.builder()
-                                  .name("쥐순이")
-                                  .maker("코드숨")
-                                  .price(10000)
-                                  .imageUrl("http://localhost:8080/rat")
-                                  .build());
+        product.changeWith(ProductFixtures.mouseSunWithImageUrl());
 
         assertThat(product.getName()).isEqualTo("쥐순이");
         assertThat(product.getMaker()).isEqualTo("코드숨");
