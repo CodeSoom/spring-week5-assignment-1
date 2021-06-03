@@ -58,10 +58,13 @@ class UserServiceTest {
                 .email("123@google.com")
                 .password("3000")
                 .build();
+
         User user = userService.createUser(userData);
-        assertThat(user.getName()).isEqualTo("Kim");
+
+        assertThat(user.getName()).isEqualTo(userData.getName());
     }
 
+    //테스트용 사용자를 만들어 사용할 것.
     @Test
     void updateUserWithExistedId() {
         UserData updateUser = UserData.builder()
@@ -70,7 +73,9 @@ class UserServiceTest {
                 .build();
 
         User user = userService.updateUser(1L, updateUser);
-        assertThat(user.getName()).isEqualTo("LIM");
+
+        assertThat(user.getName()).isEqualTo(updateUser.getName());
+
         verify(userRepository).findById(1L);
     }
 
@@ -88,6 +93,7 @@ class UserServiceTest {
     @Test
     void deleteUserWithExistedId() {
         userService.deleteUser(1L);
+
         verify(userRepository).delete(any(User.class));
         verify(userRepository).findById(1L);
     }

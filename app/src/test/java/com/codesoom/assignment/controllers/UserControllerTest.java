@@ -33,9 +33,10 @@ public class UserControllerTest {
     String invalidEmailContent = "{\"name\":\"LIM\",\"email\":\"limcode.com\",\"password\":\"123456\"}";
     String invalidPasswordContent = "{\"name\":\"LIM\",\"email\":\"lim@code.com\",\"password\":\"1\"}";
 
+    User user;
     @BeforeEach
     void setUp() {
-        User user = User.builder()
+        user = User.builder()
                 .id(1L)
                 .name("LIM")
                 .email("lim@code.com")
@@ -59,6 +60,7 @@ public class UserControllerTest {
                 });
 
         given(userService.deleteUser(1L)).willReturn(user);
+
         given(userService.deleteUser(999L))
                 .willThrow(new UserNotFoundException(999L));
     }
@@ -71,7 +73,8 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(validContent))
                 .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("LIM")));
+                .andExpect(content().string(containsString(user.getName())));
+
         verify(userService).createUser(any(UserData.class));
     }
 
@@ -95,7 +98,7 @@ public class UserControllerTest {
                         .content(validContent)
         )
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("LIM")));
+                .andExpect(content().string(containsString(user.getName())));
     }
 
     @Test
@@ -113,6 +116,7 @@ public class UserControllerTest {
     void deleteWithExistedId() throws Exception {
         mockMvc.perform(delete("/users/1"))
                 .andExpect(status().isOk());
+
         verify(userService).deleteUser(1L);
     }
 
