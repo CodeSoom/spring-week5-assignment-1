@@ -29,7 +29,7 @@ public class UserService {
      * @param userData 사용자 정보
      * @return 등록한 사용자
      */
-    public User signInUser(UserData userData) {
+    public User signUp(UserData userData) {
         User user = mapper.map(userData, User.class);
         return userRepository.save(user);
     }
@@ -42,8 +42,8 @@ public class UserService {
      */
     public User updateUser(Long id, UserData userData) {
         User user = findUser(id);
-        modifyUser(userData, user);
-        return userRepository.save(user);
+        user.modify(mapper, userData);
+        return user;
     }
 
     /**
@@ -57,9 +57,5 @@ public class UserService {
     private User findUser(Long id) {
         return userRepository.findById(id)
                              .orElseThrow(() -> new UserNotFoundException(id));
-    }
-
-    private void modifyUser(UserData userDataForModify, User destinationUser) {
-        mapper.map(userDataForModify, destinationUser);
     }
 }

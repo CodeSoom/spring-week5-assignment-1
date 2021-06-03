@@ -33,8 +33,8 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User signInUser(@RequestBody @Valid UserData userData) {
-        return userService.signInUser(userData);
+    public User signUpUser(@RequestBody @Valid UserData userData) {
+        return userService.signUp(userData);
     }
 
     /**

@@ -9,6 +9,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 /**
  * 사용자 Dto.
@@ -20,16 +21,16 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class UserData {
 
-    @NotBlank
+    @NotBlank(message = "이름을 입력 해주세요")
     @Mapping("name")
     private String name;
 
-    @Email
+    @Email(message = "이메일을 입력 해주세요")
     @NotBlank
     @Mapping("email")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "패스워드를 입력해주세요")
     @Mapping("password")
     private String password;
 }
