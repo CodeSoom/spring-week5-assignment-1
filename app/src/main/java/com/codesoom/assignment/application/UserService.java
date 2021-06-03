@@ -3,6 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.userdata.UserCreateData;
+import com.codesoom.assignment.dto.userdata.UserUpdateData;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -28,7 +30,7 @@ public class UserService {
         return findUser(id);
     }
 
-    public User createUser(UserData userData) {
+    public User createUser(UserCreateData userData) {
         User user = User.builder()
                 .name(userData.getName())
                 .email(userData.getEmail())
@@ -37,7 +39,7 @@ public class UserService {
         return this.userRepository.save(user);
     }
 
-    public User updateUser(Long id, UserData userData) {
+    public User updateUser(Long id, UserUpdateData userData) {
         User user = findUser(id);
 
         user.change(

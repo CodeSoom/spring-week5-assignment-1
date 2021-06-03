@@ -1,0 +1,28 @@
+package com.codesoom.assignment.dto.userdata;
+import com.codesoom.assignment.dto.UserData;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.AllArgsConstructor;
+
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotBlank;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class UserCreateData extends UserData {
+
+    @NotBlank
+    private String name;
+
+    @NotBlank
+    @Email
+    private String email;
+
+    @NotBlank
+    private String password;
+}
