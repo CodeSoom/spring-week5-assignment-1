@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -16,8 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -57,6 +57,10 @@ public class UserControllerTest {
                             .age(userData.getAge())
                             .build();
                 });
+
+        given(userService.deleteUser(1L)).willReturn(user);
+        given(userService.deleteUser(999L))
+                .willThrow(new UserNotFoundException(999L));
     }
 
     @Test
@@ -103,5 +107,18 @@ public class UserControllerTest {
                         .content(invalidEmailContent)
                         .content(invalidPasswordContent))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deleteWithExistedId() throws Exception {
+        mockMvc.perform(delete("/users/1"))
+                .andExpect(status().isOk());
+        verify(userService).deleteUser(1L);
+    }
+
+    @Test
+    void deleteWithNotExistedId() throws Exception {
+        mockMvc.perform(delete("/users/999"))
+                .andExpect(status().isNotFound());
     }
 }
