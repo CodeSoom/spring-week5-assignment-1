@@ -54,7 +54,6 @@ public class UserControllerTest {
                             .age(userData.getAge())
                             .build();
                 });
-
     }
 
     @Test
