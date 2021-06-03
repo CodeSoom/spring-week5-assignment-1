@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * 회원정보 Entity입니다.
+ * 회원정보
  */
 @Entity
 @Getter
@@ -28,19 +28,16 @@ public class Account {
 
     /**
      * 회원의 이름입니다.
-     * 값은 Null이거나 공백일 수 없습니다.
      */
     private String name;
 
     /**
      * 회원의 비밀번호입니다.
-     * 값은 Null이거나 공백일 수 없습니다.
      */
     private String password;
 
     /**
      * 회원의 이메일입니다.
-     * 값은 Null이거나 공백일 수 없습니다.
      */
     private String email;
 

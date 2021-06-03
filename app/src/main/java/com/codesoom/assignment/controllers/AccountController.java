@@ -11,14 +11,13 @@ import java.util.List;
 
 /**
  *
- * 웹에서 회원정보에 대한 요청을 받아 처리 및 출력을 담당합니다.
+ * 회원 정보의 CRUD에 대한 http 요청을 처리합니다.
  *
- * @author flying_fisherman
  */
 
 @RestController
 @CrossOrigin
-@RequestMapping("/products/accounts")
+@RequestMapping("/users")
 public class AccountController {
     private final AccountService accountService;
 
@@ -27,9 +26,9 @@ public class AccountController {
     }
 
     /**
-     * 전체 회원정보를 List화 하여 리턴합니다.
+     * 전체 회원정보 목록을 리턴합니다.
      *
-     * @return 전체 회원정보입니다.
+     * @return 회원정보 목록
      */
     @GetMapping
     public List<Account> accountList() {
@@ -37,10 +36,10 @@ public class AccountController {
     }
 
     /**
-     * id를 받아 해당 id의 회원정보를 리턴합니다.
+     * 회원정보를 리턴합니다.
      *
-     * @param id 조회하려는 회원정보 ID입니다.
-     * @return 해당 ID의 회원정보입니다.
+     * @param id 조회하려는 회원정보 ID
+     * @return 회원정보
      */
     @GetMapping("{id}")
     public Account accountDetail(@PathVariable Long id) {
@@ -48,10 +47,10 @@ public class AccountController {
     }
 
     /**
-     * 필요한 회원정보의 내용을 받아 새로운 회원정보를 작성합니다.
+     * 새로운 회원정보를 작성합니다.
      *
-     * @param accountData 작성하려는 회원정보의 내용입니다.
-     * @return 작성된 회원정보입니다.
+     * @param accountData 작성하려는 회원정보의 내용
+     * @return 작성된 회원정보
      */
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
@@ -60,11 +59,11 @@ public class AccountController {
     }
 
     /**
-     * id와 수정하고자 하는 내용을 받아 해당 id의 회원정보를 수정합니다.
+     * 회원정보를 수정합니다.
      *
-     * @param id 수정하려는 회원정보 ID입니다.
-     * @param accountData 수정하고자 하는 회원정보 내용입니다.
-     * @return 수정된 회원정보입니다.
+     * @param id 수정하려는 회원정보 ID
+     * @param accountData 수정하려는 회원정보 내용
+     * @return 수정된 회원정보
      */
     @PatchMapping("{id}")
     public Account accountUpdate(@PathVariable Long id,
@@ -74,11 +73,11 @@ public class AccountController {
     }
 
     /**
-     * id와 수정하고자 하는 내용을 받아 해당 id의 회원정보를 수정합니다.
+     * 회원정보를 수정합니다.
      *
-     * @param id 수정하려는 회원정보 ID입니다.
-     * @param accountData 수정하고자 하는 회원정보 내용입니다.
-     * @return 수정된 회원정보입니다.
+     * @param id 수정하려는 회원정보 ID
+     * @param accountData 수정하려는 회원정보 내용
+     * @return 수정된 회원정보
      */
     @PutMapping("{id}")
     public Account accountPut(@PathVariable Long id,
@@ -88,9 +87,9 @@ public class AccountController {
     }
 
     /**
-     * id를 받아 해당 id의 회원정보를 삭제합니다.
+     * 회원정보를 삭제합니다.
      *
-     * @param id 삭제하려는 회원정보 ID입니다.
+     * @param id 삭제하려는 회원정보 ID
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
