@@ -1,7 +1,9 @@
-package com.codesoom.assignment;
+package com.codesoom.assignment.exception;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
+
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
