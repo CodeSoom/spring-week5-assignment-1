@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.UserDto;
 import lombok.*;
 
 import javax.persistence.*;
@@ -32,5 +33,14 @@ public class User {
         this.name = source.name;
         this.email = source.email;
         this.password = source.password;
+    }
+
+    public static User of(User user) {
+        return User.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
     }
 }
