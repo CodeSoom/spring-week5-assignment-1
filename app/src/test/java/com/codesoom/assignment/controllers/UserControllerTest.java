@@ -30,6 +30,8 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
+    String invalidContent = "{\"name\":\"LIM\",\"email\":\"limcode.com\",\"password\":\"123456\"}";
+
     @BeforeEach
     void setUp() {
         User user = User.builder()
@@ -70,7 +72,6 @@ public class UserControllerTest {
 
     @Test
     void createWithInvalidAttributes() throws Exception {
-        String invalidContent = "{\"name\":\"LIM\",\"email\":\"limcode.com\",\"password\":\"123456\"}";
         mockMvc.perform(
                 post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -98,8 +99,7 @@ public class UserControllerTest {
                 patch("/users/1")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"LIM\",\"email\":\"codespring.com\"," +
-                                "\"password\":123456}")
+                        .content(invalidContent)
         )
                 .andExpect(status().isBadRequest());
     }
