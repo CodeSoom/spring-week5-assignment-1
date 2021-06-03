@@ -12,9 +12,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.in;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -38,6 +41,20 @@ public class UserControllerTest {
 
         given(userService.createUser(any(UserData.class)))
                 .willReturn(user);
+
+        given(userService.updateUser(eq(1L), any(UserData.class)))
+                .will(invocation -> {
+                    Long id = invocation.getArgument(0);
+                    UserData userData = invocation.getArgument(1);
+                    return User.builder()
+                            .id(id)
+                            .name(userData.getName())
+                            .email(userData.getEmail())
+                            .password(userData.getPassword())
+                            .age(userData.getAge())
+                            .build();
+                });
+
     }
 
     @Test
@@ -61,5 +78,18 @@ public class UserControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidContent))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateWithValidAttributes() throws Exception {
+        mockMvc.perform(
+                patch("/users/1")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"LIM\",\"email\":\"code@spring.com\"," +
+                                "\"password\":123456}")
+        )
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("LIM")));
     }
 }

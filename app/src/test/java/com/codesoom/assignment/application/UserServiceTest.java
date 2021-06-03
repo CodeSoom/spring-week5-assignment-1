@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -8,10 +9,14 @@ import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class UserServiceTest {
 
@@ -19,9 +24,16 @@ class UserServiceTest {
     private UserRepository userRepository = mock(UserRepository.class);
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         userService = new UserService(mapper, userRepository);
+
+        User user = User.builder()
+                .id(1L)
+                .name("KIM")
+                .email("code@soom.com")
+                .password("123456")
+                .age(22).build();
 
         given(userRepository.save(any(User.class))).will(invocation -> {
             User source = invocation.getArgument(0);
@@ -33,10 +45,14 @@ class UserServiceTest {
                     .age(source.getAge())
                     .build();
         });
+
+
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(1000L)).willThrow(UserNotFoundException.class);
     }
 
     @Test
-    void createUser(){
+    void createUser() {
         UserData userData = UserData.builder()
                 .name("Kim")
                 .email("123@google.com")
@@ -44,5 +60,41 @@ class UserServiceTest {
                 .build();
         User user = userService.createUser(userData);
         assertThat(user.getName()).isEqualTo("Kim");
+    }
+
+    @Test
+    void updateUserWithExistedId() {
+        UserData updateUser = UserData.builder()
+                .name("LIM")
+                .email("java@spring.com")
+                .build();
+
+        User user = userService.updateUser(1L, updateUser);
+        assertThat(user.getName()).isEqualTo("LIM");
+        verify(userRepository).findById(1L);
+    }
+
+    @Test
+    void updateUserWithNotExistedId() {
+        UserData updateUser = UserData.builder()
+                .name("LIM")
+                .email("java@spring")
+                .build();
+
+        assertThatThrownBy(() -> userService.updateUser(1000L, updateUser))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void deleteUserWithExistedId() {
+        userService.deleteUser(1L);
+        verify(userRepository).delete(any(User.class));
+        verify(userRepository).findById(1L);
+    }
+
+    @Test
+    void deleteUserWithNotExistedId() {
+        assertThatThrownBy(() -> userService.deleteUser(1000L))
+                .isInstanceOf(UserNotFoundException.class);
     }
 }

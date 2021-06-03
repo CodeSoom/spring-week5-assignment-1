@@ -108,4 +108,11 @@ public Product updateProduct(Long id, ProductData productData) {
 
 #### @Email, password regex 조건은 왜 User 가 아닌, UserData 에 걸어야 동작하는가 ?
 
+- UserController test, given(update) -> userData 는 어디서 값을 받지..?
+
+- DI 이란?
+- Inversion of Control 이라고도 하는 의존 관계 주입이자, 어떤 객체가 사용하는 의존 객체를 직접 만들어 사용하는 것이 아닌, 주입 받아 사용하는 방법.
+  - new 연산자를 사용하지 않고, 직접 주입받아 사용한다는 말인가..?
+- DozerMapper 대신 다른 매퍼를 사용할 경우, 해당 부분만 swtich 하면 되기 때문이라 생각합니다.
+
 
