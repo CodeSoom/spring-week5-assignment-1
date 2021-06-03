@@ -12,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.in;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -30,7 +29,9 @@ public class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    String invalidContent = "{\"name\":\"LIM\",\"email\":\"limcode.com\",\"password\":\"123456\"}";
+    String validContent = "{\"name\":\"LIM\",\"email\":\"lim@code.com\",\"password\":\"123456\"}";
+    String invalidEmailContent = "{\"name\":\"LIM\",\"email\":\"limcode.com\",\"password\":\"123456\"}";
+    String invalidPasswordContent = "{\"name\":\"LIM\",\"email\":\"lim@code.com\",\"password\":\"1\"}";
 
     @BeforeEach
     void setUp() {
@@ -64,7 +65,7 @@ public class UserControllerTest {
                 post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"LIM\",\"email\":\"lim@code.com\",\"password\":\"123456\"}"))
+                        .content(validContent))
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("LIM")));
         verify(userService).createUser(any(UserData.class));
@@ -76,7 +77,8 @@ public class UserControllerTest {
                 post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidContent))
+                        .content(invalidEmailContent)
+                        .content(invalidPasswordContent))
                 .andExpect(status().isBadRequest());
     }
 
@@ -86,8 +88,7 @@ public class UserControllerTest {
                 patch("/users/1")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"LIM\",\"email\":\"code@spring.com\"," +
-                                "\"password\":123456}")
+                        .content(validContent)
         )
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("LIM")));
@@ -99,8 +100,8 @@ public class UserControllerTest {
                 patch("/users/1")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidContent)
-        )
+                        .content(invalidEmailContent)
+                        .content(invalidPasswordContent))
                 .andExpect(status().isBadRequest());
     }
 }
