@@ -1,7 +1,7 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductBadRequestException;
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.exception.ProductBadRequestException;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
@@ -14,7 +14,6 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * @author 유동관
  * @description 상품 관련 CRUD
  */
 @Service
@@ -38,8 +37,8 @@ public class ProductService {
      *
      * @param id - 조회하고자 하는 상품의 식별자
      * @return 주어진 식별자에 해당하는 상품
-     * @throws ProductNotFoundException 만약 주어진
-     *         {@param id}에 해당되는 상품이 저장되어 있지 않은 경우
+     * @throws ProductNotFoundException
+     *          주어진 상품의 정보가 유효하지 않은 경우
      */
     public Product getProduct(Long id) {
         return productRepository.findById(id)
@@ -77,8 +76,8 @@ public class ProductService {
      * @param id - 수정하고자 하는 상품의 식별자
      * @param productData - 수정 할 새로운 상품
      * @return product 수정 된 상품
-     * @throws ProductNotFoundException 만약 주어진
-     *        {@param id}에 해당되는 상품이 저장되어 있지 않은 경우
+     * @throws ProductNotFoundException
+     *          주어진 상품의 정보가 유효하지 않은 경우
      */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = getProduct(id);
@@ -94,7 +93,7 @@ public class ProductService {
      * @param id - 삭제하고자 하는 상품의 식별자
      * @return 삭제 된 상품
      * @throws ProductNotFoundException 만약
-     *         @code id}에 해당되는 상품이 저장되어 있지 않은 경우
+     *         {@param id}에 해당되는 상품을 찾을 수 없는 경우
      */
     public Product deleteProduct(Long id) {
         Product product = getProduct(id);
