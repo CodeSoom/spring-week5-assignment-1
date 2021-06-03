@@ -91,4 +91,16 @@ public class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("LIM")));
     }
+
+    @Test
+    void updateWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                patch("/users/1")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"LIM\",\"email\":\"codespring.com\"," +
+                                "\"password\":123456}")
+        )
+                .andExpect(status().isBadRequest());
+    }
 }
