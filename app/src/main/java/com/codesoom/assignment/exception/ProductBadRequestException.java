@@ -1,4 +1,4 @@
-package com.codesoom.assignment;
+package com.codesoom.assignment.exception;
 
 public class ProductBadRequestException extends RuntimeException {
     public ProductBadRequestException(String variable, String status) {
