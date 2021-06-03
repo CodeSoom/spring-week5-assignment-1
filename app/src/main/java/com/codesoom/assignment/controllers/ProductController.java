@@ -22,9 +22,9 @@ public class ProductController {
     }
 
     /**
-     * 모든 상품 정보에 대한 요청을 처리합니다.
+     * 모든 상품에 대한 요청을 처리합니다.
      *
-     * @return 모든 상품 정보
+     * @return 모든 상품
      */
     @GetMapping
     public List<Product> list() {
@@ -32,10 +32,10 @@ public class ProductController {
     }
 
     /**
-     * 특정 상품에 대한 요청을 처리합니다.
+     * 주어진 식별자를 가진 상품에 대한 요청을 처리합니다.
      *
      * @param id 상품 식별자
-     * @return 상품 정보
+     * @return 상품
      */
     @GetMapping("{id}")
     public Product detail(@PathVariable Long id) {
@@ -43,10 +43,10 @@ public class ProductController {
     }
 
     /**
-     * 상품 정보 생성에 대한 요청을 처리합니다.
+     * 상품 생성에 대한 요청을 처리합니다.
      *
      * @param productData 생성할 상품 정보
-     * @return 생성된 상품 정보
+     * @return 생성된 상품
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -55,11 +55,11 @@ public class ProductController {
     }
 
     /**
-     * 특정 상품에 대한 정보 수정 요청을 처리합니다.
+     * 주어진 식별자를 가진 상품에 대한 수정 요청을 처리합니다.
      *
      * @param id 상품 식별자
-     * @param productData 수정할 상품의 정보
-     * @return 수정된 상품 정보
+     * @param productData 수정할 상품 정보
+     * @return 수정된 상품
      */
     @PatchMapping("{id}")
     public Product update(
@@ -70,7 +70,7 @@ public class ProductController {
     }
 
     /**
-     * 특정 상품에 대한 정보 삭제 요청을 처리합니다.
+     * 주어진 식별자를 가진 상품에 대한 삭제 요청을 처리합니다.
      *
      * @param id 상품 식별자
      */

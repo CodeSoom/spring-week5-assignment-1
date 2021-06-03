@@ -22,29 +22,29 @@ public class ProductService {
     }
 
     /**
-     * 모든 상품 정보를 반환합니다.
+     * 모든 상품을 반환합니다.
      *
-     * @return 상품 정보 리스트
+     * @return 상품 리스트
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
     /**
-     * 특정 상품에 대한 세부사항을 반환합니다.
+     * 주어진 식별자를 가진 상품을 반환합니다.
      *
      * @param id 상품 식별자
-     * @return 상품의 세부사항
+     * @return 상품
      */
     public Product getProduct(Long id) {
         return findProduct(id);
     }
 
     /**
-     * 상품에 대한 정보를 생성한 뒤, 저장하고 반환합니다.
+     * 상품을 생성하고 반환합니다.
      *
      * @param productData 생성할 상품의 정보
-     * @return 생성된 상보 정보
+     * @return 생성된 상품
      */
     public Product createProduct(ProductData productData) {
         Product product = Product.builder()
@@ -57,11 +57,11 @@ public class ProductService {
     }
 
     /**
-     * 상품에 대한 정보를 수정합니다.
+     * 상품을 수정합니다.
      *
      * @param id 상품 식별자
      * @param productData 수정할 상품의 정보
-     * @return 수정된 상품 정보
+     * @return 수정된 상품
      */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
@@ -77,10 +77,10 @@ public class ProductService {
     }
 
     /**
-     * 특정 상품 정보를 삭제합니다.
+     * 주어진 식별자를 가진 상품을 삭제합니다.
      *
      * @param id 상품 식별자
-     * @return 삭제된 상품 정보
+     * @return 삭제된 상품
      */
     public Product deleteProduct(Long id) {
         Product product = findProduct(id);
