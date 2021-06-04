@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 유저 엔티티
+ */
 @Entity
 @Builder
 @Getter
@@ -23,6 +26,11 @@ public class User {
     private String email;
     private String password;
 
+    /**
+     * 유저를 주어진 유저 정보로 갱신합니다.
+     *
+     * @param source 주어진 유저 정보
+     */
     public void change(User source) {
         this.name = source.getName();
         this.email = source.getEmail();
