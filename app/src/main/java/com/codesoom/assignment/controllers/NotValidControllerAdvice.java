@@ -13,8 +13,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class NotValidControllerAdvice {
     /**
-     * 유효하지 않을 데이터가 전달될 경우
-     * 400 Bad Request 상태와 유효하지 않은 부분을 응답합니다.
+     * 유효하지 않은 데이터가 전달될 경우 에러를 응답합니다.
      *
      * @param exception 발생한 예외
      * @return 에러 응답
