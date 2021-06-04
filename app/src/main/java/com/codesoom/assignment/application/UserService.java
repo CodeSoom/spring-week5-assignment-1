@@ -8,22 +8,46 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
+/**
+ * 유저 데이터에 대한 요청을 처리합니다.
+ */
 @Service
 public class UserService {
 
     private UserRepository userRepository;
     private Mapper mapper;
 
+    /**
+     * Object 맵퍼 객체와 유저 저장소 객체를 주입 받습니다.
+     *
+     * @param mapper Object 맵퍼
+     * @param userRepository 유저 저장소 객체
+     */
     public UserService(Mapper mapper, UserRepository userRepository) {
         this.mapper = mapper;
         this.userRepository = userRepository;
     }
 
+    /**
+     * 유저를 생성하고, 생성한 유저의 정보를 반환합니다.
+     *
+     * @param source 생성할 유저 정보
+     * @return 생성된 유저 정보
+     */
     public User createUser(UserDto source) {
         User user = mapper.map(source, User.class);
         return userRepository.save(user);
     }
 
+    /**
+     * 유저를 갱신하고, 갱신한 유저의 정보를 반환합니다.
+     *
+     * @param id 갱신할 유저 id
+     * @param source 갱신할 내용
+     * @return 갱신한 유저 정보
+     * @throws NotFoundUserException
+     *      유저를 찾지 못했을 때 던지는 예외
+     */
     public User updateUser(Long id, UserDto source) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundUserException(id));
@@ -31,6 +55,13 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    /**
+     * 유저를 삭제합니다.
+     *
+     * @param id 삭제할 유저 id
+     * @throws NotFoundUserException
+     *      유저를 찾지 못했을 때 던지는 예외
+     */
     public void deleteUser(Long id) {
         try {
             userRepository.deleteById(id);
