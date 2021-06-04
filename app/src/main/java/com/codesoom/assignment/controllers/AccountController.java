@@ -67,7 +67,7 @@ public class AccountController {
      */
     @PatchMapping("{id}")
     public Account accountUpdate(@PathVariable Long id,
-                              @RequestBody @Valid AccountData accountData
+                                 @RequestBody @Valid AccountData accountData
     ) {
       return accountService.updateAccount(id, accountData);
     }
