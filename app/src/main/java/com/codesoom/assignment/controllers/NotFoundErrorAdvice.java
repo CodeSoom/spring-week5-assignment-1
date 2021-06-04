@@ -9,8 +9,17 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+/**
+ * 컨트롤러 layer에서 던지는 예외를 처리합니다.
+ */
 @ControllerAdvice
 public class NotFoundErrorAdvice {
+
+    /**
+     * 상품을 찾지 못했다는 예외가 던져지면, 404 상태코드와 예외 메시지를 응답합니다.
+     *
+     * @return 상품을 찾지 못했다는 예외 메시지
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
@@ -18,6 +27,12 @@ public class NotFoundErrorAdvice {
         return new ErrorResponse("Product not found");
     }
 
+    /**
+     * 유저를 찾지 못했다는 예외가 던져지면, 404 상태코드와 예외 메시지를 응답합니다.
+     *
+     * @param e 던져진 예외 객체
+     * @return 유저를 찾지 못했다는 예외 메시지
+     */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NotFoundUserException.class)
