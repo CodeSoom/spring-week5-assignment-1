@@ -1,7 +1,7 @@
 package com.codesoom.assignment.dto;
 
 /**
- * HTTP 응답할 에러 내용을 저장하는 객체
+ * HTTP 응답할 에러 내용을 저장합니다.
  */
 public class ErrorResponse {
     private String message;
