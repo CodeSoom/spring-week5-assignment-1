@@ -71,8 +71,7 @@ public class UserService {
                 userData.getEmail(),
                 userData.getPassword()
         );
-
-        return user;
+        return userRepository.save(user);
     }
 
     /**
