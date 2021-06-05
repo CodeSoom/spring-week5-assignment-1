@@ -18,10 +18,10 @@ public class UserService {
     private Mapper mapper;
 
     /**
-     * Object 맵퍼 객체와 유저 저장소 객체를 주입 받습니다.
+     * 생성자.
      *
      * @param mapper Object 맵퍼
-     * @param userRepository 유저 저장소 객체
+     * @param userRepository 유저 저장소
      */
     public UserService(Mapper mapper, UserRepository userRepository) {
         this.mapper = mapper;
@@ -45,8 +45,7 @@ public class UserService {
      * @param id 갱신할 유저 id
      * @param source 갱신할 내용
      * @return 갱신한 유저 정보
-     * @throws NotFoundUserException
-     *      유저를 찾지 못했을 때 던지는 예외
+     * @throws NotFoundUserException 유저를 찾지 못한 경우
      */
     public User updateUser(Long id, UserDto source) {
         User user = userRepository.findById(id)
@@ -59,8 +58,7 @@ public class UserService {
      * 유저를 삭제합니다.
      *
      * @param id 삭제할 유저 id
-     * @throws NotFoundUserException
-     *      유저를 찾지 못했을 때 던지는 예외
+     * @throws NotFoundUserException 유저를 찾지 못한 경우
      */
     public void deleteUser(Long id) {
         try {
