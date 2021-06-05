@@ -7,6 +7,7 @@ import com.codesoom.assignment.dto.UserDto;
 import com.codesoom.assignment.exception.NotFoundUserException;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
+import com.github.dozermapper.core.MappingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -107,6 +108,18 @@ class UserServiceTest {
                 assertThat(user.getName()).isEqualTo(givenUserDto.getName());
             }
         }
+
+        @Nested
+        @DisplayName("null이 주어지면")
+        class Context_of_null {
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> userService.createUser(null))
+                        .isInstanceOf(MappingException.class);
+            }
+        }
     }
 
     @Nested
@@ -165,6 +178,18 @@ class UserServiceTest {
             void it_updates_and_returns_user() {
                 assertThatThrownBy(() -> userService.updateUser(givenId, givenUserDto))
                         .isInstanceOf(NotFoundUserException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("갱신할 정보로 null이 주어지면")
+        class Context_of_null {
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> userService.updateUser(EXISTENT_ID, null))
+                        .isInstanceOf(MappingException.class);
             }
         }
     }

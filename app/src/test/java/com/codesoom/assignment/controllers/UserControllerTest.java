@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserDto;
 import com.codesoom.assignment.exception.NotFoundUserException;
+import com.github.dozermapper.core.MappingException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -85,8 +86,12 @@ class UserControllerTest {
 
         given(userService.createUser(sampleUserDto))
                 .willReturn(sampleUser);
+        given(userService.createUser(null))
+                .willThrow(MappingException.class);
         given(userService.updateUser(EXISTENT_ID, updateUserDto))
                 .willReturn(updatedUser);
+        given(userService.updateUser(EXISTENT_ID, null))
+                .willThrow(MappingException.class);
 
         willThrow(NotFoundUserException.class)
                 .given(userService).updateUser(eq(NON_EXISTENT_ID), any(UserDto.class));
@@ -99,23 +104,28 @@ class UserControllerTest {
     class Describe_of_create {
 
         @Nested
-        @DisplayName("유효한 유저 정보가 주어지면")
+        @DisplayName("유저 정보가 주어지면")
         class Context_of_valid_user_dto {
-
-            private UserDto givenUserDto;
-
-            @BeforeEach
-            void setup() {
-                this.givenUserDto = sampleUserDto;
-            }
 
             @Test
             @DisplayName("유저를 생성하고, 생성한 유저를 반환한다")
             void it_creates_and_returns_user() {
-                User user = userController.create(givenUserDto);
+                User user = userController.create(sampleUserDto);
 
-                assertThat(user.getName()).isEqualTo(givenUserDto.getName());
+                assertThat(user.getName()).isEqualTo(sampleUserDto.getName());
                 verify(userService).createUser(any(UserDto.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("null이 주어지면")
+        class Context_of_null {
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> userController.create(null))
+                        .isInstanceOf(MappingException.class);
             }
         }
     }
@@ -144,6 +154,26 @@ class UserControllerTest {
 
                 assertThat(user.getName()).isEqualTo(givenUserDto.getName());
                 verify(userService).updateUser(eq(givenId), any(UserDto.class));
+            }
+        }
+
+        @DisplayName("유저 정보로 null이 주어지면")
+        class Context_of_null {
+
+            private Long givenId;
+            private UserDto givenUserDto;
+
+            @BeforeEach
+            void setup() {
+                this.givenId = EXISTENT_ID;
+                this.givenUserDto = null;
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> userController.update(givenId, givenUserDto))
+                        .isInstanceOf(MappingException.class);
             }
         }
     }
