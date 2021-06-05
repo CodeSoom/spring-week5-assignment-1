@@ -12,6 +12,7 @@ import java.util.List;
 /**
  * 고양이 장난감 물품에 대한 Request 처리하여 Response를 반환합니다.
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/products")
 public class ProductController {
