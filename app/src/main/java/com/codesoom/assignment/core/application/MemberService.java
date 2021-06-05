@@ -6,8 +6,10 @@ import com.codesoom.assignment.web.dto.MemberData;
 import com.codesoom.assignment.web.exception.MemberNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
+import javax.transaction.Transactional;
 
+@Service
+@Transactional
 public class MemberService {
 
     private final MemberRepository memberRepository;
