@@ -7,23 +7,23 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 /**
- * 스프링 부트 앱
+ * 애플리케이션 메인 클래스
  */
 @SpringBootApplication
 public class App {
     /**
-     * 스프링 부트 애플리케이션을 시동합니다.
+     * 서버를 시동합니다.
      *
-     * @param args 수프링 부트 애플리케이션에 주어진 인자
+     * @param args 주어진 인자
      */
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
     }
 
     /**
-     * DozerMapper 객체를 Java Bean으로 만듭니다.
+     * Mapper Bean을 정의하고 리턴합니다.
      *
-     * @return Java Bean으로 쓸 DozerMapper 객체
+     * @return 정의한 Mapper Bean
      */
     @Bean
     public Mapper dozerMapper() {
