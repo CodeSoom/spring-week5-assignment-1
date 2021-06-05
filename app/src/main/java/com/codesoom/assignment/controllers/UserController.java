@@ -24,22 +24,46 @@ public class UserController {
     // TODO: 추상클래스를 만들어서 Controller가 공통적으로 가지는 메소드 추상화하기
     // 아마 제네릭도 필요할 듯
 
+    /**
+     * 유저 목록에 대한 요청을 처리합니다.
+     *
+     * @return 유저 목록
+     */
     @GetMapping
     public List<User> list() {
         return this.userService.getUsers();
     }
 
+    /**
+     * 식별자를 가진 유저에 대한 요청을 처리합니다.
+     *
+     * @param id 유저 식별자
+     * @return 유저
+     */
     @GetMapping("{id}")
     public User detail(@PathVariable Long id) {
         return this.userService.getUser(id);
     }
 
+    /**
+     * 유저 생성에 대한 요청을 처리합니다.
+     *
+     * @param userData 생성할 유저의 정보
+     * @return 생성된 유저
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody @Valid UserCreateData userData) {
         return this.userService.createUser(userData);
     }
 
+    /**
+     * 식별자를 가진 유저에 대한 정보 수정 요청을 처리합니다.
+     *
+     * @param id 유저 식별자
+     * @param userData 수정에 필요한 유저의 정보
+     * @return 정보가 수정된 유저
+     */
     @PatchMapping("{id}")
     public User update(
             @PathVariable Long id,
@@ -48,6 +72,11 @@ public class UserController {
         return this.userService.updateUser(id, userData);
     }
 
+    /**
+     * 식별자를 가진 유저 삭제에 대한 요청을 처리합니다.
+     *
+     * @param id 유저 식별자
+     */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long id) {
