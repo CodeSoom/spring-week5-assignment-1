@@ -61,8 +61,8 @@ public class UserControllerTest {
 
         given(userService.deleteUser(1L)).willReturn(user);
 
-        given(userService.deleteUser(999L))
-                .willThrow(new UserNotFoundException(999L));
+        given(userService.deleteUser(1000L))
+                .willThrow(new UserNotFoundException(1000L));
     }
 
     @Test
@@ -120,9 +120,10 @@ public class UserControllerTest {
         verify(userService).deleteUser(1L);
     }
 
+    // TEST 실패
     @Test
     void deleteWithNotExistedId() throws Exception {
-        mockMvc.perform(delete("/users/999"))
+        mockMvc.perform(delete("/users/1000"))
                 .andExpect(status().isNotFound());
     }
 }

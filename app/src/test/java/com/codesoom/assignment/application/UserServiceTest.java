@@ -23,6 +23,8 @@ class UserServiceTest {
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
 
+    UserData updateUser;
+
     @BeforeEach
     void setUp() {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
@@ -34,6 +36,11 @@ class UserServiceTest {
                 .email("code@soom.com")
                 .password("123456")
                 .age(22).build();
+
+        updateUser = UserData.builder()
+                .name("LIM")
+                .email("java@spring.com")
+                .build();
 
         given(userRepository.save(any(User.class))).will(invocation -> {
             User source = invocation.getArgument(0);
@@ -64,27 +71,17 @@ class UserServiceTest {
         assertThat(user.getName()).isEqualTo(userData.getName());
     }
 
-    //테스트용 사용자를 만들어 사용할 것.
     @Test
     void updateUserWithExistedId() {
-        UserData updateUser = UserData.builder()
-                .name("LIM")
-                .email("java@spring.com")
-                .build();
 
         User user = userService.updateUser(1L, updateUser);
 
         assertThat(user.getName()).isEqualTo(updateUser.getName());
-
         verify(userRepository).findById(1L);
     }
 
     @Test
     void updateUserWithNotExistedId() {
-        UserData updateUser = UserData.builder()
-                .name("LIM")
-                .email("java@spring")
-                .build();
 
         assertThatThrownBy(() -> userService.updateUser(1000L, updateUser))
                 .isInstanceOf(UserNotFoundException.class);
