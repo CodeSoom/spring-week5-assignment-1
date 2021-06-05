@@ -7,18 +7,18 @@ public class ErrorResponse {
     private String message;
 
     /**
-     * 에러 내용을 저장하는 객체를 생성한다.
+     * 생성자.
      *
-     * @param message 에러 내용
+     * @param message 에러 메시지
      */
     public ErrorResponse(String message) {
         this.message = message;
     }
 
     /**
-     * 저장된 에러 내용을 반환한다.
+     * 저장된 에러 메시지를 반환한다.
      *
-     * @return 저장된 에러 내용
+     * @return 저장된 에러 메시지
      */
     public String getMessage() {
         return message;

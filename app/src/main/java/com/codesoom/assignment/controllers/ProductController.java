@@ -20,7 +20,7 @@ public class ProductController {
     private final ProductService productService;
 
     /**
-     * 상품 서비스 객체를 주입 받습니다.
+     * 생성자.
      *
      * @param productService 상품 서비스 객체
      */
@@ -29,7 +29,7 @@ public class ProductController {
     }
 
     /**
-     * 200 상태 코드와 모든 상품 목록을 응답합니다.
+     * 모든 상품 목록을 응답합니다.
      *
      * @return 모든 상품 목록
      */
@@ -39,7 +39,7 @@ public class ProductController {
     }
 
     /**
-     * 상품을 찾고, 200 상태 코드와 찾은 상품을 응답합니다.
+     * 상품을 찾고, 찾은 상품을 응답합니다.
      *
      * @param id 찾을 상품 id
      * @return 200 상태 코드와 찾은 상품
@@ -63,7 +63,7 @@ public class ProductController {
     }
 
     /**
-     * 상품을 갱신하고, 200 상태 코드와 갱신한 상품을 응답합니다.
+     * 상품을 갱신하고, 갱신한 상품을 응답합니다.
      *
      * @param id 갱신할 상품 id
      * @param productData 갱신할 내용

@@ -26,9 +26,9 @@ public class UserController {
     private UserService userService;
 
     /**
-     * 요청 받은 동작을 수행할 서비스객체를 주입 받습니다.
+     * 생성자.
      *
-     * @param userService
+     * @param userService 유저 서비스 객체
      */
     public UserController(UserService userService) {
         this.userService = userService;
