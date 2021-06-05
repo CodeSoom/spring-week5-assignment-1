@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @NoArgsConstructor
@@ -14,10 +13,15 @@ import javax.validation.constraints.NotBlank;
 @Builder
 public class UserData {
     public Long id;
-    @NotBlank(message = "잘못된 요청입니다. 파라미터를 확인해 주세요.")
+    @NotBlank(message = "잘못된 요청입니다. 파라미터를 확인해 주세요."
+            ,groups = {UserValidationGroups.createUserGroup.class
+            ,UserValidationGroups.updateUserGroup.class})
     public String name;
-    @Email(message = "잘못된 요청입니다. 파라미터를 확인해 주세요.")
+    @NotBlank(message = "잘못된 요청입니다. 파라미터를 확인해 주세요."
+            ,groups = {UserValidationGroups.createUserGroup.class})
     public String email;
-    @NotBlank(message = "잘못된 요청입니다. 파라미터를 확인해 주세요.")
+    @NotBlank(message = "잘못된 요청입니다. 파라미터를 확인해 주세요."
+            ,groups = {UserValidationGroups.createUserGroup.class
+            ,UserValidationGroups.updateUserGroup.class})
     public String password;
 }

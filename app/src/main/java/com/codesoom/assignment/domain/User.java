@@ -1,10 +1,8 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.UserData;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -12,10 +10,9 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Getter
+@ToString
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,10 +24,13 @@ public class User {
 
     private String password;
 
-    public User chageData(UserData userData){
-        this.email = userData.getEmail();
-        this.name = userData.getName();
-        this.password = userData.getPassword();
-        return this;
+    private User(Long id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    protected User() {
     }
 }

@@ -68,6 +68,9 @@ dependencies {
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
     }
+
+    // https://mvnrepository.com/artifact/com.github.fangjinuo.easyjson/simplejson-to-easyjson
+    implementation group: 'com.github.fangjinuo.easyjson', name: 'simplejson-to-easyjson', version: '3.1.1'
 }
 
 application {
