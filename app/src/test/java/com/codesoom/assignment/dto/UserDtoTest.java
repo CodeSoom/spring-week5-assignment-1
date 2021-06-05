@@ -1,6 +1,5 @@
 package com.codesoom.assignment.dto;
 
-import com.codesoom.assignment.domain.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
