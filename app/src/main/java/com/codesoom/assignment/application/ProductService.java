@@ -18,9 +18,9 @@ public class ProductService {
     private final ProductRepository productRepository;
 
     /**
-     * 상품 저장소 객체를 주입 받습니다.
+     * 생성자.
      *
-     * @param productRepository
+     * @param productRepository 상품 저장소
      */
     public ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
@@ -100,8 +100,7 @@ public class ProductService {
      *
      * @param id 찾을 상품의 id
      * @return 찾은 상품
-     * @throws ProductNotFoundException
-     *      상품을 찾지 못할 때 던지는 예외
+     * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     private Product findProduct(Long id) {
         return productRepository.findById(id)
