@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * 유저 엔티티
+ * 유저 엔티티.
  */
 @Entity
 @Builder

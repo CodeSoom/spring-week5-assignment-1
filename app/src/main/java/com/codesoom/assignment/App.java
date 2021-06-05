@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 
 /**
- * 애플리케이션 메인 클래스
+ * 애플리케이션 메인 클래스.
  */
 @SpringBootApplication
 public class App {
