@@ -1,7 +1,7 @@
 package com.codesoom.assignment.exception;
 
 /**
- * 유저를 찾지 못한 경우 던지는 예외 객체
+ * 유저를 찾지 못한 경우 던집니다.
  */
 public class NotFoundUserException extends RuntimeException {
     /**

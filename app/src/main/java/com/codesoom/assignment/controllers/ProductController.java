@@ -43,8 +43,7 @@ public class ProductController {
      *
      * @param id 찾을 상품 id
      * @return 200 상태 코드와 찾은 상품
-     * @throws ProductNotFoundException
-     *      상품을 찾지 못한 경우 던지는 예외
+     * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     @GetMapping("{id}")
     public Product detail(@PathVariable Long id) {
@@ -69,8 +68,7 @@ public class ProductController {
      * @param id 갱신할 상품 id
      * @param productData 갱신할 내용
      * @return 201 상태 코드와 갱신한 상품
-     * @throws ProductNotFoundException
-     *      상품을 찾지 못한 경우 던지는 예외
+     * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     @PatchMapping("{id}")
     public Product update(
@@ -84,8 +82,7 @@ public class ProductController {
      * 상품을 삭제하고, 204 상태코드를 응답합니다.
      *
      * @param id 삭제할 상품 id
-     * @throws ProductNotFoundException
-     *      상품을 찾지 못한 경우 던지는 예외
+     * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
