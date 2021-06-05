@@ -7,6 +7,7 @@ import com.codesoom.assignment.web.exception.MemberNotFoundException;
 import org.springframework.stereotype.Service;
 
 @Service
+
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -51,7 +52,8 @@ public class MemberService {
                 memberData.getEmail()
         );
 
-        return memberRepository.save(member);
+//        return memberRepository.save(member);
+        return member;
     }
 
 }
