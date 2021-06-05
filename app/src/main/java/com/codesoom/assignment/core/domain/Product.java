@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 고양이 장난감 - DB 도메인
+ */
 @Entity
 @Getter
 @Builder

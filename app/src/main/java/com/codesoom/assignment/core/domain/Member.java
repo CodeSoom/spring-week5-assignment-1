@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 회원 - DB 도메인
+ */
 @Entity
 @Getter
 @Builder

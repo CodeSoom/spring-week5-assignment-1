@@ -6,6 +6,9 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 고양이 장난감 데이터 - Web DTO
+ */
 @Setter
 @Getter
 @Builder

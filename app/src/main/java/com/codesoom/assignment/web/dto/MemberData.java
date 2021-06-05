@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 고양이 장난감 데이터 - Web DTO
+ */
 @Getter
 @Builder
 @NoArgsConstructor
