@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * 컨트롤러 layer에서 던지는 예외를 처리합니다.
+ * 무언가를 찾지 못했을 경우 던져진 예외를 처리합니다.
  */
 @ControllerAdvice
 public class NotFoundErrorAdvice {
