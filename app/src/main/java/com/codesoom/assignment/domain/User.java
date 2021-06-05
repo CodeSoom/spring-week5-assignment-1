@@ -1,7 +1,15 @@
 package com.codesoom.assignment.domain;
 
+<<<<<<< HEAD
 import lombok.Builder;
 import lombok.Getter;
+=======
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
 import lombok.ToString;
 
 import javax.persistence.Entity;
@@ -10,6 +18,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
+<<<<<<< HEAD
+=======
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
 @Builder
 @Getter
 @ToString
@@ -24,6 +37,7 @@ public class User {
 
     private String password;
 
+<<<<<<< HEAD
     private User(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
@@ -33,4 +47,6 @@ public class User {
 
     protected User() {
     }
+=======
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
 }

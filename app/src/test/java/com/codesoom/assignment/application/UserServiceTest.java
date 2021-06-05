@@ -1,6 +1,10 @@
 package com.codesoom.assignment.application;
 
+<<<<<<< HEAD
 import com.codesoom.assignment.exception.UserNotFoundException;
+=======
+import com.codesoom.assignment.UserNotFoundException;
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -53,7 +57,11 @@ class UserServiceTest {
     @DisplayName("createUser 메서드는")
     class Describe_CreateUser {
         @Nested
+<<<<<<< HEAD
         @DisplayName("유저 정보에 대한 모든 정보가 입력 된다면")
+=======
+        @DisplayName("모든 값이 입력 된다면")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
         class Context_Valid_Create_User {
             private Long id = 1L;
             private UserData userData;
@@ -97,7 +105,11 @@ class UserServiceTest {
     @DisplayName("updateUser 메소드는")
     class Describe_Update_User {
         @Nested
+<<<<<<< HEAD
         @DisplayName("요청한 아이디로 유저를 찾을 수 있다면")
+=======
+        @DisplayName("목록에 유저가 있다면")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
         class Context_Valid_Update_User {
             private Long id = 1L;
             private UserData userData;
@@ -146,7 +158,11 @@ class UserServiceTest {
         }
 
         @Nested
+<<<<<<< HEAD
         @DisplayName("요청한 아이디로 유저를 찾을 수 없다면")
+=======
+        @DisplayName("목록에 유저가 없다면")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
         class Context_Invalid_Update_User {
             private Long id = 100L;
             private UserData userData;
@@ -161,7 +177,11 @@ class UserServiceTest {
             }
 
             @Test
+<<<<<<< HEAD
             @DisplayName("UserNotFoundException을 던진다.")
+=======
+            @DisplayName("UserNotFoundException이 발생한다.")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
             void invalid_update_user_exception() {
                 Assertions.assertThatThrownBy(
                         () -> {
@@ -185,7 +205,11 @@ class UserServiceTest {
     @DisplayName("deleteUser 메소드는")
     class Describe_Delete_User {
         @Nested
+<<<<<<< HEAD
         @DisplayName("요청한 회원 아이디로 유저를 찾을 수 있다면")
+=======
+        @DisplayName("목록에 유저가 있다면")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
         class Context_Valid_Delete_User {
             private Long id = 1L;
             private UserData userData;
@@ -211,7 +235,11 @@ class UserServiceTest {
         }
 
         @Nested
+<<<<<<< HEAD
         @DisplayName("요청한 회원 아이디로 유저를 찾을 수 없다면")
+=======
+        @DisplayName("목록에 유자가 없다면")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
         class Conetxt_Invalid_Delete_User {
             private Long id = 100L;
             private UserData userData;
@@ -225,7 +253,11 @@ class UserServiceTest {
             }
 
             @Test
+<<<<<<< HEAD
             @DisplayName("UserNotFoundException을 던진다.")
+=======
+            @DisplayName("UserNotFoundException을 발생한다.")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
             void invalid_delete_user_exception() {
                 Throwable throwable = catchThrowable(
                         () -> userService.deleteUser(id));

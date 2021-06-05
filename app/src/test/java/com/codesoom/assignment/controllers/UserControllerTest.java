@@ -172,7 +172,11 @@ class UserControllerTest {
         }
 
         @Nested
+<<<<<<< HEAD
         @DisplayName("요청한 아이디로 유저를 찾을 수 없다면")
+=======
+        @DisplayName("유저 목록이 없다면")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
         class Context_Invalid_Update {
             private Long id = 100L;
             private UserData userData;
@@ -205,7 +209,11 @@ class UserControllerTest {
     @DisplayName("delete 메소드는")
     class Describe_Delete {
         @Nested
+<<<<<<< HEAD
         @DisplayName("요청한 아이디로 유저를 찾을 수 있다면")
+=======
+        @DisplayName("유저 목록에 있으면")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
         class Context_Valid_Delete {
             private Long id = 1L;
             private UserData userData;
@@ -245,7 +253,11 @@ class UserControllerTest {
         }
 
         @Nested
+<<<<<<< HEAD
         @DisplayName("요청한 아이디로 유저를 찾을 수 없다면")
+=======
+        @DisplayName("유저 목록에 없으면")
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
         class Context_Invalid_Delete {
             private Long id = 100L;
             private String userDelUrl = userUrl + "/" + id;

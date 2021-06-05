@@ -7,7 +7,11 @@ import com.codesoom.assignment.dto.UserData;
 import org.springframework.stereotype.Service;
 
 /**
+<<<<<<< HEAD
  * 사용자 정보를 등록,수정,삭제를 담당합니다.
+=======
+ * 사용자 정보를 등록,수정,삭제하는 서비스 로직입니다.
+>>>>>>> 22c8bd2609d69f3ecd808fca4d6127023b3f2971
  */
 @Service
 public class UserService {
