@@ -73,7 +73,7 @@ class UserTest {
             @BeforeEach
             void modelSetUp() {
                 User.UserBuilder userBuilder = new User.UserBuilder();
-                this.user = userBuilder
+                user = userBuilder
                         .name("Jack")
                         .email("jack@email.com")
                         .password("asdf1234")
@@ -83,11 +83,11 @@ class UserTest {
             @Test
             @DisplayName("유저의 속성을 수정합니다")
             void ItEditsUser() {
-                assertThat(this.user.getName()).isEqualTo("Jack");
-                assertThat(this.user.getEmail()).isEqualTo("jack@email.com");
-                assertThat(this.user.getPassword()).isEqualTo("asdf1234");
+                assertThat(user.getName()).isEqualTo("Jack");
+                assertThat(user.getEmail()).isEqualTo("jack@email.com");
+                assertThat(user.getPassword()).isEqualTo("asdf1234");
 
-                this.user.change(
+                user.change(
                         "wilson",
                         "wilson@email.com",
                         "rewq4321"

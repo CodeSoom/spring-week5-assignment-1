@@ -104,7 +104,7 @@ class UserServiceTest {
 
             @BeforeEach
             void userSetUp() {
-                this.user = User.builder()
+                user = User.builder()
                         .id(1L)
                         .name("Jack")
                         .email("jack@email.com")
@@ -112,14 +112,14 @@ class UserServiceTest {
                         .build();
 
                 given(userRepository.findById(1L))
-                        .willReturn(java.util.Optional.ofNullable(this.user));
+                        .willReturn(java.util.Optional.ofNullable(user));
             }
 
             @Test
             @DisplayName("유저를 반환합니다")
             void ItReturnsUser() {
                 assertThat(userService.getUser(1L))
-                        .isEqualTo(this.user);
+                        .isEqualTo(user);
             }
         }
 
@@ -192,33 +192,33 @@ class UserServiceTest {
 
             @BeforeEach
             void userSetUp() {
-                this.userUpdateData = UserUpdateData.builder()
+                userUpdateData = UserUpdateData.builder()
                         .name("Wilson")
                         .password("qwer1234")
                         .build();
-                this.user = User.builder()
+                user = User.builder()
                         .id(1L)
                         .name("Jack")
                         .email("jack@email.com")
                         .password("qwer1234")
                         .build();
-                this.editedUser = User.builder()
+                editedUser = User.builder()
                         .id(1L)
-                        .name(this.userUpdateData.getName())
-                        .email(this.userUpdateData.getEmail())
-                        .password(this.userUpdateData.getPassword())
+                        .name(userUpdateData.getName())
+                        .email(userUpdateData.getEmail())
+                        .password(userUpdateData.getPassword())
                         .build();
                 given(userRepository.findById(1L))
-                        .willReturn(java.util.Optional.ofNullable(this.user));
+                        .willReturn(java.util.Optional.ofNullable(user));
                 given(userRepository.save(any(User.class)))
-                        .willReturn(this.editedUser);
+                        .willReturn(editedUser);
             }
 
             @Test
             @DisplayName("유저 정보를 수정하고 반환합니다")
             void ItReturnsEditedUser() {
-                assertThat(userService.updateUser(1L, this.userUpdateData))
-                        .isEqualTo(this.editedUser);
+                assertThat(userService.updateUser(1L, userUpdateData))
+                        .isEqualTo(editedUser);
             }
         }
 
@@ -253,7 +253,7 @@ class UserServiceTest {
 
             @BeforeEach
             void userSetUp() {
-                this.user = User.builder()
+                user = User.builder()
                         .id(1L)
                         .name("Jack")
                         .email("jack@email.com")
@@ -261,14 +261,14 @@ class UserServiceTest {
                         .build();
 
                 given(userRepository.findById(1L))
-                        .willReturn(java.util.Optional.ofNullable(this.user));
+                        .willReturn(java.util.Optional.ofNullable(user));
             }
 
             @Test
             @DisplayName("유저를 삭제하고 반환합니다")
             void ItReturnsUser() {
                 assertThat(userService.deleteUser(1L))
-                        .isEqualTo(this.user);
+                        .isEqualTo(user);
             }
         }
 

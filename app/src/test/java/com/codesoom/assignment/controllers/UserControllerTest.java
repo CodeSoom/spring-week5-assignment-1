@@ -104,7 +104,7 @@ class UserControllerTest {
 
             @BeforeEach
             void userSetUp() {
-                this.user = User.builder()
+                user = User.builder()
                         .id(1L)
                         .name("Jack")
                         .email("jack@email.com")
@@ -112,14 +112,14 @@ class UserControllerTest {
                         .build();
 
                 given(userService.getUser(1L))
-                        .willReturn(this.user);
+                        .willReturn(user);
             }
 
             @Test
             @DisplayName("유저를 반환합니다")
             void ItReturnsUser() {
                 assertThat(userController.detail(1L))
-                        .isEqualTo(this.user);
+                        .isEqualTo(user);
             }
         }
 
@@ -151,25 +151,25 @@ class UserControllerTest {
 
         @BeforeEach
         void userCreateDataSetUp() {
-            this.userCreateData = UserCreateData.builder()
+            userCreateData = UserCreateData.builder()
                     .name("Jack")
                     .email("jack@email.com")
                     .password("qwer1234")
                     .build();
-            this.user = User.builder()
-                    .name(this.userCreateData.getName())
-                    .email(this.userCreateData.getEmail())
-                    .password(this.userCreateData.getPassword())
+            user = User.builder()
+                    .name(userCreateData.getName())
+                    .email(userCreateData.getEmail())
+                    .password(userCreateData.getPassword())
                     .build();
             given(userService.createUser(any(UserCreateData.class)))
-                    .willReturn(this.user);
+                    .willReturn(user);
         }
 
         @Test
         @DisplayName("유저를 생성하고 반환합니다")
         void ItReturnsUser() {
-            assertThat(userController.create(this.userCreateData))
-                    .isEqualTo(this.user);
+            assertThat(userController.create(userCreateData))
+                    .isEqualTo(user);
         }
     }
 
@@ -191,21 +191,21 @@ class UserControllerTest {
                         .name("Wilson")
                         .password("qwer1234")
                         .build();
-                this.editedUser = User.builder()
+                editedUser = User.builder()
                         .id(1L)
                         .name(userUpdateData.getName())
                         .email(userUpdateData.getEmail())
                         .password(userUpdateData.getPassword())
                         .build();
                 given(userService.updateUser(eq(1L), any(UserUpdateData.class)))
-                        .willReturn(this.editedUser);
+                        .willReturn(editedUser);
             }
 
             @Test
             @DisplayName("유저 정보를 수정하고 반환한다")
             void ItReturnsEditedUser() {
                 assertThat(userController.update(1L, userUpdateData))
-                        .isEqualTo(this.editedUser);
+                        .isEqualTo(editedUser);
             }
         }
 

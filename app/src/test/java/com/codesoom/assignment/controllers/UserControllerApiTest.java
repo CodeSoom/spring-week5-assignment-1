@@ -118,14 +118,14 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userSetUp() {
-                this.user = User.builder()
+                user = User.builder()
                         .id(1L)
                         .name("Jack")
                         .email("jack@email.com")
                         .password("qwer1234")
                         .build();
                 given(userService.getUser(1L))
-                        .willReturn(this.user);
+                        .willReturn(user);
             }
 
             @Test
@@ -171,13 +171,13 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userDataSetup() {
-                this.userCreateData = UserCreateData.builder()
+                userCreateData = UserCreateData.builder()
                         .name("Jack")
                         .email("jack@email.com")
                         .password("qwer1234")
                         .build();
 
-                this.user = User.builder()
+                user = User.builder()
                         .id(1L)
                         .name(userCreateData.getName())
                         .email(userCreateData.getEmail())
@@ -185,14 +185,14 @@ public class UserControllerApiTest {
                         .build();
 
                 given(userService.createUser(any(UserCreateData.class)))
-                        .willReturn(this.user);
+                        .willReturn(user);
             }
 
             @Test
             @DisplayName("유저와 Created status를 반환합니다")
             void ItReturnsCreatedWithUser() throws Exception {
-                String userData = objectMapper.writeValueAsString(this.userCreateData);
-                String expected = objectMapper.writeValueAsString(this.user);
+                String userData = objectMapper.writeValueAsString(userCreateData);
+                String expected = objectMapper.writeValueAsString(user);
                 mockMvc.perform(post("/users")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(userData))
@@ -209,7 +209,7 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userDataSetUp() {
-                this.userCreateData = UserCreateData.builder()
+                userCreateData = UserCreateData.builder()
                         .password("qwer1234")
                         .build();
             }
@@ -217,7 +217,7 @@ public class UserControllerApiTest {
             @Test
             @DisplayName("BadRequest status를 반환합니다")
             void ItReturnsBadRequest() throws Exception {
-                String userData = objectMapper.writeValueAsString(this.userCreateData);
+                String userData = objectMapper.writeValueAsString(userCreateData);
                 mockMvc.perform(post("/users")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(userData))
@@ -233,7 +233,7 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userDataSetUp() {
-                this.userCreateData = UserCreateData.builder()
+                userCreateData = UserCreateData.builder()
                         .name("Jack")
                         .email("jackemail.com")
                         .password("qwer1234")
@@ -243,7 +243,7 @@ public class UserControllerApiTest {
             @Test
             @DisplayName("BadRequest를 반환합니다")
             void ItReturnsBadRequest() throws Exception {
-                String userData = objectMapper.writeValueAsString(this.userCreateData);
+                String userData = objectMapper.writeValueAsString(userCreateData);
                 mockMvc.perform(post("/users")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(userData))
@@ -265,26 +265,26 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userDataSetUp() {
-                this.userUpdateData = UserUpdateData.builder()
+                userUpdateData = UserUpdateData.builder()
                         .name("Jack")
                         .email("jack@email.com")
                         .password("qwer1234")
                         .build();
-                this.editedUser = User.builder()
+                editedUser = User.builder()
                         .id(1L)
-                        .name(this.userUpdateData.getName())
-                        .email(this.userUpdateData.getEmail())
-                        .password(this.userUpdateData.getPassword())
+                        .name(userUpdateData.getName())
+                        .email(userUpdateData.getEmail())
+                        .password(userUpdateData.getPassword())
                         .build();
                 given(userService.updateUser(eq(1L), any(UserUpdateData.class)))
-                        .willReturn(this.editedUser);
+                        .willReturn(editedUser);
             }
 
             @Test
             @DisplayName("수정된 유저와 OK status를 반환합니다")
             void ItReturnsOkWithEditedUser() throws Exception {
-                String userData = objectMapper.writeValueAsString(this.userUpdateData);
-                String expected = objectMapper.writeValueAsString(this.editedUser);
+                String userData = objectMapper.writeValueAsString(userUpdateData);
+                String expected = objectMapper.writeValueAsString(editedUser);
                 mockMvc.perform(patch("/users/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(userData))
@@ -301,7 +301,7 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userDataSetUp() {
-                this.userUpdateData = UserUpdateData.builder()
+                userUpdateData = UserUpdateData.builder()
                         .email("jack@email.com")
                         .password("qwer1234")
                         .build();
@@ -310,7 +310,7 @@ public class UserControllerApiTest {
             @Test
             @DisplayName("BadRequest를 반환합니다")
             void ItReturnsBadRequest() throws Exception {
-                String userData = objectMapper.writeValueAsString(this.userUpdateData);
+                String userData = objectMapper.writeValueAsString(userUpdateData);
                 mockMvc.perform(patch("/users/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(userData))
@@ -326,7 +326,7 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userDataSetUp() {
-                this.userUpdateData = UserUpdateData.builder()
+                userUpdateData = UserUpdateData.builder()
                         .name("Jack")
                         .password("qwer1234")
                         .build();
@@ -335,7 +335,7 @@ public class UserControllerApiTest {
             @Test
             @DisplayName("BadRequest를 반환합니다")
             void ItReturnsOkWithEditedUser() throws Exception {
-                String userData = objectMapper.writeValueAsString(this.userUpdateData);
+                String userData = objectMapper.writeValueAsString(userUpdateData);
                 mockMvc.perform(patch("/users/1L")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(userData))
@@ -351,7 +351,7 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userDataSetUp() {
-                this.userUpdateData = UserUpdateData.builder()
+                userUpdateData = UserUpdateData.builder()
                         .name("Jack")
                         .email("jackemail.com")
                         .password("qwer1234")
@@ -361,7 +361,7 @@ public class UserControllerApiTest {
             @Test
             @DisplayName("BadRequest를 반환합니다")
             void ItReturnsBadRequest() throws Exception {
-                String userData = objectMapper.writeValueAsString(this.userUpdateData);
+                String userData = objectMapper.writeValueAsString(userUpdateData);
                 mockMvc.perform(patch("/users/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(userData))
@@ -377,7 +377,7 @@ public class UserControllerApiTest {
 
             @BeforeEach
             void userDataSetUp() {
-                this.userUpdateData = UserUpdateData.builder()
+                userUpdateData = UserUpdateData.builder()
                         .name("Jack")
                         .email("jack@email.com")
                         .build();
@@ -386,7 +386,7 @@ public class UserControllerApiTest {
             @Test
             @DisplayName("BadRequest를 반환합니다")
             void ItReturnsOkWithEditedUser() throws Exception {
-                String userData = objectMapper.writeValueAsString(this.userUpdateData);
+                String userData = objectMapper.writeValueAsString(userUpdateData);
                 mockMvc.perform(patch("/users/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(userData))
