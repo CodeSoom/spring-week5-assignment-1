@@ -91,8 +91,8 @@ class UserServiceTest {
     void deleteUserWithExistedId() {
         userService.deleteUser(1L);
 
-        verify(userRepository).delete(any(User.class));
         verify(userRepository).findById(1L);
+        verify(userRepository).delete(any(User.class));
     }
 
     @Test
