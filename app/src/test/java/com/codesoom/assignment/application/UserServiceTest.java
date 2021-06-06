@@ -5,6 +5,8 @@ import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.userdata.UserCreateData;
 import com.codesoom.assignment.dto.userdata.UserUpdateData;
 import com.codesoom.assignment.exception.UserNotFoundException;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -25,10 +27,11 @@ class UserServiceTest {
     private UserService userService;
 
     private final UserRepository userRepository = mock(UserRepository.class);
+    private final Mapper dozerMapper = DozerBeanMapperBuilder.buildDefault();
 
     @BeforeEach
     void userServiceSetUp() {
-        this.userService = new UserService(this.userRepository);
+        this.userService = new UserService(this.userRepository, dozerMapper);
     }
 
     @Nested

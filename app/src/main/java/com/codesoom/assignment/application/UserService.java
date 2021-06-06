@@ -2,10 +2,11 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.userdata.UserCreateData;
 import com.codesoom.assignment.dto.userdata.UserUpdateData;
 import com.codesoom.assignment.exception.UserNotFoundException;
+import com.github.dozermapper.core.Mapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,9 +16,12 @@ import java.util.List;
 @Transactional
 public class UserService {
     private final UserRepository userRepository;
+    private final Mapper mapper;
 
-    public UserService(UserRepository userRepository) {
+    @Autowired
+    public UserService(UserRepository userRepository, Mapper dozerMapper) {
         this.userRepository = userRepository;
+        this.mapper = dozerMapper;
     }
 
     // TODO: 메소드 이름 수정하고 제네릭을 이용하면 여기 메소드도 추상화가 가능할 것 같다.
@@ -48,11 +52,7 @@ public class UserService {
      * @return 생성된 유저
      */
     public User createUser(UserCreateData userData) {
-        User user = User.builder()
-                .name(userData.getName())
-                .email(userData.getEmail())
-                .password(userData.getPassword())
-                .build();
+        User user = this.mapper.map(userData, User.class);
         return this.userRepository.save(user);
     }
 
@@ -65,12 +65,7 @@ public class UserService {
      */
     public User updateUser(Long id, UserUpdateData userData) {
         User user = findUser(id);
-
-        user.change(
-                userData.getName(),
-                userData.getEmail(),
-                userData.getPassword()
-        );
+        this.mapper.map(userData, user);
         return userRepository.save(user);
     }
 
@@ -82,9 +77,7 @@ public class UserService {
      */
     public User deleteUser(Long id) {
         User user = findUser(id);
-
         this.userRepository.delete(user);
-
         return user;
     }
 
