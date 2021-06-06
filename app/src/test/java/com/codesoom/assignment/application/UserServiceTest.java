@@ -97,7 +97,7 @@ class UserServiceTest {
     class DescribeGetUser {
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 있을 경우")
+        @DisplayName("유저를 찾았을 경우")
         class ContextWithId {
 
             private User user;
@@ -116,7 +116,7 @@ class UserServiceTest {
             }
 
             @Test
-            @DisplayName("유저를 반환한다")
+            @DisplayName("유저를 반환합니다")
             void ItReturnsUser() {
                 assertThat(userService.getUser(1L))
                         .isEqualTo(this.user);
@@ -124,7 +124,7 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 없을 경우")
+        @DisplayName("유저를 찾지 못하는 경우")
         class ContextWithoutUser {
 
             @BeforeEach
@@ -183,7 +183,7 @@ class UserServiceTest {
     class DescribeUpdateUser {
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 있을 때")
+        @DisplayName("유저를 찾았을 경우")
         class ContextWithUser {
 
             private User user;
@@ -223,7 +223,7 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 없을 때")
+        @DisplayName("유저를 찾지 못한 경우")
         class ContextWithoutUser {
 
             @BeforeEach
@@ -246,7 +246,7 @@ class UserServiceTest {
     class DescribeDeleteUser {
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 있을 때")
+        @DisplayName("유저를 찾은 경우")
         class ContextWithUser {
 
             private User user;
@@ -265,7 +265,7 @@ class UserServiceTest {
             }
 
             @Test
-            @DisplayName("유저를 삭제하고 반환한다")
+            @DisplayName("유저를 삭제하고 반환합니다")
             void ItReturnsUser() {
                 assertThat(userService.deleteUser(1L))
                         .isEqualTo(this.user);
@@ -273,7 +273,7 @@ class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 없을 때")
+        @DisplayName("유저를 찾지 못한 경우")
         class ContextWithoutUser {
 
             @BeforeEach

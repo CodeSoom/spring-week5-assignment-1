@@ -111,7 +111,7 @@ public class UserControllerApiTest {
     class DescribeGETDetail {
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 있으면")
+        @DisplayName("유저를 찾은 경우")
         class ContextWithExistedId {
 
             private User user;
@@ -140,7 +140,7 @@ public class UserControllerApiTest {
         }
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 없으면")
+        @DisplayName("유저를 찾지 못한 경우")
         class ContextWithoutExistedId {
 
             @BeforeEach
@@ -400,7 +400,7 @@ public class UserControllerApiTest {
     class DescribeDELETEDestroy {
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 있으면")
+        @DisplayName("유저를 찾은 경우")
         class ContextWithExistedId {
 
             @BeforeEach
@@ -425,7 +425,7 @@ public class UserControllerApiTest {
         }
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 없다면")
+        @DisplayName("유저를 찾지 못한 경우")
         class ContextWithoutExistedId {
 
             @BeforeEach

@@ -15,7 +15,6 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -98,7 +97,7 @@ class UserControllerTest {
     class DescribeDetail {
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 있을 때")
+        @DisplayName("유저를 찾은 경우")
         class ContextWithUser {
 
             private User user;
@@ -125,7 +124,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 존재하지 않을 때")
+        @DisplayName("유저를 찾지 못한 경우")
         class ContextWithoutUser {
 
             @BeforeEach
@@ -181,7 +180,7 @@ class UserControllerTest {
         private UserUpdateData userUpdateData;
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 있으면")
+        @DisplayName("유저를 찾은 경우")
         class ContextWithUser {
 
             private User editedUser;
@@ -211,7 +210,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 없으면")
+        @DisplayName("유저를 찾지 못한 경우")
         class ContextWithoutUser {
 
             @BeforeEach
@@ -238,7 +237,7 @@ class UserControllerTest {
     class DescribeDestroy {
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 있으면")
+        @DisplayName("유저를 찾은 경우")
         class ContextWithUser {
 
             @BeforeEach
@@ -263,7 +262,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("식별자를 가진 유저가 없으면")
+        @DisplayName("유저를 찾지 못한 경우")
         class ContextWithoutUser {
 
             @BeforeEach
