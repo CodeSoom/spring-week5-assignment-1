@@ -21,9 +21,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    // TODO: 추상클래스를 만들어서 Controller가 공통적으로 가지는 메소드 추상화하기
-    // 아마 제네릭도 필요할 듯
-
     /**
      * 유저 목록에 대한 요청을 처리합니다.
      *

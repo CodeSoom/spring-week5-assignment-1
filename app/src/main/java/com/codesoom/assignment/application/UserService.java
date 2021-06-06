@@ -24,8 +24,6 @@ public class UserService {
         this.mapper = dozerMapper;
     }
 
-    // TODO: 메소드 이름 수정하고 제네릭을 이용하면 여기 메소드도 추상화가 가능할 것 같다.
-
     /**
      * 유저 목록을 반환합니다.
      *
