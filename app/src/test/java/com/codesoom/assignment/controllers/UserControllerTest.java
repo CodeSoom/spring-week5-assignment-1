@@ -102,12 +102,21 @@ public class UserControllerTest {
     }
 
     @Test
-    void updateWithInvalidAttributes() throws Exception {
+    void updateWithInvalidEmail() throws Exception {
         mockMvc.perform(
                 patch("/users/1")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(invalidEmailContent)
+                        .content(invalidEmailContent))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateWithInvalidPassword() throws Exception {
+        mockMvc.perform(
+                patch("/users/1")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
                         .content(invalidPasswordContent))
                 .andExpect(status().isBadRequest());
     }
@@ -120,7 +129,6 @@ public class UserControllerTest {
         verify(userService).deleteUser(1L);
     }
 
-    // TEST 실패
     @Test
     void deleteWithNotExistedId() throws Exception {
         mockMvc.perform(delete("/users/1000"))
