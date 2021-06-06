@@ -107,12 +107,19 @@ class UserControllerTest {
         @DisplayName("유저 정보가 주어지면")
         class Context_of_valid_user_dto {
 
+            private UserDto givenUserDto;
+
+            @BeforeEach
+            void setup() {
+                givenUserDto = sampleUserDto;
+            }
+
             @Test
             @DisplayName("유저를 생성하고, 생성한 유저를 반환한다")
             void it_creates_and_returns_user() {
-                User user = userController.create(sampleUserDto);
+                User user = userController.create(givenUserDto);
 
-                assertThat(user.getName()).isEqualTo(sampleUserDto.getName());
+                assertThat(user.getName()).isEqualTo(givenUserDto.getName());
                 verify(userService).createUser(any(UserDto.class));
             }
         }
