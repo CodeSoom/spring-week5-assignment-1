@@ -38,7 +38,7 @@ public class AccountController {
     /**
      * 회원정보를 리턴합니다.
      *
-     * @param id 조회하려는 회원정보 ID
+     * @param id 조회하려는 회원정보 식별자
      * @return 회원정보
      */
     @GetMapping("{id}")
@@ -61,7 +61,7 @@ public class AccountController {
     /**
      * 회원정보를 수정합니다.
      *
-     * @param id 수정하려는 회원정보 ID
+     * @param id 수정하려는 회원정보 식별자
      * @param accountData 수정하려는 회원정보 내용
      * @return 수정된 회원정보
      */
@@ -75,7 +75,7 @@ public class AccountController {
     /**
      * 회원정보를 수정합니다.
      *
-     * @param id 수정하려는 회원정보 ID
+     * @param id 수정하려는 회원정보 식별자
      * @param accountData 수정하려는 회원정보 내용
      * @return 수정된 회원정보
      */
@@ -89,7 +89,7 @@ public class AccountController {
     /**
      * 회원정보를 삭제합니다.
      *
-     * @param id 삭제하려는 회원정보 ID
+     * @param id 삭제하려는 회원정보 식별자
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)

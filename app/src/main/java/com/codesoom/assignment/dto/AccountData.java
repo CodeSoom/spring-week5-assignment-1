@@ -4,7 +4,11 @@ import com.codesoom.assignment.domain.Account;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import com.github.dozermapper.core.Mapping;
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.AllArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 
@@ -24,8 +28,6 @@ public class AccountData {
 
     /**
      * 회원의 이름입니다.
-     * Account의 name과 Mapping되어 있습니다.
-     * 값은 Null이거나 공백일 수 없습니다.
      */
     @NotBlank
     @Mapping("name")
@@ -33,8 +35,6 @@ public class AccountData {
 
     /**
      * 회원의 비밀번호입니다.
-     * Account의 password와 Mapping되어 있습니다.
-     * 값은 Null이거나 공백일 수 없습니다.
      */
     @NotBlank
     @Mapping("password")
@@ -42,8 +42,6 @@ public class AccountData {
 
     /**
      * 회원의 이메일입니다.
-     * Account의 email와 Mapping되어 있습니다.
-     * 값은 Null이거나 공백일 수 없습니다.
      */
     @NotBlank
     @Mapping("email")

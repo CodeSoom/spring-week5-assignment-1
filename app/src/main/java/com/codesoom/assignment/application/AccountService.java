@@ -37,7 +37,7 @@ public class AccountService {
     /**
      * 회원정보를 리턴합니다.
      *
-     * @param id 조회하려는 회원정보 ID
+     * @param id 조회하려는 회원정보 식별자
      * @return 회원정보
      */
     public Account getAccount(Long id) {
@@ -51,10 +51,6 @@ public class AccountService {
      * @return 작성된 회원정보
      */
     public Account createAccount(AccountData accountData) {
-//        return accountRepository.save(
-//                mapper.map(accountData, Account.class)
-//        );
-
         Account account = mapper.map(accountData, Account.class);
         return accountRepository.save(account);
     }
@@ -62,7 +58,7 @@ public class AccountService {
     /**
      * 회원정보를 수정합니다.
      *
-     * @param id 수정하려는 회원정보 ID
+     * @param id 수정하려는 회원정보 식별자
      * @param source 수정하려는 회원정보 내용
      * @return 수정된 회원정보
      */
@@ -71,17 +67,13 @@ public class AccountService {
     public Account updateAccount(Long id, AccountData source) {
         Account account = findAccount(id);
         account.changeAccData(mapper.map(source, Account.class));
-
-//        // Testing
-//        source.setId(id);
-//        Account account = source.changeData(source);
         return account;
     }
 
     /**
      * 회원정보를 삭제합니다.
      *
-     * @param id 삭제하려는 회원정보 ID
+     * @param id 삭제하려는 회원정보 식별자
      * @return 삭제 전 회원정보
      */
     public Account deleteAccount(Long id) {
@@ -95,7 +87,7 @@ public class AccountService {
      *
      * @throws AccountNotFoundException id에 해당하는 회원정보가 존재하지 않습니다.
      *
-     * @param id 데이터 내에서 검색하려는 회원정보 ID
+     * @param id 데이터 내에서 검색하려는 회원정보 식별자
      * @return 회원정보
      */
     public Account findAccount(Long id) {
