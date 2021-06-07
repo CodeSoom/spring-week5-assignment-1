@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
@@ -135,6 +135,15 @@ class ProductControllerTest {
                                 "\"price\":0}")
         )
                 .andExpect(status().isBadRequest());
+
+        mockMvc.perform(
+                post("/products")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"\",\"maker\":\"\"," +
+                                "\"price\":-10}")
+        )
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -173,6 +182,15 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"maker\":\"\"," +
                                 "\"price\":0}")
+        )
+                .andExpect(status().isBadRequest());
+
+        mockMvc.perform(
+                patch("/products/1")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"\",\"maker\":\"\"," +
+                                "\"price\":-10}")
         )
                 .andExpect(status().isBadRequest());
     }
