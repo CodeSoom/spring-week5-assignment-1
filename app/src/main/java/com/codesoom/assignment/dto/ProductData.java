@@ -5,6 +5,9 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 상품 Dto.
+ */
 @Setter
 @Getter
 @Builder
