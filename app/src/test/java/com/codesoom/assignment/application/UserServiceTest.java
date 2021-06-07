@@ -47,7 +47,7 @@ public class UserServiceTest {
     class Describe_get {
 
         @Nested
-        @DisplayName("만약 주어진 ID의 사용자가 저장되어 있을 경우")
+        @DisplayName("만약 주어진 ID의 사용자를 찾을 수 있다면")
         class Context_with_existed_user_id {
 
             @BeforeEach
@@ -66,7 +66,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("만약 주어진 ID의 사용자가 저장되어 있지 않을 경우")
+        @DisplayName("만약 주어진 ID의 사용자를 찾을 수 없다면")
         class Context_with_not_existed_user_id {
 
             @BeforeEach
@@ -112,7 +112,7 @@ public class UserServiceTest {
     class Describe_patch {
 
         @Nested
-        @DisplayName("만약 주어진 ID의 사용자가 저장되어 있다면")
+        @DisplayName("만약 주어진 ID의 사용자를 찾을 수 있다면")
         class Context_with_existed_user_id_and_valid_user_data {
 
             @BeforeEach
@@ -139,7 +139,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("만약 주어진 ID의 사용자가 저장되어 있지 않을 경우")
+        @DisplayName("만약 주어진 ID의 사용자를 찾을 수 없다면")
         class Context_with_not_existed_user_id {
             private final Long invalidUserId = -1L;
 
@@ -163,7 +163,7 @@ public class UserServiceTest {
     class Describe_delete {
 
         @Nested
-        @DisplayName("만약 주어진 ID의 사용자가 저장되어 있다면")
+        @DisplayName("만약 주어진 ID의 사용자를 찾을 수 있다면")
         class Context_with_existed_user_id {
 
             @BeforeEach
@@ -185,7 +185,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("만약 주어진 ID의 사용자가 저장되어 있지 않을 경우")
+        @DisplayName("만약 주어진 ID의 사용자를 찾을 수 없다면")
         class Context_with_not_existed_user_id {
             private final Long invalidUserId = -1L;
 
