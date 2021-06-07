@@ -1,16 +1,19 @@
 package com.codesoom.assignment.dto;
 
+import lombok.Builder;
+
 /**
  * 에러 메세지 응답객체 입니다.
  */
-public class ErrorResponse {
-    private String message;
+@Builder
+public class ErrorResponse<T> {
+    private T message;
 
-    public ErrorResponse(String message) {
-        this.message = message;
+    public ErrorResponse(T message) {
+        this.message = (T) message;
     }
 
-    public String getMessage() {
+    public T getMessage() {
         return message;
     }
 }

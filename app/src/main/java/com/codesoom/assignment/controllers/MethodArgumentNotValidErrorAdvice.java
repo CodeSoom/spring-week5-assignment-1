@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 유효성 검사 관련 예외처리를 담당합니다.
  */
@@ -23,17 +26,16 @@ public class MethodArgumentNotValidErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public String handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
+    public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
-        StringBuilder builder = new StringBuilder();
+        Map<String, String> errorMap = new HashMap<>();
 
         for (FieldError fieldError : bindingResult.getFieldErrors()) {
-            builder.append(fieldError.getField());
-            builder.append(" (은)는 ");
-            builder.append(fieldError.getDefaultMessage());
-            builder.append("\n");
+            errorMap.put(fieldError.getField(), fieldError.getDefaultMessage());
         }
 
-        return builder.toString();
+        return ErrorResponse.builder()
+                            .message(errorMap)
+                            .build();
     }
 }
