@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Setter
 @Getter
@@ -20,6 +21,7 @@ public class ProductData {
     private String maker;
 
     @NotNull
+    @PositiveOrZero
     private Integer price;
 
     private String imageUrl;
