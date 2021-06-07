@@ -51,6 +51,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
+    // Dozer Mapper
+    implementation 'com.github.dozermapper:dozer-core:6.5.2'
+
     // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -80,6 +83,10 @@ tasks.named('test') {
     useJUnitPlatform()
 
     finalizedBy jacocoTestReport
+}
+
+javadoc {
+    options.encoding = 'UTF-8'
 }
 
 jacoco {

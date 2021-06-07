@@ -10,35 +10,32 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * 상품.
+ * 사용자.
  */
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class User {
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
 
-    private String maker;
+    private String email;
 
-    private Integer price;
-
-    private String imageUrl;
+    private String password;
 
     /**
-     * 상품 데이터를 수정한다.
+     * 사용자 데이터를 수정한다.
      *
      * @param source 수정 데이터
      */
-    public void changeWith(Product source) {
+    public void changeWith(User source) {
         this.name = source.name;
-        this.maker = source.maker;
-        this.price = source.price;
-        this.imageUrl = source.imageUrl;
+        this.email = source.email;
+        this.password = source.password;
     }
 }

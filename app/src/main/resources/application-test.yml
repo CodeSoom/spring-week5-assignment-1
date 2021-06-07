@@ -1,0 +1,7 @@
+spring:
+  datasource:
+    # http://www.h2database.com/html/features.html#connection_modes
+    url: jdbc:h2:mem:test_mem
+  jpa:
+    hibernate:
+      ddl-auto: update
