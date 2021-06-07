@@ -27,13 +27,10 @@ public class Product {
 
     private String imageUrl;
 
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public void change(Product source) {
+        this.name = source.getName();
+        this.maker = source.getMaker();
+        this.price = source.getPrice();
+        this.imageUrl = source.getImageUrl();
     }
 }
