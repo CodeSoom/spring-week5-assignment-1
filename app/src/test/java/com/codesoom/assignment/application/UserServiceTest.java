@@ -20,6 +20,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.then;
 import static org.mockito.Mockito.*;
 
+@DisplayName("UserService")
 class UserServiceTest {
     private UserService userService;
     private UserRepository userRepository;
