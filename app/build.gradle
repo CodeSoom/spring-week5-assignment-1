@@ -51,6 +51,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
+    // DozerMapper
+    implementation 'com.github.dozermapper:dozer-core:6.4.0'
+
     // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
@@ -107,8 +110,8 @@ jacocoTestCoverageVerification {
 
             excludes = [
                     "com.codesoom.assignment.App",
-                    "com.codesoom.assignment.dto.*",
-                    "com.codesoom.assignment.domain.*"
+                    "com.codesoom.assignment.web.dto.*",
+                    "com.codesoom.assignment.core.domain.*"
             ]
         }
     }

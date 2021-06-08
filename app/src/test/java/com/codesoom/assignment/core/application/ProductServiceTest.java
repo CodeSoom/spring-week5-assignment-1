@@ -1,9 +1,11 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.core.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.web.exception.ProductNotFoundException;
+import com.codesoom.assignment.core.domain.Product;
+import com.codesoom.assignment.core.domain.ProductRepository;
+import com.codesoom.assignment.web.dto.ProductData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -24,7 +26,9 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository);
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+
+        productService = new ProductService(mapper, productRepository);
 
         Product product = Product.builder()
                 .id(1L)

@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.core.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,6 +9,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+/**
+ * 제품 도메인
+ */
 @Entity
 @Getter
 @Builder
@@ -27,13 +30,10 @@ public class Product {
 
     private String imageUrl;
 
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public void changeWith(Product source) {
+        this.name = source.getName();
+        this.maker = source.getMaker();
+        this.price = source.getPrice();
+        this.imageUrl = source.getImageUrl();
     }
 }

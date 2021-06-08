@@ -1,7 +1,7 @@
-package com.codesoom.assignment.infra;
+package com.codesoom.assignment.core.infra;
 
-import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.core.domain.Product;
+import com.codesoom.assignment.core.domain.ProductRepository;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;
 
