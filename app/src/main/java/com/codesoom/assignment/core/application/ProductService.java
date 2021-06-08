@@ -11,7 +11,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * 고양이 장난감 데이터를 가공하여 반환하거나 처리합니다.
+ * 제품 데이터를 가공하여 반환하거나 처리합니다.
  */
 @Service
 @Transactional
@@ -27,8 +27,8 @@ public class ProductService {
     }
 
     /**
-     * 고양이 장난감 목록을 반환합니다.
-     * @return 고양이 장난감 목록
+     * 제품 목록을 반환합니다.
+     * @return 제품 목록
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
@@ -37,16 +37,16 @@ public class ProductService {
     /**
      * ID에 해당하는 장난감을 반환합니다.
      * @param id
-     * @return 고양이 장난감
+     * @return 제품
      */
     public Product getProduct(Long id) {
         return findProduct(id);
     }
 
     /**
-     * 신규 고양이 장난감을 등록합니다.
+     * 신규 제품을 등록합니다.
      * @param productData
-     * @return 등록한 고양이 장난감
+     * @return 등록한 제품
      */
     public Product createProduct(ProductData productData) {
         Product product = mapper.map(productData, Product.class);
@@ -56,7 +56,7 @@ public class ProductService {
     /**
      * ID에 해당하는 장난감 정보를 갱신합니다.
      * @param id
-     * @return 갱신한 고양이 장난감
+     * @return 갱신한 제품
      */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
@@ -69,7 +69,7 @@ public class ProductService {
     /**
      * ID에 해당하는 장난감을 삭제합니다.
      * @param id
-     * @return 삭제한 고양이 장난감
+     * @return 삭제한 제품
      */
     public Product deleteProduct(Long id) {
         Product product = findProduct(id);
@@ -82,7 +82,7 @@ public class ProductService {
     /**
      * ID에 해당하는 장난감을 반환합니다.
      * @param id
-     * @return 고양이 장난감
+     * @return 제품
      */
     private Product findProduct(Long id) {
         return productRepository.findById(id)
