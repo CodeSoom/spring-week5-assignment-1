@@ -7,7 +7,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * 고양이 장난감 데이터 - Web DTO
+ * 제품 DTO
  */
 @Setter
 @Getter
