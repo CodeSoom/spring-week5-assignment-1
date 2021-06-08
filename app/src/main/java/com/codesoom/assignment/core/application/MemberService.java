@@ -19,9 +19,9 @@ public class MemberService {
     }
 
     /**
-     * 신규 회원를 등록합니다.
-     * @param  memberData - 신규 등록할 회원 정보(이름, 비밀번호, 이메일 등).
-     * @return member - 고유 ID를 발급받은 신규 회원.
+     * 신규 회원을 등록하고, 등록된 회원을 리턴합니다.
+     * @param  memberData 신규 등록할 회원 정보.
+     * @return member 등록된 신규 회원.
      */
     public Member saveMember(MemberData memberData) {
         Member member = Member.builder()
@@ -34,9 +34,9 @@ public class MemberService {
     }
 
     /**
-     * 기존 회원를 삭제합니다.
-     * @param  id - 삭제할 특정 회원의 고유 ID.
-     * @throws MemberNotFoundException - ID에 해당하는 회원이 없다면, 회원 정보를 찾을 수 없다는 에러 발생.
+     * 회원 정보를 찾아 삭제합니다.
+     * @param  id 삭제할 회원의 식별자.
+     * @throws MemberNotFoundException 회원을 찾을 수 없는 경우.
      */
     public void deleteMember(Long id) {
         Member member = memberRepository.findById(id)
@@ -46,11 +46,11 @@ public class MemberService {
     }
 
     /**
-     * 기존 회원 정보를 갱합니다.
-     * @param id - 갱신할 특정 회원의 고유 ID.
+     * 회원 정보를 찾아 갱합니다.
+     * @param id 갱신할 회원의 식별자.
      * @param memberData - 갱신할 회원의 정보(이름, 비밀번호, 이메일 등).
-     * @return member - 갱신한 회원 정보 반환.
-     * @throws MemberNotFoundException - ID에 해당하는 회원이 없다면, 회원 정보를 찾을 수 없다는 에러 발생.
+     * @return member - 갱신된 회원.
+     * @throws MemberNotFoundException 회원을 찾을 수 없는 경우.
      */
     public Member updateMember(Long id, MemberData memberData) {
         Member member = memberRepository.findById(id)
