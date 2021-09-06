@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.AccountRepository;
+import com.codesoom.assignment.dto.AccountData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,4 +16,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccountService {
     private final AccountRepository accountRepository;
+
+
+    public AccountData creation(AccountData data) {
+        return null;
+    }
+
+    public AccountData patchAccount(long id, AccountData data) {
+        return null;
+    }
+
+    public void deleteAccount(Long id) {
+
+    }
 }

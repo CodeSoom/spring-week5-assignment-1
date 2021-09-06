@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.Account;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
@@ -31,4 +32,22 @@ public class AccountData {
     @Mapping("password")
     @JsonIgnore
     private String password;
+
+    public static AccountData from(Account account) {
+        return AccountData.builder()
+                .id(account.getId())
+                .name(account.getName())
+                .password(account.getPassword())
+                .email(account.getEmail())
+                .build();
+    }
+
+    public Account toAccount() {
+        return Account.builder()
+                .id(id)
+                .name(name)
+                .password(password)
+                .email(email)
+                .build();
+    }
 }
