@@ -39,4 +39,9 @@ class ProductTest {
         assertThat(product.getImageUrl())
                 .isEqualTo("http://localhost:8080/rat");
     }
+
+    @Test
+    void delete() {
+
+    }
 }
