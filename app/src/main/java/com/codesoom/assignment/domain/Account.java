@@ -18,7 +18,8 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class Account {
 
-    @Id @GeneratedValue
+    @Id
+    @GeneratedValue
     private Long id;
 
     @NotBlank
@@ -33,9 +34,11 @@ public class Account {
     public static Account from(AccountData data) {
         return Account.of(data.getId(), data.getName(), data.getEmail(), data.getPassword());
     }
+
     public static Account of(String name, String email, String password) {
         return Account.of(null, name, email, password);
     }
+
     public static Account of(Long id, String name, String email, String password) {
         return Account.builder()
                 .id(id)
