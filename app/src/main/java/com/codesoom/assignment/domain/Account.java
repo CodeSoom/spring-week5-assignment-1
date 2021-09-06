@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.AccountData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,6 +29,21 @@ public class Account {
 
     @NotBlank
     private String password;
+
+    public static Account from(AccountData data) {
+        return Account.of(data.getId(), data.getName(), data.getEmail(), data.getPassword());
+    }
+    public static Account of(String name, String email, String password) {
+        return Account.of(null, name, email, password);
+    }
+    public static Account of(Long id, String name, String email, String password) {
+        return Account.builder()
+                .id(id)
+                .name(name)
+                .password(password)
+                .email(email)
+                .build();
+    }
 
     public void change(Account source) {
         name = source.name;

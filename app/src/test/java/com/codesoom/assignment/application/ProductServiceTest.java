@@ -7,6 +7,8 @@ import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +35,7 @@ class ProductServiceTest {
                 .price(5000)
                 .build();
 
-        given(productRepository.findAll()).willReturn(List.of(product));
+        given(productRepository.findAll()).willReturn(Arrays.asList(product));
 
         given(productRepository.findById(1L)).willReturn(Optional.of(product));
 
@@ -50,7 +52,7 @@ class ProductServiceTest {
 
     @Test
     void getProductsWithNoProduct() {
-        given(productRepository.findAll()).willReturn(List.of());
+        given(productRepository.findAll()).willReturn(Collections.emptyList());
 
         assertThat(productService.getProducts()).isEmpty();
     }
