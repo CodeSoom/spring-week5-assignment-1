@@ -3,18 +3,19 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 
+import com.codesoom.assignment.exception.UserNotFoundException;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DataJdbcTest
+@DataJpaTest
 @DisplayName("UserService 테스트")
 class UserServiceTest {
 
@@ -113,7 +114,7 @@ class UserServiceTest {
             @DisplayName("UserNotFoundException을 던집니다.")
             void it_throw_UserNotFoundException() {
                 assertThatThrownBy(()->userService.update(invalid_id, newUser))
-                        .isInstanceOf(UserNotFoundException(invalid_id));
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -138,7 +139,7 @@ class UserServiceTest {
             @DisplayName("UserNotFoundException을 던집니다.")
             void it_throw_UserNotFoundException() {
                 assertThatThrownBy(()->userService.delete(invalid_id))
-                        .isInstanceOf(UserNotFoundException(invalid_id));
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
