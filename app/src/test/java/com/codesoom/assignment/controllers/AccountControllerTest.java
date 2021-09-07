@@ -4,7 +4,6 @@ import com.codesoom.assignment.application.AccountService;
 import com.codesoom.assignment.domain.Account;
 import com.codesoom.assignment.dto.AccountData;
 import com.codesoom.assignment.exceptions.AccountNotFoundException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -148,14 +147,49 @@ class AccountControllerTest {
                         .value(String.format(AccountNotFoundException.DEFAULT_MESSAGE, 100L)));
     }
 
+
+    @DisplayName("잘못 된 타입의 식별자로는 회원 정보를 수정할 수 없다.. - PATCH /user/{invalidTypeId}")
+    @ParameterizedTest
+    @ValueSource(strings = {"", "null", "NaN", "abc"})
+    void patchInvalidTypeId(String invalidId) throws Exception {
+        final String content = String.format(FORM,
+                null,
+                OTHER_ACCOUNT_NAME,
+                OTHER_ACCOUNT_EMAIL,
+                OTHER_ACCOUNT_PASSWORD);
+
+        mockMvc.perform(
+                        patch(API_PATH + "/" + invalidId)
+                                .locale(Locale.KOREAN)
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message")
+                        .value(BadRequestErrorAdvice.NOT_SUPPORTED_TYPE_ARGUMENT));
+    }
+
+
     @DisplayName("식별자로 회원 정보를 삭제할 수 있다 - DELETE /user/{id}")
     @ParameterizedTest
     @ValueSource(longs = {0, 1, 2, 3, 4, 5})
     void deleteAccount(long id) throws Exception {
-        mockMvc.perform(delete(API_PATH+"/"+ id))
+        mockMvc.perform(delete(API_PATH + "/" + id))
                 .andExpect(status().isNoContent());
 
         verify(accountService).deleteAccount(id);
+    }
+
+
+    @DisplayName("잘못 된 타입의 식별자로 회원 정보를 삭제할 수 없다 - DELETE /user/{invalidId}")
+    @ParameterizedTest
+    @ValueSource(strings = {"", "null", "NaN", "abc"})
+    void deleteWithInvalidId(String invalidId) throws Exception {
+        mockMvc.perform(delete(API_PATH + "/" + invalidId))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message")
+                        .value(BadRequestErrorAdvice.NOT_SUPPORTED_TYPE_ARGUMENT));
     }
 
 }
