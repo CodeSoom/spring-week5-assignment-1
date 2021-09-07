@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.service.CatToyService;
+import com.codesoom.assignment.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -22,11 +22,11 @@ import java.util.List;
 @RestController
 @CrossOrigin
 @RequestMapping("/products")
-public class CatToyController {
+public class ProductController {
 
-    private final CatToyService catToyService;
+    private final ProductService catToyService;
 
-    public CatToyController(CatToyService catToyService) {
+    public ProductController(ProductService catToyService) {
         this.catToyService = catToyService;
     }
 

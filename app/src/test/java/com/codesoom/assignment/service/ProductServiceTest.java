@@ -1,7 +1,7 @@
 package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.repository.CatToyRepository;
+import com.codesoom.assignment.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,10 +20,10 @@ import static org.mockito.Mockito.verify;
 
 @Nested
 @DisplayName("CatToyService 클래스")
-class CatToyServiceTest {
+class ProductServiceTest {
 
-    private CatToyServiceImpl catToyServiceImpl;
-    private CatToyRepository catToyRepository;
+    private ProductService productService;
+    private ProductRepository productRepository;
 
     private CatToy givenCatToy;
     private List<CatToy> givenCatToyList;
@@ -32,8 +32,8 @@ class CatToyServiceTest {
 
     @BeforeEach
     public void setUp() {
-        catToyRepository = mock(CatToyRepository.class);
-        catToyServiceImpl = new CatToyServiceImpl(catToyRepository);
+        productRepository = mock(ProductRepository.class);
+        productService = new ProductServiceImpl(productRepository);
 
         givenCatToy = new CatToy(
                 EXIST_ID,
@@ -52,15 +52,13 @@ class CatToyServiceTest {
     class getAllCatToys {
         @BeforeEach
         void prepareTest() {
-            given(catToyRepository.findAll()).willReturn(givenCatToyList);
+            given(productRepository.findAll()).willReturn(givenCatToyList);
         }
 
         @Test
-        @DisplayName("장난감 목록 전체를 반환한다.")
+        @DisplayName("장난감 목록 전체를 반환을 요청한다.")
         void getCatToys() {
-            List<CatToy> catToys = catToyServiceImpl.getCatToys();
-
-            verify(catToyRepository).findAll();
+            List<CatToy> catToys = productService.getCatToys();
 
             Assertions.assertThat(catToys).hasSize(1);
         }
@@ -71,15 +69,13 @@ class CatToyServiceTest {
     class findCatToyById {
         @BeforeEach
         void prepareTest() {
-            given(catToyRepository.findById(EXIST_ID)).willReturn(Optional.of(givenCatToy));
+            given(productRepository.findById(EXIST_ID)).willReturn(Optional.of(givenCatToy));
         }
 
         @Test
-        @DisplayName("식별자와 일치하는 장난감을 반환한다.")
+        @DisplayName("식별자와 일치하는 장난감을 반환을 요청한다.")
         void findCatToyById() {
-            CatToy catToy = catToyServiceImpl.findCatToyById(EXIST_ID);
-
-            verify(catToyRepository).findById(EXIST_ID);
+            CatToy catToy = productService.findCatToyById(EXIST_ID);
 
             Assertions.assertThat(catToy.getName()).isEqualTo("Test Name");
         }
@@ -90,15 +86,13 @@ class CatToyServiceTest {
     class addCatToy {
         @BeforeEach
         void prepareTest() {
-            given(catToyRepository.save(any(CatToy.class))).willReturn(givenCatToy);
+            given(productRepository.save(any(CatToy.class))).willReturn(givenCatToy);
         }
 
         @Test
-        @DisplayName("요청된 장난감을 저장하고 반환한다.")
+        @DisplayName("요청된 장난감을 저장하고 반환을 요청한다.")
         void addCatToy() {
-            CatToy catToy = catToyServiceImpl.addCatToy(givenCatToy);
-
-            verify(catToyRepository).save(givenCatToy);
+            CatToy catToy = productService.addCatToy(givenCatToy);
 
             Assertions.assertThat(catToy.getName()).isEqualTo("Test Name");
         }
@@ -109,15 +103,13 @@ class CatToyServiceTest {
     class updateCatToy {
         @BeforeEach
         void prepareTest() {
-            given(catToyRepository.findById(EXIST_ID)).willReturn(Optional.of(givenCatToy));
+            given(productRepository.findById(EXIST_ID)).willReturn(Optional.of(givenCatToy));
         }
 
         @Test
-        @DisplayName("요청된 장난감을 수정한다.")
+        @DisplayName("요청된 장난감을 수정을 요청한다.")
         void updateCatToy() {
-            CatToy catToy = catToyServiceImpl.updateCatToy(EXIST_ID, givenCatToy);
-
-            verify(catToyRepository).findById(EXIST_ID);
+            CatToy catToy = productService.updateCatToy(EXIST_ID, givenCatToy);
 
             Assertions.assertThat(catToy.getName()).isEqualTo(givenCatToy.getName());
         }
@@ -128,16 +120,14 @@ class CatToyServiceTest {
     class deleteCatToyById {
         @BeforeEach
         void prepareTest() {
-            given(catToyRepository.findById(EXIST_ID)).willReturn(Optional.of(givenCatToy));
+            given(productRepository.findById(EXIST_ID)).willReturn(Optional.of(givenCatToy));
         }
 
         @Test
-        @DisplayName("요청된 장난감을 삭제한다.")
+        @DisplayName("요청된 장난감을 삭제를 요청한다.")
         void deleteCatToyById() {
-            catToyServiceImpl.deleteCatToyById(EXIST_ID);
-
-            verify(catToyRepository).findById(EXIST_ID);
-            verify(catToyRepository).deleteById(EXIST_ID);
+            productService.deleteCatToyById(1L);
+            verify(productRepository).deleteById(1L);
         }
     }
 }

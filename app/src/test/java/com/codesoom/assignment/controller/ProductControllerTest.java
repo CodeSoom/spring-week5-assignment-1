@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.service.CatToyService;
+import com.codesoom.assignment.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -30,13 +30,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-class CatToyControllerTest {
+class ProductControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CatToyService catToyService;
+    private ProductService catToyService;
 
     private static final long ID = 1L;
     private static final String NAME = "TEST NAME";

@@ -2,17 +2,17 @@ package com.codesoom.assignment.service;
 
 import com.codesoom.assignment.common.exception.CatToyNotFoundException;
 import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.repository.CatToyRepository;
+import com.codesoom.assignment.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class CatToyServiceImpl implements CatToyService{
+public class ProductServiceImpl implements ProductService {
 
-    private final CatToyRepository catToyRepository;
+    private final ProductRepository catToyRepository;
 
-    public CatToyServiceImpl(CatToyRepository catToyRepository) {
+    public ProductServiceImpl(ProductRepository catToyRepository) {
         this.catToyRepository = catToyRepository;
     }
 

@@ -4,7 +4,7 @@ import com.codesoom.assignment.domain.CatToy;
 
 import java.util.List;
 
-public interface CatToyService {
+public interface ProductService {
     List<CatToy> getCatToys();
     CatToy findCatToyById(Long id);
     CatToy addCatToy(CatToy catToy);

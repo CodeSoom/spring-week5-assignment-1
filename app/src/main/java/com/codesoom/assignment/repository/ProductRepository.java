@@ -6,7 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface CatToyRepository extends CrudRepository<CatToy, Long> {
+public interface ProductRepository extends CrudRepository<CatToy, Long> {
     List<CatToy> findAll();
     Optional<CatToy> findById(Long id);
     CatToy save(CatToy catToy);
