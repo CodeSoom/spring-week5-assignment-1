@@ -83,12 +83,12 @@ class UserControllerTest {
         class Context_with_correct_data {
 
             @Test
-            @DisplayName("response(status: ok, data: new user)를 반환합니다.")
+            @DisplayName("response(status: created, data: new user)를 반환합니다.")
             void it_response_ok() throws Exception {
                 mockMvc.perform(post("/user")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content_correct_user))
-                        .andExpect(status().isOk())
+                        .andExpect(status().isCreated())
                         .andExpect(content().string(content_correct_user));
             }
         }
@@ -118,12 +118,12 @@ class UserControllerTest {
         class Context_with_existing_user {
 
             @Test
-            @DisplayName("response(status: created, data: update user)를 반환합니다.")
+            @DisplayName("response(status: ok, data: update user)를 반환합니다.")
             void it_response_ok() throws Exception {
                 mockMvc.perform(patch("/user/" + VALID_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content_correct_user))
-                        .andExpect(status().isCreated())
+                        .andExpect(status().isOk())
                         .andExpect(content().string(content_correct_user));
             }
         }
