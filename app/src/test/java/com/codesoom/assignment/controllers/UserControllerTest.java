@@ -57,14 +57,13 @@ class UserControllerTest {
         content_invalid_user = objectMapper.writeValueAsString(invalid_user);
 
         given(userService.create(any(User.class))).will(invocation -> {
-            User user = invocation.getArgument(0);
-            return objectMapper.writeValueAsString(user);
+            return invocation.getArgument(0);
         });
 
         given(userService.update(eq(VALID_ID), any(User.class))).will(invocation -> {
             User user = invocation.getArgument(1);
             user.setId(VALID_ID);
-            return objectMapper.writeValueAsString(user);
+            return user;
         });
 
         given(userService.update(eq(INVALID_ID), any(User.class)))
