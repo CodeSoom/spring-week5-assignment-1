@@ -9,6 +9,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * 상품 관리 담당.
+ */
 @Service
 @Transactional
 public class ProductService {

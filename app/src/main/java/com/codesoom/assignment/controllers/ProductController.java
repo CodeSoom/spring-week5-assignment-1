@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * 상품 관련 HTTP 요청 처리 담당.
+ */
 @RestController
 @RequestMapping("/products")
 public class ProductController {
