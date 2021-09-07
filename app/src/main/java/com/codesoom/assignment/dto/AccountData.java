@@ -42,6 +42,10 @@ public class AccountData {
                 .build();
     }
 
+    public static AccountData of(String name, String email, String password) {
+        return new AccountData(null, name, email, password);
+    }
+
     public Account toAccount() {
         return Account.builder()
                 .id(id)

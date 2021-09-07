@@ -1,16 +1,37 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Account;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
+
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+import java.util.Set;
+import java.util.stream.Stream;
 
 import static com.codesoom.assignment.Constant.ACCOUNT_EMAIL;
 import static com.codesoom.assignment.Constant.ACCOUNT_NAME;
 import static com.codesoom.assignment.Constant.ACCOUNT_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("DTO 객체인 AccountData의 비즈니스 로직 테스트")
+@DisplayName("DTO 객체인 AccountData의 로직 테스트")
 class AccountDataTest {
+    private static ValidatorFactory factory;
+    private static Validator validator;
+
+
+    @BeforeAll
+    static void init() {
+        factory = Validation.buildDefaultValidatorFactory();
+        validator = factory.getValidator();
+    }
+
 
     @DisplayName("AccountData를 Account 도메인 객체로 변환 할 수 있다.")
     @Test
@@ -40,6 +61,42 @@ class AccountDataTest {
         assertThat(accountData.getName()).isEqualTo(account.getName());
         assertThat(accountData.getEmail()).isEqualTo(account.getEmail());
         assertThat(accountData.getPassword()).isEqualTo(account.getPassword());
+    }
+
+    @DisplayName("유효성 검증 애노테이션을 활용해 필드 검사를 할 수 있다.")
+    @Test
+    void createWithExistsField() {
+        final Account account = Account.builder()
+                .id(1L)
+                .name(ACCOUNT_NAME)
+                .email(ACCOUNT_EMAIL)
+                .password(ACCOUNT_PASSWORD)
+                .build();
+
+        AccountData accountData = AccountData.from(account);
+        final Set<ConstraintViolation<AccountData>> validate = validator.validate(accountData);
+
+        assertThat(validate).isEmpty();
+    }
+
+    @DisplayName("필드에 공백 혹은 null 값은 유효성 검증에서 실패한다.")
+    @ParameterizedTest
+    @MethodSource("provideAccountDataWithEmptyField")
+    void createWithEmptyField(AccountData source) {
+
+        final Set<ConstraintViolation<AccountData>> validate = validator.validate(source);
+        final ConstraintViolation<AccountData> violation = validate.stream().findFirst().orElse(null);
+
+        assertThat(violation).isNotNull();
+        assertThat(violation.getMessage()).isEqualTo("공백일 수 없습니다");
+    }
+
+    public static Stream<Arguments> provideAccountDataWithEmptyField() {
+        return Stream.of(
+                Arguments.of(AccountData.of(null, ACCOUNT_EMAIL, ACCOUNT_PASSWORD)),
+                Arguments.of(AccountData.of(ACCOUNT_NAME, "", ACCOUNT_PASSWORD)),
+                Arguments.of(AccountData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ""))
+        );
     }
 
 }
