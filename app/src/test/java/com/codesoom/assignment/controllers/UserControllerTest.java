@@ -85,6 +85,7 @@ class UserControllerTest {
             @DisplayName("response(status: created, data: new user)를 반환합니다.")
             void it_response_ok() throws Exception {
                 mockMvc.perform(post("/user")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content_correct_user))
                         .andExpect(status().isCreated())
@@ -100,6 +101,7 @@ class UserControllerTest {
             @DisplayName("response(status: bad request)를 반환합니다.")
             void it_response_bad_request() throws Exception {
                 mockMvc.perform(post("/user")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content_invalid_user))
                         .andExpect(status().isBadRequest());
@@ -120,6 +122,7 @@ class UserControllerTest {
             @DisplayName("response(status: ok, data: update user)를 반환합니다.")
             void it_response_ok() throws Exception {
                 mockMvc.perform(patch("/user/" + VALID_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content_correct_user))
                         .andExpect(status().isOk())
@@ -135,6 +138,7 @@ class UserControllerTest {
             @DisplayName("response(status: not found)를 반환합니다.")
             void it_response_not_found() throws Exception {
                 mockMvc.perform(patch("/user/" + INVALID_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content_correct_user))
                         .andExpect(status().isNotFound());
