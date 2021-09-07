@@ -1,7 +1,7 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Account;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -30,7 +30,7 @@ public class AccountData {
 
     @NotBlank
     @Mapping("password")
-    @JsonIgnore
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     public static AccountData from(Account account) {

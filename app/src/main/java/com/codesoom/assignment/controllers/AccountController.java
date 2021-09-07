@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.AccountService;
 import com.codesoom.assignment.dto.AccountData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,6 +26,7 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/user")
 @RequiredArgsConstructor
+@CrossOrigin
 public class AccountController {
     private final AccountService accountService;
 
@@ -34,6 +36,7 @@ public class AccountController {
      * @return 저장된 회원 상세 정보
      */
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public AccountData createAccount(@RequestBody @Valid AccountData accountData) {
         return accountService.creation(accountData);
     }
