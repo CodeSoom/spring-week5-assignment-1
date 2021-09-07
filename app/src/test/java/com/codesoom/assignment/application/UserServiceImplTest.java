@@ -3,8 +3,10 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserEmailDuplicateException;
 import org.junit.jupiter.api.*;
 import org.mockito.Mockito;
+import org.springframework.boot.convert.DurationFormat;
 
 import java.util.Optional;
 
@@ -77,7 +79,7 @@ class UserServiceImplTest {
 
             @Test
             @DisplayName("UserData 객체를 통하여 User 객체를 생성후 반환한다")
-            void It_create_return_user() {
+            void It_create_return_user() throws Exception {
 
                 User createUser = userService.createUser(source);
 
@@ -87,6 +89,40 @@ class UserServiceImplTest {
                 assertEquals(TEST_PASSWORD, createUser.getPassword());
 
                 verify(userRepository).save(any(User.class));
+
+            }
+
+        }
+
+        @Nested
+        @DisplayName("생성할 사용자 이메일이 이미 존재한다면")
+        class Context_duplicate_email {
+
+            UserData source;
+
+            @BeforeEach
+            void setUp() throws Exception{
+
+                source = UserData.builder()
+                        .name(TEST_NAME)
+                        .email(TEST_EMAIL)
+                        .password(TEST_PASSWORD)
+                        .build();
+
+              given(userService.createUser(source)).willThrow(new UserEmailDuplicateException());
+//                given(userService.createUser(source)).willAnswer(invocation -> {
+//                    throw  new UserEmailDuplicateException();
+//                });
+
+            }
+
+            @Test
+            @DisplayName("UserEmailDuplicateException 예외를 던진다")
+            void It_create_return_user() throws Exception {
+
+                org.assertj.core.api.Assertions.assertThatThrownBy(() ->
+                        userService.createUser(source)).as("이미 가입된 메일이 존재합니다.").isInstanceOf(UserEmailDuplicateException.class);
+
             }
 
         }

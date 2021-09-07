@@ -3,14 +3,14 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserEmailDuplicateException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
-/**
- * 사용자 생성, 수정, 삭제 기능을 담당하는 클래스
- */
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
@@ -21,13 +21,12 @@ public class UserServiceImpl implements UserService {
         this.userRepository = userRepository;
     }
 
-    /**
-     * 사용자를 생성하여 데이터베이스에 저장하는 메소드
-     * @param source 사용자 객체에 매핑하기 위한 객체
-     * @return 사용자 객체
-     */
     @Override
-    public User createUser(UserData source) {
+    public User createUser(UserData source) throws Exception {
+
+        if(emailCheck(source.getEmail()).isPresent()) {
+            throw new UserEmailDuplicateException();
+        }
 
         User user = User.builder()
                 .name(source.getName())
@@ -39,12 +38,6 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    /**
-     * 사용자 정보를 수정하는 메소드
-     * @param id 사용자 id
-     * @param source 수정할 정보가 들어있는 객체
-     * @return 수정한 사용자 객체 반환
-     */
     @Override
     public User updateUser(Long id, UserData source) {
 
@@ -55,14 +48,27 @@ public class UserServiceImpl implements UserService {
 
     }
 
-    /**
-     * 등록된 사용자들 삭제하는 메소드
-     * @param id 삭제할 사용자 id
-     */
     @Override
     public void deleteUser(Long id) {
 
         userRepository.deleteById(id);
+
+    }
+
+    @Override
+    public Optional<User> emailCheck(String mail) throws Exception {
+
+        List<User> users = userRepository.findAll();
+
+        for (User user : users) {
+
+            if(user.getEmail().equals(mail)) {
+                return Optional.of(user);
+            }
+
+        }
+
+        return Optional.empty();
 
     }
 

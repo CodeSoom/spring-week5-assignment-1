@@ -20,7 +20,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid UserData userData) {
+    public User create(@RequestBody @Valid UserData userData) throws Exception {
 
         return userService.createUser(userData);
 
