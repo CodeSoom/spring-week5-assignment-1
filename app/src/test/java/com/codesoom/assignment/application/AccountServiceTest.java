@@ -8,6 +8,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static com.codesoom.assignment.Constant.ACCOUNT_EMAIL;
 import static com.codesoom.assignment.Constant.ACCOUNT_NAME;
 import static com.codesoom.assignment.Constant.ACCOUNT_PASSWORD;
@@ -42,6 +44,10 @@ class AccountServiceTest {
 
     private void setUpFixture() {
         given(accountRepository.save(any(Account.class))).willReturn(account);
+
+        given(accountRepository.findById(account.getId())).willReturn(Optional.of(account));
+
+        given(accountRepository.findById(100L)).willThrow(new AccountNotFoundException(100L));
     }
 
     @DisplayName("회원 정보를 등록할 수 있다. ")
@@ -75,7 +81,6 @@ class AccountServiceTest {
     @DisplayName("존재하지 않는 식별자의 회원 정보를 수정하려 하면 예외가 발생한다.")
     @Test
     void patchWithInValidAccount() {
-        AccountData savedAccount = accountService.creation(accountData);
         final AccountData target = AccountData.of(OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_PASSWORD);
 
         assertThatThrownBy(() -> accountService.patchAccount(100L, target))
@@ -87,10 +92,17 @@ class AccountServiceTest {
     @Test
     void deleteWithValidAccount() {
         AccountData savedAccount = accountService.creation(accountData);
-        final Account account = savedAccount.toAccount();
 
         accountService.deleteAccount(savedAccount.getId());
 
         verify(accountRepository).delete(account);
+    }
+
+    @DisplayName("회원 정보를 삭제할 수 있다.")
+    @Test
+    void deleteWithInValidAccount() {
+        assertThatThrownBy(()->accountService.deleteAccount(100L))
+                .isInstanceOf(AccountNotFoundException.class)
+                .hasMessage(String.format(AccountNotFoundException.DEFAULT_MESSAGE, 100L));
     }
 }
