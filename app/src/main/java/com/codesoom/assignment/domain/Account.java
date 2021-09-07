@@ -1,8 +1,9 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.AccountData;
+import com.codesoom.assignment.dto.AccountSaveData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
+@Generated
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -31,7 +33,7 @@ public class Account {
     @NotBlank
     private String password;
 
-    public static Account from(AccountData data) {
+    public static Account from(AccountSaveData data) {
         return Account.of(data.getId(), data.getName(), data.getEmail(), data.getPassword());
     }
 
@@ -49,8 +51,8 @@ public class Account {
     }
 
     public void change(Account source) {
-        name = source.name;
-        email = source.email;
-        password = source.password;
+        email = source.email != null ? source.email : email;
+        password = source.password != null ? source.password : password;
+        name = source.name != null ? source.name : name;
     }
 }

@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.dto.ErrorResponse;
+import com.codesoom.assignment.exceptions.AccountUpdateFailedException;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -41,6 +42,11 @@ public class BadRequestErrorAdvice {
         return new ErrorResponse(NOT_SUPPORTED_TYPE_ARGUMENT);
     }
 
-
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(AccountUpdateFailedException.class)
+    public ErrorResponse handleMethodArgumentTypeMismatch(AccountUpdateFailedException ex) {
+        return new ErrorResponse(ex.getMessage());
+    }
 
 }

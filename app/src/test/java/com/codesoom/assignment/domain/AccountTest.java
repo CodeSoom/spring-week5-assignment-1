@@ -1,6 +1,6 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.AccountData;
+import com.codesoom.assignment.dto.AccountSaveData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -8,10 +8,17 @@ import static com.codesoom.assignment.Constant.ACCOUNT_EMAIL;
 import static com.codesoom.assignment.Constant.ACCOUNT_NAME;
 import static com.codesoom.assignment.Constant.ACCOUNT_PASSWORD;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Account 객체 테스트")
 class AccountTest {
+
+    @DisplayName("객체 생성을 할 수 있다.")
+    @Test
+    void create() {
+        final Account account = new Account();
+
+        assertThat(account).isInstanceOf(Account.class);
+    }
 
     @DisplayName("빌더 패턴을 이용해 객체 생성이 가능하다.")
     @Test
@@ -43,7 +50,7 @@ class AccountTest {
     @DisplayName("정적 팩토리 메서드 from 를 통해 객체 생성이 가능하다.")
     @Test
     void creationWithFromFactoryMethod() {
-        AccountData accountData = new AccountData(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
+        AccountSaveData accountData = new AccountSaveData(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
         final Account account = Account.from(accountData);
 
         assertThat(account.getId()).isEqualTo(1L);

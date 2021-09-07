@@ -2,11 +2,15 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Account;
 import com.codesoom.assignment.domain.AccountRepository;
-import com.codesoom.assignment.dto.AccountData;
+import com.codesoom.assignment.dto.AccountSaveData;
+import com.codesoom.assignment.dto.AccountUpdateData;
 import com.codesoom.assignment.exceptions.AccountNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 회원 정보를 관리한다.
@@ -21,27 +25,43 @@ public class AccountService {
     private final AccountRepository accountRepository;
 
 
-    public AccountData creation(AccountData data) {
+    @Transactional
+    public AccountSaveData creation(AccountSaveData data) {
         final Account account = data.toAccount();
         final Account savedAccount = accountRepository.save(account);
 
-        return AccountData.from(savedAccount);
+        return AccountSaveData.from(savedAccount);
     }
 
     @Transactional
-    public AccountData patchAccount(long id, AccountData data) {
+    public AccountSaveData patchAccount(long id, AccountUpdateData data) {
         final Account foundAccount = accountRepository.findById(id)
-                .orElseThrow(() -> new AccountNotFoundException(id));
+                .orElseThrow(()-> new AccountNotFoundException(id));
 
         foundAccount.change(data.toAccount());
 
-        return AccountData.from(foundAccount);
+        return AccountSaveData.from(foundAccount);
     }
 
+    @Transactional
     public void deleteAccount(Long id) {
         final Account foundAccount = accountRepository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException(id));
 
         accountRepository.delete(foundAccount);
+    }
+
+    public AccountSaveData findAccount(long id) {
+        final Account account = accountRepository.findById(id)
+                .orElseThrow(() -> new AccountNotFoundException(id));
+
+        return AccountSaveData.from(account);
+    }
+
+    public List<AccountSaveData> findAll() {
+        return accountRepository.findAll()
+                .stream()
+                .map(AccountSaveData::from)
+                .collect(Collectors.toList());
     }
 }

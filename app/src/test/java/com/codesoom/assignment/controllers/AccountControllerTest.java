@@ -2,7 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.AccountService;
 import com.codesoom.assignment.domain.Account;
-import com.codesoom.assignment.dto.AccountData;
+import com.codesoom.assignment.dto.AccountSaveData;
+import com.codesoom.assignment.dto.AccountUpdateData;
 import com.codesoom.assignment.exceptions.AccountNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -40,7 +41,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(AccountController.class)
 class AccountControllerTest {
 
-    private static final String API_PATH = "/user";
+    private static final String API_PATH = "/users";
     private static final String FORM = "{\"id\":%s,\"name\":\"%s\",\"email\":\"%s\", \"password\":\"%s\"}";
 
     @Autowired
@@ -54,12 +55,12 @@ class AccountControllerTest {
     void setUp() {
         Account account = Account.of(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
 
-        given(accountService.creation(any(AccountData.class))).willReturn(AccountData.from(account));
+        given(accountService.creation(any(AccountSaveData.class))).willReturn(AccountSaveData.from(account));
 
-        given(accountService.patchAccount(eq(account.getId()), any(AccountData.class)))
-                .willReturn(AccountData.of(OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_EMAIL, OTHER_ACCOUNT_PASSWORD));
+        given(accountService.patchAccount(eq(account.getId()), any(AccountUpdateData.class)))
+                .willReturn(AccountSaveData.of(OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_EMAIL, OTHER_ACCOUNT_PASSWORD));
 
-        given(accountService.patchAccount(eq(100L), any(AccountData.class)))
+        given(accountService.patchAccount(eq(100L), any(AccountUpdateData.class)))
                 .willThrow(new AccountNotFoundException(100L));
     }
 
@@ -104,8 +105,8 @@ class AccountControllerTest {
     @DisplayName("등록된 회원의 정보를 수정할 수 있다. - PATCH /user/{id}")
     @Test
     void patchWithExistsAccount() throws Exception {
-        final AccountData savedAccountData = accountService.creation(
-                AccountData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD));
+        final AccountSaveData savedAccountData = accountService.creation(
+                AccountSaveData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD));
 
         final String content = String.format(FORM,
                 savedAccountData.getId(),
@@ -150,7 +151,7 @@ class AccountControllerTest {
 
     @DisplayName("잘못 된 타입의 식별자로는 회원 정보를 수정할 수 없다.. - PATCH /user/{invalidTypeId}")
     @ParameterizedTest
-    @ValueSource(strings = {"", "null", "NaN", "abc"})
+    @ValueSource(strings = {"null", "NaN", "abc"})
     void patchInvalidTypeId(String invalidId) throws Exception {
         final String content = String.format(FORM,
                 null,
@@ -184,7 +185,7 @@ class AccountControllerTest {
 
     @DisplayName("잘못 된 타입의 식별자로 회원 정보를 삭제할 수 없다 - DELETE /user/{invalidId}")
     @ParameterizedTest
-    @ValueSource(strings = {"", "null", "NaN", "abc"})
+    @ValueSource(strings = {"null", "NaN", "abc"})
     void deleteWithInvalidId(String invalidId) throws Exception {
         mockMvc.perform(delete(API_PATH + "/" + invalidId))
                 .andExpect(status().isBadRequest())

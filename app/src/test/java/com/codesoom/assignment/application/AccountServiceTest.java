@@ -2,7 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Account;
 import com.codesoom.assignment.domain.AccountRepository;
-import com.codesoom.assignment.dto.AccountData;
+import com.codesoom.assignment.dto.AccountSaveData;
+import com.codesoom.assignment.dto.AccountUpdateData;
 import com.codesoom.assignment.exceptions.AccountNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,11 +30,11 @@ class AccountServiceTest {
     private AccountService accountService;
 
     private Account account;
-    private AccountData accountData;
+    private AccountSaveData accountData;
 
     @BeforeEach
     void setUp() {
-        accountData = AccountData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
+        accountData = AccountSaveData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
         account = Account.of(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
 
         accountRepository = mock(AccountRepository.class);
@@ -52,8 +53,8 @@ class AccountServiceTest {
 
     @DisplayName("회원 정보를 등록할 수 있다. ")
     @Test
-    void createWithValidAccount() {
-        AccountData savedAccount = accountService.creation(accountData);
+    void createWithValidAccountV1() {
+        AccountSaveData savedAccount = accountService.creation(accountData);
 
         assertThat(savedAccount.getId()).isEqualTo(1L);
         assertThat(savedAccount.getName()).isEqualTo(accountData.getName());
@@ -66,10 +67,10 @@ class AccountServiceTest {
     @DisplayName("회원 정보를 수정할 수 있다.")
     @Test
     void patchWithValidAccount() {
-        AccountData savedAccount = accountService.creation(accountData);
-        final AccountData target = AccountData.of(OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_PASSWORD);
+        AccountSaveData savedAccount = accountService.creation(accountData);
+        final AccountUpdateData target = AccountUpdateData.of(OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_PASSWORD);
 
-        final AccountData updatedAccountData = accountService.patchAccount(savedAccount.getId(), target);
+        final AccountSaveData updatedAccountData = accountService.patchAccount(savedAccount.getId(), target);
 
         assertThat(updatedAccountData.getId()).isEqualTo(savedAccount.getId());
         assertThat(updatedAccountData.getName()).isEqualTo(target.getName());
@@ -81,7 +82,7 @@ class AccountServiceTest {
     @DisplayName("존재하지 않는 식별자의 회원 정보를 수정하려 하면 예외가 발생한다.")
     @Test
     void patchWithInValidAccount() {
-        final AccountData target = AccountData.of(OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_PASSWORD);
+        final AccountUpdateData target = AccountUpdateData.of(OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_NAME, OTHER_ACCOUNT_PASSWORD);
 
         assertThatThrownBy(() -> accountService.patchAccount(100L, target))
                 .isInstanceOf(AccountNotFoundException.class)
@@ -91,7 +92,7 @@ class AccountServiceTest {
     @DisplayName("회원 정보를 삭제할 수 있다.")
     @Test
     void deleteWithValidAccount() {
-        AccountData savedAccount = accountService.creation(accountData);
+        AccountSaveData savedAccount = accountService.creation(accountData);
 
         accountService.deleteAccount(savedAccount.getId());
 

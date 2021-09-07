@@ -36,7 +36,7 @@ class AccountDataTest {
     @DisplayName("AccountData를 Account 도메인 객체로 변환 할 수 있다.")
     @Test
     void toAccount() {
-        final AccountData accountData = new AccountData(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
+        final AccountSaveData accountData = new AccountSaveData(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
         Account account = accountData.toAccount();
 
         assertThat(account.getId()).isEqualTo(1L);
@@ -55,7 +55,7 @@ class AccountDataTest {
                 .password(ACCOUNT_PASSWORD)
                 .build();
 
-        AccountData accountData = AccountData.from(account);
+        AccountSaveData accountData = AccountSaveData.from(account);
 
         assertThat(accountData.getId()).isEqualTo(account.getId());
         assertThat(accountData.getName()).isEqualTo(account.getName());
@@ -73,8 +73,8 @@ class AccountDataTest {
                 .password(ACCOUNT_PASSWORD)
                 .build();
 
-        AccountData accountData = AccountData.from(account);
-        final Set<ConstraintViolation<AccountData>> validate = validator.validate(accountData);
+        AccountSaveData accountData = AccountSaveData.from(account);
+        final Set<ConstraintViolation<AccountSaveData>> validate = validator.validate(accountData);
 
         assertThat(validate).isEmpty();
     }
@@ -82,10 +82,10 @@ class AccountDataTest {
     @DisplayName("필드에 공백 혹은 null 값은 유효성 검증에서 실패한다.")
     @ParameterizedTest
     @MethodSource("provideAccountDataWithEmptyField")
-    void createWithEmptyField(AccountData source) {
+    void createWithEmptyField(AccountSaveData source) {
 
-        final Set<ConstraintViolation<AccountData>> validate = validator.validate(source);
-        final ConstraintViolation<AccountData> violation = validate.stream().findFirst().orElse(null);
+        final Set<ConstraintViolation<AccountSaveData>> validate = validator.validate(source);
+        final ConstraintViolation<AccountSaveData> violation = validate.stream().findFirst().orElse(null);
 
         assertThat(violation).isNotNull();
         assertThat(violation.getMessage()).isEqualTo("공백일 수 없습니다");
@@ -93,9 +93,9 @@ class AccountDataTest {
 
     public static Stream<Arguments> provideAccountDataWithEmptyField() {
         return Stream.of(
-                Arguments.of(AccountData.of(null, ACCOUNT_EMAIL, ACCOUNT_PASSWORD)),
-                Arguments.of(AccountData.of(ACCOUNT_NAME, "", ACCOUNT_PASSWORD)),
-                Arguments.of(AccountData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ""))
+                Arguments.of(AccountSaveData.of(null, ACCOUNT_EMAIL, ACCOUNT_PASSWORD)),
+                Arguments.of(AccountSaveData.of(ACCOUNT_NAME, "", ACCOUNT_PASSWORD)),
+                Arguments.of(AccountSaveData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ""))
         );
     }
 

@@ -1,11 +1,14 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.AccountService;
-import com.codesoom.assignment.dto.AccountData;
+import com.codesoom.assignment.dto.AccountSaveData;
+import com.codesoom.assignment.dto.AccountUpdateData;
+import com.codesoom.assignment.exceptions.AccountUpdateFailedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 /**
@@ -24,7 +28,7 @@ import javax.validation.Valid;
  * 3. 회원 삭제하기 - DELETE /user/{id}
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @RequiredArgsConstructor
 @CrossOrigin
 public class AccountController {
@@ -37,7 +41,7 @@ public class AccountController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public AccountData createAccount(@RequestBody @Valid AccountData accountData) {
+    public AccountSaveData createAccount(@RequestBody @Valid AccountSaveData accountData) {
         return accountService.creation(accountData);
     }
 
@@ -48,8 +52,12 @@ public class AccountController {
      * @return 수정된 회원 정보
      */
     @PatchMapping("{id}")
-    public AccountData patchAccount(@PathVariable long id,
-                                    @RequestBody @Valid AccountData accountData) {
+    public AccountSaveData patchAccount(@PathVariable long id,
+                                        @RequestBody @Valid AccountUpdateData accountData) {
+        if (!
+                accountData.isValid()) {
+            throw new AccountUpdateFailedException();
+        }
         return accountService.patchAccount(id, accountData);
     }
 
@@ -61,5 +69,10 @@ public class AccountController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAccount(@PathVariable Long id) {
         accountService.deleteAccount(id);
+    }
+
+    @GetMapping
+    public List<AccountSaveData> deleteAccount() {
+        return accountService.findAll();
     }
 }

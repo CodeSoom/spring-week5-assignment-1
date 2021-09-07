@@ -16,25 +16,22 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AccountData {
+public class AccountSaveData {
 
     private Long id;
 
     @NotBlank
-    @Mapping("name")
     private String name;
 
     @NotBlank
-    @Mapping("email")
     private String email;
 
     @NotBlank
-    @Mapping("password")
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    public static AccountData from(Account account) {
-        return AccountData.builder()
+    public static AccountSaveData from(Account account) {
+        return AccountSaveData.builder()
                 .id(account.getId())
                 .name(account.getName())
                 .password(account.getPassword())
@@ -42,8 +39,8 @@ public class AccountData {
                 .build();
     }
 
-    public static AccountData of(String name, String email, String password) {
-        return new AccountData(null, name, email, password);
+    public static AccountSaveData of(String name, String email, String password) {
+        return new AccountSaveData(null, name, email, password);
     }
 
     public Account toAccount() {
