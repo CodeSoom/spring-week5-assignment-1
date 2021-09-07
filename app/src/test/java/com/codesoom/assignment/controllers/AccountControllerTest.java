@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.Account;
 import com.codesoom.assignment.dto.AccountSaveData;
 import com.codesoom.assignment.dto.AccountUpdateData;
 import com.codesoom.assignment.exceptions.AccountNotFoundException;
+import com.codesoom.assignment.exceptions.AccountUpdateFailedException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -81,7 +82,7 @@ class AccountControllerTest {
 
     @DisplayName("잘못 된 정보로 회원 등록 API를 호출하면 등록에 실패한다. - POST /user BODY {invalidData}")
     @ParameterizedTest
-    @MethodSource("provideInvalidAccountData")
+    @MethodSource("provideInvalidParamAndAccountData")
     void createWithInvalidAccount(String fieldName, String content) throws Exception {
         mockMvc.perform(
                         post(API_PATH)
@@ -94,7 +95,7 @@ class AccountControllerTest {
                         .value("[" + fieldName + "](은)는 공백일 수 없습니다 입력된 값: []"));
     }
 
-    public static Stream<Arguments> provideInvalidAccountData() {
+    public static Stream<Arguments> provideInvalidParamAndAccountData() {
         return Stream.of(
                 Arguments.of("name", String.format(FORM, null, "", ACCOUNT_EMAIL, ACCOUNT_PASSWORD)),
                 Arguments.of("email", String.format(FORM, null, ACCOUNT_NAME, "", ACCOUNT_PASSWORD)),
@@ -147,6 +148,33 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.message")
                         .value(String.format(AccountNotFoundException.DEFAULT_MESSAGE, 100L)));
     }
+
+
+    @DisplayName("회원의 정보는 공백으로 수정 할 수 없다. - PATCH /user/{id}")
+    @ParameterizedTest
+    @MethodSource("provideInvalidAccountData")
+    void patchWithInvalidAccount(String content) throws Exception {
+
+        mockMvc.perform(
+                        patch(API_PATH + "/100")
+                                .locale(Locale.KOREAN)
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(content)
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message")
+                        .value(AccountUpdateFailedException.DEFAULT_MESSAGE));
+    }
+
+    public static Stream<Arguments> provideInvalidAccountData() {
+        return Stream.of(
+                Arguments.of(String.format(FORM, null, "", ACCOUNT_EMAIL, ACCOUNT_PASSWORD)),
+                Arguments.of(String.format(FORM, null, ACCOUNT_NAME, "", ACCOUNT_PASSWORD)),
+                Arguments.of(String.format(FORM, null, ACCOUNT_NAME, ACCOUNT_EMAIL, ""))
+        );
+    }
+
 
 
     @DisplayName("잘못 된 타입의 식별자로는 회원 정보를 수정할 수 없다.. - PATCH /user/{invalidTypeId}")

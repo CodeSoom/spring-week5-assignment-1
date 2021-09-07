@@ -58,10 +58,4 @@ public class AccountService {
         return AccountSaveData.from(account);
     }
 
-    public List<AccountSaveData> findAll() {
-        return accountRepository.findAll()
-                .stream()
-                .map(AccountSaveData::from)
-                .collect(Collectors.toList());
-    }
 }

@@ -71,8 +71,4 @@ public class AccountController {
         accountService.deleteAccount(id);
     }
 
-    @GetMapping
-    public List<AccountSaveData> deleteAccount() {
-        return accountService.findAll();
-    }
 }
