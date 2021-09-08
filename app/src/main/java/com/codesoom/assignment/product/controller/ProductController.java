@@ -1,7 +1,7 @@
-package com.codesoom.assignment.controller;
+package com.codesoom.assignment.product.controller;
 
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.service.ProductService;
+import com.codesoom.assignment.product.domain.CatToy;
+import com.codesoom.assignment.product.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;

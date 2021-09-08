@@ -1,6 +1,6 @@
-package com.codesoom.assignment.service;
+package com.codesoom.assignment.product.service;
 
-import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.product.domain.CatToy;
 
 import java.util.List;
 

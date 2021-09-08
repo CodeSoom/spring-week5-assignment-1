@@ -1,8 +1,8 @@
-package com.codesoom.assignment.service;
+package com.codesoom.assignment.product.service;
 
 import com.codesoom.assignment.common.exception.CatToyNotFoundException;
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.repository.ProductRepository;
+import com.codesoom.assignment.product.domain.CatToy;
+import com.codesoom.assignment.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

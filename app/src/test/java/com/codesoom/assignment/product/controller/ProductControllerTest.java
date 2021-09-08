@@ -1,7 +1,7 @@
-package com.codesoom.assignment.controller;
+package com.codesoom.assignment.product.controller;
 
-import com.codesoom.assignment.domain.CatToy;
-import com.codesoom.assignment.service.ProductService;
+import com.codesoom.assignment.product.domain.CatToy;
+import com.codesoom.assignment.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

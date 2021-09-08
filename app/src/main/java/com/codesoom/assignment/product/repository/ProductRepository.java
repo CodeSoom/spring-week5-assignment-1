@@ -1,6 +1,6 @@
-package com.codesoom.assignment.repository;
+package com.codesoom.assignment.product.repository;
 
-import com.codesoom.assignment.domain.CatToy;
+import com.codesoom.assignment.product.domain.CatToy;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
