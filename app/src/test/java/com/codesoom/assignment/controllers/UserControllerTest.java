@@ -100,7 +100,7 @@ public class UserControllerTest {
                     .createUser(any(UserData.class));
             }
 
-            @ParameterizedTest(name = "400(Bad Request)를 리턴한다.")
+            @ParameterizedTest(name = "400(Bad Request)를 리턴한다. email={0}, name={1}, password={2}")
             @CsvSource(
                 {
                     "'test@test.com', 'test', ''",

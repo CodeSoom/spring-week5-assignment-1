@@ -81,7 +81,7 @@ public class UserWebTest {
         @Nested
         @DisplayName("잘못된 User 데이터가 주어진 경우")
         class Context_invalid_UserData {
-            @ParameterizedTest(name = "400(Bad Request)를 리턴한다.")
+            @ParameterizedTest(name = "400(Bad Request)를 리턴한다. email={0}, name={1}, password={2}")
             @CsvSource(
                 {
                     "'test@test.com', 'test', ''",
