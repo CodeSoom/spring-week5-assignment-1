@@ -1,8 +1,5 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.dto.ProductData;
-
 import javax.servlet.http.HttpServletRequest;
 
 import com.codesoom.assignment.ProductNotFoundException;
@@ -19,10 +16,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class NotFoundErrorAdvice {
     /**
-     * ProductNotFoundException을 처리한다.
+     * 던져진 "id에대한 값을 찾을수 없는 예외"를 받아 에러에 대한 응답을 리턴한다.
      *
-     * @return 어디서(url경로, Http 메서드) 어떤 에러가 발생하였으며, 어떻게 해결할 수 있을지를 리턴한다.
-     *
+     * @return 예외에 대한 내용이 담긴 응답
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
