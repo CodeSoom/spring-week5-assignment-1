@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -20,6 +21,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -47,7 +50,7 @@ public class UserControllerTest {
     @Nested
     @DisplayName("create 메서드는")
     class Describe_create {
-        ResultActions subject() throws Exception {
+        private ResultActions subject() throws Exception {
             return mockMvc.perform(
                 post("/user")
                     .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -56,23 +59,23 @@ public class UserControllerTest {
             );
         }
 
-        OngoingStubbing<User> mockSubject() {
+        private OngoingStubbing<User> mockSubject() {
             return when(userService.createUser(any(UserData.class)));
-        }
-
-        @AfterEach
-        void afterEach() {
-            verify(userService)
-                .createUser(any(UserData.class));
         }
 
         @Nested
         @DisplayName("올바른 User 데이터가 주어진 경우")
-        class Context_correct_UserData {
+        class Context_valid_UserData {
             @BeforeEach
             void beforeEach() {
                 mockSubject()
                     .thenReturn(USER);
+            }
+
+            @AfterEach
+            void afterEach() {
+                verify(userService)
+                    .createUser(any(UserData.class));
             }
 
             @Test
@@ -85,6 +88,39 @@ public class UserControllerTest {
                     .andExpect(content().string(
                         Parser.toJson(USER)
                     ));
+            }
+        }
+
+        @Nested
+        @DisplayName("잘못된 User 데이터가 주어진 경우")
+        class Context_invalid_UserData {
+            @AfterEach
+            void afterEach() {
+                verify(userService, never())
+                    .createUser(any(UserData.class));
+            }
+
+            @ParameterizedTest(name = "400(Bad Request)를 리턴한다.")
+            @CsvSource(
+                {
+                    "'test@test.com', 'test', ''",
+                    "'', 'test', 'password",
+                    "'test@test.com', '', 'password'"
+                }
+            )
+            void it_returns_a_bad_request(
+                final String email, final String name, final String password
+            ) throws Exception {
+                requestBody = Parser.toJson(
+                    UserData.builder()
+                        .name(name)
+                        .email(email)
+                        .password(password)
+                        .build()
+                );
+
+                subject()
+                    .andExpect(status().isBadRequest());
             }
         }
     }
