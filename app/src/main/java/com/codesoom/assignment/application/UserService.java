@@ -19,11 +19,11 @@ public class UserService {
     }
 
     public User updateUser(Long id, User source) {
-        User user = userRepository.findById(id)
-            .orElseThrow(() -> new UserNotFoundException(id));
+        return userRepository.findById(id)
+            .map(user -> {
+                user.changeInfo(source);
 
-        user.changeInfo(source);
-
-        return userRepository.save(user);
+                return userRepository.save(user);
+            }).orElseThrow(() -> new UserNotFoundException(id));
     }
 }
