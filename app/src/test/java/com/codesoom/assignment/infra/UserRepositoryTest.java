@@ -21,8 +21,8 @@ public class UserRepositoryTest {
 
     private User savedUser;
 
-    void subjectSave() {
-        savedUser = userRepository.save(USER);
+    User subjectSave() {
+        return userRepository.save(USER);
     }
 
     void subjectDelete() {
