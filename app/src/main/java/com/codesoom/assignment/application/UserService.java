@@ -10,11 +10,7 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 /**
- * User 리소스
- * 수행할 작업을 정의하고, Domain layer에 수행을 위임한다.
- *
- * @see User
- * @see UserRepository
+ * User에 대한 생성, 조회, 수정, 삭제를 담당한다.
  */
 @Service
 @Transactional
