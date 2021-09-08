@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.springframework.stereotype.Service;
@@ -18,7 +19,11 @@ public class UserService {
     }
 
     public User updateUser(Long id, User source) {
-        // TODO: repository에서 수정 후 리턴
-        return source;
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException(id));
+
+        user.changeInfo(source);
+
+        return userRepository.save(user);
     }
 }

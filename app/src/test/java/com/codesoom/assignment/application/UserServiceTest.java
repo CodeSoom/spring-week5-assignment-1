@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
@@ -11,6 +12,7 @@ import static org.mockito.Mockito.verify;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,6 +35,12 @@ public class UserServiceTest {
 
         given(userRepository.save(any(User.class)))
             .will(invocation -> invocation.getArgument(0));
+
+        given(userRepository.findById(1L))
+            .willReturn(Optional.of(User.builder().build()));
+
+        given(userRepository.findById(9999L))
+            .willReturn(Optional.empty());
     }
 
     @Test
@@ -81,7 +89,7 @@ public class UserServiceTest {
                 assertThat(updatedUser.getPassword()).isEqualTo("password2");
 
                 verify(userRepository).findById(existId);
-                verify(userRepository).save(source);
+                verify(userRepository).save(any(User.class));
             }
         }
 
@@ -109,7 +117,7 @@ public class UserServiceTest {
                 }).isInstanceOf(UserNotFoundException.class);
 
                 verify(userRepository).findById(notExistId);
-                verify(userRepository, never()).save(source);
+                verify(userRepository, never()).save(eq(source));
             }
         }
     }
