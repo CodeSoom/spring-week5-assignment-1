@@ -7,7 +7,6 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -24,8 +23,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.io.UnsupportedEncodingException;
 
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,6 +51,16 @@ class UserControllerTest {
         String contentAsString = mvcResult.getResponse().getContentAsString();
 
         return objectMapper.readValue(contentAsString, type);
+    }
+
+    private User createUserBeforePatchTest() throws Exception {
+        ResultActions actions = mockMvc.perform(post("/users")
+                .content(objectMapper.writeValueAsString(userPostDtoFixture))
+                .contentType(MediaType.APPLICATION_JSON));
+
+        User createdUser = getResponseContent(actions, new TypeReference<User>() {});
+
+        return createdUser;
     }
 
     @Nested
@@ -135,47 +143,141 @@ class UserControllerTest {
     @Nested
     @DisplayName("Patch Request")
     class PatchRequest {
-        User createUserBeforePatchTest() throws Exception {
-            ResultActions actions = mockMvc.perform(post("/users")
-                    .content(objectMapper.writeValueAsString(userPostDtoFixture))
-                    .contentType(MediaType.APPLICATION_JSON));
+        private User createdUser;
+        private UserUpdateDto updateDto;
 
-            User createdUser = getResponseContent(actions, new TypeReference<User>() {});
+        @BeforeEach
+        void setup() throws Exception {
+            createdUser = createUserBeforePatchTest();
 
-            return createdUser;
+            updateDto = UserUpdateDto.builder()
+                    .name("new name")
+                    .email("new@email.com")
+                    .password("newpassword")
+                    .build();
         }
 
         @Nested
         @DisplayName("With a valid request body")
         class WithValidRequestBody {
-            private User createdUser;
-            private UserUpdateDto updateDto;
-
-            @BeforeEach
-            void setup() throws Exception {
-                createdUser = createUserBeforePatchTest();
-
-                updateDto = UserUpdateDto.builder()
-                        .name("newwwwwname")
-                        .build();
-            }
-
-            // TODO: 테스트 실패하는 이유 찾기
             @Test
             @DisplayName("returns an updated user with 200 HTTP status code")
             void returnsUpdatedUser() throws Exception {
                 User expectedUpdatedUser = User.builder()
-                        .name(updateDto.getName())
                         .id(createdUser.getId())
-                        .email(createdUser.getEmail())
-                        .password(createdUser.getPassword())
+                        .name(updateDto.getName())
+                        .email(updateDto.getEmail())
+                        .password(updateDto.getPassword())
                         .build();
 
-                mockMvc.perform(patch("/users")
+                mockMvc.perform(patch("/users/" + createdUser.getId())
                                 .content(objectMapper.writeValueAsString(updateDto))
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().json(objectMapper.writeValueAsString(expectedUpdatedUser)));
+            }
+        }
+
+        @Nested
+        @DisplayName("With a non existent id")
+        class WithNonExistentId {
+            @Test
+            @DisplayName("responses with 404 HTTP status code")
+            void responsesWith404Error() throws Exception {
+                mockMvc.perform(patch("/users/" + 100000000L)
+                                .content(objectMapper.writeValueAsString(updateDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("When the name is invalid")
+        class WhenNameIsInvalid {
+            @ParameterizedTest(name = "responses with 400 error with the name \"{0}\"")
+            @ValueSource(strings = {" ", ""})
+            void responsesWith400Error(String name) throws Exception {
+                UserUpdateDto invalidNameUserUpdateDto = UserUpdateDto.builder()
+                        .email("valid@email.com")
+                        .password("valid-password")
+                        .name(name)
+                        .build();
+
+                mockMvc.perform(patch("/users/" + createdUser.getId())
+                                .content(objectMapper.writeValueAsString(invalidNameUserUpdateDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("When the email is invalid")
+        class WhenEmailIsInvalid {
+            @ParameterizedTest(name = "responses with 400 error with the email \"{0}\"")
+            @ValueSource(strings = {" ", "", "no-at-sign"})
+            void responsesWith400Error(String email) throws Exception {
+                UserUpdateDto invalidEmailUserUpdateDto = UserUpdateDto.builder()
+                        .email(email)
+                        .password("valid-password")
+                        .name("valid-name")
+                        .build();
+
+                mockMvc.perform(patch("/users/" + createdUser.getId())
+                                .content(objectMapper.writeValueAsString(invalidEmailUserUpdateDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("When the password is invalid")
+        class WhenPasswordIsInvalid {
+            @ParameterizedTest(name = "responses with 400 error with the password \"{0}\"")
+            @ValueSource(strings = {" ", ""})
+            void responsesWith400Error(String password) throws Exception {
+                UserUpdateDto invalidPasswordUserUpdateDto = UserUpdateDto.builder()
+                        .email(password)
+                        .password("valid-password")
+                        .name("valid-name")
+                        .build();
+
+                mockMvc.perform(patch("/users/" + createdUser.getId())
+                                .content(objectMapper.writeValueAsString(invalidPasswordUserUpdateDto))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Delete Request")
+    class DeleteRequest {
+        private User createdUser;
+
+        @BeforeEach
+        void setup() throws Exception {
+            createdUser = createUserBeforePatchTest();
+        }
+
+        @Nested
+        @DisplayName("With a valid path parameter")
+        class WithValidRequestBody {
+            @Test
+            @DisplayName("responses with 204 HTTP status code")
+            void responsesWith204() throws Exception {
+                mockMvc.perform(delete("/users/" + createdUser.getId()))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("With a non existent id")
+        class WithNonExistentParameter {
+            @Test
+            @DisplayName("responses with 404 HTTP status code")
+            void responsesWith404() throws Exception {
+                mockMvc.perform(delete("/users/" + 1000000000L))
+                        .andExpect(status().isNotFound());
             }
         }
     }
