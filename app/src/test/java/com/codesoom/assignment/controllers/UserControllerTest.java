@@ -59,6 +59,7 @@ class UserControllerTest {
         correctUser = new User(VALID_ID, "이름1", "패스워드1", "이메일1");
         blankNameUser = User.builder().name(" ").password("패스워드1").email("이메일1").build();
         blankPasswordUser = User.builder().name("이름1").password(" ").email("이메일1").build();
+        blankEmailUser = User.builder().name("이름1").password("패스워드1").email(" ").build();
 
         given(userService.create(any(UserCreateDTO.class))).will(invocation -> {
             return mapper.map(invocation.getArgument(0), User.class);
@@ -145,6 +146,28 @@ class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(makeContent(blankPasswordUserCreateDTO)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("이메일이 비어있는 유저 데이터를 전달하면")
+        class Context_with_blank_email_user {
+
+            private UserCreateDTO blankEmailUserCreateDTO;
+
+            @BeforeEach
+            void prepare() {
+                blankEmailUserCreateDTO = mapper.map(blankEmailUser, UserCreateDTO.class);
+            }
+
+            @Test
+            @DisplayName("status: Bad request를 응답합니다.")
+            void it_response_bad_request() throws Exception {
+                mockMvc.perform(post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(makeContent(blankEmailUserCreateDTO)))
                         .andExpect(status().isBadRequest());
             }
         }
