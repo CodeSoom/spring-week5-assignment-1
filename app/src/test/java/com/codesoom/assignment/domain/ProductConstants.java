@@ -2,6 +2,7 @@ package com.codesoom.assignment.domain;
 
 import java.util.List;
 
+import com.codesoom.assignment.dto.ProductData;
 import com.google.common.collect.Lists;
 
 public interface ProductConstants {
@@ -11,6 +12,7 @@ public interface ProductConstants {
     final Integer PRICE = 1000;
     final String IMAGE_URL = "http://localhost:8080/rat";
     final Product PRODUCT = new Product(ID, NAME, MAKER, PRICE, IMAGE_URL);
+    final ProductData PRODUCT_DATA = new ProductData(ID, NAME, MAKER, PRICE, IMAGE_URL);
     final List<Product> PRODUCT_LIST = Lists.newArrayList(PRODUCT);
     final List<Product> EMPTY_LIST = Lists.newArrayList();
 }
