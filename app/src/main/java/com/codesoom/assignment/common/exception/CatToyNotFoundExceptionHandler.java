@@ -12,9 +12,15 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class CatToyNotFoundExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(CatToyNotFoundExceptionHandler.class);
 
-    @ExceptionHandler({CatToyNotFoundException.class, IllegalArgumentException.class, EmptyResultDataAccessException.class})
+    @ExceptionHandler({CatToyNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void CatToyNotFoundException(Exception e) {
+        LOGGER.error("error log = {}", e.toString());
+    }
+
+    @ExceptionHandler({IllegalArgumentException.class})
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public void IllegalArgumentException(Exception e) {
         LOGGER.error("error log = {}", e.toString());
     }
 }

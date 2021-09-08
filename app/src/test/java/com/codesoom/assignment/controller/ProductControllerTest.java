@@ -58,7 +58,7 @@ class ProductControllerTest {
     @DisplayName("getCatToys 메서드는")
     class getAllCatToys {
         @Test
-        @DisplayName("고양이 장난감 목록 전체를 반환한다.")
+        @DisplayName("고양이 장난감 목록 전체를 반환 요청한다.")
         void getCatToys() throws Exception {
             mockMvc.perform(get("/products"))
                     .andExpect(status().isOk())
@@ -70,12 +70,19 @@ class ProductControllerTest {
     @DisplayName("findCatTiyById 메서드는")
     class findCatToyById {
         @Test
-        @DisplayName("식별자에 해당하는 장난감을 반환한다.")
-        void findCatToyById() throws Exception {
+        @DisplayName("id가 유효한 경우 식별자에 해당하는 장난감을 반환 요청한다.")
+        void findCatToyByValidId() throws Exception {
             mockMvc.perform(get("/products/1"))
                     .andExpect(status().isOk())
                     .andExpect(content().string(containsString(NAME)));
             verify(catToyService).findCatToyById(1L);
+        }
+
+        @Test
+        @DisplayName("id가 유효하지 않은 경우 예외를 반환한다.")
+        void findCatToyByNotValidId() throws Exception {
+            mockMvc.perform(get("/products/a"))
+                    .andExpect(status().isBadRequest());
         }
     }
 
@@ -83,13 +90,24 @@ class ProductControllerTest {
     @DisplayName("registerCatToy 메서드는")
     class registerCatToy {
         @Test
-        void registerCatToy() throws Exception {
+        @DisplayName("파라미터가 유효한 경우 장난감을 등록 요청한다.")
+        void registerCatToyWithValidBody() throws Exception {
             mockMvc.perform(
                     post("/products")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content("{\"name\":\"New name\"}")
+                    .content("{\"name\" : \"Test Name\", \"maker\" : \"Test Maker\", \"price\" : 10000}")
             ).andExpect(status().isCreated());
             verify(catToyService).addCatToy(any(CatToy.class));
+        }
+
+        @Test
+        @DisplayName("파라미터가 유효하지 않은 경우 예외를 반환한다.")
+        void registerCatToyWithNotValidBody() throws Exception {
+            mockMvc.perform(
+                    post("/products")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\":\"\"}")
+            ).andExpect(status().isBadRequest());
         }
     }
 
@@ -97,13 +115,24 @@ class ProductControllerTest {
     @DisplayName("updateCatToy 메서드는")
     class updateCatToy {
         @Test
-        void updateCatToy() throws Exception {
+        @DisplayName("파라미터가 유효한 경우 장난감을 수정 요청한다.")
+        void updateCatToyWithValidBody() throws Exception {
             mockMvc.perform(
                     patch("/products/1")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content("{\"name\":\"New name\"}")
+                            .content("{\"name\" : \"New Name\", \"maker\" : \"New Maker\", \"price\" : 20000}")
             ).andExpect(status().isOk());
             verify(catToyService).updateCatToy(eq(1L), any(CatToy.class));
+        }
+
+        @Test
+        @DisplayName("파라미터가 유효하지 않은 경우 예외를 반환한다.")
+        void updateCatToyWithNotValidBody() throws Exception {
+            mockMvc.perform(
+                    post("/products")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content("{\"name\":\"\"}")
+            ).andExpect(status().isBadRequest());
         }
     }
 
@@ -111,10 +140,18 @@ class ProductControllerTest {
     @DisplayName("deleteCatToy 메서드는")
     class deleteCatToy {
         @Test
-        void deleteCatToy() throws Exception {
+        @DisplayName("id가 유효한 경우 식별자에 해당하는 장난감을 삭제 요청한다.")
+        void deleteCatToyWithValidId() throws Exception {
             mockMvc.perform(delete("/products/1"))
                     .andExpect(status().isNoContent());
             verify(catToyService).deleteCatToyById(1L);
+        }
+
+        @Test
+        @DisplayName("id가 유효하지 않은 경우 예외를 반환한다.")
+        void findCatToyByNotValidId() throws Exception {
+            mockMvc.perform(delete("/products/a"))
+                    .andExpect(status().isBadRequest());
         }
     }
 }
