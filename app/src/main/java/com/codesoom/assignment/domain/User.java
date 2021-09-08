@@ -27,4 +27,12 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public User changeInfo(User source) {
+        this.name = source.getName();
+        this.email = source.getEmail();
+        this.password = source.getPassword();
+
+        return this;
+    }
 }
