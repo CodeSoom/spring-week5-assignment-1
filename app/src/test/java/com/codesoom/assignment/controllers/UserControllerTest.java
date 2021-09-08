@@ -1,17 +1,12 @@
 package com.codesoom.assignment.controllers;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.CreateUserDto;
 import com.codesoom.assignment.dto.UpdateUserDto;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,31 +14,20 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(UserController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 public class UserControllerTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private UserService userService;
-
-    @BeforeEach
-    void setUp() {
-        given(userService.createUser(any(User.class)))
-            .will(invocation -> invocation.getArgument(0));
-
-        given(userService.updateUser(eq(1L), any(User.class)))
-            .will(invocation -> invocation.getArgument(1));
-
-        given(userService.updateUser(eq(9999L), any(User.class)))
-            .willThrow(new UserNotFoundException(9999L));
-    }
+    @Autowired
+    private UserRepository userRepository;
 
     @Nested
     @DisplayName("POST /users 요청은")
@@ -74,8 +58,6 @@ public class UserControllerTest {
                 )
                     .andExpect(status().isCreated())
                     .andExpect(content().json(toJson(validCreateUserDto.toEntity())));
-
-                verify(userService).createUser(any(User.class));
             }
         }
 
@@ -102,8 +84,6 @@ public class UserControllerTest {
                         .content(toJsonWithoutPassword(invalidCreateUserDto))
                 )
                     .andExpect(status().isBadRequest());
-
-                verify(userService, never()).createUser(invalidCreateUserDto.toEntity());
             }
         }
     }
@@ -135,7 +115,15 @@ public class UserControllerTest {
 
                 @BeforeEach
                 void setUp() {
-                    existId = 1L;
+                    User createdUser = userRepository.save(
+                        validUpdateUserDto.toEntity()
+                    );
+
+                    Long id = createdUser.getId();
+                    assertThat(userRepository.existsById(id))
+                        .isTrue();
+
+                    existId = id;
                 }
 
                 @Test
@@ -148,8 +136,6 @@ public class UserControllerTest {
                     )
                         .andExpect(status().isOk())
                         .andExpect(content().json(toJson(validUpdateUserDto.toEntity())));
-
-                    verify(userService).updateUser(eq(existId), any(User.class));
                 }
             }
 
@@ -161,7 +147,17 @@ public class UserControllerTest {
 
                 @BeforeEach
                 void setUp() {
-                    notExistId = 9999L;
+                    User user = userRepository.save(
+                        validUpdateUserDto.toEntity()
+                    );
+
+                    userRepository.deleteAll();
+
+                    Long id = user.getId();
+                    assertThat(userRepository.existsById(id))
+                        .isFalse();
+
+                    notExistId = id;
                 }
 
                 @Test
@@ -173,8 +169,6 @@ public class UserControllerTest {
                             .content(toJson(validUpdateUserDto))
                     )
                         .andExpect(status().isNotFound());
-
-                    verify(userService).updateUser(eq(notExistId), any(User.class));
                 }
             }
         }
