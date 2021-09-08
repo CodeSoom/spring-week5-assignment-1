@@ -23,7 +23,12 @@ public class UserService {
     this.userRepository = userRepository;
   }
 
-
+  /**
+   * 신규회원의 정보를 저장하고, 그 회원을 return
+   *
+   * @param userData 새로 가입할 회원의 정보
+   * @return 가입한 회원
+   */
   public User createUser(UserData userData) {
     User user = mapper.map(userData, User.class);
 
