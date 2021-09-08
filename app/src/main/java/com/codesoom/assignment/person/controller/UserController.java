@@ -1,6 +1,7 @@
 package com.codesoom.assignment.person.controller;
 
 import com.codesoom.assignment.person.domain.User;
+import com.codesoom.assignment.person.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -33,7 +34,7 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User addUser(@RequestBody User user) {
-        return userSerivce.addUser(user);
+        return userService.addUser(user);
     }
 
     /**
