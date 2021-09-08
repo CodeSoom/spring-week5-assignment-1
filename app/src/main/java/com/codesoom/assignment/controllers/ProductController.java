@@ -9,6 +9,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+/**
+ * Product 리소스
+ * Http 요청과 Application layer를 연결한다.
+ *
+ * @see ProductService
+ */
 @RestController
 @RequestMapping("/products")
 public class ProductController {
@@ -18,6 +24,11 @@ public class ProductController {
         this.productService = productService;
     }
 
+    /**
+     * Product 목록 조회 요청을 Application layer에 연결한다.
+     *
+     * @return Product 목록
+     */
     @GetMapping
     public List<Product> list() {
         return productService.getProducts();
