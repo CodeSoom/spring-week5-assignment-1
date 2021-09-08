@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controllers;
 
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserDto;
@@ -11,17 +11,19 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest
+@WebMvcTest(UserController.class)
 public class UserControllerTest {
 
     @Autowired
-    private UserController userController;
+    private MockMvc mockMvc;
 
     @Nested
-    @DisplayName("create 메서드는")
-    class Describe_create {
+    @DisplayName("POST /user 요청은")
+    class Describe_postUsers {
 
         @Nested
         @DisplayName("유효한 유저 생성 DTO가 주어질 때")
@@ -39,13 +41,15 @@ public class UserControllerTest {
             }
 
             @Test
-            @DisplayName("생성한 유저를 리턴한다")
-            void it_create_a_user() {
-                User user = userController.create(validCreateUserDto);
-
-                assertThat(user.getName()).isEqualTo("name");
-                assertThat(user.getEmail()).isEqualTo("email");
-                assertThat(user.getPassword()).isEqualTo("password");
+            @DisplayName("생성한 유저를 리턴하고 201을 응답한다")
+            void it_returns_created_user_and_response_201() throws Exception {
+                mockMvc.perform(
+                    post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJson(validCreateUserDto))
+                )
+                    .andExpect(status().isCreated())
+                    .andExpect(content().json(toJson(validCreateUserDto.toEntity())));
             }
         }
 
@@ -64,12 +68,43 @@ public class UserControllerTest {
             }
 
             @Test
-            @DisplayName("에러를 던진다")
-            void it_throws() {
-                assertThatThrownBy(() ->
-                    userController.create(invalidCreateUserDto)
-                );
+            @DisplayName("에러를 던지고 400을 응답한다")
+            void it_throws_and_response_400() throws Exception {
+                mockMvc.perform(
+                    post("/user")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(toJsonWithoutPassword(invalidCreateUserDto))
+                )
+                    .andExpect(status().isBadRequest());
             }
         }
+    }
+
+    private String toJson(User user) {
+        return String.format(
+            "{\"name\": \"%s\","
+                + " \"email\": \"%s\","
+                + " \"password\": \"%s\"}",
+            user.getName(),
+            user.getEmail(),
+            user.getPassword());
+    }
+
+    private String toJson(CreateUserDto createUserDto) {
+        return String.format(
+            "{\"name\": \"%s\","
+                + " \"email\": \"%s\","
+                + " \"password\": \"%s\"}",
+            createUserDto.getName(),
+            createUserDto.getEmail(),
+            createUserDto.getPassword());
+    }
+
+    private String toJsonWithoutPassword(CreateUserDto createUserDto) {
+        return String.format(
+            "{\"name\": \"%s\","
+                + " \"email\": \"%s\"}",
+            createUserDto.getName(),
+            createUserDto.getEmail());
     }
 }
