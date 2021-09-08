@@ -16,9 +16,5 @@ public interface UserConstants {
         .name(NAME)
         .password(PASSWORD)
         .build();
-    final UserData USER_DATA = UserData.builder()
-        .email(EMAIL)
-        .name(NAME)
-        .password(PASSWORD)
-        .build();
+    final UserData USER_DATA = new UserData(null, NAME, EMAIL, PASSWORD);
 }

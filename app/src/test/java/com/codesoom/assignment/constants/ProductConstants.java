@@ -21,12 +21,7 @@ public interface ProductConstants {
         .price(PRICE)
         .imageUrl(IMAGE_URL)
         .build();
-    final ProductData PRODUCT_DATA = ProductData.builder()
-        .name(NAME)
-        .maker(MAKER)
-        .price(PRICE)
-        .imageUrl(IMAGE_URL)
-        .build();
+    final ProductData PRODUCT_DATA = new ProductData(null, NAME, MAKER, PRICE, IMAGE_URL);
     final List<Product> PRODUCT_LIST = Lists.newArrayList(PRODUCT);
     final List<Product> EMPTY_LIST = Lists.newArrayList();
 }

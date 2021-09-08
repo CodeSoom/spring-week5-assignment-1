@@ -1,8 +1,6 @@
 package com.codesoom.assignment.dto;
 
-import lombok.Setter;
 import lombok.Getter;
-import lombok.Builder;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 
@@ -11,9 +9,7 @@ import javax.validation.constraints.NotNull;
 
 import com.github.dozermapper.core.Mapping;
 
-@Setter
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductData {

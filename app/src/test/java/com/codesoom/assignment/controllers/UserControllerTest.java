@@ -112,11 +112,7 @@ public class UserControllerTest {
                 final String email, final String name, final String password
             ) throws Exception {
                 requestBody = Parser.toJson(
-                    UserData.builder()
-                        .name(name)
-                        .email(email)
-                        .password(password)
-                        .build()
+                    new UserData(null, name, email, password)
                 );
 
                 subject()
