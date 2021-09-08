@@ -10,12 +10,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AccountUpdateData {
-
-    private Long id;
 
     private String name;
 
@@ -24,22 +21,12 @@ public class AccountUpdateData {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    public static AccountUpdateData from(Account account) {
-        return AccountUpdateData.builder()
-                .id(account.getId())
-                .name(account.getName())
-                .password(account.getPassword())
-                .email(account.getEmail())
-                .build();
-    }
-
     public static AccountUpdateData of(String name, String email, String password) {
-        return new AccountUpdateData(null, name, email, password);
+        return new AccountUpdateData(name, email, password);
     }
 
     public Account toAccount() {
         return Account.builder()
-                .id(id)
                 .name(name)
                 .password(password)
                 .email(email)

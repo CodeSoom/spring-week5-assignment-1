@@ -2,6 +2,7 @@ package com.codesoom.assignment.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -13,6 +14,7 @@ import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
+@Generated
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
