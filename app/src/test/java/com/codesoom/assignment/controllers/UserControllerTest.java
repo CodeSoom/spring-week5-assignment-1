@@ -49,6 +49,7 @@ class UserControllerTest {
     private User correctUser;
     private User blankNameUser;
     private User blankPasswordUser;
+    private User blankEmailUser;
 
     @BeforeEach
     void setUp()  {
@@ -56,8 +57,8 @@ class UserControllerTest {
         mapper = DozerBeanMapperBuilder.buildDefault();
 
         correctUser = new User(VALID_ID, "이름1", "패스워드1", "이메일1");
-        blankNameUser = User.builder().name("").password("패스워드1").build();
-        blankPasswordUser = User.builder().name("이름1").password("").build();
+        blankNameUser = User.builder().name(" ").password("패스워드1").email("이메일1").build();
+        blankPasswordUser = User.builder().name("이름1").password(" ").email("이메일1").build();
 
         given(userService.create(any(UserCreateDTO.class))).will(invocation -> {
             return mapper.map(invocation.getArgument(0), User.class);
