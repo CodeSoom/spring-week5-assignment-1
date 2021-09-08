@@ -42,14 +42,16 @@ class UserControllerTest {
     private final Long INVALID_ID = 9999L;
 
     private User correctUser;
-    private User invalidUser;
+    private User blankNameUser;
+    private User blankPasswordUser;
 
     @BeforeEach
     void setUp()  {
         objectMapper = new ObjectMapper();
 
         correctUser = new User(VALID_ID, "이름1", "패스워드1", "이메일1");
-        invalidUser = User.builder().name("").password("패스워드1").build();
+        blankNameUser = User.builder().name("").password("패스워드1").build();
+        blankPasswordUser = User.builder().name("이름1").password("").build();
 
         given(userService.create(any(User.class))).will(invocation -> {
             return invocation.getArgument(0);
@@ -89,8 +91,8 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("유효하지 않은 데이터를 전달하면")
-        class Context_with_invalid_data {
+        @DisplayName("이름이 비어있는 유저 데이터를 전달하면")
+        class Context_with_blank_name_user {
 
             @Test
             @DisplayName("status: Bad request를 응답합니다.")
@@ -98,11 +100,25 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(invalidUser)))
+                        .content(makeContentFromUser(blankNameUser)))
                         .andExpect(status().isBadRequest());
             }
         }
 
+        @Nested
+        @DisplayName("패스워스가 비어있는 유저 데이터를 전달하면")
+        class Context_with_blank_password_user {
+
+            @Test
+            @DisplayName("status: Bad request를 응답합니다.")
+            void it_response_bad_request() throws Exception {
+                mockMvc.perform(post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(makeContentFromUser(blankPasswordUser)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 
     @Nested
@@ -141,15 +157,31 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("유효하지 않은 데이터를 전달하면")
-        class Context_with_invalid_data {
+        @DisplayName("이름이 비어있는 유저 데이터를 전달하면")
+        class Context_with_blank_name_user {
 
             @Test
             @DisplayName("status: Bad request를 응답합니다.")
             void it_response_bad_request() throws Exception {
-                mockMvc.perform(patch("/users/" + VALID_ID)
+                mockMvc.perform(post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(invalidUser)))
+                        .content(makeContentFromUser(blankNameUser)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("패스워스가 비어있는 유저 데이터를 전달하면")
+        class Context_with_blank_password_user {
+
+            @Test
+            @DisplayName("status: Bad request를 응답합니다.")
+            void it_response_bad_request() throws Exception {
+                mockMvc.perform(post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(makeContentFromUser(blankPasswordUser)))
                         .andExpect(status().isBadRequest());
             }
         }
