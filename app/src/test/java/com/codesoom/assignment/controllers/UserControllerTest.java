@@ -1,7 +1,6 @@
 package com.codesoom.assignment.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -38,7 +37,7 @@ public class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /user 요청은")
+    @DisplayName("POST /users 요청은")
     class Describe_postUsers {
 
         @Nested
@@ -60,7 +59,7 @@ public class UserControllerTest {
             @DisplayName("생성한 유저를 리턴하고 201을 응답한다")
             void it_returns_created_user_and_response_201() throws Exception {
                 mockMvc.perform(
-                    post("/user")
+                    post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(validCreateUserDto))
                 )
@@ -89,7 +88,7 @@ public class UserControllerTest {
             @DisplayName("에러를 던지고 400을 응답한다")
             void it_throws_and_response_400() throws Exception {
                 mockMvc.perform(
-                    post("/user")
+                    post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJsonWithoutPassword(invalidCreateUserDto))
                 )
