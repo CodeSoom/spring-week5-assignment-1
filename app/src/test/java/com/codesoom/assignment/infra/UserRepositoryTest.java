@@ -40,7 +40,7 @@ public class UserRepositoryTest {
         @Test
         @DisplayName("User를 저장한다.")
         void it_saves_object() {
-            subjectSave();
+            User saveResult = subjectSave();
 
             assertThat(savedUser)
                 .matches(user -> user.getId() != null);
