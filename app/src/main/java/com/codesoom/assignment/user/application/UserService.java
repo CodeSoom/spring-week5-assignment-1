@@ -1,9 +1,9 @@
 package com.codesoom.assignment.user.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.domain.UserRepository;
 import com.codesoom.assignment.user.dto.UserData;
-import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
@@ -33,4 +33,14 @@ public class UserService {
     User user = mapper.map(userData, User.class);
 
     return userRepository.save(user);
-  }}
+  }
+
+  public void deleteUser(Long id) {
+    User user = findUser(id);
+    userRepository.delete(user);
+  }
+
+  private User findUser(Long id) {
+    return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
+  }
+}
