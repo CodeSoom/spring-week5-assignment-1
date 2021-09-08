@@ -20,15 +20,15 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    User create(@Valid @RequestBody UserDTO user) {
-        return userService.create(user);
+    User create(@Valid @RequestBody UserDTO userDTO) {
+        return userService.create(userDTO);
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     User update(@PathVariable Long id,
-                @Valid @RequestBody UserDTO user) {
-        return userService.update(id, user);
+                @Valid @RequestBody UserDTO userDTO) {
+        return userService.update(id, userDTO);
     }
 
     @DeleteMapping("{id}")
