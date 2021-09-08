@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
@@ -8,9 +9,11 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserDto;
+import com.codesoom.assignment.dto.UpdateUserDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -34,6 +37,12 @@ public class UserControllerTest {
     void setUp() {
         given(userService.createUser(any(User.class)))
             .will(invocation -> invocation.getArgument(0));
+
+        given(userService.updateUser(eq(1L), any(User.class)))
+            .will(invocation -> invocation.getArgument(1));
+
+        given(userService.updateUser(eq(9999L), any(User.class)))
+            .willThrow(new UserNotFoundException(9999L));
     }
 
     @Nested
@@ -97,6 +106,88 @@ public class UserControllerTest {
                 verify(userService, never()).createUser(invalidCreateUserDto.toEntity());
             }
         }
+    }
+
+    @Nested
+    @DisplayName("POST /users/{id} 요청은")
+    class Describe_postUsersWithId {
+
+        @Nested
+        @DisplayName("유효한 유저 업데이트 DTO가 주어진다면")
+        class Context_validUpdateUserDto {
+
+            private UpdateUserDto validUpdateUserDto;
+
+            @BeforeEach
+            void setUp() {
+                validUpdateUserDto = UpdateUserDto.builder()
+                    .name("name")
+                    .email("email")
+                    .password("password")
+                    .build();
+            }
+
+            @Nested
+            @DisplayName("id가 존재한다면")
+            class Context_idExist {
+
+                private Long existId;
+
+                @BeforeEach
+                void setUp() {
+                    existId = 1L;
+                }
+
+                @Test
+                @DisplayName("수정된 유저를 리턴하고 200을 응답한다")
+                void it_returns_updated_user_and_response_200() throws Exception {
+                    mockMvc.perform(
+                        post("/users/" + existId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(toJson(validUpdateUserDto))
+                    )
+                        .andExpect(status().isOk())
+                        .andExpect(content().json(toJson(validUpdateUserDto.toEntity())));
+
+                    verify(userService).updateUser(eq(existId), any(User.class));
+                }
+            }
+
+            @Nested
+            @DisplayName("id가 존재하지 않는다면")
+            class Context_idNotExist {
+
+                private Long notExistId;
+
+                @BeforeEach
+                void setUp() {
+                    notExistId = 9999L;
+                }
+
+                @Test
+                @DisplayName("404를 응답한다")
+                void it_response_404() throws Exception {
+                    mockMvc.perform(
+                        post("/users/" + notExistId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(toJson(validUpdateUserDto))
+                    )
+                        .andExpect(status().isNotFound());
+
+                    verify(userService).updateUser(eq(notExistId), any(User.class));
+                }
+            }
+        }
+    }
+
+    private String toJson(UpdateUserDto updateUserDto) {
+        return String.format(
+            "{\"name\": \"%s\","
+                + " \"email\": \"%s\","
+                + " \"password\": \"%s\"}",
+            updateUserDto.getName(),
+            updateUserDto.getEmail(),
+            updateUserDto.getPassword());
     }
 
     private String toJson(User user) {

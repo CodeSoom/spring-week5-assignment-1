@@ -16,4 +16,9 @@ public class UserService {
     public User createUser(User user) {
         return userRepository.save(user);
     }
+
+    public User updateUser(Long id, User user) {
+        // TODO: repository에서 수정 후 리턴
+        return User.builder().build();
+    }
 }
