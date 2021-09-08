@@ -1,4 +1,4 @@
-package com.codesoom.assignment.dto;
+package com.codesoom.assignment;
 
 public class ErrorResponse {
     private String message;

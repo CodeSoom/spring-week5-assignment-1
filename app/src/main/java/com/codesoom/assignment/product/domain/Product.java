@@ -1,4 +1,4 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.product.domain;
 
 import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
