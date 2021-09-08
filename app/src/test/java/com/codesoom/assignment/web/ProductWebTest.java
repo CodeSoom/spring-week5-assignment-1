@@ -8,7 +8,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static com.codesoom.assignment.domain.ProductConstants.PRODUCT_DATA;
 import static com.codesoom.assignment.domain.ProductConstants.EMPTY_LIST;
 
-import com.codesoom.assignment.controllers.ProductController;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.utils.Parser;
 import com.google.common.collect.Lists;
@@ -18,60 +17,63 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @DisplayName("Product 리소스")
-@WebMvcTest(ProductController.class)
+@SpringBootTest
+@ExtendWith(SpringExtension.class)
+@AutoConfigureMockMvc
 public class ProductWebTest {
     @Autowired
     private MockMvc mockMvc;
 
-    ResultActions subjectGetProduct() throws Exception {
+    private String requestBody;
+    private Long requestParameter;
+
+    private ResultActions subjectGetProduct() throws Exception {
         return mockMvc.perform(
             get("/products")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         );
     }
 
-    ResultActions subjectPostProduct(final String input) throws Exception {
+    private ResultActions subjectPostProduct() throws Exception {
         return mockMvc.perform(
             post("/products")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON)
-                // TODO requestBOdy로 변경해야함
-                .content(input)
+                .content(requestBody)
         );
     }
 
-    ResultActions subjectDeleteProduct(final Long id) throws Exception {
+    private ResultActions subjectDeleteProduct() throws Exception {
         return mockMvc.perform(
-            delete("/products" + id)
+            delete("/products/" + requestParameter)
         );
     }
 
-    // TODO @Nested 추가해야함
+    @Nested
     @DisplayName("전체 목록 조회 엔드포인트는")
     class Describe_get_products {
-        private String content;
 
         @Nested
         @DisplayName("저장된 Product가 없다면")
         class Context_product_empty {
-            @BeforeEach
-            void beforeEach() throws Exception {
-                content = Parser.toJson(EMPTY_LIST);
-            }
-
             @Test
             @DisplayName("빈 목록을 리턴한다.")
             void it_returns_a_empty_list() throws Exception {
                 subjectGetProduct()
                     .andExpect(status().isOk())
-                    .andExpect(content().string(content));
+                    .andExpect(content().string(
+                        Parser.toJson(EMPTY_LIST)
+                    ));
             }
         }
 
@@ -82,19 +84,19 @@ public class ProductWebTest {
 
             @BeforeEach
             void beforeEach() throws Exception {
+                requestBody = Parser.toJson(PRODUCT_DATA);
                 product = Parser.toObject(
-                    subjectPostProduct(Parser.toJson(PRODUCT_DATA))
+                    subjectPostProduct()
                         .andReturn()
                         .getResponse()
                         .getContentAsString(), Product.class
                 );
-
-                content = Parser.toJson(Lists.newArrayList(product));
+                requestParameter = product.getId();
             }
 
             @AfterEach
             void afterEach() throws Exception {
-                subjectDeleteProduct(product.getId());
+                subjectDeleteProduct();
             }
 
             @Test
@@ -102,7 +104,9 @@ public class ProductWebTest {
             void it_returns_a_product_list() throws Exception {
                 subjectGetProduct()
                     .andExpect(status().isOk())
-                    .andExpect(content().string(content));
+                    .andExpect(content().string(
+                        Parser.toJson(Lists.newArrayList(product))
+                    ));
             }
         }
     }
