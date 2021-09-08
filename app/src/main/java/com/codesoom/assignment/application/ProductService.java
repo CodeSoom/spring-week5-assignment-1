@@ -11,6 +11,13 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * Product 리소스
+ * 수행할 작업을 정의하고, Domain layer에 수행을 위임한다.
+ *
+ * @see Product
+ * @see ProductRepository
+ */
 @Service
 @Transactional
 public class ProductService {
@@ -24,6 +31,11 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * Product 목록 조회하고 리턴한다.
+     *
+     * @return Product 목록
+     */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
