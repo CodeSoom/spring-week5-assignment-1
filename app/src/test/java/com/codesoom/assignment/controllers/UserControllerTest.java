@@ -82,7 +82,7 @@ class UserControllerTest {
         class Context_with_correct_data {
 
             @Test
-            @DisplayName("response(status: created, data: new user)를 반환합니다.")
+            @DisplayName("status: Created, data: new user를 응답합니다.")
             void it_response_ok() throws Exception {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -98,7 +98,7 @@ class UserControllerTest {
         class Context_with_invalid_data {
 
             @Test
-            @DisplayName("response(status: bad request)를 반환합니다.")
+            @DisplayName("status: Bad request를 응답합니다.")
             void it_response_bad_request() throws Exception {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -119,7 +119,7 @@ class UserControllerTest {
         class Context_with_existing_user {
 
             @Test
-            @DisplayName("response(status: ok, data: update user)를 반환합니다.")
+            @DisplayName("status: Ok, data: updated user를 응합니다.")
             void it_response_ok() throws Exception {
                 mockMvc.perform(patch("/users/" + VALID_ID)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -135,7 +135,7 @@ class UserControllerTest {
         class Context_with_not_existing_user {
 
             @Test
-            @DisplayName("response(status: not found)를 반환합니다.")
+            @DisplayName("status: Not found를 응답합니다.")
             void it_response_not_found() throws Exception {
                 mockMvc.perform(patch("/users/" + INVALID_ID)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -150,7 +150,7 @@ class UserControllerTest {
         class Context_with_invalid_data {
 
             @Test
-            @DisplayName("response(status: bad request)를 반환합니다.")
+            @DisplayName("status: Bad request를 응답합니다.")
             void it_response_bad_request() throws Exception {
                 mockMvc.perform(patch("/users/" + VALID_ID)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -168,7 +168,7 @@ class UserControllerTest {
         class Context_with_existing_user {
 
             @Test
-            @DisplayName("response(status: no content, data: update user)를 반환합니다.")
+            @DisplayName("status: No content, data: updated user를 응답합니다.")
             void it_response_ok() throws Exception {
                 mockMvc.perform(delete("/users/" + VALID_ID)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -181,7 +181,7 @@ class UserControllerTest {
         class Context_with_not_existing_user {
 
             @Test
-            @DisplayName("response(status: not found)를 반환합니다.")
+            @DisplayName("status: Not found를 응답합니다.")
             void it_response_not_found() throws Exception {
                 mockMvc.perform(delete("/users/" + INVALID_ID)
                         .contentType(MediaType.APPLICATION_JSON))
