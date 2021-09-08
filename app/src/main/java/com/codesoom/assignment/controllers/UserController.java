@@ -14,6 +14,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * 회원 관련 HTTP 요청 처리 담당.
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -24,6 +27,12 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 회원을 생성합니다.
+     *
+     * @param createUserDto 회원 생성 정보
+     * @return 생성된 회원
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(
@@ -32,6 +41,13 @@ public class UserController {
         return userService.createUser(createUserDto.toEntity());
     }
 
+    /**
+     * 회원 정보를 수정합니다.
+     *
+     * @param id            식별자
+     * @param updateUserDto 수정할 회원 정보
+     * @return 수정된 회원
+     */
     @PatchMapping("{id}")
     public User update(
         @PathVariable Long id,

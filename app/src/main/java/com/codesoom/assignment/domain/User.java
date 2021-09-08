@@ -6,6 +6,9 @@ import javax.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 
+/**
+ * 회원.
+ */
 @Getter
 @Entity
 public class User {
@@ -28,6 +31,12 @@ public class User {
         this.password = password;
     }
 
+    /**
+     * 회원 정보를 수정하고, 리턴합니다.
+     *
+     * @param source 수정할 회원 정보
+     * @return 수정된 회원
+     */
     public User changeInfo(User source) {
         this.name = source.getName();
         this.email = source.getEmail();
