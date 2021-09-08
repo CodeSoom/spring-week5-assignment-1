@@ -12,7 +12,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * Product에 대한 조회, 입력, 수정 등을 담당합니다.
+ * Product에 대한 생성, 조회, 수정 삭제를 담당한다.
  */
 @Service
 @Transactional
