@@ -1,13 +1,13 @@
 package com.codesoom.assignment.dto;
 
-public class ErrorResponse {
-    private String message;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-    public ErrorResponse(String message) {
-        this.message = message;
-    }
-
-    public String getMessage() {
-        return message;
-    }
+@Getter
+@AllArgsConstructor
+public final class ErrorResponse {
+    private final String url;
+    private final String method;
+    private final String error;
+    private final String solution;
 }

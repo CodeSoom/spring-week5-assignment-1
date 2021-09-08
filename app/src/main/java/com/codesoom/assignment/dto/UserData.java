@@ -18,15 +18,15 @@ import lombok.Setter;
 public class UserData {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "이름을 입력하세요.")
     @Mapping("name")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "이메일을 입력하세요.")
     @Mapping("email")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호를 입력하세요.")
     @Mapping("password")
     private String password;
 }
