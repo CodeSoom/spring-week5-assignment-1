@@ -17,7 +17,7 @@ public class CreateUserDto {
     @NotBlank
     private String password;
 
-    public CreateUserDto() {
+    protected CreateUserDto() {
     }
 
     @Builder
