@@ -17,8 +17,8 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, User user) {
+    public User updateUser(Long id, User source) {
         // TODO: repository에서 수정 후 리턴
-        return User.builder().build();
+        return source;
     }
 }
