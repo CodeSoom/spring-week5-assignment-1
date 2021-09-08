@@ -34,6 +34,8 @@ import static com.codesoom.assignment.domain.ProductConstants.MAKER;
 import static com.codesoom.assignment.domain.ProductConstants.PRICE;
 import static com.codesoom.assignment.domain.ProductConstants.IMAGE_URL;
 import static com.codesoom.assignment.domain.ProductConstants.PRODUCT;
+import static com.codesoom.assignment.domain.ProductConstants.PRODUCT_LIST;
+import static com.codesoom.assignment.domain.ProductConstants.EMPTY_LIST;
 
 @WebMvcTest(ProductController.class)
 @DisplayName("ProductController 클래스")
@@ -74,7 +76,7 @@ class ProductControllerTest {
             @BeforeEach
             void beforeEach() {
                 mockSubject()
-                    .thenReturn(Lists.newArrayList());
+                    .thenReturn(EMPTY_LIST);
             }
 
             @Test
@@ -92,7 +94,7 @@ class ProductControllerTest {
             @BeforeEach
             void beforeEach() {
                 mockSubject()
-                    .thenReturn(Lists.newArrayList(PRODUCT));
+                    .thenReturn(PRODUCT_LIST);
             }
 
             @Test

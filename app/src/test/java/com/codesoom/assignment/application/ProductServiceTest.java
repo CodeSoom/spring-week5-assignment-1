@@ -24,6 +24,8 @@ import static com.codesoom.assignment.domain.ProductConstants.MAKER;
 import static com.codesoom.assignment.domain.ProductConstants.PRICE;
 import static com.codesoom.assignment.domain.ProductConstants.IMAGE_URL;
 import static com.codesoom.assignment.domain.ProductConstants.PRODUCT;
+import static com.codesoom.assignment.domain.ProductConstants.PRODUCT_LIST;
+import static com.codesoom.assignment.domain.ProductConstants.EMPTY_LIST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -57,7 +59,7 @@ class ProductServiceTest {
             @BeforeEach
             void beforeEach() {
                 mockSubject()
-                    .thenReturn(Lists.newArrayList(PRODUCT));
+                    .thenReturn(PRODUCT_LIST);
             }
             @Test
             @DisplayName("Product 목록을 리턴한다.")
@@ -72,7 +74,7 @@ class ProductServiceTest {
             @BeforeEach
             void beforeEach() {
                 mockSubject()
-                    .thenReturn(Lists.newArrayList());
+                    .thenReturn(EMPTY_LIST);
             }
             @Test
             @DisplayName("빈 목록을 리턴한다.")
