@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -89,8 +90,8 @@ public class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("POST /users/{id} 요청은")
-    class Describe_postUsersWithId {
+    @DisplayName("PATCH /users/{id} 요청은")
+    class Describe_patchUsersWithId {
 
         @Nested
         @DisplayName("유효한 유저 업데이트 DTO가 주어진다면")
@@ -130,7 +131,7 @@ public class UserControllerTest {
                 @DisplayName("수정된 유저를 리턴하고 200을 응답한다")
                 void it_returns_updated_user_and_response_200() throws Exception {
                     mockMvc.perform(
-                        post("/users/" + existId)
+                        patch("/users/" + existId)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(validUpdateUserDto))
                     )
@@ -164,7 +165,8 @@ public class UserControllerTest {
                 @DisplayName("404를 응답한다")
                 void it_response_404() throws Exception {
                     mockMvc.perform(
-                        post("/users/" + notExistId)
+                        patch("/users/" + notExistId)
+
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(validUpdateUserDto))
                     )

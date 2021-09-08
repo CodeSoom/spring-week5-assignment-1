@@ -6,6 +6,7 @@ import com.codesoom.assignment.dto.CreateUserDto;
 import com.codesoom.assignment.dto.UpdateUserDto;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,12 +26,17 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid CreateUserDto createUserDto) {
+    public User create(
+        @RequestBody @Valid CreateUserDto createUserDto
+    ) {
         return userService.createUser(createUserDto.toEntity());
     }
 
-    @PostMapping("{id}")
-    public User update(@PathVariable Long id, @RequestBody @Valid UpdateUserDto updateUserDto) {
+    @PatchMapping("{id}")
+    public User update(
+        @PathVariable Long id,
+        @RequestBody @Valid UpdateUserDto updateUserDto
+    ) {
         return userService.updateUser(id, updateUserDto.toEntity());
     }
 }
