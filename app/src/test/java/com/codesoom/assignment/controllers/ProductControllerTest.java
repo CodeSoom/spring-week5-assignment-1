@@ -2,7 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
-import com.google.common.collect.Lists;
+import com.codesoom.assignment.utils.Parser;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,21 +19,12 @@ import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.endsWith;
-import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.codesoom.assignment.domain.ProductConstants.ID;
-import static com.codesoom.assignment.domain.ProductConstants.NAME;
-import static com.codesoom.assignment.domain.ProductConstants.MAKER;
-import static com.codesoom.assignment.domain.ProductConstants.PRICE;
-import static com.codesoom.assignment.domain.ProductConstants.IMAGE_URL;
-import static com.codesoom.assignment.domain.ProductConstants.PRODUCT;
 import static com.codesoom.assignment.domain.ProductConstants.PRODUCT_LIST;
 import static com.codesoom.assignment.domain.ProductConstants.EMPTY_LIST;
 
@@ -84,7 +75,9 @@ class ProductControllerTest {
             void it_returns_a_empty_list() throws Exception {
                 subject()
                     .andExpect(status().isOk())
-                    .andExpect(content().string("[]"));
+                    .andExpect(content().string(
+                        Parser.toJson(EMPTY_LIST)
+                    ));
             }
         }
 
@@ -102,10 +95,8 @@ class ProductControllerTest {
             void it_returns_a_product_list() throws Exception {
                 subject()
                     .andExpect(status().isOk())
-                    .andExpect(content().string(containsString("[")))
-                    .andExpect(content().string(containsString("]")))
                     .andExpect(content().string(
-                        containsString(PRODUCT.getId().toString())
+                        Parser.toJson(PRODUCT_LIST)
                     ));
             }
         }
