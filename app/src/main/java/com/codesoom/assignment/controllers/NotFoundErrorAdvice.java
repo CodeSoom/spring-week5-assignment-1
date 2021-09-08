@@ -23,14 +23,6 @@ public class NotFoundErrorAdvice {
      *
      * @return 어디서(url경로, Http 메서드) 어떤 에러가 발생하였으며, 어떻게 해결할 수 있을지를 리턴한다.
      *
-     * @see ProductController#detail(Long)
-     * @see ProductService#getProduct(Long)
-     *
-     * @see ProductController#update(Long)
-     * @see ProductService#updateProduct(Long, ProductData)
-     *
-     * @see ProductController#destroy(Long)
-     * @see ProductService#deleteProduct(Long)
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
