@@ -21,26 +21,26 @@ public class UserRepositoryTest {
 
     private User savedUser;
 
-    User subjectSave() {
-        return userRepository.save(USER);
+    private void subjectSave() {
+        savedUser = userRepository.save(USER);
     }
 
-    void subjectDelete() {
+    private void subjectDelete() {
         userRepository.delete(savedUser);
     }
 
     @Nested
     @DisplayName("save 메서드는")
-    class Context_user_save {
+    public class Context_user_save {
         @AfterEach
-        void afterEach() {
+        public void afterEach() {
             subjectDelete();
         }
 
         @Test
         @DisplayName("User를 저장한다.")
-        void it_saves_object() {
-            User saveResult = subjectSave();
+        public void it_saves_object() {
+            subjectSave();
 
             assertThat(savedUser)
                 .matches(user -> user.getId() != null);
