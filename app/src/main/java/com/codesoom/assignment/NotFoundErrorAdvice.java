@@ -14,4 +14,13 @@ public class NotFoundErrorAdvice {
     public ErrorResponse handleProductTaskNotFound() {
         return new ErrorResponse("Product not found");
     }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(UserNotFoundException.class)
+    public ErrorResponse handleProductUserNotFound() {
+        return new ErrorResponse("User not found");
+    }
+
+
 }
