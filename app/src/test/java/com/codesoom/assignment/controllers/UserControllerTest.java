@@ -1,5 +1,7 @@
 package com.codesoom.assignment.controllers;
 
+import static com.codesoom.assignment.constants.UserConstants.USER;
+import static com.codesoom.assignment.constants.UserConstants.USER_DATA;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.reset;
@@ -8,8 +10,6 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.codesoom.assignment.domain.UserConstants.USER;
-import static com.codesoom.assignment.domain.UserConstants.USER_DATA;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;

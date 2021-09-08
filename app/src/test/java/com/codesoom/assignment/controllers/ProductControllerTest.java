@@ -25,8 +25,8 @@ import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.codesoom.assignment.domain.ProductConstants.PRODUCT_LIST;
-import static com.codesoom.assignment.domain.ProductConstants.EMPTY_LIST;
+import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_LIST;
+import static com.codesoom.assignment.constants.ProductConstants.EMPTY_LIST;
 
 @WebMvcTest(ProductController.class)
 @DisplayName("ProductController 클래스")

@@ -1,6 +1,6 @@
 package com.codesoom.assignment.infra;
 
-import static com.codesoom.assignment.domain.UserConstants.USER;
+import static com.codesoom.assignment.constants.UserConstants.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.codesoom.assignment.domain.User;

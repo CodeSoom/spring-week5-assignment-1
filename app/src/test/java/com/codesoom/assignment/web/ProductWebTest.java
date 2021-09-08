@@ -5,8 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.codesoom.assignment.domain.ProductConstants.PRODUCT_DATA;
-import static com.codesoom.assignment.domain.ProductConstants.EMPTY_LIST;
+import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_DATA;
+import static com.codesoom.assignment.constants.ProductConstants.EMPTY_LIST;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.utils.Parser;

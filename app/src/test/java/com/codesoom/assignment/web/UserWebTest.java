@@ -1,10 +1,10 @@
 package com.codesoom.assignment.web;
 
+import static com.codesoom.assignment.constants.UserConstants.USER_DATA;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.codesoom.assignment.domain.UserConstants.USER_DATA;
 
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.utils.Parser;

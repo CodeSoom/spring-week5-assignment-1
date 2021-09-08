@@ -2,7 +2,6 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.google.common.collect.Lists;
 
 import org.assertj.core.api.ListAssert;
 import org.junit.jupiter.api.AfterEach;
@@ -18,14 +17,8 @@ import org.mockito.stubbing.OngoingStubbing;
 
 import java.util.List;
 
-import static com.codesoom.assignment.domain.ProductConstants.ID;
-import static com.codesoom.assignment.domain.ProductConstants.NAME;
-import static com.codesoom.assignment.domain.ProductConstants.MAKER;
-import static com.codesoom.assignment.domain.ProductConstants.PRICE;
-import static com.codesoom.assignment.domain.ProductConstants.IMAGE_URL;
-import static com.codesoom.assignment.domain.ProductConstants.PRODUCT;
-import static com.codesoom.assignment.domain.ProductConstants.PRODUCT_LIST;
-import static com.codesoom.assignment.domain.ProductConstants.EMPTY_LIST;
+import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_LIST;
+import static com.codesoom.assignment.constants.ProductConstants.EMPTY_LIST;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;

@@ -1,10 +1,10 @@
 package com.codesoom.assignment.infra;
 
-import static com.codesoom.assignment.domain.ProductConstants.PRODUCT;
-import static com.codesoom.assignment.domain.ProductConstants.NAME;
-import static com.codesoom.assignment.domain.ProductConstants.MAKER;
-import static com.codesoom.assignment.domain.ProductConstants.PRICE;
-import static com.codesoom.assignment.domain.ProductConstants.IMAGE_URL;
+import static com.codesoom.assignment.constants.ProductConstants.PRODUCT;
+import static com.codesoom.assignment.constants.ProductConstants.NAME;
+import static com.codesoom.assignment.constants.ProductConstants.MAKER;
+import static com.codesoom.assignment.constants.ProductConstants.IMAGE_URL;
+import static com.codesoom.assignment.constants.ProductConstants.PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 

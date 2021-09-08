@@ -1,10 +1,14 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.constants;
 
 import java.util.List;
 
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
 import com.google.common.collect.Lists;
 
+/**
+ * Product관련 테스트에서 반복적으로 사용되는 데이터 정의
+ */
 public interface ProductConstants {
     final Long ID = 1L;
     final String NAME = "쥐돌이";

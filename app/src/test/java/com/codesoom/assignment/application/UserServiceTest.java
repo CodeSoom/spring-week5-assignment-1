@@ -1,12 +1,12 @@
 package com.codesoom.assignment.application;
 
+import static com.codesoom.assignment.constants.UserConstants.USER;
+import static com.codesoom.assignment.constants.UserConstants.USER_DATA;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
-import static com.codesoom.assignment.domain.UserConstants.USER_DATA;
-import static com.codesoom.assignment.domain.UserConstants.USER;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
