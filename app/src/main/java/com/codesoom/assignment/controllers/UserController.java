@@ -14,10 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * User 리소스
- * Http 요청과 Application layer를 연결한다.
- *
- * @see UserService
+ * User에 대한 생성, 조회, 수정, 삭제 요청을 Application layer에 전달한다.
  */
 @RestController
 @RequestMapping("/user")
@@ -29,7 +26,7 @@ public class UserController {
     }
 
     /**
-     * Product 생성 요청을 Application layer에 연결한다.
+     * Product 생성 요청을 Application layer에 전달한다.
      *
      * @param userData 생성할 User 데이터
      * @return 생성한 User 데이터

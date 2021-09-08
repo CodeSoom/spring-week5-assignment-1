@@ -10,10 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * Product 리소스
- * Http 요청과 Application layer를 연결한다.
- *
- * @see ProductService
+ * Product에 대한 생성, 조회, 수정, 삭제 요청을 Application layer에 전달한다.
  */
 @RestController
 @RequestMapping("/products")
@@ -25,7 +22,7 @@ public class ProductController {
     }
 
     /**
-     * Product 목록 조회 요청을 Application layer에 연결한다.
+     * Product 목록 조회 요청을 Application layer에 전달한다.
      *
      * @return Product 목록
      */
