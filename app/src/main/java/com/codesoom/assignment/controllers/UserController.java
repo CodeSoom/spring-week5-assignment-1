@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserDto;
 import javax.validation.Valid;
@@ -14,10 +15,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/user")
 public class UserController {
 
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody @Valid CreateUserDto createUserDto) {
-        // TODO: service에서 생성한 유저를 받아 리턴
-        return createUserDto.toEntity();
+        return userService.createUser(createUserDto.toEntity());
     }
 }
