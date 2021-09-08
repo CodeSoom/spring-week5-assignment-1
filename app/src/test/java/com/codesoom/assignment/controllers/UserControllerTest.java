@@ -2,9 +2,12 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserDTO;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,33 +40,36 @@ class UserControllerTest {
     private UserService userService;
 
     private ObjectMapper objectMapper;
+    private Mapper mapper;
 
     private final Long VALID_ID = 1L;
     private final Long INVALID_ID = 9999L;
 
-    private User correctUser;
-    private User blankNameUser;
-    private User blankPasswordUser;
+    private UserDTO correctUserDTO;
+    private UserDTO blankNameUserDTO;
+    private UserDTO blankPasswordUserDTO;
 
     @BeforeEach
     void setUp()  {
         objectMapper = new ObjectMapper();
+        mapper = DozerBeanMapperBuilder.buildDefault();
 
-        correctUser = new User(VALID_ID, "이름1", "패스워드1", "이메일1");
-        blankNameUser = User.builder().name("").password("패스워드1").build();
-        blankPasswordUser = User.builder().name("이름1").password("").build();
+        correctUserDTO = new UserDTO(VALID_ID, "이름1", "패스워드1", "이메일1");
+        blankNameUserDTO = UserDTO.builder().name("").password("패스워드1").build();
+        blankPasswordUserDTO = UserDTO.builder().name("이름1").password("").build();
 
-        given(userService.create(any(User.class))).will(invocation -> {
-            return invocation.getArgument(0);
+        given(userService.create(any(UserDTO.class))).will(invocation -> {
+            return mapper.map(invocation.getArgument(0), User.class);
         });
 
-        given(userService.update(eq(VALID_ID), any(User.class))).will(invocation -> {
-            User user = invocation.getArgument(1);
+        given(userService.update(eq(VALID_ID), any(UserDTO.class))).will(invocation -> {
+            UserDTO userDTO = invocation.getArgument(1);
+            User user = mapper.map(userDTO, User.class);
             user.setId(VALID_ID);
             return user;
         });
 
-        given(userService.update(eq(INVALID_ID), any(User.class)))
+        given(userService.update(eq(INVALID_ID), any(UserDTO.class)))
                 .willThrow(new UserNotFoundException(INVALID_ID));
 
         willDoNothing().given(userService).delete(VALID_ID);
@@ -84,9 +90,9 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(correctUser)))
+                        .content(makeContentFromUser(correctUserDTO)))
                         .andExpect(status().isCreated())
-                        .andExpect(content().string(makeContentFromUser(correctUser)));
+                        .andExpect(content().string(makeContentFromUser(correctUserDTO)));
             }
         }
 
@@ -100,7 +106,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(blankNameUser)))
+                        .content(makeContentFromUser(blankNameUserDTO)))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -115,7 +121,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(blankPasswordUser)))
+                        .content(makeContentFromUser(blankPasswordUserDTO)))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -135,9 +141,9 @@ class UserControllerTest {
                 mockMvc.perform(patch("/users/" + VALID_ID)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(correctUser)))
+                        .content(makeContentFromUser(correctUserDTO)))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(makeContentFromUser(correctUser)));
+                        .andExpect(content().string(makeContentFromUser(correctUserDTO)));
             }
         }
 
@@ -151,7 +157,7 @@ class UserControllerTest {
                 mockMvc.perform(patch("/users/" + INVALID_ID)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(correctUser)))
+                        .content(makeContentFromUser(correctUserDTO)))
                         .andExpect(status().isNotFound());
             }
         }
@@ -166,7 +172,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(blankNameUser)))
+                        .content(makeContentFromUser(blankNameUserDTO)))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -181,7 +187,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(makeContentFromUser(blankPasswordUser)))
+                        .content(makeContentFromUser(blankPasswordUserDTO)))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -217,7 +223,7 @@ class UserControllerTest {
         }
     }
 
-    private String makeContentFromUser(User user) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(user);
+    private String makeContentFromUser(UserDTO userDTO) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(userDTO);
     }
 }

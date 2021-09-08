@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,14 +20,14 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    User create(@Valid @RequestBody User user) {
+    User create(@Valid @RequestBody UserDTO user) {
         return userService.create(user);
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     User update(@PathVariable Long id,
-                @Valid @RequestBody User user) {
+                @Valid @RequestBody UserDTO user) {
         return userService.update(id, user);
     }
 
