@@ -11,7 +11,9 @@ import static org.assertj.core.api.Assertions.tuple;
 import java.util.List;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.ProductRepository;
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -20,30 +22,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 @Nested
-@DisplayName("JpaProductRepository 클래스")
+@DisplayName("ProductRepository 클래스")
 @DataJpaTest
-public class JpaProductRepositoryTest {
+public class ProductRepositoryTest {
     @Autowired
-    private JpaProductRepository jpaProductRepository;
+    private ProductRepository productRepository;
 
     private Product savedProduct;
     private List<Product> products;
 
-    void subject_findAll() {
-        products = jpaProductRepository.findAll();
+    void subjectFindAll() {
+        products = productRepository.findAll();
     }
 
-    void subject_save() {
-        savedProduct = jpaProductRepository.save(PRODUCT);
+    void subjectSave() {
+        savedProduct = productRepository.save(PRODUCT);
     }
 
-    void subject_delete() {
-        jpaProductRepository.delete(savedProduct);
-    }
-
-    @BeforeEach
-    void beforeEach() {
-        jpaProductRepository.deleteAll();
+    void subjectDelete() {
+        productRepository.delete(savedProduct);
     }
 
     @Nested
@@ -54,13 +51,18 @@ public class JpaProductRepositoryTest {
         class Context_product_exist {
             @BeforeEach
             void beforeEach() {
-                subject_save();
+                subjectSave();
+            }
+
+            @AfterEach
+            void afterEach() {
+                subjectDelete();
             }
 
             @Test
             @DisplayName("Product 목록을 리턴한다.")
             void it_returns_a_product_list() {
-                subject_findAll();
+                subjectFindAll();
 
                 assertThat(products)
                     .extracting(
@@ -77,7 +79,7 @@ public class JpaProductRepositoryTest {
             @Test
             @DisplayName("빈 목록을 리턴한다.")
             void it_returns_a_empty_list() {
-                subject_findAll();
+                subjectFindAll();
 
                 assertThat(products)
                     .isEmpty();
