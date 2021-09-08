@@ -14,15 +14,15 @@ import lombok.NoArgsConstructor;
 public class UserData {
     private Long id;
 
-    @NotBlank(message = "이름을 입력하세요.")
+    @NotBlank(message = "이름이 입력되지 않았습니다.")
     @Mapping("name")
     private String name;
 
-    @NotBlank(message = "이메일을 입력하세요.")
+    @NotBlank(message = "이메일이 입력되지 않았습니다.")
     @Mapping("email")
     private String email;
 
-    @NotBlank(message = "비밀번호를 입력하세요.")
+    @NotBlank(message = "비밀번호가 입력되지 않았습니다.")
     @Mapping("password")
     private String password;
 }

@@ -2,8 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import javax.servlet.http.HttpServletRequest;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.dto.ErrorResponse;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -12,10 +12,26 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 /**
- * MethodArgumentNotValidException 예외를 처리한다.
+ * 컨트롤러에서 발생하는 에러를 처리한다.
  */
 @ControllerAdvice
-public class ArgumentNotValidAdvice {
+public class ControllerExceptionHandler {
+    /**
+     * 던져진 "id에대한 값을 찾을수 없는 예외"를 받아 에러에 대한 응답을 리턴한다.
+     *
+     * @return 예외에 대한 내용이 담긴 응답
+     */
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(ProductNotFoundException.class)
+    public ErrorResponse handleNotFound(final HttpServletRequest request) {
+        return ErrorResponse.builder()
+            .url(request.getRequestURI())
+            .method(request.getMethod())
+            .error(
+                "Product를 찾을 수 없습니다."
+            ).build();
+    }
     /**
      * 던져진 "잘못된 메소드 입력값 에외"를 받아 에러에 대한 응답을 리턴한다.
      *
