@@ -28,15 +28,14 @@ public class ArgumentNotValidAdvice {
         final HttpServletRequest request,
         final MethodArgumentNotValidException exception
     ) {
-        return new ErrorResponse(
-            request.getRequestURI(),
-            request.getMethod(),
-            "잘못된 입력값입니다.",
-            exception.getBindingResult()
-                .getAllErrors()
-                .get(0)
-                .getDefaultMessage()
-        );
+        return ErrorResponse.builder()
+            .url(request.getRequestURI())
+            .method(request.getMethod())
+            .error(
+                exception.getBindingResult()
+                    .getAllErrors()
+                    .get(0)
+                    .getDefaultMessage()
+            ).build();
     }
-
 }

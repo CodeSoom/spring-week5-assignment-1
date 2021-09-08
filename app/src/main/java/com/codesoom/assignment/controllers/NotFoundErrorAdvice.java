@@ -24,11 +24,11 @@ public class NotFoundErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
     public ErrorResponse handleNotFound(final HttpServletRequest request) {
-        return new ErrorResponse(
-            request.getRequestURI(),
-            request.getMethod(),
-            "Product를 찾을 수 없습니다.",
-            "id를 확인해 주세요."
-        );
+        return ErrorResponse.builder()
+            .url(request.getRequestURI())
+            .method(request.getMethod())
+            .error(
+                "Product를 찾을 수 없습니다."
+            ).build();
     }
 }

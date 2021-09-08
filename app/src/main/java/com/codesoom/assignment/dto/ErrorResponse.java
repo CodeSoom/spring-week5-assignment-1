@@ -1,13 +1,12 @@
 package com.codesoom.assignment.dto;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
-@AllArgsConstructor
+@Builder
 public final class ErrorResponse {
     private final String url;
     private final String method;
     private final String error;
-    private final String solution;
 }
