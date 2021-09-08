@@ -27,7 +27,7 @@ public class ProductController {
 
     private final ProductService catToyService;
 
-    public ProductController(ProductService catToyService) {
+    public ProductConteroller(ProductService catToyService) {
         this.catToyService = catToyService;
     }
 
