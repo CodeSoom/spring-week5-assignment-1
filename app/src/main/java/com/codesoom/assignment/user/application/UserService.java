@@ -35,6 +35,11 @@ public class UserService {
     return userRepository.save(user);
   }
 
+
+  /** 탈퇴할 회원을 id로 찾고, 그 회원정보를 삭제한다.
+   *
+   * @param id 탈퇴할 회원의 id
+   */
   public void deleteUser(Long id) {
     User user = findUser(id);
     userRepository.delete(user);
