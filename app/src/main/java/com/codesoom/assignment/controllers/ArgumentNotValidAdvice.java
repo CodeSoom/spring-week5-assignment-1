@@ -3,7 +3,6 @@ package com.codesoom.assignment.controllers;
 import javax.servlet.http.HttpServletRequest;
 
 import com.codesoom.assignment.dto.ErrorResponse;
-import com.codesoom.assignment.dto.UserData;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -18,12 +17,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class ArgumentNotValidAdvice {
     /**
-     * MethodArgumentNotValidException을 처리한다.
+     * 던져진 "잘못된 메소드 입력값 에외"를 받아 에러에 대한 응답을 리턴한다.
      *
-     * @return 어디서(url경로, Http 메서드) 어떤 에러가 발생하였으며, 어떻게 해결할 수 있을지를 리턴한다.
-     *
-     * @see UserController#create(UserData)
-     *
+     * @return 예외에 대한 내용이 담긴 응답
      */
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
