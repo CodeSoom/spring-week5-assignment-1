@@ -3,7 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 
-import com.codesoom.assignment.dto.UserDTO;
+import com.codesoom.assignment.dto.UserCreateDTO;
+import com.codesoom.assignment.dto.UserUpdateDTO;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -26,22 +27,21 @@ class UserServiceTest {
     private final String PASSWORD = "비밀번호1";
     private final String EMAIL = "이메일1";
 
-    private UserDTO userDTO;
     private User user;
     private UserService userService;
+    private Mapper mapper;
 
     @Autowired
     private UserRepository userRepository;
 
     @BeforeEach
     void setUp() {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        mapper = DozerBeanMapperBuilder.buildDefault();
         userService = new UserService(mapper, userRepository);
-        userDTO = UserDTO.builder()
+        user = User.builder()
                 .name(NAME)
                 .password(PASSWORD)
-                .email(EMAIL).build();
-        user = mapper.map(userDTO, User.class);
+                .email(EMAIL).build();;
     }
 
     @AfterEach
@@ -53,10 +53,17 @@ class UserServiceTest {
     @DisplayName("create 메소드")
     class Describe_create {
 
+        private UserCreateDTO userCreateDTO;
+
+        @BeforeEach
+        void prepare() {
+            userCreateDTO = mapper.map(user, UserCreateDTO.class);
+        }
+
         @Test
         @DisplayName("생성된 유저를 반환합니다.")
         void it_return_created_user() {
-            User createdUser = userService.create(userDTO);
+            User createdUser = userService.create(userCreateDTO);
 
             assertThat(createdUser.getName()).isEqualTo(NAME);
             assertThat(createdUser.getPassword()).isEqualTo(PASSWORD);
@@ -68,17 +75,17 @@ class UserServiceTest {
     @DisplayName("update 메소드")
     class Describe_update {
 
-        private UserDTO newUserDTO;
+        private UserUpdateDTO userUpdateDTO;
         private final String NEW_NAME = "이름2";
         private final String NEW_PASSWORD = "비밀번호2";
         private final String NEW_EMAIL = "이메일2";
 
         @BeforeEach
         void prepare() {
-            newUserDTO = UserDTO.builder()
-                    .name(NEW_NAME)
-                    .password(NEW_PASSWORD)
-                    .email(NEW_EMAIL).build();
+            userUpdateDTO = UserUpdateDTO.builder()
+                                .name(NEW_NAME)
+                                .password(NEW_PASSWORD)
+                                .email(NEW_EMAIL).build();
         }
 
         @Nested
@@ -96,7 +103,7 @@ class UserServiceTest {
             @Test
             @DisplayName("변경된 유저를 반환합니다.")
             void it_return_created_user() {
-                User updatedUser = userService.update(validId, newUserDTO);
+                User updatedUser = userService.update(validId, userUpdateDTO);
 
                 assertThat(updatedUser.getName()).isEqualTo(NEW_NAME);
                 assertThat(updatedUser.getPassword()).isEqualTo(NEW_PASSWORD);
@@ -119,7 +126,7 @@ class UserServiceTest {
             @Test
             @DisplayName("UserNotFoundException을 던집니다.")
             void it_throw_UserNotFoundException() {
-                assertThatThrownBy(()->userService.update(invalidId, newUserDTO))
+                assertThatThrownBy(()->userService.update(invalidId, userUpdateDTO))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }

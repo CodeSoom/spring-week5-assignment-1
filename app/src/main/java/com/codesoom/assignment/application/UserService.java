@@ -2,7 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserDTO;
+import com.codesoom.assignment.dto.UserCreateDTO;
+import com.codesoom.assignment.dto.UserUpdateDTO;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -21,15 +22,15 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User create(UserDTO userDTO) {
-        User user = this.mapper.map(userDTO, User.class);
+    public User create(UserCreateDTO userCreateDTO) {
+        User user = this.mapper.map(userCreateDTO, User.class);
         return userRepository.save(user);
     }
 
-    public User update(Long id, UserDTO updateUserDTO) {
+    public User update(Long id, UserUpdateDTO userUpdateDTO) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        User updateUser = this.mapper.map(updateUserDTO, User.class);
+        User updateUser = this.mapper.map(userUpdateDTO, User.class);
         user.update(updateUser);
         return userRepository.save(user);
     }

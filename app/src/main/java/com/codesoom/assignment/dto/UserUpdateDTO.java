@@ -1,4 +1,5 @@
 package com.codesoom.assignment.dto;
+
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
@@ -8,7 +9,8 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserDTO {
+public class UserUpdateDTO {
+
     private Long id;
 
     @NotBlank
