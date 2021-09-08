@@ -36,7 +36,7 @@ public class UserService {
   }
 
 
-  /** 탈퇴할 회원을 id로 찾고, 그 회원정보요 삭제한다.
+  /** 탈퇴할 회원을 id로 찾고, 그 회원정보를 삭제한다.
    *
    * @param id 탈퇴할 회원의 id
    */
