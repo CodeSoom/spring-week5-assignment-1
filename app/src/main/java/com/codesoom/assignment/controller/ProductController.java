@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -58,7 +59,7 @@ public class ProductController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CatToy registerCatToy(@RequestBody CatToy catToy) {
+    public CatToy registerCatToy(@Valid @RequestBody CatToy catToy) {
         return catToyService.addCatToy(catToy);
     }
 
@@ -70,7 +71,7 @@ public class ProductController {
      */
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CatToy updateCatToy(@PathVariable Long id, @RequestBody CatToy catToy) {
+    public CatToy updateCatToy(@PathVariable Long id, @Valid @RequestBody CatToy catToy) {
         return catToyService.updateCatToy(id, catToy);
     }
 

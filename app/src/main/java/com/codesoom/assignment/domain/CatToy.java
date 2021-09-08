@@ -8,6 +8,9 @@ import lombok.Setter;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Getter
 @Setter
@@ -18,10 +21,24 @@ public class CatToy {
     @Id
     @GeneratedValue
     private Long id;
+
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String maker;
+
+    @PositiveOrZero
     private Integer price;
+
     private String imageUrl;
+
+    public CatToy(String name, String maker, int price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     public void update(CatToy catToy) {
         this.name = catToy.getName();
