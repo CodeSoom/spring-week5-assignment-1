@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.controllers.NullOrNoEmptyString;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,13 +11,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class UserUpdateDto {
+    @NullOrNoEmptyString
     @Mapping("email")
     private String email;
 
+    @NullOrNoEmptyString
     @Mapping("name")
     private String name;
 
+    @NullOrNoEmptyString
     @Mapping("password")
     private String password;
 }

@@ -2,7 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserDto;
+import com.codesoom.assignment.dto.UserPostDto;
+import com.codesoom.assignment.dto.UserUpdateDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,8 +25,8 @@ class UserServiceTest {
 
     private UserRepository userRepository;
 
-    private UserDto userDtoFixture;
-    private UserDto newUserDtoFixture;
+    private UserPostDto userDtoFixture;
+    private UserUpdateDto newUserDtoFixture;
     private User userFixture;
 
     private final Long EXISTENT_ID = 1L;
@@ -40,13 +41,13 @@ class UserServiceTest {
 
     @BeforeEach
     void setupFixtures() {
-        userDtoFixture = UserDto.builder()
+        userDtoFixture = UserPostDto.builder()
                 .name("난난")
                 .email("nana@gmail.com")
                 .password("nananana")
                 .build();
 
-        newUserDtoFixture = UserDto.builder()
+        newUserDtoFixture = UserUpdateDto.builder()
                 .name("단단")
                 .email("dada@gmail.com")
                 .password("dadadada")
