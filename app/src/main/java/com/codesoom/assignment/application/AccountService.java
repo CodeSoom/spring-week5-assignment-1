@@ -9,14 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
 /**
  * 회원 정보를 관리한다.
  * 1. 회원 생성하기 - creation(AccountData)
  * 2. 회원 수정하기 - patchAccount(AccountData)
  * 3. 회원 삭제하기 - deleteAccount(Long id)
+ * 4. 회원 검색하기 - findAccount(Long id);
  */
 @Service
 @RequiredArgsConstructor

@@ -34,6 +34,43 @@ public class AccountServiceNestedTest {
     }
 
     @Nested
+    @DisplayName("findAccount 메서드는")
+    class Describe_findAccount {
+        private AccountSaveData accountSaveData;
+
+        @BeforeEach
+        void prepareFindAccount() {
+            accountSaveData = accountService.creation(AccountSaveData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD));
+        }
+
+        @DisplayName("식별자가 존재하는 회원인 경우")
+        @Nested
+        class Context_exists_id{
+            @DisplayName("정상적으로 회원이 조회 된다.")
+            @Test
+            void findAccount() {
+                final AccountSaveData foundAccountData = accountService.findAccount(accountSaveData.getId());
+
+                assertThat(foundAccountData.getName()).isEqualTo(accountSaveData.getName());
+                assertThat(foundAccountData.getEmail()).isEqualTo(accountSaveData.getEmail());
+                assertThat(foundAccountData.getPassword()).isEqualTo(accountSaveData.getPassword());
+            }
+        }
+
+        @DisplayName("식별자가 존재하지 않는 회원인 경우")
+        @Nested
+        class Context_not_exists_id {
+            @DisplayName("AccountNotFoundException 예외가 발생한다.")
+            @Test
+            void findNotExistsAccount() {
+                assertThatThrownBy(() -> accountService.findAccount(100L))
+                        .isInstanceOf(AccountNotFoundException.class)
+                        .hasMessage(String.format(AccountNotFoundException.DEFAULT_MESSAGE, 100L));
+            }
+        }
+    }
+
+    @Nested
     @DisplayName("create 메서드는")
     class Describe_create {
         @Nested
@@ -131,7 +168,7 @@ public class AccountServiceNestedTest {
             @DisplayName("AccountNotFoundException 예외가 발생한다.")
             @Test
             void deleteNotExistsId() {
-                assertThatThrownBy(() -> accountService.findAccount(1000L))
+                assertThatThrownBy(() -> accountService.deleteAccount(1000L))
                         .isInstanceOf(AccountNotFoundException.class)
                         .hasMessage(String.format(AccountNotFoundException.DEFAULT_MESSAGE, 1000L));
             }
