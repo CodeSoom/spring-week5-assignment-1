@@ -1,18 +1,12 @@
 package com.codesoom.assignment.infra;
 
-import static com.codesoom.assignment.domain.UserConstants.ID;
-import static com.codesoom.assignment.domain.UserConstants.EMAIL;
-import static com.codesoom.assignment.domain.UserConstants.NAME;
-import static com.codesoom.assignment.domain.UserConstants.PASSWORD;
 import static com.codesoom.assignment.domain.UserConstants.USER;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.emptyIterable;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -28,13 +22,7 @@ public class UserRepositoryTest {
     private User savedUser;
 
     void subjectSave() {
-        User user = User.builder()
-            .name(NAME)
-            .email(EMAIL)
-            .password(PASSWORD)
-            .build();
-
-        savedUser = userRepository.save(user);
+        savedUser = userRepository.save(USER);
     }
 
     void subjectDelete() {
