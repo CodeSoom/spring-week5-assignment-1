@@ -79,18 +79,18 @@ class UserServiceTest {
         @DisplayName("저장된 유저의 id가 주어지면")
         class Context_with_existing_user_id {
 
-            private Long valid_id;
+            private Long validId;
 
             @BeforeEach
             void prepare() {
                 User givenUser = userRepository.save(user);
-                valid_id = givenUser.getId();
+                validId = givenUser.getId();
             }
 
             @Test
             @DisplayName("변경된 유저를 반환합니다.")
             void it_return_created_user() {
-                User updatedUser = userService.update(valid_id, newUser);
+                User updatedUser = userService.update(validId, newUser);
 
                 assertThat(updatedUser.getName()).isEqualTo(NEW_NAME);
                 assertThat(updatedUser.getPassword()).isEqualTo(NEW_PASSWORD);
@@ -102,18 +102,18 @@ class UserServiceTest {
         @DisplayName("저장되지 않는 유저의 id가 주어지면")
         class Context_with_not_existing_user_id {
 
-            private Long invalid_id;
+            private Long invalidId;
 
             @BeforeEach
             void prepare() {
                 userRepository.deleteAll();
-                invalid_id = 1L;
+                invalidId = 1L;
             }
 
             @Test
             @DisplayName("UserNotFoundException을 던집니다.")
             void it_throw_UserNotFoundException() {
-                assertThatThrownBy(()->userService.update(invalid_id, newUser))
+                assertThatThrownBy(()->userService.update(invalidId, newUser))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
@@ -127,18 +127,18 @@ class UserServiceTest {
         @DisplayName("저장되지 않는 유저의 id가 주어지면")
         class Context_with_not_existing_user_id {
 
-            private Long invalid_id;
+            private Long invalidId;
 
             @BeforeEach
             void prepare() {
                 userRepository.deleteAll();
-                invalid_id = 1L;
+                invalidId = 1L;
             }
 
             @Test
             @DisplayName("UserNotFoundException을 던집니다.")
             void it_throw_UserNotFoundException() {
-                assertThatThrownBy(()->userService.delete(invalid_id))
+                assertThatThrownBy(()->userService.delete(invalidId))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }

@@ -41,20 +41,20 @@ class UserControllerTest {
     private final Long VALID_ID = 1L;
     private final Long INVALID_ID = 9999L;
 
-    private User correct_user;
-    private String content_correct_user;
-    private User invalid_user;
-    private String content_invalid_user;
+    private User correctUser;
+    private String contentCorrectUser;
+    private User invalidUser;
+    private String contentInvalidUser;
 
 
     @BeforeEach
     void setUp() throws JsonProcessingException {
         objectMapper = new ObjectMapper();
 
-        correct_user = new User(VALID_ID, "이름1", "패스워드1", "이메일1");
-        content_correct_user = objectMapper.writeValueAsString(correct_user);
-        invalid_user = User.builder().name("이름1").build();
-        content_invalid_user = objectMapper.writeValueAsString(invalid_user);
+        correctUser = new User(VALID_ID, "이름1", "패스워드1", "이메일1");
+        contentCorrectUser = objectMapper.writeValueAsString(correctUser);
+        invalidUser = User.builder().name("이름1").build();
+        contentInvalidUser = objectMapper.writeValueAsString(invalidUser);
 
         given(userService.create(any(User.class))).will(invocation -> {
             return invocation.getArgument(0);
@@ -87,9 +87,9 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content_correct_user))
+                        .content(contentCorrectUser))
                         .andExpect(status().isCreated())
-                        .andExpect(content().string(content_correct_user));
+                        .andExpect(content().string(contentCorrectUser));
             }
         }
 
@@ -103,7 +103,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content_invalid_user))
+                        .content(contentInvalidUser))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -124,9 +124,9 @@ class UserControllerTest {
                 mockMvc.perform(patch("/users/" + VALID_ID)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content_correct_user))
+                        .content(contentCorrectUser))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(content_correct_user));
+                        .andExpect(content().string(contentCorrectUser));
             }
         }
 
@@ -140,7 +140,7 @@ class UserControllerTest {
                 mockMvc.perform(patch("/users/" + INVALID_ID)
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content_correct_user))
+                        .content(contentCorrectUser))
                         .andExpect(status().isNotFound());
             }
         }
@@ -154,7 +154,7 @@ class UserControllerTest {
             void it_response_bad_request() throws Exception {
                 mockMvc.perform(patch("/users/" + VALID_ID)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(content_invalid_user))
+                        .content(contentInvalidUser))
                         .andExpect(status().isBadRequest());
             }
         }
