@@ -1,9 +1,8 @@
-package com.codesoom.assignment.person.domain;
+package com.codesoom.assignment.user.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -24,4 +23,10 @@ public class User {
     private String email;
     @NotBlank
     private String password;
+
+    public void change(User user) {
+        this.name = user.getName();
+        this.email = user.getEmail();
+        this.password = user.getPassword();
+    }
 }

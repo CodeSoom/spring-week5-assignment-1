@@ -1,7 +1,7 @@
-package com.codesoom.assignment.person.controller;
+package com.codesoom.assignment.user.controller;
 
-import com.codesoom.assignment.person.domain.User;
-import com.codesoom.assignment.person.service.UserService;
+import com.codesoom.assignment.user.domain.User;
+import com.codesoom.assignment.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -53,7 +53,7 @@ public class UserController {
      * @param id 삭제 요청 User 식별자
      */
     @DeleteMapping("/{id}")
-    public void deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public void deleteUserById(@PathVariable Long id) {
+        userService.deleteUserById(id);
     }
 }
