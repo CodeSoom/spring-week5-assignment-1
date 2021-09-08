@@ -12,11 +12,7 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 /**
- * Product 리소스
- * 수행할 작업을 정의하고, Domain layer에 수행을 위임한다.
- *
- * @see Product
- * @see ProductRepository
+ * Product에 대한 조회, 입력, 수정 등을 담당합니다.
  */
 @Service
 @Transactional
