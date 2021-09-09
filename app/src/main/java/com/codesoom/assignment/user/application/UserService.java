@@ -48,7 +48,7 @@ public class UserService {
   /** 찾고자 하는 회원의 id로, 그 회원의 정보를 return
    *
    * @param id 찾고자 하는 회원의 id
-   * @return 찾고자하는 회원
+   * @return 찾은 회원
    */
   private User findUser(Long id) {
     return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
