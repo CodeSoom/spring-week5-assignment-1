@@ -53,11 +53,8 @@ class UserServiceImplTest {
             void It_create_return_user() throws Exception {
 
                 User createUser = userService.createUser(source);
-                System.out.println("createUser.getId() = " + createUser.getId());
-                System.out.println("createUser.getName() = " + createUser.getName());
-                System.out.println("createUser.getEmail() = " + createUser.getEmail());
-                System.out.println("createUser.getPassword() = " + createUser.getPassword());
 
+                assertEquals("name1",createUser.getName());
 
             }
 
