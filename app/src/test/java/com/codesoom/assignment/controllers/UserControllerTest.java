@@ -50,8 +50,10 @@ class UserControllerTest {
         given(userService.selectUser(NOT_EXISTS_ID)).willThrow(new UserNotFoundException(NOT_EXISTS_ID));
 
         given(userService.modifyUser(eq(DEFAULT_ID), any(UserData.class))).willReturn(changeUserData);
-        given(userService.modifyUser(eq(NOT_EXISTS_ID), any(UserData.class)))
-                .willThrow(new ProductNotFoundException(NOT_EXISTS_ID));
+        given(userService.modifyUser(eq(NOT_EXISTS_ID), any(UserData.class))).willThrow(new ProductNotFoundException(NOT_EXISTS_ID));
+
+        given(userService.deleteUser(DEFAULT_ID)).willReturn(saveUserData);
+        given(userService.deleteUser(NOT_EXISTS_ID)).willThrow(new UserNotFoundException(NOT_EXISTS_ID));
     }
 
     private void userDataSetup() {
@@ -188,5 +190,29 @@ class UserControllerTest {
 
         // then
         .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    @DisplayName("회원 삭제")
+    void deleteUser() throws Exception {
+        // when
+        mockMvc.perform(delete("/users/" + DEFAULT_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+        // then
+        .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @DisplayName("회원 삭제 실패 - 존재하지 않는 ID")
+    void notExistsUserDeleteFail() throws Exception {
+        // when
+        mockMvc.perform(delete("/users/" + NOT_EXISTS_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+        // then
+        .andExpect(status().isNotFound());
     }
 }

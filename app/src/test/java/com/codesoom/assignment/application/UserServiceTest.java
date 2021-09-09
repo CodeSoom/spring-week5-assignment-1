@@ -111,4 +111,24 @@ class UserServiceTest {
         assertThatThrownBy(() -> userService.modifyUser(NOT_EXISTS_ID, modifyUserData))
                 .isInstanceOf(UserNotFoundException.class);
     }
+
+    @Test
+    @DisplayName("유저 삭제")
+    void deleteUser() {
+        // when
+        userService.deleteUser(createUserId);
+
+        // then
+        assertThatThrownBy(() -> userService.selectUser(createUserId))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    @DisplayName("유저 삭제 실패 - 존재하지 않는 ID")
+    void notExistsUserDeleteFail() {
+        // when
+        // then
+        assertThatThrownBy(() -> userService.deleteUser(NOT_EXISTS_ID))
+                .isInstanceOf(UserNotFoundException.class);
+    }
 }

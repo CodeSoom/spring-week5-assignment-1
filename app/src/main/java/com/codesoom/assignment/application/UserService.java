@@ -37,16 +37,21 @@ public class UserService {
         return UserData.ofList(userRepository.findAll());
     }
 
-    private User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
-    }
-
     public UserData modifyUser(Long id, UserData userData) {
         User user = getUser(id);
         user.modifyUser(userData);
         return new UserData(userRepository.save(user));
     }
 
+    public UserData deleteUser(Long id) {
+        User user = getUser(id);
+        userRepository.delete(user);
+        return new UserData(user);
+    }
+
+    private User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
 
 }
