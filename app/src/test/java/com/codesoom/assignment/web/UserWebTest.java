@@ -1,15 +1,21 @@
 package com.codesoom.assignment.web;
 
+import static com.codesoom.assignment.constants.UserConstants.ID;
 import static com.codesoom.assignment.constants.UserConstants.USER_DATA;
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.codesoom.assignment.NotFoundException;
+import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.ErrorResponse;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.utils.Parser;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -23,6 +29,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @DisplayName("User 리소스")
 @SpringBootTest
@@ -33,8 +40,9 @@ public class UserWebTest {
     private MockMvc mockMvc;
 
     private String requestBody;
+    private Long requestParameter;
 
-    ResultActions subjectPostUser() throws Exception {
+    private ResultActions subjectPostUser() throws Exception {
         return mockMvc.perform(
             post("/user")
                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -50,54 +58,117 @@ public class UserWebTest {
     //     );
     // }
 
-    // private ResultActions subjectDeleteUserId() throws Exception {
-    //     return mockMvc.perform(
-    //         delete("/user/" + requestParameter)
-    //             .accept(MediaType.APPLICATION_JSON_UTF8)
-    //     );
-    // }
+    private ResultActions subjectDeleteUser() throws Exception {
+        return mockMvc.perform(
+            delete("/user/" + requestParameter)
+                .accept(MediaType.APPLICATION_JSON_UTF8)
+        );
+    }
 
     @Nested
     @DisplayName("생성 엔드포인트는")
-    class Describe_post_user {
+    public class Describe_post_user {
         @Nested
         @DisplayName("올바른 User 데이터가 주어진 경우")
-        class Context_valid_UserData {
+        public class Context_valid_UserData {
             @AfterEach
-            void afterEach() throws Exception {
-                // subjectDeleteUserId();
+            public void afterEach() throws Exception {
+                subjectDeleteUser();
             }
 
             @Test
             @DisplayName("User를 생성하고 리턴한다.")
-            void it_creates_a_user() throws Exception {
+            public void it_creates_a_user() throws Exception {
                 requestBody = Parser.toJson(USER_DATA);
-                subjectPostUser()
-                    .andExpect(status().isCreated())
-                    .andExpect(content().string(containsString("id")));
+                requestParameter = Parser.toObject(
+                    subjectPostUser()
+                        .andExpect(status().isCreated())
+                        .andExpect(content().string(containsString("id")))
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(), User.class
+                ).getId();
             }
         }
 
         @Nested
         @DisplayName("잘못된 User 데이터가 주어진 경우")
-        class Context_invalid_UserData {
-            @ParameterizedTest(name = "400(Bad Request)를 리턴한다. email={0}, name={1}, password={2}")
+        public class Context_invalid_UserData {
+            @ParameterizedTest(name = "400(Bad Request)를 리턴한다.")
             @CsvSource(
                 {
-                    "'test@test.com', 'test', ''",
-                    "'', 'test', 'password",
-                    "'test@test.com', '', 'password'"
+                    "'', 'test', 'password', '이메일이 입력되지 않았습니다.'",
+                    "'test@test.com', '', 'password', '이름이 입력되지 않았습니다.'",
+                    "'test@test.com', 'test', '', '비밀번호가 입력되지 않았습니다.'"
                 }
             )
-            void it_returns_a_bad_request(
-                final String email, final String name, final String password
+            public void it_returns_a_bad_request(
+                final String email, final String name,
+                final String password, final String error
             ) throws Exception {
                 requestBody = Parser.toJson(
                     new UserData(null, name, email, password)
                 );
 
                 subjectPostUser()
-                    .andExpect(status().isBadRequest());
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().string(
+                        Parser.toJson(
+                            ErrorResponse.builder()
+                                .method(RequestMethod.POST.toString())
+                                .url("/user")
+                                .error(error)
+                                .build()
+                        )
+                    ));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("삭제 엔드포인트는")
+    public class Desciribe_delete_user {
+        @Nested
+        @DisplayName("User를 찾을 수 있는 경우")
+        public class Context_find_success {
+            @BeforeEach
+            public void beforeEach() throws Exception {
+                requestBody = Parser.toJson(USER_DATA);
+                requestParameter = Parser.toObject(
+                    subjectPostUser()
+                        .andReturn()
+                        .getResponse()
+                        .getContentAsString(), User.class
+                ).getId();
+            }
+
+            @Test
+            @DisplayName("User를 삭제한다.")
+            public void it_deletes_a_user() throws Exception {
+                subjectDeleteUser()
+                    .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("User를 찾을 수 없는 경우")
+        public class Context_find_fail {
+            @Test
+            @DisplayName("User를 찾지 못하였음을 알려준다.")
+            public void it_notifies_user_not_found() throws Exception {
+                requestParameter = ID;
+                subjectDeleteUser()
+                    .andExpect(status().isNotFound())
+                    .andExpect(content().string(
+                        Parser.toJson(
+                            ErrorResponse.builder()
+                                .method(RequestMethod.DELETE.toString())
+                                .url("/user/" + requestParameter)
+                                .error(
+                                    new NotFoundException(User.class.getSimpleName()).getMessage()
+                                ).build()
+                        )
+                    ));
             }
         }
     }
