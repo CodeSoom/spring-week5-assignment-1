@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -174,6 +175,77 @@ public class UserControllerTest {
                     )
                         .andExpect(status().isNotFound());
                 }
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /users/{id} 요청은")
+    class Describe_deleteUserWithId {
+
+        @Nested
+        @DisplayName("회원을 찾을 수 있는 경우")
+        class Context_findUser {
+
+            private Long findUserId;
+
+            @BeforeEach
+            void setUp() {
+                User user = userRepository.save(User.builder()
+                    .name("name")
+                    .email("email")
+                    .password("password")
+                    .build());
+
+                Long id = user.getId();
+
+                assertThat(userRepository.existsById(id))
+                    .isTrue();
+
+                findUserId = id;
+            }
+
+            @Test
+            @DisplayName("204를 응답한다")
+            void it_response_204() throws Exception {
+                mockMvc.perform(
+                    delete("/users" + findUserId)
+                )
+                    .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("회원을 찾을 수 없는 경우")
+        class Context_notFoundUser {
+
+            private Long notFoundUserId;
+
+            @BeforeEach
+            void setUp() {
+                User user = userRepository.save(User.builder()
+                    .name("name")
+                    .email("email")
+                    .password("password")
+                    .build());
+
+                Long id = user.getId();
+
+                userRepository.deleteAll();
+
+                assertThat(userRepository.existsById(id))
+                    .isFalse();
+
+                notFoundUserId = id;
+            }
+
+            @Test
+            @DisplayName("404를 응답한다")
+            void it_response_404() throws Exception {
+                mockMvc.perform(
+                    delete("/users/" + notFoundUserId)
+                )
+                    .andExpect(status().isNotFound());
             }
         }
     }
