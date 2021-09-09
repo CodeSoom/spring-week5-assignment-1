@@ -10,6 +10,8 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.CreateUserDto;
 import com.codesoom.assignment.dto.UpdateUserDto;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -58,7 +60,7 @@ public class UserControllerTest {
                         .content(toJson(validCreateUserDto))
                 )
                     .andExpect(status().isCreated())
-                    .andExpect(content().json(toJson(validCreateUserDto.toEntity())));
+                    .andExpect(content().json(toJson(validCreateUserDto)));
             }
         }
 
@@ -82,7 +84,7 @@ public class UserControllerTest {
                 mockMvc.perform(
                     post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJsonWithoutPassword(invalidCreateUserDto))
+                        .content(toJson(invalidCreateUserDto))
                 )
                     .andExpect(status().isBadRequest());
             }
@@ -136,7 +138,7 @@ public class UserControllerTest {
                             .content(toJson(validUpdateUserDto))
                     )
                         .andExpect(status().isOk())
-                        .andExpect(content().json(toJson(validUpdateUserDto.toEntity())));
+                        .andExpect(content().json(toJson(validUpdateUserDto)));
                 }
             }
 
@@ -176,41 +178,7 @@ public class UserControllerTest {
         }
     }
 
-    private String toJson(UpdateUserDto updateUserDto) {
-        return String.format(
-            "{\"name\": \"%s\","
-                + " \"email\": \"%s\","
-                + " \"password\": \"%s\"}",
-            updateUserDto.getName(),
-            updateUserDto.getEmail(),
-            updateUserDto.getPassword());
-    }
-
-    private String toJson(User user) {
-        return String.format(
-            "{\"name\": \"%s\","
-                + " \"email\": \"%s\","
-                + " \"password\": \"%s\"}",
-            user.getName(),
-            user.getEmail(),
-            user.getPassword());
-    }
-
-    private String toJson(CreateUserDto createUserDto) {
-        return String.format(
-            "{\"name\": \"%s\","
-                + " \"email\": \"%s\","
-                + " \"password\": \"%s\"}",
-            createUserDto.getName(),
-            createUserDto.getEmail(),
-            createUserDto.getPassword());
-    }
-
-    private String toJsonWithoutPassword(CreateUserDto createUserDto) {
-        return String.format(
-            "{\"name\": \"%s\","
-                + " \"email\": \"%s\"}",
-            createUserDto.getName(),
-            createUserDto.getEmail());
+    private String toJson(Object value) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(value);
     }
 }
