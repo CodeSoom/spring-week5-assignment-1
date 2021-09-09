@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_LIST;
@@ -39,42 +40,52 @@ class ProductServiceTest {
         ListAssert<Product> subject() {
             return assertThat(productService.getProducts());
         }
+
         OngoingStubbing<List<Product>> mockSubject() {
             return when(productRepository.findAll());
         }
+
         @AfterEach
         void afterEach() {
             verify(productRepository).findAll();
         }
+
         @Nested
-        @DisplayName("저장된 Product가 있다면")
+        @DisplayName("ProductRepository findAll 메서드의 리턴값을")
         class Context_product_exist {
             @BeforeEach
             void beforeEach() {
                 mockSubject()
                     .thenReturn(PRODUCT_LIST);
             }
+
             @Test
-            @DisplayName("Product 목록을 리턴한다.")
+            @DisplayName("그대로 리턴한다.")
             void it_returns_a_product_list() {
                 subject()
-                    .isNotEmpty();
+                    .matches(
+                        outputList -> Arrays.deepEquals(
+                            PRODUCT_LIST.toArray(), outputList.toArray()
+                        )
+                    );
             }
         }
-        @Nested
-        @DisplayName("저장된 Product가 없다면")
-        class Context_product_empty {
-            @BeforeEach
-            void beforeEach() {
-                mockSubject()
-                    .thenReturn(EMPTY_LIST);
-            }
-            @Test
-            @DisplayName("빈 목록을 리턴한다.")
-            void it_returns_a_empty_list() {
-                subject()
-                    .isEmpty();
-            }
-        }
+
+        // @Nested
+        // @DisplayName("저장된 Product가 없다면")
+        // class Context_product_empty {
+        //     @BeforeEach
+        //     void beforeEach() {
+        //         mockSubject()
+        //             .thenReturn(EMPTY_LIST);
+        //     }
+
+        //     @Test
+        //     @DisplayName("빈 목록을 리턴한다.")
+        //     void it_returns_a_empty_list() {
+        //         subject()
+        //             .isEmpty();
+        //     }
+        // }
     }
 }
