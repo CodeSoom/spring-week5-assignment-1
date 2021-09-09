@@ -49,8 +49,8 @@ public class UserRepositoryTest {
         public void it_saves_users() {
             savedUser = subjectSave();
 
-            assertThat(savedUser)
-                .matches(user -> user.getId() != null);
+            assertThat(subjectFindById())
+                .isPresent();
         }
     }
 
