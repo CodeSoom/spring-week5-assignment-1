@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import javax.transaction.Transactional;
 
+import com.codesoom.assignment.NotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -36,7 +37,20 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    // public User deleteUser(final Long id) {
-    //     userRepository.findById(id).orElseThrow()
-    // }
+    private User findUser(final Long id) {
+        return userRepository.findById(id)
+            .orElseThrow(
+                () -> new NotFoundException(User.class.getSimpleName())
+            );
+    }
+
+    /**
+     * User를 삭제한다.
+     *
+     * @param id 삭제할 User의 id
+     * @throws NotFoundException User를 찾을 수 없는 경우
+     */
+    public void deleteUser(final Long id) {
+        userRepository.delete(findUser(id));
+    }
 }

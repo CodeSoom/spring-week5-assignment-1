@@ -8,8 +8,6 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -105,12 +103,6 @@ public class UserServiceTest {
             userService.deleteUser(ID);
         }
 
-        private void mockDelete() {
-            doNothing()
-                .when(userRepository)
-                    .delete(any(User.class));
-        }
-
         private void verifyDelete(final int invokeNumber) {
             verify(userRepository, times(invokeNumber))
                 .delete(any(User.class));
@@ -121,7 +113,6 @@ public class UserServiceTest {
         public class Context_find_fail {
             @BeforeEach
             void beforeEach() {
-                mockDelete();
                 mockFindById()
                     .thenThrow(new NotFoundException(User.class.getSimpleName()));
             }
@@ -145,7 +136,6 @@ public class UserServiceTest {
         public class Context_find_success {
             @BeforeEach
             void beforeEach() {
-                mockDelete();
                 mockFindById()
                     .thenReturn(Optional.of(USER));
             }
