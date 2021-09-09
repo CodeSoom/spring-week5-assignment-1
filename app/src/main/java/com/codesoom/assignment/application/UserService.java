@@ -36,4 +36,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    // public User deleteUser(final Long id) {
+    //     userRepository.findById(id).orElseThrow()
+    // }
 }

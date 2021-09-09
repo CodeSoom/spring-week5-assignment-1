@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.NotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
@@ -61,6 +61,8 @@ public class ProductService {
 
     private Product findProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(
+                    () -> new NotFoundException(Product.class.getSimpleName())
+                );
     }
 }
