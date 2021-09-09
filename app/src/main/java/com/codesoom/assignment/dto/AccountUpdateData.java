@@ -18,7 +18,6 @@ public class AccountUpdateData {
 
     private String email;
 
-    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
     public static AccountUpdateData of(String name, String email, String password) {
