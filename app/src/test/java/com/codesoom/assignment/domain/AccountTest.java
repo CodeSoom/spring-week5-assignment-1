@@ -20,39 +20,25 @@ class AccountTest {
         assertThat(account).isInstanceOf(Account.class);
     }
 
-    @DisplayName("빌더 패턴을 이용해 객체 생성이 가능하다.")
+    @DisplayName("빌더, 정적 팩토리 메서드는 모두 동일한 결과를 낸다. .")
     @Test
     void creationWithBuilder() {
-        final Account account = Account.builder()
+        final Account account1 = Account.builder()
                 .id(1L)
                 .name(ACCOUNT_NAME)
                 .email(ACCOUNT_EMAIL)
                 .password(ACCOUNT_PASSWORD)
                 .build();
 
-        assertThat(account.getId()).isEqualTo(1L);
-        assertThat(account.getName()).isEqualTo(ACCOUNT_NAME);
-        assertThat(account.getEmail()).isEqualTo(ACCOUNT_EMAIL);
-        assertThat(account.getPassword()).isEqualTo(ACCOUNT_PASSWORD);
+        final Account account2 = Account.of(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
+        final Account account3 = Account.from(new AccountSaveData(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD));
+
+        assertThatAccountDataField(account1);
+        assertThatAccountDataField(account2);
+        assertThatAccountDataField(account3);
     }
 
-    @DisplayName("정적 팩토리 메서드 of 를 통해 객체 생성이 가능하다.")
-    @Test
-    void creationWithOfFactoryMethod() {
-        final Account account = Account.of(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
-
-        assertThat(account.getId()).isEqualTo(1L);
-        assertThat(account.getName()).isEqualTo(ACCOUNT_NAME);
-        assertThat(account.getEmail()).isEqualTo(ACCOUNT_EMAIL);
-        assertThat(account.getPassword()).isEqualTo(ACCOUNT_PASSWORD);
-    }
-
-    @DisplayName("정적 팩토리 메서드 from 를 통해 객체 생성이 가능하다.")
-    @Test
-    void creationWithFromFactoryMethod() {
-        AccountSaveData accountData = new AccountSaveData(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
-        final Account account = Account.from(accountData);
-
+    private void assertThatAccountDataField(Account account) {
         assertThat(account.getId()).isEqualTo(1L);
         assertThat(account.getName()).isEqualTo(ACCOUNT_NAME);
         assertThat(account.getEmail()).isEqualTo(ACCOUNT_EMAIL);
