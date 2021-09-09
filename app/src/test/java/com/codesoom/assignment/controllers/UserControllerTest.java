@@ -176,6 +176,85 @@ public class UserControllerTest {
                 }
             }
         }
+
+        @Nested
+        @DisplayName("유효하지 않은 업데이트 DTO가 주어진다면")
+        class NestedClass {
+
+            private UpdateUserDto invalidUpdateUserDto;
+
+            @BeforeEach
+            void setUp() {
+                invalidUpdateUserDto = UpdateUserDto.builder()
+                    .name("")
+                    .email("")
+                    .build();
+            }
+
+            @Nested
+            @DisplayName("사용자를 찾을 수 있는 경우")
+            class Context_canFindUser {
+
+                private Long foundUserId;
+
+                @BeforeEach
+                void setUp() {
+                    User createdUser = userRepository.save(
+                        invalidUpdateUserDto.toEntity()
+                    );
+
+                    Long id = createdUser.getId();
+                    assertThat(userRepository.existsById(id))
+                        .isTrue();
+
+                    foundUserId = id;
+                }
+
+                @Test
+                @DisplayName("400을 응답한다")
+                void it_returns_updated_user_and_response_200() throws Exception {
+                    mockMvc.perform(
+                        patch("/users/" + foundUserId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(toJson(invalidUpdateUserDto))
+                    )
+                        .andExpect(status().isBadRequest());
+                }
+            }
+
+            @Nested
+            @DisplayName("사용자를 찾을 수 없는 경우")
+            class Context_notFoundUser {
+
+                private Long notFoundUserId;
+
+                @BeforeEach
+                void setUp() {
+                    User user = userRepository.save(
+                        invalidUpdateUserDto.toEntity()
+                    );
+
+                    userRepository.deleteAll();
+
+                    Long id = user.getId();
+                    assertThat(userRepository.existsById(id))
+                        .isFalse();
+
+                    notFoundUserId = id;
+                }
+
+                @Test
+                @DisplayName("400를 응답한다")
+                void it_response_404() throws Exception {
+                    mockMvc.perform(
+                        patch("/users/" + notFoundUserId)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(toJson(invalidUpdateUserDto))
+                    )
+                        .andExpect(status().isBadRequest());
+                }
+            }
+        }
     }
 
     @Nested
