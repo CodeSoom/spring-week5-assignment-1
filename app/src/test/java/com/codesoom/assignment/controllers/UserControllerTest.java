@@ -22,8 +22,6 @@ import com.codesoom.assignment.dto.ErrorResponse;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.utils.Parser;
 
-import org.apache.commons.io.filefilter.NotFileFilter;
-import org.aspectj.lang.annotation.Before;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -109,10 +107,10 @@ public class UserControllerTest {
                     .createUser(any(UserData.class));
             }
 
-            @ParameterizedTest(name = "400(Bad Request)를 리턴한다. email={0}, name={1}, password={2}")
+            @ParameterizedTest(name = "400(Bad Request)를 리턴한다.")
             @CsvSource(
                 {
-                    "'', 'test', 'password, '이메일이 입력되지 않았습니다.'",
+                    "'', 'test', 'password', '이메일이 입력되지 않았습니다.'",
                     "'test@test.com', '', 'password', '이름이 입력되지 않았습니다.'",
                     "'test@test.com', 'test', '', '비밀번호가 입력되지 않았습니다.'"
                 }
@@ -131,7 +129,7 @@ public class UserControllerTest {
                         Parser.toJson(
                             ErrorResponse.builder()
                                 .method(RequestMethod.POST.toString())
-                                .url("/user/1")
+                                .url("/user")
                                 .error(error)
                                 .build()
                         )

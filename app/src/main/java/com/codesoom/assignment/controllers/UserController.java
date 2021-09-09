@@ -7,6 +7,8 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,7 +28,7 @@ public class UserController {
     }
 
     /**
-     * Product 생성 요청을 Application layer에 전달한다.
+     * User 생성 요청을 Application layer에 전달한다.
      *
      * @param userData 생성할 User 데이터
      * @return 생성한 User 데이터
@@ -35,5 +37,16 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody @Valid UserData userData) {
         return userService.createUser(userData);
+    }
+
+    /**
+     * User 삭제 요청을 Application layer에 전달한다.
+     *
+     * @param id 삭제할 User id
+     */
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void destroy(@PathVariable final Long id) {
+        userService.deleteUser(id);
     }
 }
