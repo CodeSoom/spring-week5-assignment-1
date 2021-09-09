@@ -37,15 +37,15 @@ public class UserControllerTest {
     @DisplayName("POST /users 요청은")
     class Describe_postUsers {
 
+        private CreateUserDto createUserDto;
+
         @Nested
         @DisplayName("유효한 유저 생성 DTO가 주어질 때")
         class Context_validUser {
 
-            private CreateUserDto validCreateUserDto;
-
             @BeforeEach
             void setUp() {
-                validCreateUserDto = CreateUserDto.builder()
+                createUserDto = CreateUserDto.builder()
                     .name("name")
                     .email("email")
                     .password("password")
@@ -58,10 +58,10 @@ public class UserControllerTest {
                 mockMvc.perform(
                     post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(validCreateUserDto))
+                        .content(toJson(createUserDto))
                 )
                     .andExpect(status().isCreated())
-                    .andExpect(content().json(toJson(validCreateUserDto)));
+                    .andExpect(content().json(toJson(createUserDto)));
             }
         }
 
@@ -69,11 +69,9 @@ public class UserControllerTest {
         @DisplayName("유효하지 않은 유저 생성 DTO가 주어질 때")
         class Context_invalidCreateUserDto {
 
-            private CreateUserDto invalidCreateUserDto;
-
             @BeforeEach
             void setUp() {
-                invalidCreateUserDto = CreateUserDto.builder()
+                createUserDto = CreateUserDto.builder()
                     .name("name")
                     .email("email")
                     .build();
@@ -85,7 +83,7 @@ public class UserControllerTest {
                 mockMvc.perform(
                     post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(toJson(invalidCreateUserDto))
+                        .content(toJson(createUserDto))
                 )
                     .andExpect(status().isBadRequest());
             }
@@ -96,15 +94,15 @@ public class UserControllerTest {
     @DisplayName("PATCH /users/{id} 요청은")
     class Describe_patchUsersWithId {
 
+        private UpdateUserDto updateUserDto;
+
         @Nested
         @DisplayName("유효한 유저 업데이트 DTO가 주어진다면")
         class Context_validUpdateUserDto {
 
-            private UpdateUserDto validUpdateUserDto;
-
             @BeforeEach
             void setUp() {
-                validUpdateUserDto = UpdateUserDto.builder()
+                updateUserDto = UpdateUserDto.builder()
                     .name("name")
                     .email("email")
                     .password("password")
@@ -120,7 +118,7 @@ public class UserControllerTest {
                 @BeforeEach
                 void setUp() {
                     User createdUser = userRepository.save(
-                        validUpdateUserDto.toEntity()
+                        updateUserDto.toEntity()
                     );
 
                     Long id = createdUser.getId();
@@ -136,10 +134,10 @@ public class UserControllerTest {
                     mockMvc.perform(
                         patch("/users/" + foundUserId)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(validUpdateUserDto))
+                            .content(toJson(updateUserDto))
                     )
                         .andExpect(status().isOk())
-                        .andExpect(content().json(toJson(validUpdateUserDto)));
+                        .andExpect(content().json(toJson(updateUserDto)));
                 }
             }
 
@@ -152,7 +150,7 @@ public class UserControllerTest {
                 @BeforeEach
                 void setUp() {
                     User user = userRepository.save(
-                        validUpdateUserDto.toEntity()
+                        updateUserDto.toEntity()
                     );
 
                     userRepository.deleteAll();
@@ -170,7 +168,7 @@ public class UserControllerTest {
                     mockMvc.perform(
                         patch("/users/" + notFoundUserId)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(validUpdateUserDto))
+                            .content(toJson(updateUserDto))
                     )
                         .andExpect(status().isNotFound());
                 }
@@ -181,11 +179,9 @@ public class UserControllerTest {
         @DisplayName("유효하지 않은 업데이트 DTO가 주어진다면")
         class NestedClass {
 
-            private UpdateUserDto invalidUpdateUserDto;
-
             @BeforeEach
             void setUp() {
-                invalidUpdateUserDto = UpdateUserDto.builder()
+                updateUserDto = UpdateUserDto.builder()
                     .name("")
                     .email("")
                     .build();
@@ -200,7 +196,7 @@ public class UserControllerTest {
                 @BeforeEach
                 void setUp() {
                     User createdUser = userRepository.save(
-                        invalidUpdateUserDto.toEntity()
+                        updateUserDto.toEntity()
                     );
 
                     Long id = createdUser.getId();
@@ -216,7 +212,7 @@ public class UserControllerTest {
                     mockMvc.perform(
                         patch("/users/" + foundUserId)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(invalidUpdateUserDto))
+                            .content(toJson(updateUserDto))
                     )
                         .andExpect(status().isBadRequest());
                 }
@@ -231,7 +227,7 @@ public class UserControllerTest {
                 @BeforeEach
                 void setUp() {
                     User user = userRepository.save(
-                        invalidUpdateUserDto.toEntity()
+                        updateUserDto.toEntity()
                     );
 
                     userRepository.deleteAll();
@@ -249,7 +245,7 @@ public class UserControllerTest {
                     mockMvc.perform(
                         patch("/users/" + notFoundUserId)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(invalidUpdateUserDto))
+                            .content(toJson(updateUserDto))
                     )
                         .andExpect(status().isBadRequest());
                 }
