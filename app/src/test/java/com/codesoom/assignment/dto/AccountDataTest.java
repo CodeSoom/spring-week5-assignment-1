@@ -25,13 +25,11 @@ class AccountDataTest {
     private static ValidatorFactory factory;
     private static Validator validator;
 
-
     @BeforeAll
     static void init() {
         factory = Validation.buildDefaultValidatorFactory();
         validator = factory.getValidator();
     }
-
 
     @DisplayName("AccountData를 Account 도메인 객체로 변환 할 수 있다.")
     @Test
@@ -63,7 +61,7 @@ class AccountDataTest {
         assertThat(accountData.getPassword()).isEqualTo(account.getPassword());
     }
 
-    @DisplayName("유효성 검증 애노테이션을 활용해 필드 검사를 할 수 있다.")
+    @DisplayName("validate 메서드는 객체가 유효하면 빈 Set을 반환한다.")
     @Test
     void createWithExistsField() {
         final Account account = Account.builder()

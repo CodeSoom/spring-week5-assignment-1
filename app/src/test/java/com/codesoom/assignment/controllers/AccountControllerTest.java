@@ -6,6 +6,8 @@ import com.codesoom.assignment.dto.AccountSaveData;
 import com.codesoom.assignment.dto.AccountUpdateData;
 import com.codesoom.assignment.exceptions.AccountNotFoundException;
 import com.codesoom.assignment.exceptions.AccountUpdateFailedException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -43,7 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class AccountControllerTest {
 
     private static final String API_PATH = "/users";
-    private static final String FORM = "{\"id\":%s,\"name\":\"%s\",\"email\":\"%s\", \"password\":\"%s\"}";
+    private static final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private MockMvc mockMvc;
@@ -68,7 +70,8 @@ class AccountControllerTest {
     @DisplayName("회원 정보 등록 API를 호출해 회원 정보를 등록할 수 있다. - POST /user")
     @Test
     void createAccount() throws Exception {
-        String content = String.format(FORM, null, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
+        String content = toJson(Account.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD));
+
         mockMvc.perform(
                         post(API_PATH)
                                 .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -79,6 +82,7 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.email").value(ACCOUNT_EMAIL))
                 .andExpect(jsonPath("$.password").doesNotHaveJsonPath());
     }
+
 
     @DisplayName("잘못 된 정보로 회원 등록 API를 호출하면 등록에 실패한다. - POST /user BODY {invalidData}")
     @ParameterizedTest
@@ -95,11 +99,11 @@ class AccountControllerTest {
                         .value("[" + fieldName + "](은)는 공백일 수 없습니다 입력된 값: []"));
     }
 
-    public static Stream<Arguments> provideInvalidParamAndAccountData() {
+    public static Stream<Arguments> provideInvalidParamAndAccountData() throws JsonProcessingException {
         return Stream.of(
-                Arguments.of("name", String.format(FORM, null, "", ACCOUNT_EMAIL, ACCOUNT_PASSWORD)),
-                Arguments.of("email", String.format(FORM, null, ACCOUNT_NAME, "", ACCOUNT_PASSWORD)),
-                Arguments.of("password", String.format(FORM, null, ACCOUNT_NAME, ACCOUNT_EMAIL, ""))
+                Arguments.of("name", toJson(Account.of(null, "", ACCOUNT_EMAIL, ACCOUNT_PASSWORD))),
+                Arguments.of("email", toJson(Account.of(null, ACCOUNT_NAME, "", ACCOUNT_PASSWORD))),
+                Arguments.of("password", toJson(Account.of(null, ACCOUNT_NAME, ACCOUNT_EMAIL, "")))
         );
     }
 
@@ -109,11 +113,10 @@ class AccountControllerTest {
         final AccountSaveData savedAccountData = accountService.creation(
                 AccountSaveData.of(ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD));
 
-        final String content = String.format(FORM,
-                savedAccountData.getId(),
+        final String content = mapper.writeValueAsString(AccountUpdateData.of(
                 OTHER_ACCOUNT_NAME,
                 OTHER_ACCOUNT_EMAIL,
-                OTHER_ACCOUNT_PASSWORD);
+                OTHER_ACCOUNT_PASSWORD));
 
         mockMvc.perform(
                         patch(API_PATH + "/" + savedAccountData.getId())
@@ -131,11 +134,11 @@ class AccountControllerTest {
     @DisplayName("등록되지 않은 회원의 정보는 수정할 수 없다. - PATCH /user/{notExistsId}")
     @Test
     void patchNotExistsAccount() throws Exception {
-        final String content = String.format(FORM,
+        final String content = toJson(Account.of(
                 100L,
                 OTHER_ACCOUNT_NAME,
                 OTHER_ACCOUNT_EMAIL,
-                OTHER_ACCOUNT_PASSWORD);
+                OTHER_ACCOUNT_PASSWORD));
 
         mockMvc.perform(
                         patch(API_PATH + "/100")
@@ -167,25 +170,24 @@ class AccountControllerTest {
                         .value(AccountUpdateFailedException.DEFAULT_MESSAGE));
     }
 
-    public static Stream<Arguments> provideInvalidAccountData() {
+    public static Stream<Arguments> provideInvalidAccountData() throws JsonProcessingException {
         return Stream.of(
-                Arguments.of(String.format(FORM, null, "", ACCOUNT_EMAIL, ACCOUNT_PASSWORD)),
-                Arguments.of(String.format(FORM, null, ACCOUNT_NAME, "", ACCOUNT_PASSWORD)),
-                Arguments.of(String.format(FORM, null, ACCOUNT_NAME, ACCOUNT_EMAIL, ""))
+                Arguments.of(toJson(Account.of(null, "", ACCOUNT_EMAIL, ACCOUNT_PASSWORD))),
+                Arguments.of(toJson(Account.of(null, ACCOUNT_NAME, "", ACCOUNT_PASSWORD))),
+                Arguments.of(toJson(Account.of(null, ACCOUNT_NAME, ACCOUNT_EMAIL, "")))
         );
     }
-
 
 
     @DisplayName("잘못 된 타입의 식별자로는 회원 정보를 수정할 수 없다.. - PATCH /user/{invalidTypeId}")
     @ParameterizedTest
     @ValueSource(strings = {"null", "NaN", "abc"})
     void patchInvalidTypeId(String invalidId) throws Exception {
-        final String content = String.format(FORM,
+        final String content = toJson(Account.of(
                 null,
                 OTHER_ACCOUNT_NAME,
                 OTHER_ACCOUNT_EMAIL,
-                OTHER_ACCOUNT_PASSWORD);
+                OTHER_ACCOUNT_PASSWORD));
 
         mockMvc.perform(
                         patch(API_PATH + "/" + invalidId)
@@ -199,6 +201,9 @@ class AccountControllerTest {
                         .value(BadRequestErrorAdvice.NOT_SUPPORTED_TYPE_ARGUMENT));
     }
 
+    private static String toJson(Account of) throws JsonProcessingException {
+        return mapper.writeValueAsString(of);
+    }
 
     @DisplayName("식별자로 회원 정보를 삭제할 수 있다 - DELETE /user/{id}")
     @ParameterizedTest
@@ -220,5 +225,6 @@ class AccountControllerTest {
                 .andExpect(jsonPath("$.message")
                         .value(BadRequestErrorAdvice.NOT_SUPPORTED_TYPE_ARGUMENT));
     }
+
 
 }
