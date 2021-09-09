@@ -3,10 +3,13 @@ package com.codesoom.assignment.infra;
 import static com.codesoom.assignment.constants.UserConstants.USER;
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.util.Optional;
+
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -21,12 +24,16 @@ public class UserRepositoryTest {
 
     private User savedUser;
 
-    private void subjectSave() {
-        savedUser = userRepository.save(USER);
+    private User subjectSave() {
+        return userRepository.save(USER);
     }
 
     private void subjectDelete() {
         userRepository.delete(savedUser);
+    }
+
+    private Optional<User> subjectFindById() {
+        return userRepository.findById(savedUser.getId());
     }
 
     @Nested
@@ -39,11 +46,29 @@ public class UserRepositoryTest {
 
         @Test
         @DisplayName("User를 저장한다.")
-        public void it_saves_object() {
-            subjectSave();
+        public void it_saves_users() {
+            savedUser = subjectSave();
 
             assertThat(savedUser)
                 .matches(user -> user.getId() != null);
+        }
+    }
+
+    @Nested
+    @DisplayName("delete 메서드는")
+    public class Context_user_delete {
+        @BeforeEach
+        public void beforeEach() {
+            savedUser = subjectSave();
+        }
+
+        @Test
+        @DisplayName("User를 삭제한다.")
+        public void it_deletes_users() {
+            subjectDelete();
+
+            assertThat(subjectFindById())
+                .isEmpty();
         }
     }
 }
