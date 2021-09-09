@@ -64,6 +64,7 @@ public class UserController {
      * @param id 식별자
      */
     @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(
         @PathVariable Long id
     ) {

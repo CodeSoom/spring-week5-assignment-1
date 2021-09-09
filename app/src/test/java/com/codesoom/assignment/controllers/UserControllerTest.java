@@ -169,7 +169,6 @@ public class UserControllerTest {
                 void it_response_404() throws Exception {
                     mockMvc.perform(
                         patch("/users/" + notFoundUserId)
-
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(validUpdateUserDto))
                     )
@@ -209,7 +208,7 @@ public class UserControllerTest {
             @DisplayName("204를 응답한다")
             void it_response_204() throws Exception {
                 mockMvc.perform(
-                    delete("/users" + findUserId)
+                    delete("/users/" + findUserId)
                 )
                     .andExpect(status().isNoContent());
             }
