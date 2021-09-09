@@ -47,4 +47,7 @@ public class ProductController {
     public void destroy(@PathVariable Long id) {
         productService.deleteProduct(id);
     }
+
+
+
 }
