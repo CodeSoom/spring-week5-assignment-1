@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Transactional
 @Service
@@ -24,7 +23,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User createUser(UserData source) throws Exception {
 
-        if(emailCheck(source.getEmail()).isPresent()) {
+        if( emailCheck(source.getEmail()) ) {
             throw new UserEmailDuplicateException();
         }
 
@@ -56,19 +55,19 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> emailCheck(String mail) throws Exception {
+    public boolean emailCheck(String mail) throws Exception {
 
         List<User> users = userRepository.findAll();
 
         for (User user : users) {
 
             if(user.getEmail().equals(mail)) {
-                return Optional.of(user);
+                return true;
             }
 
         }
 
-        return Optional.empty();
+        return false;
 
     }
 

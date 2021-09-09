@@ -5,42 +5,23 @@ import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.UserEmailDuplicateException;
 import org.junit.jupiter.api.*;
-import org.mockito.Mockito;
-import org.springframework.boot.convert.DurationFormat;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
-import java.util.Optional;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("UserServiceImpl 클래스")
+@DataJpaTest
 class UserServiceImplTest {
 
-    private UserService userService;
-    private UserRepository userRepository = Mockito.mock(UserRepository.class);
+    private  UserService userService;
 
-    private User TEST_USER;
-
-    private Long TEST_ID = 1L;
-    private String TEST_NAME = "name";
-    private String TEST_EMAIL = "email@xxxx.com";
-    private String TEST_PASSWORD = "1234";
-
-    private String UPDATE_NAME = "updateName";
-    private String UPDATE_EMAIL = "updateEmail@xxxx.com";
-    private String UPDATE_PASSWORD = "13579";
+    @Autowired
+    private  UserRepository userRepository;
 
     @BeforeEach
-    void setUp() {
-
-        TEST_USER = User.builder()
-                .id(1L)
-                .name("name")
-                .email("email@xxxx.com")
-                .password("1234")
-                .build();
+    void setUp() throws Exception {
 
         userService = new UserServiceImpl(userRepository);
 
@@ -60,21 +41,11 @@ class UserServiceImplTest {
             void setUp() {
 
                 source = UserData.builder()
-                        .name(TEST_NAME)
-                        .email(TEST_EMAIL)
-                        .password(TEST_PASSWORD)
+                        .name("name1")
+                        .email("email1")
+                        .password("12345")
                         .build();
-
-                given(userRepository.save(any(User.class))).will(invocation -> {
-                    User user = invocation.getArgument(0);
-                    return user.builder()
-                            .id(TEST_ID)
-                            .name(TEST_NAME)
-                            .email(TEST_EMAIL)
-                            .password(TEST_PASSWORD)
-                            .build();
-                });
-
+                
             }
 
             @Test
@@ -82,13 +53,11 @@ class UserServiceImplTest {
             void It_create_return_user() throws Exception {
 
                 User createUser = userService.createUser(source);
+                System.out.println("createUser.getId() = " + createUser.getId());
+                System.out.println("createUser.getName() = " + createUser.getName());
+                System.out.println("createUser.getEmail() = " + createUser.getEmail());
+                System.out.println("createUser.getPassword() = " + createUser.getPassword());
 
-                assertEquals(TEST_ID, createUser.getId());
-                assertEquals(TEST_NAME, createUser.getName());
-                assertEquals(TEST_EMAIL, createUser.getEmail());
-                assertEquals(TEST_PASSWORD, createUser.getPassword());
-
-                verify(userRepository).save(any(User.class));
 
             }
 
@@ -98,21 +67,19 @@ class UserServiceImplTest {
         @DisplayName("생성할 사용자 이메일이 이미 존재한다면")
         class Context_duplicate_email {
 
-            UserData source;
+            UserData data;
+            User user;
 
             @BeforeEach
-            void setUp() throws Exception{
+            void setUp() throws Exception {
 
-                source = UserData.builder()
-                        .name(TEST_NAME)
-                        .email(TEST_EMAIL)
-                        .password(TEST_PASSWORD)
+                data = UserData.builder()
+                        .name("name2")
+                        .email("email2")
+                        .password("12345")
                         .build();
 
-              given(userService.createUser(source)).willThrow(new UserEmailDuplicateException());
-//                given(userService.createUser(source)).willAnswer(invocation -> {
-//                    throw  new UserEmailDuplicateException();
-//                });
+                user = userService.createUser(data);
 
             }
 
@@ -120,14 +87,15 @@ class UserServiceImplTest {
             @DisplayName("UserEmailDuplicateException 예외를 던진다")
             void It_create_return_user() throws Exception {
 
-                org.assertj.core.api.Assertions.assertThatThrownBy(() ->
-                        userService.createUser(source)).as("이미 가입된 메일이 존재합니다.").isInstanceOf(UserEmailDuplicateException.class);
+                assertThatThrownBy(() -> userService.createUser(data))
+                        .hasMessage("이미 가입된 메일이 존재합니다.").isInstanceOf(UserEmailDuplicateException.class);
 
             }
 
         }
 
     }
+
 
     @Nested
     @DisplayName("updateUser 메소드는")
@@ -137,18 +105,24 @@ class UserServiceImplTest {
         @DisplayName("수정할 사용자 정보가 있을 경우에")
         class Context_exist_update_user {
 
-            UserData userData;
+            UserData updateSource;
+            User TEST_USER;
 
             @BeforeEach
-            void setUp() {
+            void setUp() throws Exception {
 
-                userData = UserData.builder()
-                        .name(UPDATE_NAME)
-                        .email(UPDATE_EMAIL)
-                        .password(UPDATE_PASSWORD)
+               TEST_USER = userService.createUser( UserData.builder()
+                                        .name("name1")
+                                        .email("email1")
+                                        .password("12345")
+                                        .build() );
+
+
+                updateSource = UserData.builder()
+                        .name("UPDATE_NAME")
+                        .email("UPDATE_EMAIL")
+                        .password("11111")
                         .build();
-
-                given(userRepository.findById(TEST_ID)).willReturn(Optional.of(TEST_USER));
 
             }
 
@@ -156,18 +130,23 @@ class UserServiceImplTest {
             @DisplayName("아이디와 수정 정보를 입력받아 사용자 정보를 수정한다")
             void It_return_update_user() {
 
-                User updateUser = userService.updateUser(TEST_ID, userData);
+                User user = userService.updateUser(TEST_USER.getId(), updateSource);
 
-                assertEquals(TEST_ID, updateUser.getId());
-                assertEquals(UPDATE_NAME, updateUser.getName());
-                assertEquals(UPDATE_EMAIL, updateUser.getEmail());
-                assertEquals(UPDATE_PASSWORD, updateUser.getPassword());
-
-                verify(userRepository).findById(TEST_ID);
+                assertEquals("UPDATE_NAME",user.getName());
+                assertEquals("UPDATE_EMAIL", user.getEmail());
+                assertEquals("11111", user.getPassword());
 
             }
 
         }
+
+    }
+
+
+    @AfterEach
+    void clean() {
+
+        userRepository.deleteAll();
 
     }
 

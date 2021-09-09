@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import java.util.Optional;
 /**
  * 사용자 생성, 수정, 삭제 기능을 담당하는 클래스
  */
+@Service
 public interface UserService {
 
     /**
@@ -32,7 +34,7 @@ public interface UserService {
      */
     void deleteUser(Long id);
 
-    Optional<User> emailCheck(String mail) throws Exception;
+    boolean emailCheck(String mail) throws Exception;
 
 }
 
