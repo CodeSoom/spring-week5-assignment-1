@@ -33,6 +33,7 @@ public class UserService {
      * @param id     찾을 회원 식별자
      * @param source 바꿀 회원 정보
      * @return 수정된 회원
+     * @throws UserNotFoundException 회원을 찾지 못한 경우
      */
     public User updateUser(Long id, User source) {
         return userRepository.findById(id)
@@ -47,8 +48,12 @@ public class UserService {
      * 식별자로 회원을 찾아 삭제합니다.
      *
      * @param id 식별자
+     * @throws UserNotFoundException 회원을 찾지 못한 경우
      */
     public void deleteUser(Long id) {
+        User user = userRepository.findById(id)
+            .orElseThrow(() -> new UserNotFoundException(id));
 
+        userRepository.delete(user);
     }
 }
