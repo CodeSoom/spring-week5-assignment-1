@@ -6,6 +6,7 @@ import com.codesoom.assignment.dto.CreateUserDto;
 import com.codesoom.assignment.dto.UpdateUserDto;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,5 +55,18 @@ public class UserController {
         @RequestBody @Valid UpdateUserDto updateUserDto
     ) {
         return userService.updateUser(id, updateUserDto.toEntity());
+    }
+
+
+    /**
+     * 식별자로 회원을 찾아 삭제합니다.
+     *
+     * @param id 식별자
+     */
+    @DeleteMapping("{id}")
+    public void delete(
+        @PathVariable Long id
+    ) {
+        userService.deleteUser(id);
     }
 }

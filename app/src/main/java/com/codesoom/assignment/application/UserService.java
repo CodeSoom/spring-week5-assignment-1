@@ -42,4 +42,13 @@ public class UserService {
                 return userRepository.save(user);
             }).orElseThrow(() -> new UserNotFoundException(id));
     }
+
+    /**
+     * 식별자로 회원을 찾아 삭제합니다.
+     *
+     * @param id 식별자
+     */
+    public void deleteUser(Long id) {
+
+    }
 }
