@@ -62,7 +62,7 @@ public class ProductService {
     private Product findProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(
-                    () -> new NotFoundException(Product.class.getSimpleName())
+                    () -> new NotFoundException(id, Product.class.getSimpleName())
                 );
     }
 }

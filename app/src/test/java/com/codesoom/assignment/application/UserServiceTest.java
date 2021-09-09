@@ -114,7 +114,7 @@ public class UserServiceTest {
             @BeforeEach
             void beforeEach() {
                 mockFindById()
-                    .thenThrow(new NotFoundException(User.class.getSimpleName()));
+                    .thenThrow(new NotFoundException(ID, User.class.getSimpleName()));
             }
 
             @AfterEach

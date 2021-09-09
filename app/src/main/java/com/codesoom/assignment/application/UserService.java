@@ -40,7 +40,7 @@ public class UserService {
     private User findUser(final Long id) {
         return userRepository.findById(id)
             .orElseThrow(
-                () -> new NotFoundException(User.class.getSimpleName())
+                () -> new NotFoundException(id, User.class.getSimpleName())
             );
     }
 

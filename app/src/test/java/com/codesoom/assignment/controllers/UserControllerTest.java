@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import static com.codesoom.assignment.constants.UserConstants.ID;
 import static com.codesoom.assignment.constants.UserConstants.USER;
 import static com.codesoom.assignment.constants.UserConstants.USER_DATA;
 import static org.mockito.ArgumentMatchers.any;
@@ -176,7 +177,7 @@ public class UserControllerTest {
         public class Context_find_fail {
             @BeforeEach
             public void beforeEach() {
-                doThrow(new NotFoundException(User.class.getSimpleName()))
+                doThrow(new NotFoundException(ID, User.class.getSimpleName()))
                     .when(userService).deleteUser(anyLong());
             }
 
@@ -191,7 +192,7 @@ public class UserControllerTest {
                                 .method(RequestMethod.DELETE.toString())
                                 .url("/user/1")
                                 .error(
-                                    new NotFoundException(User.class.getSimpleName()).getMessage()
+                                    new NotFoundException(ID, User.class.getSimpleName()).getMessage()
                                 )
                                 .build()
                         )

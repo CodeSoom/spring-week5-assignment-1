@@ -165,7 +165,7 @@ public class UserWebTest {
                                 .method(RequestMethod.DELETE.toString())
                                 .url("/user/" + requestParameter)
                                 .error(
-                                    new NotFoundException(User.class.getSimpleName()).getMessage()
+                                    new NotFoundException(requestParameter, User.class.getSimpleName()).getMessage()
                                 ).build()
                         )
                     ));
