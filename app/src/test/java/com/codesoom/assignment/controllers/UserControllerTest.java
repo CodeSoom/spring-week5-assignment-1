@@ -261,6 +261,17 @@ public class UserControllerTest {
     @DisplayName("DELETE /users/{id} 요청은")
     class Describe_deleteUserWithId {
 
+        private User fixtureUser;
+
+        @BeforeEach
+        void setUp() {
+            fixtureUser = User.builder()
+                .name("name")
+                .email("email")
+                .password("password")
+                .build();
+        }
+
         @Nested
         @DisplayName("회원을 찾을 수 있는 경우")
         class Context_findUser {
@@ -269,11 +280,7 @@ public class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                User user = userRepository.save(User.builder()
-                    .name("name")
-                    .email("email")
-                    .password("password")
-                    .build());
+                User user = userRepository.save(fixtureUser);
 
                 Long id = user.getId();
 
@@ -301,11 +308,7 @@ public class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                User user = userRepository.save(User.builder()
-                    .name("name")
-                    .email("email")
-                    .password("password")
-                    .build());
+                User user = userRepository.save(fixtureUser);
 
                 Long id = user.getId();
 
