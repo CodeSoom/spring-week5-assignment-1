@@ -19,13 +19,6 @@ public class UserTest {
     }
 
     @Test
-    void createUser() {
-        assertThat(user.getName()).isEqualTo("name");
-        assertThat(user.getEmail()).isEqualTo("email");
-        assertThat(user.getPassword()).isEqualTo("password");
-    }
-
-    @Test
     void changeInfo() {
         User source = User.builder()
             .name("name2")
