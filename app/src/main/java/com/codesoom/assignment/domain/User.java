@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.UserData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -45,6 +46,12 @@ public class User {
 
     public String password() {
         return password;
+    }
+
+    public void modifyUser(UserData userData) {
+        this.name = userData.getName();
+        this.email = userData.getEmail();
+        this.password = userData.getPassword();
     }
 }
 

@@ -42,4 +42,11 @@ public class UserService {
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
 
+    public UserData modifyUser(Long id, UserData userData) {
+        User user = getUser(id);
+        user.modifyUser(userData);
+        return new UserData(userRepository.save(user));
+    }
+
+
 }

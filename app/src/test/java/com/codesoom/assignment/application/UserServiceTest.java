@@ -25,6 +25,7 @@ class UserServiceTest {
 
     private UserData userData;
     private UserData createUser;
+    private UserData modifyUserData;
     private Long createUserId;
 
     @BeforeEach
@@ -39,6 +40,12 @@ class UserServiceTest {
 
         createUser = userService.createUser(userData);
         createUserId = createUser.getId();
+
+        modifyUserData = UserData.builder()
+                .name(CHANGE_NAME)
+                .email(CHANGE_EMAIL)
+                .password(CHANGE_PASSWORD)
+                .build();
     }
 
     @Test
@@ -83,5 +90,25 @@ class UserServiceTest {
         // then
         assertThat(users.size()).isNotZero();
         assertThat(users.get(0).getName()).isEqualTo(NAME);
+    }
+
+    @Test
+    @DisplayName("유저 수정")
+    void modifyUser() {
+        // when
+        UserData user = userService.modifyUser(createUserId, modifyUserData);
+
+        // then
+        assertThat(user.getName()).isEqualTo(CHANGE_NAME);
+        assertThat(user.getEmail()).isEqualTo(CHANGE_EMAIL);
+    }
+
+    @Test
+    @DisplayName("유저 수정 실패 - 존재하지 않는 ID")
+    void notExistsUserModifyFail() {
+        // when
+        // then
+        assertThatThrownBy(() -> userService.modifyUser(NOT_EXISTS_ID, modifyUserData))
+                .isInstanceOf(UserNotFoundException.class);
     }
 }

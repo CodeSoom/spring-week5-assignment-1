@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.dto.UserData;
@@ -16,9 +17,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.codesoom.assignment.constant.UserConstant.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,6 +37,7 @@ class UserControllerTest {
     private UserData userData;
     private UserData saveUserData;
     private UserData emptyUserData;
+    private UserData changeUserData;
 
     @BeforeEach
     void setup() {
@@ -45,6 +48,10 @@ class UserControllerTest {
 
         given(userService.selectUser(DEFAULT_ID)).willReturn(saveUserData);
         given(userService.selectUser(NOT_EXISTS_ID)).willThrow(new UserNotFoundException(NOT_EXISTS_ID));
+
+        given(userService.modifyUser(eq(DEFAULT_ID), any(UserData.class))).willReturn(changeUserData);
+        given(userService.modifyUser(eq(NOT_EXISTS_ID), any(UserData.class)))
+                .willThrow(new ProductNotFoundException(NOT_EXISTS_ID));
     }
 
     private void userDataSetup() {
@@ -65,6 +72,13 @@ class UserControllerTest {
                 .name("")
                 .email("")
                 .password("")
+                .build();
+
+        changeUserData = UserData.builder()
+                .id(DEFAULT_ID)
+                .name(CHANGE_NAME)
+                .email(CHANGE_EMAIL)
+                .password(CHANGE_PASSWORD)
                 .build();
     }
 
@@ -132,6 +146,47 @@ class UserControllerTest {
 
         // then
         .andExpect(status().isOk());
+    }
 
+
+    @Test
+    @DisplayName("회원 수정")
+    void modifyUser() throws Exception {
+        // when
+        mockMvc.perform(patch("/users/" + DEFAULT_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(changeUserData)))
+
+        // then
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString(CHANGE_NAME)));
+
+    }
+
+    @Test
+    @DisplayName("회원 수정 실패 - 존재하지 않는 ID")
+    void notExistsUserModifyFail() throws Exception {
+        // when
+        mockMvc.perform(patch("/users/" + NOT_EXISTS_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(changeUserData)))
+
+        // then
+        .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("회원 수정 실패 - 비 정상적인 변경하려는 값 전달")
+    void userModifyFailWithEmptyData() throws Exception {
+        // when
+        mockMvc.perform(patch("/users/" + NOT_EXISTS_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(emptyUserData)))
+
+        // then
+        .andExpect(status().isBadRequest());
     }
 }

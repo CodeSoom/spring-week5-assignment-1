@@ -33,4 +33,10 @@ public class UserController {
     public List<UserData> selectUsers() {
         return userService.selectUsers();
     }
+
+    @PatchMapping("/{id}")
+    public UserData modifyUser(@PathVariable Long id, @RequestBody @Valid UserData userData) {
+        return userService.modifyUser(id, userData);
+    }
+
 }
