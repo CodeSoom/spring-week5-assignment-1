@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import static com.codesoom.assignment.constant.UserConstant.*;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -32,6 +34,7 @@ class UserControllerTest {
     private ObjectMapper objectMapper;
     private UserData userData;
     private UserData saveUserData;
+    private UserData emptyUserData;
 
     @BeforeEach
     void setup() {
@@ -39,6 +42,9 @@ class UserControllerTest {
         userDataSetup();
 
         given(userService.createUser(any(UserData.class))).willReturn(saveUserData);
+
+        given(userService.selectUser(DEFAULT_ID)).willReturn(saveUserData);
+        given(userService.selectUser(NOT_EXISTS_ID)).willThrow(new UserNotFoundException(NOT_EXISTS_ID));
     }
 
     private void userDataSetup() {
@@ -54,6 +60,12 @@ class UserControllerTest {
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
+
+        emptyUserData = UserData.builder()
+                .name("")
+                .email("")
+                .password("")
+                .build();
     }
 
     @Test
@@ -68,6 +80,58 @@ class UserControllerTest {
         // then
         .andExpect(status().isCreated())
         .andExpect(content().string(containsString(NAME)));
+
+    }
+
+    @Test
+    @DisplayName("회원 생성 실패")
+    void createUserFail() throws Exception {
+        // when
+        mockMvc.perform(post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(emptyUserData)))
+
+        // then
+        .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @DisplayName("회원 검색")
+    void selectUser() throws Exception {
+        // when
+        mockMvc.perform(get("/users/" + DEFAULT_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+        // then
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString(NAME)));
+    }
+
+    @Test
+    @DisplayName("회원 검색 실패")
+    void selectUserFail() throws Exception {
+        // when
+        mockMvc.perform(get("/users/" + NOT_EXISTS_ID)
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+        // then
+        .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @DisplayName("회원 리스트 검색")
+    void selectUsers() throws Exception {
+        // when
+        mockMvc.perform(get("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON))
+
+        // then
+        .andExpect(status().isOk());
 
     }
 }

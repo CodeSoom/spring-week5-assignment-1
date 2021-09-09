@@ -1,11 +1,13 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.domain.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -27,5 +29,17 @@ public class UserService {
         return new UserData(userRepository.save(user));
     }
 
+    public UserData selectUser(Long id) {
+        return new UserData(getUser(id));
+    }
+
+    public List<UserData> selectUsers() {
+        return UserData.ofList(userRepository.findAll());
+    }
+
+    private User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+    }
 
 }

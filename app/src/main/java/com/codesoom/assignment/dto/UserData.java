@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Setter
 @Getter
@@ -28,5 +30,11 @@ public class UserData {
 
     public UserData(User user) {
         this(user.id(), user.name(), user.email(), user.password());
+    }
+
+    public static List<UserData> ofList(List<User> users) {
+        return users.stream()
+                .map(UserData::new)
+                .collect(Collectors.toList());
     }
 }
