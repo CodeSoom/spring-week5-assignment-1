@@ -152,7 +152,6 @@ class UserControllerTest {
 
             updateDto = UserUpdateDto.builder()
                     .name("new name")
-                    .email("new@email.com")
                     .password("newpassword")
                     .build();
         }
@@ -165,8 +164,8 @@ class UserControllerTest {
             void returnsUpdatedUser() throws Exception {
                 User expectedUpdatedUser = User.builder()
                         .id(createdUser.getId())
+                        .email(createdUser.getEmail())
                         .name(updateDto.getName())
-                        .email(updateDto.getEmail())
                         .password(updateDto.getPassword())
                         .build();
 
@@ -198,7 +197,6 @@ class UserControllerTest {
             @ValueSource(strings = {" ", ""})
             void responsesWith400Error(String name) throws Exception {
                 UserUpdateDto invalidNameUserUpdateDto = UserUpdateDto.builder()
-                        .email("valid@email.com")
                         .password("valid-password")
                         .name(name)
                         .build();
@@ -211,33 +209,13 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("When the email is invalid")
-        class WhenEmailIsInvalid {
-            @ParameterizedTest(name = "responses with 400 error with the email \"{0}\"")
-            @ValueSource(strings = {" ", "", "no-at-sign"})
-            void responsesWith400Error(String email) throws Exception {
-                UserUpdateDto invalidEmailUserUpdateDto = UserUpdateDto.builder()
-                        .email(email)
-                        .password("valid-password")
-                        .name("valid-name")
-                        .build();
-
-                mockMvc.perform(patch("/users/" + createdUser.getId())
-                                .content(objectMapper.writeValueAsString(invalidEmailUserUpdateDto))
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest());
-            }
-        }
-
-        @Nested
         @DisplayName("When the password is invalid")
         class WhenPasswordIsInvalid {
             @ParameterizedTest(name = "responses with 400 error with the password \"{0}\"")
             @ValueSource(strings = {" ", ""})
             void responsesWith400Error(String password) throws Exception {
                 UserUpdateDto invalidPasswordUserUpdateDto = UserUpdateDto.builder()
-                        .email(password)
-                        .password("valid-password")
+                        .password(password)
                         .name("valid-name")
                         .build();
 

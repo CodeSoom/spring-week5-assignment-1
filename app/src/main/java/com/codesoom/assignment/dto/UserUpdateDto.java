@@ -1,26 +1,23 @@
 package com.codesoom.assignment.dto;
 
-import com.codesoom.assignment.controllers.NullOrNoEmptyString;
 import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.NotBlank;
+
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class UserUpdateDto {
-    @NullOrNoEmptyString
-    @Mapping("email")
-    private String email;
-
-    @NullOrNoEmptyString
+    @NotBlank
     @Mapping("name")
     private String name;
 
-    @NullOrNoEmptyString
+    @NotBlank
     @Mapping("password")
     private String password;
 }

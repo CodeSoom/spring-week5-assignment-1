@@ -49,7 +49,6 @@ class UserServiceTest {
 
         newUserDtoFixture = UserUpdateDto.builder()
                 .name("단단")
-                .email("dada@gmail.com")
                 .password("dadadada")
                 .build();
 
@@ -95,8 +94,8 @@ class UserServiceTest {
                 verify(userRepository).findById(EXISTENT_ID);
 
                 assertThat(updatedUser.getId()).isEqualTo(userFixture.getId());
+                assertThat(updatedUser.getEmail()).isEqualTo(userFixture.getEmail());
                 assertThat(updatedUser.getName()).isEqualTo(newUserDtoFixture.getName());
-                assertThat(updatedUser.getEmail()).isEqualTo(newUserDtoFixture.getEmail());
                 assertThat(updatedUser.getPassword()).isEqualTo(newUserDtoFixture.getPassword());
             }
         }

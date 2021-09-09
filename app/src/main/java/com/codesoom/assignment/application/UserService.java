@@ -41,7 +41,6 @@ public class UserService {
         User user = findUserById(id);
 
         user.update(
-                userDto.getEmail(),
                 userDto.getName(),
                 userDto.getPassword()
         );
