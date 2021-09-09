@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.domain;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -14,8 +14,7 @@ import javax.validation.constraints.PositiveOrZero;
 @Getter
 @Setter
 @Entity
-@AllArgsConstructor
-@NoArgsConstructor
+@Builder
 public class CatToy {
     @Id
     @GeneratedValue
@@ -31,13 +30,6 @@ public class CatToy {
     private Integer price;
 
     private String imageUrl;
-
-    public CatToy(String name, String maker, int price, String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
 
     public void update(CatToy catToy) {
         this.name = catToy.getName();

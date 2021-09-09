@@ -28,9 +28,14 @@ class ProductServiceTest {
     private ProductRepository productRepository;
 
     private CatToy givenCatToy;
-    private List<CatToy> givenCatToyList = new ArrayList<>();
-    private static final Long EXIST_ID = 1L;
-    private static final Long NOT_EXIST_ID = 100L;
+    private final List<CatToy> givenCatToyList = new ArrayList<>();
+    private static Long EXIST_ID;
+    private static Long NOT_EXIST_ID;
+
+    private static final String NAME = "Test Name";
+    private static final String MAKER = "Test Maker";
+    private static final int PRICE = 10000;
+    private static final String IMAGE_URL = "test Image Url";
 
     @BeforeEach
     public void setUp() {
@@ -42,14 +47,16 @@ class ProductServiceTest {
     }
 
     void setUpFixtures() {
-        givenCatToy = new CatToy(
-                EXIST_ID,
-                "Test Name",
-                "Test Maker",
-                10000,
-                "test Image Url"
-        );
+        givenCatToy = CatToy.builder()
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .imageUrl(IMAGE_URL)
+                .build();
+
         givenCatToyList.add(givenCatToy);
+        EXIST_ID = givenCatToy.getId();
+        NOT_EXIST_ID = EXIST_ID + 100L;
 
         given(productRepository.findAll()).willReturn(givenCatToyList);
         given(productRepository.findById(EXIST_ID)).willReturn(Optional.of(givenCatToy));
@@ -73,7 +80,7 @@ class ProductServiceTest {
         void getCatToys() {
             List<CatToy> catToys = productService.getCatToys();
 
-            Assertions.assertThat(catToys).hasSize(1);
+            Assertions.assertThat(catToys.size()).isEqualTo(givenCatToyList.size());
         }
     }
 
@@ -99,12 +106,12 @@ class ProductServiceTest {
     @Nested
     @DisplayName("addCatToy 메서드는")
     class addCatToy {
-        CatToy source = new CatToy(
-                "Test Name2",
-                "Test Maker2",
-                20000,
-                "test Image Url2"
-        );
+        CatToy source = CatToy.builder()
+                .name("Test Name2")
+                .maker("Test Maker2")
+                .price(20000)
+                .imageUrl("test Image Url2")
+                .build();
 
         @Test
         @DisplayName("요청된 장난감을 저장하고 반환한다.")
@@ -121,12 +128,12 @@ class ProductServiceTest {
     @Nested
     @DisplayName("updateCatToy 메서드는")
     class updateCatToy {
-        CatToy source = new CatToy(
-                "Test Name2",
-                "Test Maker2",
-                20000,
-                "test Image Url2"
-        );
+        CatToy source = CatToy.builder()
+                .name("Test Name2")
+                .maker("Test Maker2")
+                .price(20000)
+                .imageUrl("test Image Url2")
+                .build();
 
         @Test
         @DisplayName("존재하는 식별자일 때 요청된 장난감을 수정한다.")
@@ -156,6 +163,8 @@ class ProductServiceTest {
         @DisplayName("존재하는 식별자일 때 요청된 장난감을 삭제한다.")
         void deleteCatToyByExistedId() {
             productService.deleteCatToyById(EXIST_ID);
+//            assertThatThrownBy(() -> productService.findCatToyById(EXIST_ID))
+//                    .isInstanceOf(CatToyNotFoundException.class);
         }
 
         @Test

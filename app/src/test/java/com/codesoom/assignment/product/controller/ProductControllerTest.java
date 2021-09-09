@@ -2,6 +2,7 @@ package com.codesoom.assignment.product.controller;
 
 import com.codesoom.assignment.product.domain.CatToy;
 import com.codesoom.assignment.product.service.ProductService;
+import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -46,7 +47,14 @@ class ProductControllerTest {
 
     @BeforeEach
     public void setUp() {
-        CatToy catToy = new CatToy(ID, NAME, MAKER, PRICE, IMAGE_URL);
+        CatToy catToy = CatToy.builder()
+                .id(ID)
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .imageUrl(IMAGE_URL)
+                .build();
+
         List<CatToy> catToyList = new ArrayList<>();
         catToyList.add(catToy);
 

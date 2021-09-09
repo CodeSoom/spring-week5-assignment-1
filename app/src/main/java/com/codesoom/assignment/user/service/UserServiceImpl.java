@@ -20,14 +20,19 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User updateUser(Long id, User user) {
-        User foundUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User foundUser = userRepository
+                .findById(id)
+                .orElseThrow(UserNotFoundException::new);
+
         foundUser.change(user);
         return foundUser;
     }
 
     @Override
     public void deleteUserById(Long id) {
-        User user = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        User user = userRepository
+                .findById(id)
+                .orElseThrow(UserNotFoundException::new);
         userRepository.deleteById(id);
     }
 }

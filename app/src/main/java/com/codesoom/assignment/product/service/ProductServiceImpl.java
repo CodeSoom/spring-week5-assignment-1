@@ -21,7 +21,9 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public CatToy findCatToyById(Long id) {
-        return catToyRepository.findById(id).orElseThrow(CatToyNotFoundException::new);
+        return catToyRepository
+                .findById(id)
+                .orElseThrow(CatToyNotFoundException::new);
     }
 
     public CatToy addCatToy(CatToy catToy) {
@@ -35,7 +37,10 @@ public class ProductServiceImpl implements ProductService {
     }
 
     public CatToy deleteCatToyById(Long id) {
-        CatToy foundCatToy = catToyRepository.findById(id).orElseThrow(CatToyNotFoundException::new);
+        CatToy foundCatToy = catToyRepository
+                .findById(id)
+                .orElseThrow(CatToyNotFoundException::new);
+
         catToyRepository.deleteById(id);
         return foundCatToy;
     }

@@ -18,7 +18,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * CatToy에 대한 HTTP 요청 처리를 담당한다. 
+ * Product에 대한 HTTP 요청 처리를 담당한다.
  */
 @RestController
 @CrossOrigin
@@ -32,8 +32,8 @@ public class ProductController {
     }
 
     /**
-     * CatToy 목록을 반환한다.
-     * @return CatToy 목록
+     * product 목록을 반환한다.
+     * @return product 목록
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
@@ -42,9 +42,9 @@ public class ProductController {
     }
 
     /**
-     * 사용자가 요청한 id와 동일한 식별자를 가진 CatToy를 반환한다.
-     * @param id 요청한 CatToy 식별자
-     * @return CatToy 객체
+     * 사용자가 요청한 id와 동일한 식별자를 가진 product를 반환한다.
+     * @param id 요청한 product 식별자
+     * @return product 객체
      */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -53,9 +53,9 @@ public class ProductController {
     }
 
     /**
-     * 사용자가 요청한 CatToy를 추가한다.
-     * @param catToy 요청한 추가 대상 CatToy
-     * @return 추가된 CatToy
+     * 사용자가 요청한 product를 추가한다.
+     * @param catToy 요청한 추가 대상 product
+     * @return 추가된 product
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -64,10 +64,10 @@ public class ProductController {
     }
 
     /**
-     * 사용자가 요청한 CatToy를 수정한다.
-     * @param id 요청한 CatToy 식별자
-     * @param catToy 수정할 CatToy
-     * @return 수정된 CatToy
+     * 사용자가 요청한 product를 수정한다.
+     * @param id 요청한 product 식별자
+     * @param catToy 수정할 product
+     * @return 수정된 product
      */
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
@@ -76,8 +76,8 @@ public class ProductController {
     }
 
     /**
-     * 사용자가 요청한 CatToy를 삭제한다.
-     * @param id 삭제할 CatToy 식별자
+     * 사용자가 요청한 product 삭제한다.
+     * @param id 삭제할 product 식별자
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
