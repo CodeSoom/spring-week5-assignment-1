@@ -9,6 +9,9 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 사용자 생성 정보를 표현합니다
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor

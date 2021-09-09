@@ -7,6 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
+/**
+ * 사용자 데이터를 다루는 기본 명령을 정의합니다
+ */
 @Primary
 public interface JpaUserRepository
         extends UserRepository, CrudRepository<User, Long> {
