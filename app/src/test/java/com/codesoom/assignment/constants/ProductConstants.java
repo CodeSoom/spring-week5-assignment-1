@@ -23,5 +23,5 @@ public interface ProductConstants {
         .build();
     final ProductData PRODUCT_DATA = new ProductData(null, NAME, MAKER, PRICE, IMAGE_URL);
     final List<Product> PRODUCT_LIST = Lists.newArrayList(PRODUCT);
-    final List<Product> EMPTY_LIST = Lists.newArrayList();
+    final String PRODUCT_ENDPOINT = "/products/";
 }

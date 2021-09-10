@@ -1,35 +1,37 @@
 package com.codesoom.assignment.web;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_DATA;
-import static com.codesoom.assignment.constants.ProductConstants.EMPTY_LIST;
+import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_LIST;
+import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_ENDPOINT;
 
+import java.util.List;
+
+import com.codesoom.assignment.controllers.ProductController;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.utils.Parser;
-import com.google.common.collect.Lists;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.stubbing.OngoingStubbing;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 @DisplayName("Product 리소스")
-@SpringBootTest
-@ExtendWith(SpringExtension.class)
-@AutoConfigureMockMvc
+@WebMvcTest(ProductController.class)
 public class ProductWebTest {
     @Autowired
     private MockMvc mockMvc;
@@ -37,16 +39,19 @@ public class ProductWebTest {
     private String requestBody;
     private Long requestParameter;
 
+    @MockBean
+    private ProductController productController;
+
     private ResultActions subjectGetProduct() throws Exception {
         return mockMvc.perform(
-            get("/products")
+            get(PRODUCT_ENDPOINT)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         );
     }
 
     private ResultActions subjectPostProduct() throws Exception {
         return mockMvc.perform(
-            post("/products")
+            post(PRODUCT_ENDPOINT)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)
@@ -55,59 +60,41 @@ public class ProductWebTest {
 
     private ResultActions subjectDeleteProduct() throws Exception {
         return mockMvc.perform(
-            delete("/products/" + requestParameter)
+            delete(PRODUCT_ENDPOINT + requestParameter)
         );
     }
 
     @Nested
     @DisplayName("전체 목록 조회 엔드포인트는")
-    class Describe_get_products {
-
-        @Nested
-        @DisplayName("저장된 Product가 없다면")
-        class Context_product_empty {
-            @Test
-            @DisplayName("빈 목록을 리턴한다.")
-            void it_returns_a_empty_list() throws Exception {
-                subjectGetProduct()
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(
-                        Parser.toJson(EMPTY_LIST)
-                    ));
-            }
+    public class Describe_get_products {
+        private OngoingStubbing<List<Product>> mockList() {
+            return when(productController.list());
         }
 
-        @Nested
-        @DisplayName("저장된 Product가 있다면")
-        class Context_product_exist {
-            private Product product;
+        private ProductController verifyList(final int invokeCounts) {
+            return verify(productController, times(invokeCounts));
+        }
 
-            @BeforeEach
-            void beforeEach() throws Exception {
-                requestBody = Parser.toJson(PRODUCT_DATA);
-                product = Parser.toObject(
-                    subjectPostProduct()
-                        .andReturn()
-                        .getResponse()
-                        .getContentAsString(), Product.class
-                );
-                requestParameter = product.getId();
-            }
+        @BeforeEach
+        private void beforeEach() {
+            mockList()
+                .thenReturn(PRODUCT_LIST);
+        }
 
-            @AfterEach
-            void afterEach() throws Exception {
-                subjectDeleteProduct();
-            }
+        @AfterEach
+        private void afterEach() {
+            verifyList(1)
+                .list();
+        }
 
-            @Test
-            @DisplayName("Product 목록을 리턴한다.")
-            void it_returns_a_product_list() throws Exception {
-                subjectGetProduct()
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(
-                        Parser.toJson(Lists.newArrayList(product))
-                    ));
-            }
+        @Test
+        @DisplayName("ProductController list 메서드의 리턴값을 JSON 문자열로 변환하여 리턴한다.")
+        public void it_returns_a_product_list_json_string() throws Exception {
+            subjectGetProduct()
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                    Parser.toJson(PRODUCT_LIST)
+                ));
         }
     }
 }
