@@ -12,12 +12,31 @@ public interface ProductService {
     List<Product> getProducts();
 
     /**
-     * 식별자와 일치하
-     * @param id
-     * @return
+     * 식별자와 일치하는 제품을 반환한다
+     * @param id 제품 식별자
+     * @return 제품
      */
     Product findProductById(Long id);
+
+    /**
+     * 요청된 제품을 받아 추가하고, 추가된 제품을 반환한다.
+     * @param product 추가할 제품
+     * @return 추가된 제품
+     */
     Product addProduct(Product product);
+
+    /**
+     * 요청된 식별자와 일치하는 제품을 찾아 수정한다.
+     * @param id 교체할 제품 식별자
+     * @param product 새로 교체할 제품
+     * @return 교체된 제품
+     */
     Product updateProduct(Long id, Product product);
+
+    /**
+     * 요청된 식별자와 일치하는 제품을 찾아 삭제한다.
+     * @param id 제품 식별자
+     * @return 삭제된 제품
+     */
     Product deleteProductById(Long id);
 }
