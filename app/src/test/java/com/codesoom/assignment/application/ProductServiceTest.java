@@ -19,8 +19,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_LIST;
-import static com.codesoom.assignment.constants.ProductConstants.EMPTY_LIST;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -36,56 +36,40 @@ class ProductServiceTest {
 
     @Nested
     @DisplayName("getProducts 메서드는")
-    class Describe_getProducts {
-        ListAssert<Product> subject() {
+    public class Describe_getProducts {
+        private ListAssert<Product> subject() {
             return assertThat(productService.getProducts());
         }
 
-        OngoingStubbing<List<Product>> mockSubject() {
+        private OngoingStubbing<List<Product>> mockFindAll() {
             return when(productRepository.findAll());
         }
 
+        private ProductRepository verifyFindAll(final int invokeCounts) {
+            return verify(productRepository, times(invokeCounts));
+        }
+
+        @BeforeEach
+        public void beforeEach() {
+            mockFindAll()
+                .thenReturn(PRODUCT_LIST);
+        }
+
         @AfterEach
-        void afterEach() {
-            verify(productRepository).findAll();
+        public void afterEach() {
+            verifyFindAll(1)
+                .findAll();
         }
 
-        @Nested
-        @DisplayName("ProductRepository findAll 메서드의 리턴값을")
-        class Context_product_exist {
-            @BeforeEach
-            void beforeEach() {
-                mockSubject()
-                    .thenReturn(PRODUCT_LIST);
-            }
-
-            @Test
-            @DisplayName("그대로 리턴한다.")
-            void it_returns_a_product_list() {
-                subject()
-                    .matches(
-                        outputList -> Arrays.deepEquals(
-                            PRODUCT_LIST.toArray(), outputList.toArray()
-                        )
-                    );
-            }
+        @Test
+        @DisplayName("ProductRepository findAll 메서드의 리턴값을 리턴한다.")
+        public void it_returns_a_product_list() {
+            subject()
+                .matches(
+                    outputList -> Arrays.deepEquals(
+                        PRODUCT_LIST.toArray(), outputList.toArray()
+                    )
+                );
         }
-
-        // @Nested
-        // @DisplayName("저장된 Product가 없다면")
-        // class Context_product_empty {
-        //     @BeforeEach
-        //     void beforeEach() {
-        //         mockSubject()
-        //             .thenReturn(EMPTY_LIST);
-        //     }
-
-        //     @Test
-        //     @DisplayName("빈 목록을 리턴한다.")
-        //     void it_returns_a_empty_list() {
-        //         subject()
-        //             .isEmpty();
-        //     }
-        // }
     }
 }
