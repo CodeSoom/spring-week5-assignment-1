@@ -94,7 +94,13 @@ public class UserControllerTest {
     @DisplayName("PATCH /users/{id} 요청은")
     class Describe_patchUsersWithId {
 
+        @BeforeEach
+        void setUp() {
+            userRepository.deleteAll();
+        }
+
         private UpdateUserDto updateUserDto;
+        private Long id;
 
         @Nested
         @DisplayName("유효한 유저 업데이트 DTO가 주어진다면")
@@ -113,26 +119,22 @@ public class UserControllerTest {
             @DisplayName("사용자를 찾을 수 있는 경우")
             class Context_canFindUser {
 
-                private Long foundUserId;
-
                 @BeforeEach
                 void setUp() {
                     User createdUser = userRepository.save(
                         updateUserDto.toEntity()
                     );
 
-                    Long id = createdUser.getId();
+                    id = createdUser.getId();
                     assertThat(userRepository.existsById(id))
                         .isTrue();
-
-                    foundUserId = id;
                 }
 
                 @Test
                 @DisplayName("수정된 유저를 리턴하고 200을 응답한다")
                 void it_returns_updated_user_and_response_200() throws Exception {
                     mockMvc.perform(
-                        patch("/users/" + foundUserId)
+                        patch("/users/" + id)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(updateUserDto))
                     )
@@ -145,28 +147,20 @@ public class UserControllerTest {
             @DisplayName("사용자를 찾을 수 없는 경우")
             class Context_notFoundUser {
 
-                private Long notFoundUserId;
-
                 @BeforeEach
                 void setUp() {
-                    User user = userRepository.save(
-                        updateUserDto.toEntity()
-                    );
-
                     userRepository.deleteAll();
 
-                    Long id = user.getId();
+                    id = 9999L;
                     assertThat(userRepository.existsById(id))
                         .isFalse();
-
-                    notFoundUserId = id;
                 }
 
                 @Test
                 @DisplayName("404를 응답한다")
                 void it_response_404() throws Exception {
                     mockMvc.perform(
-                        patch("/users/" + notFoundUserId)
+                        patch("/users/" + id)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(updateUserDto))
                     )
@@ -191,26 +185,22 @@ public class UserControllerTest {
             @DisplayName("사용자를 찾을 수 있는 경우")
             class Context_canFindUser {
 
-                private Long foundUserId;
-
                 @BeforeEach
                 void setUp() {
                     User createdUser = userRepository.save(
                         updateUserDto.toEntity()
                     );
 
-                    Long id = createdUser.getId();
+                    id = createdUser.getId();
                     assertThat(userRepository.existsById(id))
                         .isTrue();
-
-                    foundUserId = id;
                 }
 
                 @Test
                 @DisplayName("400을 응답한다")
                 void it_returns_updated_user_and_response_200() throws Exception {
                     mockMvc.perform(
-                        patch("/users/" + foundUserId)
+                        patch("/users/" + id)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(updateUserDto))
                     )
@@ -222,28 +212,18 @@ public class UserControllerTest {
             @DisplayName("사용자를 찾을 수 없는 경우")
             class Context_notFoundUser {
 
-                private Long notFoundUserId;
-
                 @BeforeEach
                 void setUp() {
-                    User user = userRepository.save(
-                        updateUserDto.toEntity()
-                    );
-
-                    userRepository.deleteAll();
-
-                    Long id = user.getId();
+                    id = 9999L;
                     assertThat(userRepository.existsById(id))
                         .isFalse();
-
-                    notFoundUserId = id;
                 }
 
                 @Test
                 @DisplayName("400를 응답한다")
                 void it_response_404() throws Exception {
                     mockMvc.perform(
-                        patch("/users/" + notFoundUserId)
+                        patch("/users/" + id)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(updateUserDto))
                     )
@@ -257,40 +237,37 @@ public class UserControllerTest {
     @DisplayName("DELETE /users/{id} 요청은")
     class Describe_deleteUserWithId {
 
-        private User fixtureUser;
-
         @BeforeEach
         void setUp() {
-            fixtureUser = User.builder()
-                .name("name")
-                .email("email")
-                .password("password")
-                .build();
+            userRepository.deleteAll();
         }
+
+        private Long id;
 
         @Nested
         @DisplayName("회원을 찾을 수 있는 경우")
         class Context_findUser {
 
-            private Long findUserId;
-
             @BeforeEach
             void setUp() {
+                User fixtureUser = User.builder()
+                    .name("name")
+                    .email("email")
+                    .password("password")
+                    .build();
                 User user = userRepository.save(fixtureUser);
 
-                Long id = user.getId();
+                id = user.getId();
 
                 assertThat(userRepository.existsById(id))
                     .isTrue();
-
-                findUserId = id;
             }
 
             @Test
             @DisplayName("204를 응답한다")
             void it_response_204() throws Exception {
                 mockMvc.perform(
-                    delete("/users/" + findUserId)
+                    delete("/users/" + id)
                 )
                     .andExpect(status().isNoContent());
             }
@@ -300,27 +277,19 @@ public class UserControllerTest {
         @DisplayName("회원을 찾을 수 없는 경우")
         class Context_notFoundUser {
 
-            private Long notFoundUserId;
-
             @BeforeEach
             void setUp() {
-                User user = userRepository.save(fixtureUser);
-
-                Long id = user.getId();
-
-                userRepository.deleteAll();
+                id = 9999L;
 
                 assertThat(userRepository.existsById(id))
                     .isFalse();
-
-                notFoundUserId = id;
             }
 
             @Test
             @DisplayName("404를 응답한다")
             void it_response_404() throws Exception {
                 mockMvc.perform(
-                    delete("/users/" + notFoundUserId)
+                    delete("/users/" + id)
                 )
                     .andExpect(status().isNotFound());
             }
