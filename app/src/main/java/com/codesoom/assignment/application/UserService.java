@@ -3,12 +3,14 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 /**
  * 회원 관리 담당.
  */
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
