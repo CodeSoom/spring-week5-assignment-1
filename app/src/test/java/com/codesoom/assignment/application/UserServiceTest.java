@@ -3,12 +3,17 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -18,10 +23,26 @@ class UserServiceTest {
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
 
+    public static final long VALID_ID = 1L;
+    public static final long INVALID_ID = 100L;
+
     @BeforeEach
     void setUpAll() {
+
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+
         userService = new UserService(mapper, userRepository);
+
+        User user1 = User.builder()
+                .id(VALID_ID)
+                .name("name1")
+                .email("email1")
+                .password("password1")
+                .build();
+
+        //getUser
+        given(userRepository.findById(VALID_ID)).willReturn(Optional.of(user1));
+        given(userRepository.findById(INVALID_ID)).willThrow(UserNotFoundException.class);
 
         given(userRepository.save(any(User.class))).will(invocation -> {
             User user = invocation.getArgument(0);
@@ -33,27 +54,158 @@ class UserServiceTest {
         });
     }
 
+    @Nested
+    class Describe_createUser {
 
+        @Test
+        void it_returns_a_cretaed_user() {
+            //Arrange
+            String name = "name";
+            String email = "email";
+            String password = "password";
+            UserData source = UserData.builder()
+                    .name(name)
+                    .email(email)
+                    .password(password)
+                    .build();
 
-    @Test
-    void createUser() {
-        //Arrange
-        String name = "name";
-        String email = "email";
-        String password = "password";
-        UserData source = UserData.builder()
-                .name(name)
-                .email(email)
-                .password(password)
+            //Act
+            UserData userData = userService.createUser(source);
+
+            //Assert
+            verify(userRepository).save(any(User.class));
+
+            assertThat(userData.getName()).isEqualTo(name);
+            assertThat(userData.getEmail()).isEqualTo(email);
+            assertThat(userData.getPassword()).isEqualTo(password);
+        }
+    }
+
+    @Nested
+    class Describe_getUser{
+        Long id;
+
+        @Nested
+        class Context_with_exsisted_id{
+
+            @BeforeEach
+            void setUp() {
+                id = VALID_ID;
+            }
+
+            @Test
+            void it_returns_an_user() {
+                User foundUser = userService.getUser(id);
+
+                assertThat(foundUser.getName()).isEqualTo("name1");
+                assertThat(foundUser.getEmail()).isEqualTo("email1");
+            }
+        }
+
+        @Nested
+        class Context_with_not_exsisted_id{
+
+            @BeforeEach
+            void setUp() {
+                id = INVALID_ID;
+            }
+
+            @Test
+            void it_throws_UserNotFoundException() {
+                assertThatThrownBy(() -> assertThat(userService.getUser(id)))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    class Describe_updateUser{
+        Long id;
+
+        UserData updateParam = UserData.builder()
+                .name("updateName")
+                .email("updateEmail")
+                .password("updatePassword")
                 .build();
 
-        //Act
-        UserData userData = userService.createUser(source);
 
-        verify(userRepository).save(any(User.class));
+        @Nested
+        class Context_with_exsisted_id{
 
-        assertThat(userData.getName()).isEqualTo(name);
-        assertThat(userData.getEmail()).isEqualTo(email);
-        assertThat(userData.getPassword()).isEqualTo(password);
+            @BeforeEach
+            void setUp() {
+                id = VALID_ID;
+            }
+
+            @Test
+            void it_returns_an_updated_user() {
+                //Arrange
+                User foundUser = userService.getUser(id);
+
+                assertThat(foundUser.getId()).isEqualTo(VALID_ID);
+                assertThat(foundUser.getName()).isEqualTo("name1");
+
+                //Ast
+                UserData updatedUser = userService.updateUser(id, updateParam);
+
+                //Assert
+                assertThat(updatedUser.getId()).isEqualTo(VALID_ID);
+                assertThat(updatedUser.getName()).isEqualTo("updateName");
+            }
+        }
+
+        @Nested
+        class Context_with_not_exsisted_id{
+
+            @BeforeEach
+            void setUp() {
+                id = INVALID_ID;
+            }
+
+            @Test
+            void it_throws_UserNotFoundException() {
+                assertThatThrownBy(() -> assertThat(userService.updateUser(id, updateParam)))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
     }
+
+
+    @Nested
+    class Describe_deleteUser{
+        Long id;
+
+        @Nested
+        class Context_with_exsisted_id{
+
+            @BeforeEach
+            void setUp() {
+                id = VALID_ID;
+            }
+
+            @Test
+            void it_returns_an_user() {
+                UserData deletedUser = userService.deleteUser(id);
+
+                assertThat(deletedUser.getName()).isEqualTo("name1");
+                assertThat(deletedUser.getEmail()).isEqualTo("email1");
+            }
+        }
+
+        @Nested
+        class Context_with_not_exsisted_id{
+
+            @BeforeEach
+            void setUp() {
+                id = INVALID_ID;
+            }
+
+            @Test
+            void it_throws_UserNotFoundException() {
+                assertThatThrownBy(() -> assertThat(userService.deleteUser(id)))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
+
 }
