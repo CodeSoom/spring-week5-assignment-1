@@ -3,11 +3,11 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Transactional
@@ -31,7 +31,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product getProduct(Long id) {
 
-        return productRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException());
 
     }
 

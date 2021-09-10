@@ -11,30 +11,32 @@ import java.util.List;
 public interface ProductService {
 
     /**
-     * 상품들을 조회
-     * @return 상품 배열을 리턴합니다.
+     * 모든 상품 목록을 리턴합니다.
+     * @return 상품 목록
      */
     List<Product> getProducts();
 
     /**
-     * 상품 상세 조회
+     * 상품 하나를 조회해 리턴합니다.
      * @param id 조회할 상품의 id
-     * @return 상품을 리턴합니다.
+     * @return 조회된 상품
+     * @throws com.codesoom.assignment.dto.ProductNotFoundException 상품을 못찾을 경우
      */
     Product getProduct(Long id);
 
     /**
-     * 상품을 등록
+     * 상품을 저장소에 등록합니다.
      * @param source 등록할 상품의 내용
-     * @return 등록한 상품을 리턴합니다.
+     * @return 등록한 상품
      */
     Product createProduct(ProductData source);
 
     /**
-     * 상품 수정
+     * 상품의 내용을 수정합니다
      * @param id 수정할 상품의 id
      * @param source 상품의 수정 내용
-     * @return 수정한 상품을 리턴합니다.
+     * @return 수정한 상품
+     * @throws com.codesoom.assignment.dto.ProductNotFoundException 상품을 못찾을 경우
      */
     Product updateProduct(Long id, ProductData source);
 

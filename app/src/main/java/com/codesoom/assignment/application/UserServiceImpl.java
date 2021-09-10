@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean emailCheck(String mail) throws Exception {
+    public boolean emailCheck(String mail) throws UserEmailDuplicateException {
 
         List<User> users = userRepository.findAll();
 

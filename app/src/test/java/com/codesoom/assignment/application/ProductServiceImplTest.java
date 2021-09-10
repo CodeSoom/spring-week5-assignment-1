@@ -3,13 +3,14 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductNotFoundException;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
@@ -38,22 +39,27 @@ class ProductServiceImplTest {
         @DisplayName("상품들이 존재할 때")
         class Context_exist_products {
 
+            List<Product> productList = new ArrayList<>();
+
             @BeforeEach
             void setUp() {
 
-                productService.createProduct(ProductData.builder()
+                Product product1 = productService.createProduct(ProductData.builder()
                         .name("name1")
                         .maker("maker2")
                         .price(1000L)
                         .imgUrl("img1")
                         .build());
 
-                productService.createProduct(ProductData.builder()
+                Product product2 = productService.createProduct(ProductData.builder()
                         .name("name2")
                         .maker("maker2")
                         .price(2000L)
                         .imgUrl("img2")
                         .build());
+
+                productList.add(product1);
+                productList.add(product2);
 
             }
 
@@ -63,7 +69,7 @@ class ProductServiceImplTest {
 
                 List<Product> products = productService.getProducts();
 
-                assertThat(products).hasSize(2);
+                assertEquals(productList.size(), products.size());
 
             }
 
@@ -100,12 +106,7 @@ class ProductServiceImplTest {
             @BeforeEach
             void setUp() {
 
-                Product product = productService.createProduct(ProductData.builder()
-                        .name("name1")
-                        .maker("maker1")
-                        .price(1000L)
-                        .imgUrl("img1")
-                        .build());
+                Product product = createTestProduct();
 
                 VALID_ID = product.getId();
 
@@ -130,15 +131,23 @@ class ProductServiceImplTest {
         @DisplayName("찾는 상품이 없다면")
         class Context_exist_not_product {
 
-            Long INVALID_ID = 1000L;
+            Long INVALID_ID;
+
+            @BeforeEach
+            void setUp() {
+
+                Product product = createTestProduct();
+
+                INVALID_ID = productService.getProducts().size() + 9999L;
+            }
 
             @Test
-            @DisplayName("NoSuchElementException 예외를 던진다.")
+            @DisplayName("ProductNotFoundException 예외를 던진다.")
             void It_return_noSuchElementException() {
 
                 Assertions.assertThatThrownBy(() -> {
                     productService.getProduct(INVALID_ID);
-                }).isInstanceOf(NoSuchElementException.class);
+                }).isInstanceOf(ProductNotFoundException.class);
 
             }
 
@@ -159,12 +168,7 @@ class ProductServiceImplTest {
             @BeforeEach
             void setUp() {
 
-                productData = ProductData.builder()
-                        .name("name1")
-                        .maker("maker1")
-                        .price(1000L)
-                        .imgUrl("img1")
-                        .build();
+                productData = createTestProductData();
 
             }
 
@@ -199,12 +203,7 @@ class ProductServiceImplTest {
             @BeforeEach
             void setUp() {
 
-                Product product = productService.createProduct(ProductData.builder()
-                        .name("name1")
-                        .maker("maker1")
-                        .price(1000L)
-                        .imgUrl("img1")
-                        .build());
+                Product product = createTestProduct();
 
                 updateData = ProductData.builder()
                         .name("updateName")
@@ -236,15 +235,23 @@ class ProductServiceImplTest {
         @DisplayName("수정한 상품을 찾을 수 없다면")
         class Context_exist_not_updateProduct {
 
-            Long INVALID_ID = 1000L;
+            Long INVALID_ID;
+
+            @BeforeEach
+            void setUp() {
+
+                Product product = createTestProduct();
+
+                INVALID_ID = productService.getProducts().size() + 9999L;
+            }
 
             @Test
-            @DisplayName("NoSuchElementException 예외를 던진다.")
+            @DisplayName("ProductNotFoundException 예외를 던진다.")
             void It_return_noSuchElementException() {
 
                 Assertions.assertThatThrownBy(() -> {
                     productService.getProduct(INVALID_ID);
-                }).isInstanceOf(NoSuchElementException.class);
+                }).isInstanceOf(ProductNotFoundException.class);
 
             }
 
@@ -258,19 +265,14 @@ class ProductServiceImplTest {
 
         @Nested
         @DisplayName("삭제할 상품이 있다면")
-        class Context_exist_deleteProduct{
+        class Context_exist_deleteProduct {
 
             Long VALID_ID;
 
             @BeforeEach
             void setUp() {
 
-                Product product = productService.createProduct(ProductData.builder()
-                        .name("name1")
-                        .maker("maker1")
-                        .price(1000L)
-                        .imgUrl("img1")
-                        .build());
+                Product product = createTestProduct();
 
                 VALID_ID = product.getId();
 
@@ -295,6 +297,24 @@ class ProductServiceImplTest {
 
         productRepository.deleteAll();
 
+    }
+
+    private Product createTestProduct() {
+        return productService.createProduct(ProductData.builder()
+                .name("name1")
+                .maker("maker1")
+                .price(1000L)
+                .imgUrl("img1")
+                .build());
+    }
+
+    private ProductData createTestProductData() {
+        return ProductData.builder()
+                .name("name1")
+                .maker("maker1")
+                .price(1000L)
+                .imgUrl("img1")
+                .build();
     }
 
 }
