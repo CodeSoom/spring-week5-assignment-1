@@ -1,7 +1,7 @@
 package com.codesoom.assignment.product.service;
 
-import com.codesoom.assignment.common.exception.CatToyNotFoundException;
-import com.codesoom.assignment.product.domain.CatToy;
+import com.codesoom.assignment.common.exception.ProductFoundException;
+import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,38 +10,38 @@ import java.util.List;
 @Service
 public class ProductServiceImpl implements ProductService {
 
-    private final ProductRepository catToyRepository;
+    private final ProductRepository productRepository;
 
-    public ProductServiceImpl(ProductRepository catToyRepository) {
-        this.catToyRepository = catToyRepository;
+    public ProductServiceImpl(ProductRepository productRepository) {
+        this.productRepository = productRepository;
     }
 
-    public List<CatToy> getCatToys() {
-        return catToyRepository.findAll();
+    public List<Product> getProducts() {
+        return productRepository.findAll();
     }
 
-    public CatToy findCatToyById(Long id) {
-        return catToyRepository
+    public Product findProductById(Long id) {
+        return productRepository
                 .findById(id)
-                .orElseThrow(CatToyNotFoundException::new);
+                .orElseThrow(ProductFoundException::new);
     }
 
-    public CatToy addCatToy(CatToy catToy) {
-        return catToyRepository.save(catToy);
+    public Product addProduct(Product product) {
+        return productRepository.save(product);
     }
 
-    public CatToy updateCatToy(Long id, CatToy catToy) {
-        CatToy foundCatToy = findCatToyById(id);
-        foundCatToy.update(catToy);
-        return foundCatToy;
+    public Product updateProduct(Long id, Product product) {
+        Product foundProduct = findProductById(id);
+        foundProduct.update(product);
+        return foundProduct;
     }
 
-    public CatToy deleteCatToyById(Long id) {
-        CatToy foundCatToy = catToyRepository
+    public Product deleteProductById(Long id) {
+        Product foundProduct = productRepository
                 .findById(id)
-                .orElseThrow(CatToyNotFoundException::new);
+                .orElseThrow(ProductFoundException::new);
 
-        catToyRepository.deleteById(id);
-        return foundCatToy;
+        productRepository.deleteById(id);
+        return foundProduct;
     }
 }

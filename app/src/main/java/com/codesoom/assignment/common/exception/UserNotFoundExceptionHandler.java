@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 @RestControllerAdvice
 public class UserNotFoundExceptionHandler {
-    private static final Logger LOGGER = LoggerFactory.getLogger(CatToyNotFoundExceptionHandler.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductNotFoundExceptionHandler.class);
 
     @ExceptionHandler({UserNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)

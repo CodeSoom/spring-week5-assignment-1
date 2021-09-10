@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  * User에 대한 HTTP 요청 처리를 담당한다.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 @CrossOrigin
 public class UserController {
 

@@ -2,7 +2,6 @@ package com.codesoom.assignment.product.domain;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.Entity;
@@ -15,7 +14,8 @@ import javax.validation.constraints.PositiveOrZero;
 @Setter
 @Entity
 @Builder
-public class CatToy {
+
+public class Product {
     @Id
     @GeneratedValue
     private Long id;
@@ -31,10 +31,21 @@ public class CatToy {
 
     private String imageUrl;
 
-    public void update(CatToy catToy) {
-        this.name = catToy.getName();
-        this.maker = catToy.getMaker();
-        this.price = catToy.getPrice();
-        this.imageUrl = catToy.getImageUrl();
+    public Product() {
+    }
+
+    public Product(Long id, String name, String maker, Integer price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public void update(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
     }
 }

@@ -1,8 +1,7 @@
 package com.codesoom.assignment.product.controller;
 
-import com.codesoom.assignment.product.domain.CatToy;
+import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.service.ProductService;
-import org.checkerframework.checker.units.qual.C;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -37,7 +36,7 @@ class ProductControllerTest {
     private MockMvc mockMvc;
 
     @MockBean
-    private ProductService catToyService;
+    private ProductService ProductService;
 
     private static final long ID = 1L;
     private static final String NAME = "TEST NAME";
@@ -47,7 +46,7 @@ class ProductControllerTest {
 
     @BeforeEach
     public void setUp() {
-        CatToy catToy = CatToy.builder()
+        Product product = Product.builder()
                 .id(ID)
                 .name(NAME)
                 .maker(MAKER)
@@ -55,19 +54,19 @@ class ProductControllerTest {
                 .imageUrl(IMAGE_URL)
                 .build();
 
-        List<CatToy> catToyList = new ArrayList<>();
-        catToyList.add(catToy);
+        List<Product> productList = new ArrayList<>();
+        productList.add(product);
 
-        given(catToyService.getCatToys()).willReturn(catToyList);
-        given(catToyService.findCatToyById(ID)).willReturn(catToy);
+        given(ProductService.getProducts()).willReturn(productList);
+        given(ProductService.findProductById(ID)).willReturn(product);
     }
 
     @Nested
-    @DisplayName("getCatToys 메서드는")
-    class getAllCatToys {
+    @DisplayName("getProducts 메서드는")
+    class getAllProducts {
         @Test
         @DisplayName("고양이 장난감 목록 전체를 반환 요청한다.")
-        void getCatToys() throws Exception {
+        void getProducts() throws Exception {
             mockMvc.perform(get("/products"))
                     .andExpect(status().isOk())
                     .andExpect(content().string(containsString(NAME)));
@@ -75,42 +74,42 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("findCatTiyById 메서드는")
-    class findCatToyById {
+    @DisplayName("findProductById 메서드는")
+    class findProductById {
         @Test
         @DisplayName("id가 유효한 경우 식별자에 해당하는 장난감을 반환 요청한다.")
-        void findCatToyByValidId() throws Exception {
+        void findProductByValidId() throws Exception {
             mockMvc.perform(get("/products/1"))
                     .andExpect(status().isOk())
                     .andExpect(content().string(containsString(NAME)));
-            verify(catToyService).findCatToyById(1L);
+            verify(ProductService).findProductById(1L);
         }
 
         @Test
         @DisplayName("id가 유효하지 않은 경우 예외를 반환한다.")
-        void findCatToyByNotValidId() throws Exception {
+        void findProductByNotValidId() throws Exception {
             mockMvc.perform(get("/products/a"))
                     .andExpect(status().isBadRequest());
         }
     }
 
     @Nested
-    @DisplayName("registerCatToy 메서드는")
-    class registerCatToy {
+    @DisplayName("registerProduct 메서드는")
+    class registerProduct {
         @Test
         @DisplayName("파라미터가 유효한 경우 장난감을 등록 요청한다.")
-        void registerCatToyWithValidBody() throws Exception {
+        void registerProductWithValidBody() throws Exception {
             mockMvc.perform(
                     post("/products")
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\" : \"Test Name\", \"maker\" : \"Test Maker\", \"price\" : 10000}")
             ).andExpect(status().isCreated());
-            verify(catToyService).addCatToy(any(CatToy.class));
+            verify(ProductService).addProduct(any(Product.class));
         }
 
         @Test
         @DisplayName("파라미터가 유효하지 않은 경우 예외를 반환한다.")
-        void registerCatToyWithNotValidBody() throws Exception {
+        void registerProductWithNotValidBody() throws Exception {
             mockMvc.perform(
                     post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -120,22 +119,22 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("updateCatToy 메서드는")
-    class updateCatToy {
+    @DisplayName("updateProduct 메서드는")
+    class updateProduct {
         @Test
         @DisplayName("파라미터가 유효한 경우 장난감을 수정 요청한다.")
-        void updateCatToyWithValidBody() throws Exception {
+        void updateProductWithValidBody() throws Exception {
             mockMvc.perform(
                     patch("/products/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"name\" : \"New Name\", \"maker\" : \"New Maker\", \"price\" : 20000}")
             ).andExpect(status().isOk());
-            verify(catToyService).updateCatToy(eq(1L), any(CatToy.class));
+            verify(ProductService).updateProduct(eq(1L), any(Product.class));
         }
 
         @Test
         @DisplayName("파라미터가 유효하지 않은 경우 예외를 반환한다.")
-        void updateCatToyWithNotValidBody() throws Exception {
+        void updateProductWithNotValidBody() throws Exception {
             mockMvc.perform(
                     post("/products")
                             .contentType(MediaType.APPLICATION_JSON)
@@ -145,19 +144,19 @@ class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("deleteCatToy 메서드는")
-    class deleteCatToy {
+    @DisplayName("deleteProduct 메서드는")
+    class deleteProduct {
         @Test
         @DisplayName("id가 유효한 경우 식별자에 해당하는 장난감을 삭제 요청한다.")
-        void deleteCatToyWithValidId() throws Exception {
+        void deleteProductWithValidId() throws Exception {
             mockMvc.perform(delete("/products/1"))
                     .andExpect(status().isNoContent());
-            verify(catToyService).deleteCatToyById(1L);
+            verify(ProductService).deleteProductById(1L);
         }
 
         @Test
         @DisplayName("id가 유효하지 않은 경우 예외를 반환한다.")
-        void findCatToyByNotValidId() throws Exception {
+        void findProductByNotValidId() throws Exception {
             mockMvc.perform(delete("/products/a"))
                     .andExpect(status().isBadRequest());
         }

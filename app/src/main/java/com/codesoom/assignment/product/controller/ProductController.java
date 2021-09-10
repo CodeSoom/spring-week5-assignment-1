@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.controller;
 
-import com.codesoom.assignment.product.domain.CatToy;
+import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -25,10 +25,10 @@ import java.util.List;
 @RequestMapping("/products")
 public class ProductController {
 
-    private final ProductService catToyService;
+    private final ProductService productService;
 
-    public ProductController(ProductService catToyService) {
-        this.catToyService = catToyService;
+    public ProductController(ProductService productService) {
+        this.productService = productService;
     }
 
     /**
@@ -37,8 +37,8 @@ public class ProductController {
      */
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<CatToy> getCatToys() {
-        return catToyService.getCatToys();
+    public List<Product> getProducts() {
+        return productService.getProducts();
     }
 
     /**
@@ -48,31 +48,31 @@ public class ProductController {
      */
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CatToy findCatToyById(@PathVariable Long id) {
-        return catToyService.findCatToyById(id);
+    public Product findProductById(@PathVariable Long id) {
+        return productService.findProductById(id);
     }
 
     /**
      * 사용자가 요청한 product를 추가한다.
-     * @param catToy 요청한 추가 대상 product
+     * @param product 요청한 추가 대상 product
      * @return 추가된 product
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public CatToy registerCatToy(@Valid @RequestBody CatToy catToy) {
-        return catToyService.addCatToy(catToy);
+    public Product registerProduct(@Valid @RequestBody Product product) {
+        return productService.addProduct(product);
     }
 
     /**
      * 사용자가 요청한 product를 수정한다.
      * @param id 요청한 product 식별자
-     * @param catToy 수정할 product
+     * @param product 수정할 product
      * @return 수정된 product
      */
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public CatToy updateCatToy(@PathVariable Long id, @Valid @RequestBody CatToy catToy) {
-        return catToyService.updateCatToy(id, catToy);
+    public Product updateProduct(@PathVariable Long id, @Valid @RequestBody Product product) {
+        return productService.updateProduct(id, product);
     }
 
     /**
@@ -81,7 +81,7 @@ public class ProductController {
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteCatToy(@PathVariable Long id) {
-        catToyService.deleteCatToyById(id);
+    public void deleteProduct(@PathVariable Long id) {
+        productService.deleteProductById(id);
     }
 }
