@@ -24,4 +24,10 @@ public class User {
     private String name;
 
     private String password;
+
+    public void update(final User source) {
+        email = source.email != null ? source.email : email;
+        name = source.name != null ? source.name : name;
+        password = source.password != null ? source.password : password;
+    }
 }
