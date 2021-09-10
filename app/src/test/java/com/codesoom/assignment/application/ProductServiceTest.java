@@ -50,13 +50,13 @@ class ProductServiceTest {
         }
 
         @BeforeEach
-        public void beforeEach() {
+        private void beforeEach() {
             mockFindAll()
                 .thenReturn(PRODUCT_LIST);
         }
 
         @AfterEach
-        public void afterEach() {
+        private void afterEach() {
             verifyFindAll(1)
                 .findAll();
         }

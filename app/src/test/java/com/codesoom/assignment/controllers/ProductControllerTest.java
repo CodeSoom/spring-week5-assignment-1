@@ -38,41 +38,41 @@ class ProductControllerTest {
     private ProductService productService;
 
     @AfterEach
-    void afterEach() {
+    private void afterEach() {
         reset(productService);
     }
 
     @Nested
     @DisplayName("list 메서드는")
-    class Describe_list {
-        ResultActions subject() throws Exception {
+    public class Describe_list {
+        private ResultActions subject() throws Exception {
             return mockMvc.perform(
                 get("/products")
                     .accept(MediaType.APPLICATION_JSON_UTF8)
             );
         }
 
-        OngoingStubbing<List<Product>> mockSubject() {
+        private OngoingStubbing<List<Product>> mockSubject() {
             return when(productService.getProducts());
         }
 
         @AfterEach
-        void afterEach() {
+        private void afterEach() {
             verify(productService).getProducts();
         }
 
         @Nested
         @DisplayName("저장된 Product가 없다면")
-        class Context_product_empty {
+        public class Context_product_empty {
             @BeforeEach
-            void beforeEach() {
+            private void beforeEach() {
                 mockSubject()
                     .thenReturn(EMPTY_LIST);
             }
 
             @Test
             @DisplayName("빈 목록을 리턴한다.")
-            void it_returns_a_empty_list() throws Exception {
+            public void it_returns_a_empty_list() throws Exception {
                 subject()
                     .andExpect(status().isOk())
                     .andExpect(content().string(
@@ -83,16 +83,16 @@ class ProductControllerTest {
 
         @Nested
         @DisplayName("저장된 Product가 있다면")
-        class Context_product_exist {
+        public class Context_product_exist {
             @BeforeEach
-            void beforeEach() {
+            private void beforeEach() {
                 mockSubject()
                     .thenReturn(PRODUCT_LIST);
             }
 
             @Test
             @DisplayName("Product 목록을 리턴한다.")
-            void it_returns_a_product_list() throws Exception {
+            public void it_returns_a_product_list() throws Exception {
                 subject()
                     .andExpect(status().isOk())
                     .andExpect(content().string(

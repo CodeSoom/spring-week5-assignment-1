@@ -45,12 +45,12 @@ public class ProductRepositoryTest {
         @DisplayName("저장된 Product가 있는 경우")
         public class Context_product_exist {
             @BeforeEach
-            public void beforeEach() {
+            private void beforeEach() {
                 savedProduct = subjectSave();
             }
 
             @AfterEach
-            public void afterEach() {
+            private void afterEach() {
                 subjectDelete();
             }
 
