@@ -11,7 +11,7 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 /**
- * User에 대한 생성, 조회, 수정, 삭제를 담당한다.
+ * User에 대한 생성, 수정, 삭제를 담당한다.
  */
 @Service
 @Transactional
@@ -26,14 +26,18 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+    private User mappingUser(final UserData userData) {
+        return dozerMapper.map(userData, User.class);
+    }
+
     /**
      * User를 생성하고 리턴한다.
      *
-     * @param userData User 생성에 필요한 데이터
+     * @param userData 생성할 User 데이터
      * @return 생성한 User
      */
     public User createUser(final UserData userData) {
-        User user = dozerMapper.map(userData, User.class);
+        User user = mappingUser(userData);
         return userRepository.save(user);
     }
 
@@ -52,5 +56,20 @@ public class UserService {
      */
     public void deleteUser(final Long id) {
         userRepository.delete(findUser(id));
+    }
+
+    /**
+     * User 정보를 수정한다.
+     *
+     * @param id 수정할 User의 id
+     * @param userData 수정할 User 데이터
+     * @return 수정한 User
+     * @throws NotFoundException User를 찾을 수 없는 경우
+     */
+    public User updateUser(final Long id, final UserData userData) {
+        final User user = findUser(id);
+        final User source = mappingUser(userData);
+        user.update(source);
+        return userRepository.save(user);
     }
 }
