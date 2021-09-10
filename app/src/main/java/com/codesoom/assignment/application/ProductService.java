@@ -17,8 +17,11 @@ public class ProductService {
     private final Mapper mapper;
     private final ProductRepository productRepository;
 
-    public ProductService(Mapper mapper, ProductRepository productRepository) {
-        this.mapper = mapper;
+    public ProductService(
+            Mapper dozerMapper,
+            ProductRepository productRepository
+    ) {
+        this.mapper = dozerMapper;
         this.productRepository = productRepository;
     }
 
