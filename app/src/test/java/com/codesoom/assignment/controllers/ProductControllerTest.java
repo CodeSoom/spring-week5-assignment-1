@@ -20,13 +20,13 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.List;
 
 import static org.mockito.Mockito.reset;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_LIST;
-import static com.codesoom.assignment.constants.ProductConstants.EMPTY_LIST;
 
 @WebMvcTest(ProductController.class)
 @DisplayName("ProductController 클래스")
@@ -52,53 +52,34 @@ class ProductControllerTest {
             );
         }
 
-        private OngoingStubbing<List<Product>> mockSubject() {
+        private OngoingStubbing<List<Product>> mockGetProducts() {
             return when(productService.getProducts());
+        }
+
+        private ProductService verifyGetProducts(final int invokeCounts) {
+            return verify(productService, times(invokeCounts));
+        }
+
+        @BeforeEach
+        private void beforeEach() {
+            mockGetProducts()
+                .thenReturn(PRODUCT_LIST);
         }
 
         @AfterEach
         private void afterEach() {
-            verify(productService).getProducts();
+            verifyGetProducts(1)
+                .getProducts();
         }
 
-        @Nested
-        @DisplayName("저장된 Product가 없다면")
-        public class Context_product_empty {
-            @BeforeEach
-            private void beforeEach() {
-                mockSubject()
-                    .thenReturn(EMPTY_LIST);
-            }
-
-            @Test
-            @DisplayName("빈 목록을 리턴한다.")
-            public void it_returns_a_empty_list() throws Exception {
-                subject()
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(
-                        Parser.toJson(EMPTY_LIST)
-                    ));
-            }
-        }
-
-        @Nested
-        @DisplayName("저장된 Product가 있다면")
-        public class Context_product_exist {
-            @BeforeEach
-            private void beforeEach() {
-                mockSubject()
-                    .thenReturn(PRODUCT_LIST);
-            }
-
-            @Test
-            @DisplayName("Product 목록을 리턴한다.")
-            public void it_returns_a_product_list() throws Exception {
-                subject()
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(
-                        Parser.toJson(PRODUCT_LIST)
-                    ));
-            }
+        @Test
+        @DisplayName("ProductService getProducts 메서드의 리턴값을 리턴한다.")
+        public void it_returns_a_product_list() throws Exception {
+            subject()
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                    Parser.toJson(PRODUCT_LIST)
+                ));
         }
     }
 }
