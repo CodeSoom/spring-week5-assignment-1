@@ -40,7 +40,7 @@ public class UserControllerTest {
         private CreateUserDto createUserDto;
 
         @Nested
-        @DisplayName("유효한 유저 생성 DTO가 주어질 때")
+        @DisplayName("유효한 회원 생성 DTO가 주어질 때")
         class Context_validUser {
 
             @BeforeEach
@@ -53,7 +53,7 @@ public class UserControllerTest {
             }
 
             @Test
-            @DisplayName("생성한 유저를 리턴하고 201을 응답한다")
+            @DisplayName("생성한 회원을 리턴하고 201을 응답한다")
             void it_returns_created_user_and_response_201() throws Exception {
                 mockMvc.perform(
                     post("/users")
@@ -66,7 +66,7 @@ public class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("유효하지 않은 유저 생성 DTO가 주어질 때")
+        @DisplayName("유효하지 않은 회원 생성 DTO가 주어질 때")
         class Context_invalidCreateUserDto {
 
             @BeforeEach
@@ -103,7 +103,7 @@ public class UserControllerTest {
         private Long id;
 
         @Nested
-        @DisplayName("유효한 유저 업데이트 DTO가 주어진다면")
+        @DisplayName("유효한 회원 업데이트 DTO가 주어진다면")
         class Context_validUpdateUserDto {
 
             @BeforeEach
@@ -116,7 +116,7 @@ public class UserControllerTest {
             }
 
             @Nested
-            @DisplayName("사용자를 찾을 수 있는 경우")
+            @DisplayName("회원을 찾을 수 있는 경우")
             class Context_canFindUser {
 
                 @BeforeEach
@@ -131,7 +131,7 @@ public class UserControllerTest {
                 }
 
                 @Test
-                @DisplayName("수정된 유저를 리턴하고 200을 응답한다")
+                @DisplayName("수정된 회원을 리턴하고 200을 응답한다")
                 void it_returns_updated_user_and_response_200() throws Exception {
                     mockMvc.perform(
                         patch("/users/" + id)
@@ -144,7 +144,7 @@ public class UserControllerTest {
             }
 
             @Nested
-            @DisplayName("사용자를 찾을 수 없는 경우")
+            @DisplayName("회원을 찾을 수 없는 경우")
             class Context_notFoundUser {
 
                 @BeforeEach
@@ -182,7 +182,7 @@ public class UserControllerTest {
             }
 
             @Nested
-            @DisplayName("사용자를 찾을 수 있는 경우")
+            @DisplayName("회원을 찾을 수 있는 경우")
             class Context_canFindUser {
 
                 @BeforeEach
@@ -209,7 +209,7 @@ public class UserControllerTest {
             }
 
             @Nested
-            @DisplayName("사용자를 찾을 수 없는 경우")
+            @DisplayName("회원을 찾을 수 없는 경우")
             class Context_notFoundUser {
 
                 @BeforeEach
