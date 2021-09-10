@@ -34,7 +34,7 @@ public class AccountService {
     @Transactional
     public AccountSaveData patchAccount(long id, AccountUpdateData data) {
         final Account foundAccount = accountRepository.findById(id)
-                .orElseThrow(()-> new AccountNotFoundException(id));
+                .orElseThrow(() -> new AccountNotFoundException(id));
 
         foundAccount.change(data.toAccount());
 

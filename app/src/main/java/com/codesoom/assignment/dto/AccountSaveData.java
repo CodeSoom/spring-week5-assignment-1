@@ -1,15 +1,18 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Account;
+import com.codesoom.assignment.exceptions.AccountFieldValidException;
+import com.codesoom.assignment.infra.Validators;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.ConstraintViolation;
 import javax.validation.constraints.NotBlank;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -44,11 +47,17 @@ public class AccountSaveData {
     }
 
     public Account toAccount() {
-        return Account.builder()
-                .id(id)
-                .name(name)
-                .password(password)
-                .email(email)
-                .build();
+        final Set<ConstraintViolation<Object>> validate = Validators.validate(this);
+
+        if (validate.isEmpty()) {
+            return Account.builder()
+                    .id(id)
+                    .name(name)
+                    .password(password)
+                    .email(email)
+                    .build();
+        }
+
+        throw new AccountFieldValidException(validate);
     }
 }
