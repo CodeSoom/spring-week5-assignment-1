@@ -31,7 +31,6 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         Product product = mapper.map(productData, Product.class);
         return productRepository.save(product);
     }
