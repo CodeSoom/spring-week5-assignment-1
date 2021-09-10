@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.UserModel;
 import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +12,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Getter
 @Builder
-public class UserUpdateDto {
+public class UserUpdateDto implements UserModel {
     @NotBlank
     @Mapping("name")
     private String name;

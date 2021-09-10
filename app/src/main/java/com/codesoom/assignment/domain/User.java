@@ -13,7 +13,7 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Builder
-public class User {
+public class User implements UserModel {
     @Id
     @GeneratedValue
     private Long id;
