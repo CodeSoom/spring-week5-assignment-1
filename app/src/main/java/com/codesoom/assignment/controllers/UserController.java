@@ -45,7 +45,7 @@ public class UserController {
      * 요청한 사용자를 수정하고 리턴합니다.
      * @param id 사용자 식별자
      * @param userDto 사용자 수정 정보
-     * @return 수정된 사용짜
+     * @return 수정된 사용자
      */
     @PatchMapping("{id}")
     public User update(@PathVariable Long id, @RequestBody @Valid UserUpdateDto userDto) {

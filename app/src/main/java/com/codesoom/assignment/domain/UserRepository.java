@@ -3,7 +3,7 @@ package com.codesoom.assignment.domain;
 import java.util.Optional;
 
 /**
- * 사용자 데이터를 다루는 명령을 정의합니다
+ * 사용자 데이터를 다루는 명령을 정의합니다.
  */
 public interface UserRepository {
     /**
@@ -21,7 +21,7 @@ public interface UserRepository {
     User save(User user);
 
     /**
-     * 해당 식별자의 사용자를 삭제합니다
+     * 해당 식별자의 사용자를 삭제합니다.
      * @param id 사용자 식별자
      */
     void deleteById(Long id);

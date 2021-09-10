@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 /**
- * 상품 데이터를 다루는 기본 명령을 정의합니다
+ * 상품 데이터를 다루는 기본 명령을 정의합니다.
  */
 @Primary
 public interface JpaProductRepository

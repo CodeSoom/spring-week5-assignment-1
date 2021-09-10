@@ -39,7 +39,7 @@ public class ProductService {
     }
 
     /**
-     * 상품을 생성합니다하고 리턴합니다.
+     * 상품을 생성하고 리턴합니다.
      * @param productData 상품 생성 정보
      * @return 생성된 상품
      */
@@ -88,7 +88,7 @@ public class ProductService {
     /**
      * 해당 식별자의 상품을 리턴합니다.
      * @return 상품
-     * @throws ProductNotFoundException 해당 식별자의 상품이 없는 경다
+     * @throws ProductNotFoundException 해당 식별자의 상품이 없는 경우
      */
     private Product findProduct(Long id) {
         return productRepository.findById(id)

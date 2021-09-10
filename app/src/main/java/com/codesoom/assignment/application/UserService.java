@@ -9,7 +9,7 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 /**
- * 사용자를 추가, 수정, 삭제합니다
+ * 사용자를 추가,수정,삭제합니다.
  */
 @Service
 public class UserService {
@@ -46,7 +46,7 @@ public class UserService {
     }
 
     /**
-     * 해당 식별자의 사용자를 삭제합니다
+     * 해당 식별자의 사용자를 삭제합니다.
      * @param id 사용자 식별자
      */
     public void deleteUser(Long id) {

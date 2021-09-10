@@ -23,7 +23,7 @@ public class ProductController {
     }
 
     /**
-     * 상품목록을 리턴합니다
+     * 상품목록을 리턴합니다.
      * @return 상품목록
      */
     @GetMapping
@@ -32,7 +32,7 @@ public class ProductController {
     }
 
     /**
-     * 요청한 상품을 리턴합니다
+     * 요청한 상품을 리턴합니다.
      * @param id 상품 식별자
      * @return 상품
      */
@@ -42,7 +42,7 @@ public class ProductController {
     }
 
     /**
-     * 상품을 생성하고 리턴합니다
+     * 상품을 생성하고 리턴합니다.
      * @param productData 상품 생성 정보
      * @return 생성된 상품
      */
@@ -53,7 +53,7 @@ public class ProductController {
     }
 
     /**
-     * 요청한 상품을 수정하고 리턴합니다
+     * 요청한 상품을 수정하고 리턴합니다.
      * @param id 상품 식별자
      * @param productData 상품 수정 정보
      * @return 수정된 상품
@@ -67,7 +67,7 @@ public class ProductController {
     }
 
     /**
-     * 요청한 상품을 삭제합니다
+     * 요청한 상품을 삭제합니다.
      * @param id 상품 식별자
      */
     @DeleteMapping("{id}")

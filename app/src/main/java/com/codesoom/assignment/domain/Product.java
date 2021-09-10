@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * 상품 정보를 저장하고 처리합니다
+ * 상품 정보를 저장하고 처리합니다.
  */
 @Entity
 @Getter
@@ -31,7 +31,7 @@ public class Product {
     private String imageUrl;
 
     /**
-     * 상품 정보를 변경합니다
+     * 상품 정보를 변경합니다.
      * @param name 상품 이름
      * @param maker 상품 제조사
      * @param price 상품 가격

@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 /**
- * 상품 생성, 수정 정보를 표현합니다
+ * 상품 생성, 수정 정보를 표현합니다.
  */
 @Setter
 @Getter

@@ -10,7 +10,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * 사용자 정보를 저장하고 처리합니다
+ * 사용자 정보를 저장하고 처리합니다.
  */
 @Entity
 @Getter
@@ -29,7 +29,7 @@ public class User {
     private String password;
 
     /**
-     * 사용자 정보를 변경합니다
+     * 사용자 정보를 변경합니다.
      * @param name 사용자 이름
      * @param password 비밀번호
      */
