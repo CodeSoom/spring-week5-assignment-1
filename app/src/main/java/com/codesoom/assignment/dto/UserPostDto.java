@@ -1,10 +1,8 @@
 package com.codesoom.assignment.dto;
 
 import com.github.dozermapper.core.Mapping;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -13,8 +11,6 @@ import javax.validation.constraints.NotBlank;
  * 사용자 생성 정보를 표현합니다.
  */
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 public class UserPostDto {
     @Email
@@ -29,4 +25,12 @@ public class UserPostDto {
     @NotBlank
     @Mapping("password")
     private String password;
+
+    public UserPostDto() {}
+
+    public UserPostDto(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
 }
