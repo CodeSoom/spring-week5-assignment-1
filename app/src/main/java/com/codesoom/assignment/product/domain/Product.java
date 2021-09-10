@@ -3,11 +3,13 @@ package com.codesoom.assignment.product.domain;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.format.annotation.NumberFormat;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 
 @Getter
@@ -26,7 +28,7 @@ public class Product {
     @NotBlank
     private String maker;
 
-    @PositiveOrZero
+    @NotNull
     private Integer price;
 
     private String imageUrl;

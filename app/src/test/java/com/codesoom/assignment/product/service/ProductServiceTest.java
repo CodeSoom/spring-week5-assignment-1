@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.service;
 
-import com.codesoom.assignment.common.exception.ProductFoundException;
+import com.codesoom.assignment.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.repository.ProductRepository;
 import org.assertj.core.api.Assertions;
@@ -99,7 +99,7 @@ class ProductServiceTest {
         @DisplayName("존재하지 않는 식별자일 때 예외를 반환한다.")
         void findProductByNotExistedId() {
             assertThatThrownBy(() -> productService.findProductById(NOT_EXIST_ID))
-                    .isInstanceOf(ProductFoundException.class);
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 
@@ -147,7 +147,7 @@ class ProductServiceTest {
         @DisplayName("존재하지 않는 식별자일 때 예외를 반환한다.")
         void updateProductWithNotExistedID() {
             assertThatThrownBy(() -> productService.updateProduct(NOT_EXIST_ID, source))
-                    .isInstanceOf(ProductFoundException.class);
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 
@@ -171,7 +171,7 @@ class ProductServiceTest {
         @DisplayName("존재하지 않는 식별자일 때 요청된 장난감을 삭제한다.")
         void deleteProductByNotExistedId() {
             assertThatThrownBy(() -> productService.deleteProductById(NOT_EXIST_ID))
-                    .isInstanceOf(ProductFoundException.class);
+                    .isInstanceOf(ProductNotFoundException.class);
         }
     }
 }

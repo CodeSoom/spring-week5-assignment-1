@@ -44,8 +44,9 @@ describe('Users', () => {
 
   describe('PATCH /users/{id}', () => {
     const userData = {
-      name: 'updated name',
-      password: 12345678,
+      email: `${new Date().getTime()}@test.com`,
+      name: 'testuser',
+      password: 'password',
     };
 
     let id;

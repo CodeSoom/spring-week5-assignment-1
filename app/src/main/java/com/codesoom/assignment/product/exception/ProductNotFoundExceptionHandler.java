@@ -1,4 +1,4 @@
-package com.codesoom.assignment.common.exception;
+package com.codesoom.assignment.product.exception;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 public class ProductNotFoundExceptionHandler {
     private static final Logger LOGGER = LoggerFactory.getLogger(ProductNotFoundExceptionHandler.class);
 
-    @ExceptionHandler({ProductFoundException.class})
+    @ExceptionHandler({ProductNotFoundException.class})
     @ResponseStatus(HttpStatus.NOT_FOUND)
     public void productNotFoundException(Exception e) {
         LOGGER.error("error log = {}", e.toString());

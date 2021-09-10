@@ -1,6 +1,6 @@
 package com.codesoom.assignment.user.service;
 
-import com.codesoom.assignment.common.exception.UserNotFoundException;
+import com.codesoom.assignment.user.exception.UserNotFoundException;
 import com.codesoom.assignment.user.domain.User;
 import com.codesoom.assignment.user.repository.UserRepository;
 import org.springframework.stereotype.Service;

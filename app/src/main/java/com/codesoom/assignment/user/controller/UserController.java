@@ -5,12 +5,15 @@ import com.codesoom.assignment.user.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 /**
  * User에 대한 HTTP 요청 처리를 담당한다.
@@ -33,7 +36,7 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User addUser(@RequestBody User user) {
+    public User addUser(@Valid @RequestBody User user) {
         return userService.addUser(user);
     }
 
@@ -43,8 +46,9 @@ public class UserController {
      * @param user 수정 User 정보
      * @return 수정된 User
      */
-    @PostMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody User user) {
+    @PatchMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public User updateUser(@PathVariable Long id, @Valid @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
@@ -53,6 +57,7 @@ public class UserController {
      * @param id 삭제 요청 User 식별자
      */
     @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUserById(@PathVariable Long id) {
         userService.deleteUserById(id);
     }

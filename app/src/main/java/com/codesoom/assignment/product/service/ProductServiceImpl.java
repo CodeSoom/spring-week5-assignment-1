@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.service;
 
-import com.codesoom.assignment.common.exception.ProductFoundException;
+import com.codesoom.assignment.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.repository.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     public Product findProductById(Long id) {
         return productRepository
                 .findById(id)
-                .orElseThrow(ProductFoundException::new);
+                .orElseThrow(ProductNotFoundException::new);
     }
 
     public Product addProduct(Product product) {
@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     public Product deleteProductById(Long id) {
         Product foundProduct = productRepository
                 .findById(id)
-                .orElseThrow(ProductFoundException::new);
+                .orElseThrow(ProductNotFoundException::new);
 
         productRepository.deleteById(id);
         return foundProduct;
