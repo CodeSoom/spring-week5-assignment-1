@@ -24,7 +24,7 @@ class ProductServiceTest {
 
     @BeforeEach
     void setUp() {
-        productService = new ProductService(productRepository);
+        productService = new ProductService(mapper, productRepository);
 
         Product product = Product.builder()
                 .id(1L)
