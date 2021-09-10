@@ -10,8 +10,10 @@ import java.util.NoSuchElementException;
 @Getter
 public class UserNotFoundException extends NoSuchElementException {
     private final Long id;
+    private final String message;
 
-    public UserNotFoundException(Long id) {
+    public UserNotFoundException(Long id, String message) {
         this.id = id;
+        this.message = message;
     }
 }

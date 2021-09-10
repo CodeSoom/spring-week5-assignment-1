@@ -34,6 +34,6 @@ public class NotFoundErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUserNotFound(UserNotFoundException e) {
-        return new ErrorResponse("User " + e.getId() + " not found");
+        return new ErrorResponse(e.getMessage());
     }
 }

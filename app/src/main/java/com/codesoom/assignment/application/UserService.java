@@ -24,12 +24,13 @@ public class UserService {
     /**
      * 해당 식별자의 사용자를 리턴합니다.
      * @param id 사용자 식별자
+     * @param message 해당 식별자가 없는 경우 보여줄 메시지
      * @return 사용자
      * @throws UserNotFoundException 해당 식별자의 사용자가 없는 경우
      */
-    public User findUserById(Long id) {
+    public User findUserById(Long id, String message) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(id, message));
     }
 
     /**
@@ -50,7 +51,9 @@ public class UserService {
      * @param id 사용자 식별자
      */
     public void deleteUser(Long id) {
-        findUserById(id);
+        String failureMessage = "id가 " + id + " 인 사용자를 찾지 못했기 떄문에 사용자 정보를 삭제하지 못했습니다.";
+
+        findUserById(id, failureMessage);
 
         this.userRepository.deleteById(id);
     }
@@ -62,7 +65,9 @@ public class UserService {
      * @return 수정된 사용자
      */
     public User updateUser(Long id, UserUpdateDto userDto) {
-        User user = findUserById(id);
+        String failureMessage = "id가 " + id + " 인 사용자를 찾지 못했기 떄문에 사용자 정보를 업데이트하지 못했습니다.";
+
+        User user = findUserById(id, failureMessage);
 
         user.update(
                 userDto.getName(),
