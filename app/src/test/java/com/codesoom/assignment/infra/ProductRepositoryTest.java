@@ -1,10 +1,6 @@
 package com.codesoom.assignment.infra;
 
 import static com.codesoom.assignment.constants.ProductConstants.PRODUCT;
-import static com.codesoom.assignment.constants.ProductConstants.NAME;
-import static com.codesoom.assignment.constants.ProductConstants.MAKER;
-import static com.codesoom.assignment.constants.ProductConstants.IMAGE_URL;
-import static com.codesoom.assignment.constants.ProductConstants.PRICE;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.tuple;
 
@@ -29,62 +25,61 @@ public class ProductRepositoryTest {
     private ProductRepository productRepository;
 
     private Product savedProduct;
-    private List<Product> products;
 
-    void subjectFindAll() {
-        products = productRepository.findAll();
+    private List<Product> subjectFindAll() {
+        return productRepository.findAll();
     }
 
-    void subjectSave() {
-        savedProduct = productRepository.save(PRODUCT);
+    private Product subjectSave() {
+        return productRepository.save(PRODUCT);
     }
 
-    void subjectDelete() {
+    private void subjectDelete() {
         productRepository.delete(savedProduct);
     }
 
     @Nested
     @DisplayName("findAll 메서드는")
-    class Describe_findAll {
+    public class Describe_findAll {
         @Nested
         @DisplayName("저장된 Product가 있는 경우")
-        class Context_product_exist {
+        public class Context_product_exist {
             @BeforeEach
-            void beforeEach() {
-                subjectSave();
+            public void beforeEach() {
+                savedProduct = subjectSave();
             }
 
             @AfterEach
-            void afterEach() {
+            public void afterEach() {
                 subjectDelete();
             }
 
             @Test
             @DisplayName("Product 목록을 리턴한다.")
-            void it_returns_a_product_list() {
-                subjectFindAll();
-
-                assertThat(products)
+            public void it_returns_a_product_list() {
+                assertThat(subjectFindAll())
                     .extracting(
                     Product::getName, Product::getMaker,
                     Product::getImageUrl, Product::getPrice
                     )
-                    .contains(tuple(NAME, MAKER, IMAGE_URL, PRICE));
+                    .contains(
+                        tuple(
+                            PRODUCT.getName(), PRODUCT.getMaker(),
+                            PRODUCT.getImageUrl(), PRODUCT.getPrice()
+                        )
+                    );
             }
         }
 
         @Nested
         @DisplayName("저장된 Product가 없는 경우")
-        class Context_product_empty {
+        public class Context_product_empty {
             @Test
             @DisplayName("빈 목록을 리턴한다.")
-            void it_returns_a_empty_list() {
-                subjectFindAll();
-
-                assertThat(products)
+            public void it_returns_a_empty_list() {
+                assertThat(subjectFindAll())
                     .isEmpty();
             }
         }
     }
-
 }
