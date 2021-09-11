@@ -31,7 +31,7 @@ public class UserController {
     }
 
     /**
-     * 회원을 생성하고 회원 정보를 리턴합니다.
+     * 회원을 생성하고, 해당 회원 정보를 리턴합니다.
      *
      * @param createUserDto 회원 생성 정보
      * @return 회원 정보
