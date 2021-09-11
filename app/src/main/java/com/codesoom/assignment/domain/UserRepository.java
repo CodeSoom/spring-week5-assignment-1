@@ -4,7 +4,9 @@ import java.util.Optional;
 import org.springframework.data.repository.RepositoryDefinition;
 
 /**
- * 회원 저장소.
+ * 회원 컬렉션.
+ * <p>
+ * 회원 정보에 접근 및 처리 담당.
  */
 @RepositoryDefinition(domainClass = User.class, idClass = Long.class)
 public interface UserRepository {
