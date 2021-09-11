@@ -34,12 +34,12 @@ public class User implements UserModel {
     }
 
     /**
-     * 사용자 정보를 변경합니다.
+     * 수정된 사용자를 리턴합니다.
      * @param name 사용자 이름
      * @param password 비밀번호
+     * @return 수정된 사용자
      */
-    public void update(String name, String password) {
-        this.name = name;
-        this.password = password;
+    public User update(String name, String password) {
+        return new User(id, email, name, password);
     }
 }

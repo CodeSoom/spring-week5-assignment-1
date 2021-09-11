@@ -69,11 +69,13 @@ public class UserService {
 
         User user = findUserById(id, failureMessage);
 
-        user.update(
+        User updatedUser = user.update(
                 userDto.getName(),
                 userDto.getPassword()
         );
 
-        return user;
+        this.userRepository.save(updatedUser);
+
+        return updatedUser;
     }
 }
