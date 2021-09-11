@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserDto;
+import com.codesoom.assignment.dto.CreateUserResponseDto;
 import com.codesoom.assignment.dto.UpdateUserDto;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -29,17 +30,19 @@ public class UserController {
     }
 
     /**
-     * 회원을 생성합니다.
+     * 회원을 생성하고 회원 정보를 리턴합니다.
      *
      * @param createUserDto 회원 생성 정보
-     * @return 생성된 회원
+     * @return 회원 정보
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(
+    public CreateUserResponseDto create(
         @RequestBody @Valid CreateUserDto createUserDto
     ) {
-        return userService.createUser(createUserDto.toEntity());
+        User user = userService.createUser(createUserDto.toEntity());
+
+        return new CreateUserResponseDto(user);
     }
 
     /**

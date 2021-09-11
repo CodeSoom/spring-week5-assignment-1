@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.CreateUserDto;
+import com.codesoom.assignment.dto.CreateUserResponseDto;
 import com.codesoom.assignment.dto.UpdateUserDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -61,7 +62,8 @@ public class UserControllerTest {
                         .content(toJson(createUserDto))
                 )
                     .andExpect(status().isCreated())
-                    .andExpect(content().json(toJson(createUserDto)));
+                    .andExpect(content()
+                        .json(toJson(new CreateUserResponseDto(createUserDto.toEntity()))));
             }
         }
 
