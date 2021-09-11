@@ -12,6 +12,7 @@ import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.CreateUserDto;
 import com.codesoom.assignment.dto.CreateUserResponseDto;
 import com.codesoom.assignment.dto.UpdateUserDto;
+import com.codesoom.assignment.dto.UpdateUserResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -141,7 +142,8 @@ public class UserControllerTest {
                             .content(toJson(updateUserDto))
                     )
                         .andExpect(status().isOk())
-                        .andExpect(content().json(toJson(updateUserDto)));
+                        .andExpect(content()
+                            .json(toJson(new UpdateUserResponseDto(updateUserDto.toEntity()))));
                 }
             }
 

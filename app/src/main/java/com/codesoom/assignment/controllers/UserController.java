@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserDto;
 import com.codesoom.assignment.dto.CreateUserResponseDto;
 import com.codesoom.assignment.dto.UpdateUserDto;
+import com.codesoom.assignment.dto.UpdateUserResponseDto;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -46,18 +47,20 @@ public class UserController {
     }
 
     /**
-     * 회원 정보를 수정합니다.
+     * 회원 정보를 수정하고 리턴합니다.
      *
      * @param id            식별자
      * @param updateUserDto 수정할 회원 정보
-     * @return 수정된 회원
+     * @return 수정된 회원 정보
      */
     @PatchMapping("{id}")
-    public User update(
+    public UpdateUserResponseDto update(
         @PathVariable Long id,
         @RequestBody @Valid UpdateUserDto updateUserDto
     ) {
-        return userService.updateUser(id, updateUserDto.toEntity());
+        User user = userService.updateUser(id, updateUserDto.toEntity());
+
+        return new UpdateUserResponseDto(user);
     }
 
 
