@@ -53,7 +53,7 @@ class UserControllerTest {
         return objectMapper.readValue(contentAsString, type);
     }
 
-    private User createUserBeforePatchTest() throws Exception {
+    private User createUserBeforeTest() throws Exception {
         ResultActions actions = mockMvc.perform(post("/users")
                 .content(objectMapper.writeValueAsString(userPostDtoFixture))
                 .contentType(MediaType.APPLICATION_JSON));
@@ -61,6 +61,14 @@ class UserControllerTest {
         User createdUser = getResponseContent(actions, new TypeReference<User>() {});
 
         return createdUser;
+    }
+
+    private Long getDeletedIdBeforeTest() throws Exception {
+        User user = createUserBeforeTest();
+
+        mockMvc.perform(delete("/users/" + user.getId()));
+
+        return user.getId();
     }
 
     @Nested
@@ -148,8 +156,7 @@ class UserControllerTest {
 
         @BeforeEach
         void setup() throws Exception {
-            createdUser = createUserBeforePatchTest();
-
+            createdUser = createUserBeforeTest();
             updateDto = UserUpdateDto.builder()
                     .name("new name")
                     .password("newpassword")
@@ -180,10 +187,17 @@ class UserControllerTest {
         @Nested
         @DisplayName("With a non existent id")
         class WithNonExistentId {
+            Long nonExistentId;
+
+            @BeforeEach
+            void setup() throws Exception {
+                nonExistentId = getDeletedIdBeforeTest();
+            }
+
             @Test
             @DisplayName("responses with 404 HTTP status code")
             void responsesWith404Error() throws Exception {
-                mockMvc.perform(patch("/users/" + 100000000L)
+                mockMvc.perform(patch("/users/" + nonExistentId)
                                 .content(objectMapper.writeValueAsString(updateDto))
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound());
@@ -230,16 +244,16 @@ class UserControllerTest {
     @Nested
     @DisplayName("Delete Request")
     class DeleteRequest {
-        private User createdUser;
-
-        @BeforeEach
-        void setup() throws Exception {
-            createdUser = createUserBeforePatchTest();
-        }
-
         @Nested
         @DisplayName("With a valid path parameter")
         class WithValidRequestBody {
+            private User createdUser;
+
+            @BeforeEach
+            void setup() throws Exception {
+                createdUser = createUserBeforeTest();
+            }
+
             @Test
             @DisplayName("responses with 204 HTTP status code")
             void responsesWith204() throws Exception {
@@ -251,10 +265,17 @@ class UserControllerTest {
         @Nested
         @DisplayName("With a non existent id")
         class WithNonExistentParameter {
+            private Long nonExistentId;
+
+            @BeforeEach
+            void setup() throws Exception {
+                nonExistentId = getDeletedIdBeforeTest();
+            }
+
             @Test
             @DisplayName("responses with 404 HTTP status code")
             void responsesWith404() throws Exception {
-                mockMvc.perform(delete("/users/" + 1000000000L))
+                mockMvc.perform(delete("/users/" + nonExistentId))
                         .andExpect(status().isNotFound());
             }
         }
