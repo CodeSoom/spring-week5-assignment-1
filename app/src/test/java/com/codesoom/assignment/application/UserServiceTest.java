@@ -29,9 +29,6 @@ class UserServiceTest {
     private UserUpdateDto newUserDtoFixture;
     private User userFixture;
 
-    private final Long EXISTENT_ID = 1L;
-    private final Long NON_EXISTENT_ID = 1000L;
-
     @BeforeEach
     void setupService() {
         userRepository = mock(UserRepository.class);
@@ -83,15 +80,15 @@ class UserServiceTest {
         class WithExistentId {
             @BeforeEach
             void setup() {
-                given(userRepository.findById(EXISTENT_ID)).willReturn(Optional.of(userFixture));
+                given(userRepository.findById(1L)).willReturn(Optional.of(userFixture));
             }
 
             @Test
             @DisplayName("returns an updated user")
             void returnsUpdatedUser() {
-                User updatedUser = userService.updateUser(EXISTENT_ID, newUserDtoFixture);
+                User updatedUser = userService.updateUser(1L, newUserDtoFixture);
 
-                verify(userRepository).findById(EXISTENT_ID);
+                verify(userRepository).findById(1L);
 
                 assertThat(updatedUser.getId()).isEqualTo(userFixture.getId());
                 assertThat(updatedUser.getEmail()).isEqualTo(userFixture.getEmail());
@@ -105,14 +102,14 @@ class UserServiceTest {
         class WithNotExistentId {
             @BeforeEach
             void setup() {
-                given(userRepository.findById(NON_EXISTENT_ID))
+                given(userRepository.findById(2L))
                         .willReturn(Optional.empty());
             }
 
             @Test
             @DisplayName("throws UserNotFoundException")
             void throwsUserNotFoundException() {
-                assertThatThrownBy(() -> userService.updateUser(NON_EXISTENT_ID, newUserDtoFixture))
+                assertThatThrownBy(() -> userService.updateUser(2L, newUserDtoFixture))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
@@ -126,7 +123,7 @@ class UserServiceTest {
         class WithExistingId {
             @BeforeEach
             void setup() {
-                given(userRepository.findById(EXISTENT_ID))
+                given(userRepository.findById(1L))
                         .willReturn(Optional.of(userFixture));
             }
 
@@ -144,14 +141,14 @@ class UserServiceTest {
         class WithNotExistingId {
             @BeforeEach
             void setup() {
-                given(userRepository.findById(NON_EXISTENT_ID))
+                given(userRepository.findById(2L))
                         .willReturn(Optional.empty());
             }
 
             @Test
             @DisplayName("throws UserNotFoundException")
             void throwsUserNotFoundException() {
-                assertThatThrownBy(() -> userService.deleteUser(NON_EXISTENT_ID))
+                assertThatThrownBy(() -> userService.deleteUser(2L))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
