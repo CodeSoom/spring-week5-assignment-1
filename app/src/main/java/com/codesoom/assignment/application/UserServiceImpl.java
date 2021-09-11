@@ -4,11 +4,11 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.UserEmailDuplicateException;
+import com.codesoom.assignment.dto.UserNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Transactional
 @Service
@@ -40,7 +40,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUser(Long id, UserData source) {
 
-        User findUser = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException());
+        User findUser = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException());
         findUser.userUpdate(source.getName(), source.getEmail(), source.getPassword());
 
         return findUser;
@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean emailCheck(String mail) throws UserEmailDuplicateException {
+    public boolean emailCheck(String mail) {
 
         List<User> users = userRepository.findAll();
 

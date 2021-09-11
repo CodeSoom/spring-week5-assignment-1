@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("ProductService 클래스")
@@ -131,14 +132,13 @@ class ProductServiceImplTest {
         @DisplayName("찾는 상품이 없다면")
         class Context_exist_not_product {
 
-            Long INVALID_ID;
+            Long INVALID_ID = 1000L;
 
             @BeforeEach
             void setUp() {
 
-                Product product = createTestProduct();
+                productRepository.deleteAll();
 
-                INVALID_ID = productService.getProducts().size() + 9999L;
             }
 
             @Test
@@ -235,14 +235,13 @@ class ProductServiceImplTest {
         @DisplayName("수정한 상품을 찾을 수 없다면")
         class Context_exist_not_updateProduct {
 
-            Long INVALID_ID;
+            Long INVALID_ID = 1000L;
 
             @BeforeEach
             void setUp() {
 
-                Product product = createTestProduct();
+                productRepository.deleteAll();
 
-                INVALID_ID = productService.getProducts().size() + 9999L;
             }
 
             @Test
@@ -284,7 +283,7 @@ class ProductServiceImplTest {
 
                 productService.deleteProduct(VALID_ID);
 
-                assertThat(productService.getProducts()).isEmpty();
+                assertThatThrownBy(() -> productService.getProduct(VALID_ID)).isInstanceOf(ProductNotFoundException.class);
 
             }
 

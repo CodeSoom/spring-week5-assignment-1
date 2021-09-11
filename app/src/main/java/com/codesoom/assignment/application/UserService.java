@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.UserEmailDuplicateException;
+import com.codesoom.assignment.dto.UserNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -23,8 +24,9 @@ public interface UserService {
      * @param id 사용자 id
      * @param source 수정할 사용자 정보
      * @return 수정된 사용자
+     * @throws UserNotFoundException 사용자를 못찾을 경우
      */
-    User updateUser(Long id, UserData source);
+    User updateUser(Long id, UserData source) throws UserNotFoundException;
 
     /**
      * 사용자를 삭제합니다.
@@ -36,9 +38,8 @@ public interface UserService {
      * 이메일 중복이 되었다면 true, 그렇지 않다면 false를 리턴합니다.
      * @oaram 중복을 확인하려는 이메일 주소
      * @return 중복한 이메일이 존재한다면 true / 그렇지 않다면 false
-     * @throws UserEmailDuplicateException 이메일 중복인 경우
      */
-    boolean emailCheck(String mail) throws UserEmailDuplicateException;
+    boolean emailCheck(String mail);
 
 }
 

@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductNotFoundException;
 
 import java.util.List;
 
@@ -20,7 +21,7 @@ public interface ProductService {
      * 상품 하나를 조회해 리턴합니다.
      * @param id 조회할 상품의 id
      * @return 조회된 상품
-     * @throws com.codesoom.assignment.dto.ProductNotFoundException 상품을 못찾을 경우
+     * @throws ProductNotFoundException 상품을 못찾을 경우
      */
     Product getProduct(Long id);
 
@@ -36,7 +37,7 @@ public interface ProductService {
      * @param id 수정할 상품의 id
      * @param source 상품의 수정 내용
      * @return 수정한 상품
-     * @throws com.codesoom.assignment.dto.ProductNotFoundException 상품을 못찾을 경우
+     * @throws ProductNotFoundException 상품을 못찾을 경우
      */
     Product updateProduct(Long id, ProductData source);
 

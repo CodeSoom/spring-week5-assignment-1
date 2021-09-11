@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.UserEmailDuplicateException;
+import com.codesoom.assignment.dto.UserNotFoundException;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -96,24 +97,25 @@ class UserServiceImplTest {
 
     @Nested
     @DisplayName("updateUser 메소드는")
-    class Describe_updateUset {
+    class Describe_updateUser {
 
         @Nested
         @DisplayName("수정할 사용자 정보가 있을 경우에")
         class Context_exist_update_user {
 
             UserData updateSource;
-            User TEST_USER;
+            Long VALID_ID;
 
             @BeforeEach
             void setUp() throws Exception {
 
-               TEST_USER = userService.createUser( UserData.builder()
+               User TEST_USER = userService.createUser( UserData.builder()
                                         .name("name1")
                                         .email("email1")
                                         .password("12345")
                                         .build() );
 
+                VALID_ID = TEST_USER.getId();
 
                 updateSource = UserData.builder()
                         .name("UPDATE_NAME")
@@ -127,11 +129,41 @@ class UserServiceImplTest {
             @DisplayName("아이디와 수정 정보를 입력받아 사용자 정보를 수정한다")
             void It_return_update_user() {
 
-                User user = userService.updateUser(TEST_USER.getId(), updateSource);
+                User user = userService.updateUser(VALID_ID, updateSource);
 
                 assertEquals("UPDATE_NAME",user.getName());
                 assertEquals("UPDATE_EMAIL", user.getEmail());
                 assertEquals("11111", user.getPassword());
+
+            }
+
+            @Nested
+            @DisplayName("수정할 사용자 정보가 없다면")
+            class Context_exist_not_user {
+
+                Long INVALID_ID = 1000L;
+                UserData updateSource;
+
+                @BeforeEach
+                void setUp() {
+
+                    userRepository.deleteAll();
+
+                    updateSource = UserData.builder()
+                            .name("UPDATE_NAME")
+                            .email("UPDATE_EMAIL")
+                            .password("11111")
+                            .build();
+
+                }
+
+                @Test
+                @DisplayName("UserNotFoundException 예외를 던진다.")
+                void It_return_userNotFoundException() {
+
+                    assertThatThrownBy(() -> userService.updateUser(INVALID_ID, updateSource)).isInstanceOf(UserNotFoundException.class);
+
+                }
 
             }
 

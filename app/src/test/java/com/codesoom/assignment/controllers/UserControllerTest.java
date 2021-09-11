@@ -114,10 +114,10 @@ class UserControllerTest {
         class Context_exist_update_userData {
 
             UserData updateData;
-            Long VALID_ID;
+            Long VALID_ID=1L;
 
             @BeforeEach
-            void setUp() throws Exception {
+            void setUp() {
 
                 updateData = UserData.builder()
                         .name("updateName")
@@ -125,15 +125,17 @@ class UserControllerTest {
                         .password("12345")
                         .build();
 
-                User user = userService.createUser(UserData.builder()
-                        .name("name1")
-                        .email("email1")
-                        .password("12345")
-                        .build());
+                given(userService.updateUser(VALID_ID,updateData)).will(invocation -> {
 
-                VALID_ID = user.getId();
+                    Long id = invocation.getArgument(0);
+                    UserData source = invocation.getArgument(1);
 
-                given(userService.updateUser(VALID_ID, updateData)).willReturn(any(User.class));
+                    return User.builder()
+                            .name(source.getName())
+                            .email(source.getEmail())
+                            .password(source.getPassword())
+                            .build();
+                });
 
             }
 
