@@ -17,4 +17,5 @@ public interface UserConstants {
         .password(PASSWORD)
         .build();
     final UserData USER_DATA = new UserData(null, NAME, EMAIL, PASSWORD);
+    final String USER_ENDPOINT = "/user/";
 }

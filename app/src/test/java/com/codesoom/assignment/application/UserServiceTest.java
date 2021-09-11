@@ -161,7 +161,7 @@ public class UserServiceTest {
             }
 
             @Test
-            @DisplayName("UserRepository delete 메서드를 호출한다.")
+            @DisplayName("UserRepository delete메서드를 호출한다.")
             public void it_deletes_a_user() {
                 subject();
             }
@@ -182,7 +182,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("UserRepository findById 메서드가 예외를 던지면")
+        @DisplayName("UserRepository findById메서드가 예외를 던지면")
         public class Context_repository_throws_an_exception {
             @BeforeEach
             private void beforeEach() {

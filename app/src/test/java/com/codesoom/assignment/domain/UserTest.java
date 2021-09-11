@@ -1,12 +1,6 @@
 package com.codesoom.assignment.domain;
 
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.emptyIterable;
-
-import java.util.function.BiPredicate;
-
-import com.codesoom.assignment.dto.UserData;
 
 import static com.codesoom.assignment.constants.UserConstants.NAME;
 import static com.codesoom.assignment.constants.UserConstants.EMAIL;
