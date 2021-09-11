@@ -4,6 +4,8 @@ import com.codesoom.assignment.dto.AccountSaveData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.stream.Stream;
+
 import static com.codesoom.assignment.Constant.ACCOUNT_EMAIL;
 import static com.codesoom.assignment.Constant.ACCOUNT_NAME;
 import static com.codesoom.assignment.Constant.ACCOUNT_PASSWORD;
@@ -33,16 +35,12 @@ class AccountTest {
         final Account account2 = Account.of(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD);
         final Account account3 = Account.from(new AccountSaveData(1L, ACCOUNT_NAME, ACCOUNT_EMAIL, ACCOUNT_PASSWORD));
 
-        assertThatAccountDataField(account1);
-        assertThatAccountDataField(account2);
-        assertThatAccountDataField(account3);
-    }
-
-    private void assertThatAccountDataField(Account account) {
-        assertThat(account.getId()).isEqualTo(1L);
-        assertThat(account.getName()).isEqualTo(ACCOUNT_NAME);
-        assertThat(account.getEmail()).isEqualTo(ACCOUNT_EMAIL);
-        assertThat(account.getPassword()).isEqualTo(ACCOUNT_PASSWORD);
+        Stream.of(account1, account2, account3).forEach((it)->{
+            assertThat(it.getId()).isEqualTo(1L);
+            assertThat(it.getName()).isEqualTo(ACCOUNT_NAME);
+            assertThat(it.getEmail()).isEqualTo(ACCOUNT_EMAIL);
+            assertThat(it.getPassword()).isEqualTo(ACCOUNT_PASSWORD);
+        });
     }
 
     @DisplayName("정보를 변경할 수 있습니다.")
