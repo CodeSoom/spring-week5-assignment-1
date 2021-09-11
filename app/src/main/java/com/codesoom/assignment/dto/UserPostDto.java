@@ -1,6 +1,6 @@
 package com.codesoom.assignment.dto;
 
-import com.codesoom.assignment.domain.UserModel;
+import com.codesoom.assignment.domain.UserCreateRequest;
 import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
  */
 @Getter
 @Builder
-public class UserPostDto implements UserModel {
+public class UserPostDto implements UserCreateRequest {
     @Email
     @NotBlank
     @Mapping("email")

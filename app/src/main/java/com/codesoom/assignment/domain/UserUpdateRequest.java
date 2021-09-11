@@ -1,9 +1,9 @@
 package com.codesoom.assignment.domain;
 
 /**
- * 사용자 모델의 메소드를 정의합니다.
+ * 사용자 수정 요청을 정의합니다.
  */
-public interface UserModel {
+public interface UserUpdateRequest {
     /**
      * 사용자 이름을 리턴합니다.
      * @return 사용자 이름
