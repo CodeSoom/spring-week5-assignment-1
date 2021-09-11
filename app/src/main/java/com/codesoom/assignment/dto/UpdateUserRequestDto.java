@@ -6,25 +6,24 @@ import lombok.Builder;
 import lombok.Getter;
 
 /**
- * 회원 생성 요청 시에 사용합니다.
+ * 회원 정보 업데이트 요청 시에 사용합니다.
  */
 @Getter
-public class CreateUserDto {
+public class UpdateUserRequestDto {
 
     @NotBlank
     private String name;
 
-    @NotBlank
     private String email;
 
     @NotBlank
     private String password;
 
-    protected CreateUserDto() {
+    protected UpdateUserRequestDto() {
     }
 
     @Builder
-    public CreateUserDto(String name, String email, String password) {
+    public UpdateUserRequestDto(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;

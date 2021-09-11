@@ -2,9 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.CreateUserDto;
+import com.codesoom.assignment.dto.CreateUserRequestDto;
 import com.codesoom.assignment.dto.CreateUserResponseDto;
-import com.codesoom.assignment.dto.UpdateUserDto;
+import com.codesoom.assignment.dto.UpdateUserRequestDto;
 import com.codesoom.assignment.dto.UpdateUserResponseDto;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -33,15 +33,15 @@ public class UserController {
     /**
      * 회원을 생성하고, 해당 회원 정보를 리턴합니다.
      *
-     * @param createUserDto 회원 생성 정보
+     * @param createUserRequestDto 회원 생성 정보
      * @return 회원 정보
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public CreateUserResponseDto create(
-        @RequestBody @Valid CreateUserDto createUserDto
+        @RequestBody @Valid CreateUserRequestDto createUserRequestDto
     ) {
-        User user = userService.createUser(createUserDto.toEntity());
+        User user = userService.createUser(createUserRequestDto.toEntity());
 
         return new CreateUserResponseDto(user);
     }
@@ -49,16 +49,16 @@ public class UserController {
     /**
      * 회원 정보를 수정하고 리턴합니다.
      *
-     * @param id            식별자
-     * @param updateUserDto 수정할 회원 정보
+     * @param id                   식별자
+     * @param updateUserRequestDto 수정할 회원 정보
      * @return 수정된 회원 정보
      */
     @PatchMapping("{id}")
     public UpdateUserResponseDto update(
         @PathVariable Long id,
-        @RequestBody @Valid UpdateUserDto updateUserDto
+        @RequestBody @Valid UpdateUserRequestDto updateUserRequestDto
     ) {
-        User user = userService.updateUser(id, updateUserDto.toEntity());
+        User user = userService.updateUser(id, updateUserRequestDto.toEntity());
 
         return new UpdateUserResponseDto(user);
     }
