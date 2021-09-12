@@ -5,11 +5,11 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
+/**
+ * 상품 생성, 수정 정보를 표현합니다.
+ */
 @Setter
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ProductData {
     private Long id;
 
@@ -23,4 +23,15 @@ public class ProductData {
     private Integer price;
 
     private String imageUrl;
+
+    public ProductData(){}
+
+    @Builder
+    public ProductData(Long id, String name, String maker, Integer price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 }
