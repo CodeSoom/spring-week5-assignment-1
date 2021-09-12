@@ -33,6 +33,7 @@ public class ControllerExceptionHandler {
             .method(request.getMethod())
             .error(exception.getMessage()).build();
     }
+
     /**
      * 던져진 "잘못된 메소드 입력값 에외"를 받아 에러에 대한 응답을 리턴한다.
      *
