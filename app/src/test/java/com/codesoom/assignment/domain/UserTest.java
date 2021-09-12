@@ -28,6 +28,10 @@ class UserTest {
                 .password(updatePassword)
                 .build();
 
+        System.out.println("---------------");
+        System.out.println(updateParam.toString());
+
+
         //Act
         targetUser.update(updateParam);
 

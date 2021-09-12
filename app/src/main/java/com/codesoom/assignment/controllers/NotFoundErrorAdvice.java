@@ -21,7 +21,7 @@ public class NotFoundErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleUserNotFound(Long id) {
-        return new ErrorResponse("User not found id : " + id);
-    }
+    public ErrorResponse handleUserNotFound() {
+        return new ErrorResponse("User not found id");
+    } // 이 부분은 개선이 필요합니다. 오류로 인해 잠시 수정하였습니다.
 }

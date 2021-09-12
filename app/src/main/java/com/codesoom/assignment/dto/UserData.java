@@ -8,12 +8,12 @@ import lombok.Getter;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-@Builder
 public class UserData {
 
     public UserData(){ }
 
-    UserData(Long id, String name, String email, String password) {
+    @Builder
+    public UserData(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
         this.email = email;
