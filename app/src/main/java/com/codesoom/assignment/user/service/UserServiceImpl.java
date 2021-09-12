@@ -22,7 +22,7 @@ public class UserServiceImpl implements UserService {
     public User updateUser(Long id, User user) {
         User foundUser = userRepository
                 .findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() ->new UserNotFoundException(id));
 
         foundUser.change(user);
         return foundUser;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     public void deleteUserById(Long id) {
         User user = userRepository
                 .findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() ->new UserNotFoundException(id));
         userRepository.deleteById(id);
     }
 }

@@ -23,7 +23,7 @@ public class ProductServiceImpl implements ProductService {
     public Product findProductById(Long id) {
         return productRepository
                 .findById(id)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product addProduct(Product product) {
@@ -39,7 +39,7 @@ public class ProductServiceImpl implements ProductService {
     public Product deleteProductById(Long id) {
         Product foundProduct = productRepository
                 .findById(id)
-                .orElseThrow(ProductNotFoundException::new);
+                .orElseThrow(() -> new ProductNotFoundException(id));
 
         productRepository.deleteById(id);
         return foundProduct;
