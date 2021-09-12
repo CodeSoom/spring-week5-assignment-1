@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.domain.UserRepository;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -14,18 +15,15 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final Mapper mapper;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, Mapper dozerMapper) {
         this.userRepository = userRepository;
+        this.mapper = dozerMapper;
     }
 
     public UserData createUser(UserData userData) {
-        User user = User.builder()
-                .name(userData.getName())
-                .password(userData.getPassword())
-                .email(userData.getEmail())
-                .build();
-
+        User user = mapper.map(userData, User.class);
         return new UserData(userRepository.save(user));
     }
 

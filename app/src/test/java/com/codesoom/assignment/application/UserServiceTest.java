@@ -3,6 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.domain.UserRepository;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +32,8 @@ class UserServiceTest {
 
     @BeforeEach
     void setup() {
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository, DozerBeanMapperBuilder.buildDefault());
+
         userData = UserData.builder()
                 .name(NAME)
                 .password(PASSWORD)
