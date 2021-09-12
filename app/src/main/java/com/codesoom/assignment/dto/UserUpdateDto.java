@@ -23,6 +23,7 @@ public class UserUpdateDto implements UserUpdateRequest {
 
     public UserUpdateDto() {}
 
+    @Builder
     public UserUpdateDto(String name, String password) {
         this.name = name;
         this.password = password;

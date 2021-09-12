@@ -12,7 +12,6 @@ import javax.validation.constraints.NotBlank;
  * 사용자 생성 정보를 표현합니다.
  */
 @Getter
-@Builder
 public class UserPostDto implements UserCreateRequest {
     @Email
     @NotBlank
@@ -29,6 +28,7 @@ public class UserPostDto implements UserCreateRequest {
 
     public UserPostDto() {}
 
+    @Builder
     public UserPostDto(String email, String name, String password) {
         this.email = email;
         this.name = name;

@@ -12,7 +12,6 @@ import javax.persistence.Id;
  */
 @Entity
 @Getter
-@Builder
 public class User {
     @Id
     @GeneratedValue
@@ -26,6 +25,7 @@ public class User {
 
     public User() {}
 
+    @Builder
     public User(Long id, String email, String name, String password) {
         this.id = id;
         this.email = email;
