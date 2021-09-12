@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * User에 대한 생성, 조회, 수정, 삭제 요청을 Application layer에 전달한다.
+ * 사용자에 대한 생성, 수정, 삭제 요청을 처리한다.
  */
 @RestController
 @RequestMapping("/user")
@@ -29,10 +29,10 @@ public class UserController {
     }
 
     /**
-     * User 생성 요청을 Application layer에 전달한다.
+     * 사용자를 생성하고 리턴한다.
      *
-     * @param userData 생성할 User 데이터
-     * @return 생성한 User 데이터
+     * @param userData 생성할 사용자 내용
+     * @return 생성한 사용자
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -41,10 +41,10 @@ public class UserController {
     }
 
     /**
-     * User 삭제 요청을 Application layer에 전달한다.
+     * 사용자를 삭제한다.
      *
-     * @param id 삭제할 User id
-     * @throws NotFoundException User를 찾을 수 없는 경우
+     * @param id 삭제할 사용자 id
+     * @throws NotFoundException 사용자를 찾을 수 없는 경우
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
@@ -53,12 +53,12 @@ public class UserController {
     }
 
     /**
-     * User 수정 요청을 Application layer에 전달한다.
+     * 사용자를 수정하고 리턴한다.
      *
-     * @param id 수정할 User id
-     * @param userData 수정할 User 데이터
-     * @return 수정한 User 데이터
-     * @throws NotFoundException User를 찾을 수 없는 경우
+     * @param id 수정할 사용자 id
+     * @param userData 수정할 사용자 내용
+     * @return 수정한 사용자
+     * @throws NotFoundException 사용자를 찾을 수 없는 경우
      */
     @RequestMapping(
         value = "{id}", method = { RequestMethod.PUT, RequestMethod.PATCH }
