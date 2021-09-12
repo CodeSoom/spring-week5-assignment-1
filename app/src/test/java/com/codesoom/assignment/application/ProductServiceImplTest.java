@@ -32,6 +32,13 @@ class ProductServiceImplTest {
 
     }
 
+    @AfterEach
+    void clean() {
+
+        productRepository.deleteAll();
+
+    }
+
     @Nested
     @DisplayName("getProducts 메소드는")
     class Describe_getProducts {
@@ -283,18 +290,12 @@ class ProductServiceImplTest {
 
                 productService.deleteProduct(VALID_ID);
 
-                assertThatThrownBy(() -> productService.getProduct(VALID_ID)).isInstanceOf(ProductNotFoundException.class);
+                assertThatThrownBy(() -> productService.getProduct(VALID_ID))
+                        .isInstanceOf(ProductNotFoundException.class);
 
             }
 
         }
-
-    }
-
-    @AfterEach
-    void clean() {
-
-        productRepository.deleteAll();
 
     }
 
