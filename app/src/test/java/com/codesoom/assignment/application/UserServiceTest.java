@@ -110,7 +110,8 @@ class UserServiceTest {
             @DisplayName("throws UserNotFoundException")
             void throwsUserNotFoundException() {
                 assertThatThrownBy(() -> userService.updateUser(2L, newUserDtoFixture))
-                        .isInstanceOf(UserNotFoundException.class);
+                        .isInstanceOf(UserNotFoundException.class)
+                        .hasMessageContaining("id가 2 인 사용자를 찾지 못했기 떄문에 사용자 정보를 업데이트하지 못했습니다.");
             }
         }
     }
@@ -149,7 +150,8 @@ class UserServiceTest {
             @DisplayName("throws UserNotFoundException")
             void throwsUserNotFoundException() {
                 assertThatThrownBy(() -> userService.deleteUser(2L))
-                        .isInstanceOf(UserNotFoundException.class);
+                        .isInstanceOf(UserNotFoundException.class)
+                        .hasMessageContaining("id가 2 인 사용자를 찾지 못했기 떄문에 사용자 정보를 삭제하지 못했습니다.");
             }
         }
     }

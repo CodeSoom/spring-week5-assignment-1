@@ -51,7 +51,9 @@ public class UserService {
      * @param id 사용자 식별자
      */
     public void deleteUser(Long id) {
-        String failureMessage = "id가 " + id + " 인 사용자를 찾지 못했기 떄문에 사용자 정보를 삭제하지 못했습니다.";
+        String failureMessage = String.format(
+                "id가 %d 인 사용자를 찾지 못했기 떄문에 사용자 정보를 삭제하지 못했습니다.",
+                id);
 
         findUserById(id, failureMessage);
 
@@ -65,7 +67,9 @@ public class UserService {
      * @return 수정된 사용자
      */
     public User updateUser(Long id, UserUpdateDto userDto) {
-        String failureMessage = "id가 " + id + " 인 사용자를 찾지 못했기 떄문에 사용자 정보를 업데이트하지 못했습니다.";
+        String failureMessage = String.format(
+                "id가 %d 인 사용자를 찾지 못했기 떄문에 사용자 정보를 업데이트하지 못했습니다.",
+                id);
 
         User user = findUserById(id, failureMessage);
 
