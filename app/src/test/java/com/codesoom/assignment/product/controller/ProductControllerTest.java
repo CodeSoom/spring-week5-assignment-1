@@ -1,6 +1,7 @@
 package com.codesoom.assignment.product.controller;
 
 import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.dto.ProductData;
 import com.codesoom.assignment.product.service.ProductService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -104,7 +105,7 @@ class ProductControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content("{\"name\" : \"Test Name\", \"maker\" : \"Test Maker\", \"price\" : 10000}")
             ).andExpect(status().isCreated());
-            verify(ProductService).addProduct(any(Product.class));
+            verify(ProductService).addProduct(any(ProductData.class));
         }
 
         @Test
@@ -129,7 +130,7 @@ class ProductControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content("{\"name\" : \"New Name\", \"maker\" : \"New Maker\", \"price\" : 20000}")
             ).andExpect(status().isOk());
-            verify(ProductService).updateProduct(eq(1L), any(Product.class));
+            verify(ProductService).updateProduct(eq(1L), any(ProductData.class));
         }
 
         @Test

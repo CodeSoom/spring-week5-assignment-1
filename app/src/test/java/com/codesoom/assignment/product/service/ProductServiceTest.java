@@ -1,8 +1,11 @@
 package com.codesoom.assignment.product.service;
 
+import com.codesoom.assignment.product.dto.ProductData;
 import com.codesoom.assignment.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.repository.ProductRepository;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -39,8 +42,9 @@ class ProductServiceTest {
 
     @BeforeEach
     public void setUp() {
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         productRepository = mock(ProductRepository.class);
-        productService = new ProductServiceImpl(productRepository);
+        productService = new ProductServiceImpl(productRepository, mapper);
 
         setUpFixtures();
         setUpSaveTask();
@@ -106,7 +110,7 @@ class ProductServiceTest {
     @Nested
     @DisplayName("addProduct 메서드는")
     class addProduct {
-        Product source = Product.builder()
+        ProductData source = ProductData.builder()
                 .name("Test Name2")
                 .maker("Test Maker2")
                 .price(20000)
@@ -128,7 +132,7 @@ class ProductServiceTest {
     @Nested
     @DisplayName("updateProduct 메서드는")
     class updateProduct {
-        Product source = Product.builder()
+        ProductData source = ProductData.builder()
                 .name("Test Name2")
                 .maker("Test Maker2")
                 .price(20000)

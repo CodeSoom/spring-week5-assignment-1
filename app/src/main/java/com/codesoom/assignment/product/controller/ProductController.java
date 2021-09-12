@@ -1,6 +1,7 @@
 package com.codesoom.assignment.product.controller;
 
 import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.product.dto.ProductData;
 import com.codesoom.assignment.product.service.ProductService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -54,25 +55,25 @@ public class ProductController {
 
     /**
      * 사용자가 요청한 product를 추가한다.
-     * @param product 요청한 추가 대상 product
+     * @param productData 요청한 추가 대상 product
      * @return 추가된 product
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product registerProduct(@Valid @RequestBody Product product) {
-        return productService.addProduct(product);
+    public Product registerProduct(@Valid @RequestBody ProductData productData) {
+        return productService.addProduct(productData);
     }
 
     /**
      * 사용자가 요청한 product를 수정한다.
      * @param id 요청한 product 식별자
-     * @param product 수정할 product
+     * @param productData 수정할 product
      * @return 수정된 product
      */
     @PatchMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Product updateProduct(@PathVariable Long id, @Valid @RequestBody Product product) {
-        return productService.updateProduct(id, product);
+    public Product updateProduct(@PathVariable Long id, @Valid @RequestBody ProductData productData) {
+        return productService.updateProduct(id, productData);
     }
 
     /**
