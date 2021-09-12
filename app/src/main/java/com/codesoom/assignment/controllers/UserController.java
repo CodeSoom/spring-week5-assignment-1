@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 /**
  * 사용자에 대한 생성, 수정, 삭제 요청을 처리한다.
  */
+@CrossOrigin
 @RestController
 @RequestMapping("/users")
 public class UserController {
