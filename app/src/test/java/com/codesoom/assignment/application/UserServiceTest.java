@@ -73,7 +73,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("Mapper map메서드가 저장하지 않은 User를 생성하고")
+        @DisplayName("저장하지 않은 User를 생성하고")
         public class Context_mapper_creates_an_unsaved_user {
             @BeforeEach
             private void beforeEach() {
@@ -87,7 +87,7 @@ public class UserServiceTest {
             }
 
             @Nested
-            @DisplayName("UserRepository save메서드가 User를 저장하면")
+            @DisplayName("생성한 User 저장에 성공하면")
             public class Context_repository_saves_user {
                 @BeforeEach
                 private void beforeEach() {
@@ -119,7 +119,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("UserRepository findById메서드가 예외를 던지면")
+        @DisplayName("삭제할 User를 찾지 못하는 경우")
         public class Context_repository_throws_an_exception {
             @BeforeEach
             private void beforeEach() {
@@ -136,7 +136,7 @@ public class UserServiceTest {
             }
 
             @Test
-            @DisplayName("예외를 캐치하지 않는다.")
+            @DisplayName("NotFoundException을 던진다")
             public void it_throws_a_notFoundException() {
                 assertThatThrownBy(() -> subject())
                     .isInstanceOf(NotFoundException.class);
@@ -144,7 +144,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("UserRepository findById메서드가 User를 찾으면")
+        @DisplayName("삭제할 User를 찾은 경우")
         public class Context_repository_finds_a_user {
             @BeforeEach
             private void beforeEach() {
@@ -161,7 +161,7 @@ public class UserServiceTest {
             }
 
             @Test
-            @DisplayName("UserRepository delete메서드를 호출한다.")
+            @DisplayName("User를 삭제한다.")
             public void it_deletes_a_user() {
                 subject();
             }
@@ -182,7 +182,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("UserRepository findById메서드가 예외를 던지면")
+        @DisplayName("수정할 User를 찾지 못한 경우")
         public class Context_repository_throws_an_exception {
             @BeforeEach
             private void beforeEach() {
@@ -200,7 +200,7 @@ public class UserServiceTest {
             }
 
             @Test
-            @DisplayName("예외를 캐치하지 않는다.")
+            @DisplayName("NotFoundException을 던진다.")
             public void it_does_not_catch_exceptions() {
                 assertThatThrownBy(() -> subject())
                     .isInstanceOf(NotFoundException.class);
@@ -208,7 +208,7 @@ public class UserServiceTest {
         }
 
         @Nested
-        @DisplayName("UserRepository findById가 수정할 User를 찾은 경우")
+        @DisplayName("수정할 User를 찾은 경우")
         public class Context_repository_finds_a_user {
             @BeforeEach
             private void beforeEach() {
@@ -223,7 +223,7 @@ public class UserServiceTest {
             }
 
             @Nested
-            @DisplayName("Mapper map메서드가 수정할 데이터를 생성하고")
+            @DisplayName("수정할 User데이터를 생성하고")
             public class Context_mapper_generates_data_to_be_updated {
                 @BeforeEach
                 private void beforeEach() {
@@ -237,7 +237,7 @@ public class UserServiceTest {
                 }
 
                 @Nested
-                @DisplayName("User update메서드가 데이터를 수정하면")
+                @DisplayName("생성한 데이터를 이용하여 User 정보 수정에 성공한 경우")
                 public class Context_update_user {
                     @AfterEach
                     private void afterEach() {
@@ -245,7 +245,7 @@ public class UserServiceTest {
                     }
 
                     @Nested
-                    @DisplayName("UserRepository save메서드가 수정한 User를 저장하고")
+                    @DisplayName("수정한 User를 저장하고")
                     public class Context_repository_saves_user {
                         @BeforeEach
                         private void beforeEach() {
@@ -260,7 +260,7 @@ public class UserServiceTest {
                         }
 
                         @Test
-                        @DisplayName("업데이트한 User를 리턴한다.")
+                        @DisplayName("리턴한다.")
                         public void it_returns_a_updated_user() {
                             assertThat(subject())
                                 .isInstanceOf(User.class);

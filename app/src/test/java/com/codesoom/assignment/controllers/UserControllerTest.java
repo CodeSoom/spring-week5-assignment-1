@@ -54,7 +54,7 @@ public class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("UserService createUser메서드가 User를 생성하면")
+        @DisplayName("User 생성에 성공한 경우")
         public class Context_service_creates_a_user {
             @BeforeEach
             private void beforeEach() {
@@ -91,7 +91,7 @@ public class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("UserService deleteUser메서드가 예외를 던지는 경우")
+        @DisplayName("삭제할 User를 찾지 못한 경우")
         public class Context_service_throws_an_exception {
             @BeforeEach
             private void beforeEach() {
@@ -100,7 +100,7 @@ public class UserControllerTest {
             }
 
             @Test
-            @DisplayName("에러를 캐치하지 않는다.")
+            @DisplayName("NotFoundException을 던진다.")
             public void it_does_not_catch_exceptions() {
                 assertThatThrownBy(() -> subject())
                     .isInstanceOf(NotFoundException.class);
@@ -108,7 +108,7 @@ public class UserControllerTest {
         }
 
         @Test
-        @DisplayName("UserService deleteUser메서드를 호출한다.")
+        @DisplayName("User를 삭제한다.")
         public void it_deletes_a_user() {
             subject();
         }
@@ -126,7 +126,7 @@ public class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("UserService updateUser메서드가 예외를 던지면")
+        @DisplayName("수정할 User를 찾지 못한 경우")
         public class Context_service_throws_an_exception {
             @BeforeEach
             private void beforeEach() {
@@ -141,7 +141,7 @@ public class UserControllerTest {
             }
 
             @Test
-            @DisplayName("예외를 캐치하지 않는다.")
+            @DisplayName("NotFoundExceptio을 던진다.")
             public void it_does_not_catch_exceptions() {
                 assertThatThrownBy(() -> subject())
                     .isInstanceOf(NotFoundException.class);
@@ -149,7 +149,7 @@ public class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("UserService updateUser메서드가 User를 수정하면")
+        @DisplayName("User 데이터 수정에 성공하면")
         public class Context_service_update_a_user {
             @BeforeEach
             private void beforeEach() {

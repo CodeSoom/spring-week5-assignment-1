@@ -62,7 +62,7 @@ class ProductServiceTest {
         }
 
         @Test
-        @DisplayName("ProductRepository findAll 메서드의 리턴값을 리턴한다.")
+        @DisplayName("저장한 Product 목록을 리턴한다.")
         public void it_returns_a_product_list() {
             subject()
                 .matches(

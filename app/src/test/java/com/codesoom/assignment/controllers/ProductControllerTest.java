@@ -61,7 +61,7 @@ public class ProductControllerTest {
         }
 
         @Test
-        @DisplayName("ProductService getProducts 메서드의 리턴값을 리턴한다.")
+        @DisplayName("저장된 Product 목록을 리턴한다.")
         public void it_returns_a_productService_getProducts_return_value() {
             assertThat(subject())
                 .matches(
