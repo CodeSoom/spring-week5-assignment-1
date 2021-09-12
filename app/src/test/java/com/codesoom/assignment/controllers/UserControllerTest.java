@@ -1,12 +1,17 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -16,6 +21,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
+    @MockBean
+    private UserService userService;
 
     @Test
     void registerUser() throws Exception {
@@ -29,6 +37,9 @@ class UserControllerTest {
                 .andExpect(content().string(
                         containsString("\"email\":\"bloomspes@gmail.com\"")
                         ));
+
+        // 테스트가 잘 되는지 알아보자...
+        verify(userService).registerUser(any(UserData.class));
     }
 
 }
