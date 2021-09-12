@@ -2,6 +2,7 @@ package com.codesoom.assignment.e2e;
 
 import static com.codesoom.assignment.constants.UserConstants.ID;
 import static com.codesoom.assignment.constants.UserConstants.USER_DATA;
+import static com.codesoom.assignment.constants.UserConstants.USER_ENDPOINT;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -44,7 +45,7 @@ public class UserE2ETest {
 
     private ResultActions subjectPostUser() throws Exception {
         return mockMvc.perform(
-            post("/user")
+            post(USER_ENDPOINT)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(requestBody)
@@ -60,7 +61,7 @@ public class UserE2ETest {
 
     private ResultActions subjectDeleteUser() throws Exception {
         return mockMvc.perform(
-            delete("/user/" + requestParameter)
+            delete(USER_ENDPOINT + requestParameter)
                 .accept(MediaType.APPLICATION_JSON_UTF8)
         );
     }
@@ -107,7 +108,7 @@ public class UserE2ETest {
                 final String password, final String error
             ) throws Exception {
                 requestBody = Parser.toJson(
-                    new UserData(null, name, email, password)
+                    new UserData(name, email, password)
                 );
 
                 subjectPostUser()
@@ -116,7 +117,7 @@ public class UserE2ETest {
                         Parser.toJson(
                             ErrorResponse.builder()
                                 .method(RequestMethod.POST.toString())
-                                .url("/user")
+                                .url(USER_ENDPOINT)
                                 .error(error)
                                 .build()
                         )
@@ -163,7 +164,7 @@ public class UserE2ETest {
                         Parser.toJson(
                             ErrorResponse.builder()
                                 .method(RequestMethod.DELETE.toString())
-                                .url("/user/" + requestParameter)
+                                .url(USER_ENDPOINT + requestParameter)
                                 .error(
                                     new NotFoundException(requestParameter, User.class.getSimpleName()).getMessage()
                                 ).build()

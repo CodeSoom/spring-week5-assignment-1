@@ -1,6 +1,7 @@
 package com.codesoom.assignment.constants;
 
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UpdateUserData;
 import com.codesoom.assignment.dto.UserData;
 
 /**
@@ -16,6 +17,7 @@ public interface UserConstants {
         .name(NAME)
         .password(PASSWORD)
         .build();
-    final UserData USER_DATA = new UserData(null, NAME, EMAIL, PASSWORD);
-    final String USER_ENDPOINT = "/user/";
+    final UserData USER_DATA = new UserData(NAME, EMAIL, PASSWORD);
+    final UpdateUserData UPDATE_USER_DATA = new UpdateUserData(NAME, PASSWORD);
+    final String USER_ENDPOINT = "/users/";
 }

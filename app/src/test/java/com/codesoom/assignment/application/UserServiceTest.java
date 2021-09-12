@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import static com.codesoom.assignment.constants.UserConstants.ID;
 import static com.codesoom.assignment.constants.UserConstants.USER;
 import static com.codesoom.assignment.constants.UserConstants.USER_DATA;
+import static com.codesoom.assignment.constants.UserConstants.UPDATE_USER_DATA;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
@@ -19,6 +20,7 @@ import com.codesoom.assignment.NotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UpdateUserData;
 import com.github.dozermapper.core.Mapper;
 
 import org.junit.jupiter.api.AfterEach;
@@ -45,12 +47,8 @@ public class UserServiceTest {
     @Mock
     private Mapper dozerMapper;
 
-    private OngoingStubbing<User> mockMapper() {
-        return when(dozerMapper.map(any(UserData.class), eq(User.class)));
-    }
-
-    private void verifyMapper() {
-        verify(dozerMapper).map(any(UserData.class), eq(User.class));
+    private Mapper verifyMapper(final int invokeCounts) {
+        return verify(dozerMapper, times(invokeCounts));
     }
 
     private OngoingStubbing<Optional<User>> mockFindById() {
@@ -68,6 +66,10 @@ public class UserServiceTest {
     @Nested
     @DisplayName("createUser 메서드는")
     public class Describe_createUser {
+        private OngoingStubbing<User> mockMapper() {
+            return when(dozerMapper.map(any(UserData.class), eq(User.class)));
+        }
+
         private User subject() {
             return userService.createUser(USER_DATA);
         }
@@ -83,7 +85,8 @@ public class UserServiceTest {
 
             @AfterEach
             private void afterEach() {
-                verifyMapper();
+                verifyMapper(1)
+                    .map(any(UserData.class), eq(User.class));
             }
 
             @Nested
@@ -173,8 +176,12 @@ public class UserServiceTest {
     public class Describe_updateUser {
         private final User user = mock(User.class);
 
+        private OngoingStubbing<User> mockMapper() {
+            return when(dozerMapper.map(any(UpdateUserData.class), eq(User.class)));
+        }
+
         private User subject() {
-            return userService.updateUser(ID, USER_DATA);
+            return userService.updateUser(ID, UPDATE_USER_DATA);
         }
 
         private void verifyDomain(final int invokeCounts) {
@@ -233,7 +240,8 @@ public class UserServiceTest {
 
                 @AfterEach
                 private void afterEach() {
-                    verifyMapper();
+                    verifyMapper(1)
+                        .map(any(UpdateUserData.class), eq(User.class));
                 }
 
                 @Nested

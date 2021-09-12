@@ -11,11 +11,13 @@ import static org.mockito.Mockito.when;
 import static com.codesoom.assignment.constants.UserConstants.ID;
 import static com.codesoom.assignment.constants.UserConstants.USER;
 import static com.codesoom.assignment.constants.UserConstants.USER_DATA;
+import static com.codesoom.assignment.constants.UserConstants.UPDATE_USER_DATA;
 
 import com.codesoom.assignment.NotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UpdateUserData;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -118,11 +120,11 @@ public class UserControllerTest {
     @DisplayName("update 메서드는")
     public class Describe_update {
         private User subject() {
-            return userController.update(ID, USER_DATA);
+            return userController.update(ID, UPDATE_USER_DATA);
         }
 
         private OngoingStubbing<User> mockUpdateUser() {
-            return when(userService.updateUser(anyLong(), any(UserData.class)));
+            return when(userService.updateUser(anyLong(), any(UpdateUserData.class)));
         }
 
         @Nested
@@ -137,7 +139,7 @@ public class UserControllerTest {
             @AfterEach
             private void afterEach() {
                 verifyService(1)
-                    .updateUser(anyLong(), any(UserData.class));
+                    .updateUser(anyLong(), any(UpdateUserData.class));
             }
 
             @Test
@@ -160,7 +162,7 @@ public class UserControllerTest {
             @AfterEach
             private void afterEach() {
                 verifyService(1)
-                    .updateUser(anyLong(), any(UserData.class));
+                    .updateUser(anyLong(), any(UpdateUserData.class));
             }
 
             @Test

@@ -12,8 +12,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserData {
-    private Long id;
-
     @NotBlank(message = "이름이 입력되지 않았습니다.")
     @Mapping("name")
     private String name;

@@ -24,6 +24,7 @@ import com.codesoom.assignment.controllers.UserController;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.ErrorResponse;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UpdateUserData;
 import com.codesoom.assignment.utils.Parser;
 
 import org.junit.jupiter.api.AfterEach;
@@ -130,7 +131,7 @@ public class UserWebTest {
                 final String password, final String error
             ) throws Exception {
                 requestBody = Parser.toJson(
-                    new UserData(null, name, email, password)
+                    new UserData(name, email, password)
                 );
 
                 subject()
@@ -238,13 +239,13 @@ public class UserWebTest {
         }
 
         private OngoingStubbing<User> mockUpdate() {
-            return when(userController.update(anyLong(), any(UserData.class)));
+            return when(userController.update(anyLong(), any(UpdateUserData.class)));
         }
 
         @AfterEach
         private void afterEach() {
             verifyController(2)
-                .update(anyLong(), any(UserData.class));
+                .update(anyLong(), any(UpdateUserData.class));
         }
 
         @Nested
