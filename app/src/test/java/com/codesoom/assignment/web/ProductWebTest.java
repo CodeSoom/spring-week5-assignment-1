@@ -88,7 +88,7 @@ public class ProductWebTest {
         }
 
         @Test
-        @DisplayName("ProductController list 메서드의 리턴값을 JSON 문자열로 변환하여 리턴한다.")
+        @DisplayName("전체 목록 정보를 JSON 문자열로 변환하여 리턴한다.")
         public void it_returns_a_product_list_json_string() throws Exception {
             subjectGetProduct()
                 .andExpect(status().isOk())
