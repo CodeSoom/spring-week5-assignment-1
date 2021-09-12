@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.dto.ErrorResponse;
 import com.codesoom.assignment.exceptions.AccountFieldValidException;
 import com.codesoom.assignment.exceptions.AccountUpdateFailedException;
+import lombok.Generated;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
@@ -50,6 +51,7 @@ public class BadRequestErrorAdvice {
         return new ErrorResponse(ex.getMessage());
     }
 
+    @Generated
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(AccountFieldValidException.class)

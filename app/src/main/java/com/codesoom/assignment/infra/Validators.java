@@ -11,7 +11,9 @@ public class Validators {
     private static final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
     private static final Validator validator = factory.getValidator();
 
-    public static Set<ConstraintViolation<Object>> validate(Object o) {
+    private Validators() {}
+
+    public static <T> Set<ConstraintViolation<T>> validate(T o) {
         return validator.validate(o);
     }
 }

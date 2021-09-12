@@ -3,7 +3,6 @@ package com.codesoom.assignment.domain;
 import com.codesoom.assignment.dto.AccountSaveData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Generated;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -14,7 +13,6 @@ import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
-@Generated
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -51,8 +49,12 @@ public class Account {
     }
 
     public void change(Account source) {
-        email = source.email != null ? source.email : email;
-        password = source.password != null ? source.password : password;
-        name = source.name != null ? source.name : name;
+        email = isNotEmpty(source.email) ? source.email : email;
+        password = isNotEmpty(source.password) ? source.password : password;
+        name = isNotEmpty(source.name) ? source.name : name;
+    }
+
+    private boolean isNotEmpty(String value) {
+        return value != null && !value.isEmpty();
     }
 }
