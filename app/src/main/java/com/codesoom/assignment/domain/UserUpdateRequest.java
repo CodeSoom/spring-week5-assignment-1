@@ -1,7 +1,7 @@
 package com.codesoom.assignment.domain;
 
 /**
- * 사용자 수정 요청을 정의합니다.
+ * 사용자 수정 요청.
  */
 public interface UserUpdateRequest {
     /**

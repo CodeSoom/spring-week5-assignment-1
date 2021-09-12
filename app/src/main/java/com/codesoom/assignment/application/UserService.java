@@ -24,9 +24,9 @@ public class UserService {
     /**
      * 해당 식별자의 사용자를 리턴합니다.
      * @param id 사용자 식별자
-     * @param message 해당 식별자가 없는 경우 보여줄 메시지
+     * @param message 해당 식별자의 사용자를 찾지 못한 경우 보여줄 메시지
      * @return 사용자
-     * @throws UserNotFoundException 해당 식별자의 사용자가 없는 경우
+     * @throws UserNotFoundException 해당 식별자의 사용자를 찾지 못한 경우
      */
     public User findUserById(Long id, String message) {
         return userRepository.findById(id)

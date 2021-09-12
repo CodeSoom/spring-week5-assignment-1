@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @ControllerAdvice
 public class NotFoundErrorAdvice {
     /**
-     * 존재하지 않는 상품에 대한 에러응답을 리턴합니다.
+     * 상품을 찾지 못한 경우에 대한 에러응답을 리턴합니다.
      * @return 에러 응답
      */
     @ResponseBody
@@ -26,7 +26,7 @@ public class NotFoundErrorAdvice {
     }
 
     /**
-     * 존재하지 않는 사용자에 대한 에러응답을 리턴합니다.
+     * 사용자를 찾지 못한 경우에 대한 에러응답을 리턴합니다.
      * @param e 사용자 찾을 수 없음 예외
      * @return 에러 응답
      */

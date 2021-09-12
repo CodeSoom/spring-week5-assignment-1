@@ -1,7 +1,7 @@
 package com.codesoom.assignment.domain;
 
 /**
- * 사용자 생성 요청을 정의합니다.
+ * 사용자 생성 요청.
  */
 public interface UserCreateRequest {
     /**
