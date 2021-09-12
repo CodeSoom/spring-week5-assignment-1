@@ -28,6 +28,13 @@ class UserServiceImplTest {
 
     }
 
+    @AfterEach
+    void clean() {
+
+        userRepository.deleteAll();
+
+    }
+
     @Nested
     @DisplayName("createUser 메소드는")
     class Describe_createUser {
@@ -168,14 +175,6 @@ class UserServiceImplTest {
             }
 
         }
-
-    }
-
-
-    @AfterEach
-    void clean() {
-
-        userRepository.deleteAll();
 
     }
 
