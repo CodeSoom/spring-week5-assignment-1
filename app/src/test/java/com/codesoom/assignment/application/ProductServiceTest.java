@@ -1,138 +1,76 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductData;
+
+import org.assertj.core.api.ListAssert;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.stubbing.OngoingStubbing;
 
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
+import static com.codesoom.assignment.constants.ProductConstants.PRODUCT_LIST;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
+@Nested
+@DisplayName("ProductService 클래스")
+@ExtendWith(MockitoExtension.class)
 class ProductServiceTest {
+    @InjectMocks
     private ProductService productService;
 
-    private ProductRepository productRepository = mock(ProductRepository.class);
+    @Mock
+    private ProductRepository productRepository;
 
-    @BeforeEach
-    void setUp() {
-        productService = new ProductService(productRepository);
+    @Nested
+    @DisplayName("getProducts 메서드는")
+    public class Describe_getProducts {
+        private ListAssert<Product> subject() {
+            return assertThat(productService.getProducts());
+        }
 
-        Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
+        private OngoingStubbing<List<Product>> mockFindAll() {
+            return when(productRepository.findAll());
+        }
 
-        given(productRepository.findAll()).willReturn(List.of(product));
+        private ProductRepository verifyFindAll(final int invokeCounts) {
+            return verify(productRepository, times(invokeCounts));
+        }
 
-        given(productRepository.findById(1L)).willReturn(Optional.of(product));
+        @BeforeEach
+        private void beforeEach() {
+            mockFindAll()
+                .thenReturn(PRODUCT_LIST);
+        }
 
-        given(productRepository.save(any(Product.class))).will(invocation -> {
-            Product source = invocation.getArgument(0);
-            return Product.builder()
-                    .id(2L)
-                    .name(source.getName())
-                    .maker(source.getMaker())
-                    .price(source.getPrice())
-                    .build();
-        });
+        @AfterEach
+        private void afterEach() {
+            verifyFindAll(1)
+                .findAll();
+        }
+
+        @Test
+        @DisplayName("저장한 Product 목록을 리턴한다.")
+        public void it_returns_a_product_list() {
+            subject()
+                .matches(
+                    outputList -> Arrays.deepEquals(
+                        PRODUCT_LIST.toArray(), outputList.toArray()
+                    )
+                );
+        }
     }
 
-    @Test
-    void getProductsWithNoProduct() {
-        given(productRepository.findAll()).willReturn(List.of());
-
-        assertThat(productService.getProducts()).isEmpty();
-    }
-
-    @Test
-    void getProducts() {
-        List<Product> products = productService.getProducts();
-
-        assertThat(products).isNotEmpty();
-
-        Product product = products.get(0);
-
-        assertThat(product.getName()).isEqualTo("쥐돌이");
-    }
-
-    @Test
-    void getProductWithExsitedId() {
-        Product product = productService.getProduct(1L);
-
-        assertThat(product).isNotNull();
-        assertThat(product.getName()).isEqualTo("쥐돌이");
-    }
-
-    @Test
-    void getProductWithNotExsitedId() {
-        assertThatThrownBy(() -> productService.getProduct(1000L))
-                .isInstanceOf(ProductNotFoundException.class);
-    }
-
-    @Test
-    void createProduct() {
-        ProductData productData = ProductData.builder()
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
-
-        Product product = productService.createProduct(productData);
-
-        verify(productRepository).save(any(Product.class));
-
-        assertThat(product.getId()).isEqualTo(2L);
-        assertThat(product.getName()).isEqualTo("쥐돌이");
-        assertThat(product.getMaker()).isEqualTo("냥이월드");
-    }
-
-    @Test
-    void updateProductWithExistedId() {
-        ProductData productData = ProductData.builder()
-                .name("쥐순이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
-
-        Product product = productService.updateProduct(1L, productData);
-
-        assertThat(product.getId()).isEqualTo(1L);
-        assertThat(product.getName()).isEqualTo("쥐순이");
-    }
-
-    @Test
-    void updateProductWithNotExistedId() {
-        ProductData productData = ProductData.builder()
-                .name("쥐순이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
-
-        assertThatThrownBy(() -> productService.updateProduct(1000L, productData))
-                .isInstanceOf(ProductNotFoundException.class);
-    }
-
-    @Test
-    void deleteProductWithExistedId() {
-        productService.deleteProduct(1L);
-
-        verify(productRepository).delete(any(Product.class));
-    }
-
-    @Test
-    void deleteProductWithNotExistedId() {
-        assertThatThrownBy(() -> productService.deleteProduct(1000L))
-                .isInstanceOf(ProductNotFoundException.class);
-    }
 }

@@ -1,23 +1,37 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.NotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.github.dozermapper.core.Mapper;
+
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * 상품에 대한 생성, 조회, 수정 삭제를 담당한다.
+ */
 @Service
 @Transactional
 public class ProductService {
+    private final Mapper dozerMapper;
     private final ProductRepository productRepository;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(
+        final Mapper dozerMapper, final ProductRepository productRepository
+    ) {
+        this.dozerMapper= dozerMapper;
         this.productRepository = productRepository;
     }
 
+    /**
+     * 상품 목록을 조회해 리턴합니다.
+     *
+     * @return 상품 목록
+     */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
@@ -27,25 +41,13 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-        Product product = Product.builder()
-                .name(productData.getName())
-                .maker(productData.getMaker())
-                .price(productData.getPrice())
-                .imageUrl(productData.getImageUrl())
-                .build();
+        Product product = dozerMapper.map(productData, Product.class);
         return productRepository.save(product);
     }
 
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
-
-        product.change(
-                productData.getName(),
-                productData.getMaker(),
-                productData.getPrice(),
-                productData.getImageUrl()
-        );
-
+        product.change(dozerMapper.map(productData, Product.class));
         return product;
     }
 
@@ -59,6 +61,8 @@ public class ProductService {
 
     private Product findProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(
+                    () -> new NotFoundException(id, Product.class.getSimpleName())
+                );
     }
 }

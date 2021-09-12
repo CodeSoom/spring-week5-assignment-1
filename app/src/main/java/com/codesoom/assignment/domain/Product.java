@@ -36,4 +36,11 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
     }
+
+    public void change(final Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
+        this.imageUrl = source.imageUrl;
+    }
 }
