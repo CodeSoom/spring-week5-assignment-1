@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    UserData userData createAccount() {
-        return userData.getId()
+    UserData createAccount() {
+        return UserData.builder()
+                .email("bloomspes@gmail.com")
+                .build();
     }
 }
