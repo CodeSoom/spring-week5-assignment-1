@@ -4,9 +4,11 @@ import javax.validation.Valid;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UpdateUserData;
 import com.codesoom.assignment.dto.UserData;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 사용자에 대한 생성, 수정, 삭제 요청을 처리한다.
  */
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
     private final UserService userService;
 
@@ -65,8 +67,8 @@ public class UserController {
     )
     @ResponseStatus(HttpStatus.OK)
     public User update(
-        @PathVariable final Long id, @RequestBody final UserData userData
+        @PathVariable final Long id, @RequestBody @Valid final UpdateUserData updateUserData
     ) {
-        return userService.updateUser(id, userData);
+        return userService.updateUser(id, updateUserData);
     }
 }
