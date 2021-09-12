@@ -41,12 +41,7 @@ public class ProductService {
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
-        product.change(
-                productData.getName(),
-                productData.getMaker(),
-                productData.getPrice(),
-                productData.getImageUrl()
-        );
+        product.changeWith(mapper.map(productData, Product.class));
 
         return product;
     }
