@@ -127,7 +127,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원 검색 실패")
+    @DisplayName("회원 검색 실패 - 존재하지 않는 회원 ID")
     void selectUserFail() throws Exception {
         // when
         mockMvc.perform(get("/users/" + NOT_EXISTS_ID)
@@ -152,7 +152,7 @@ class UserControllerTest {
 
 
     @Test
-    @DisplayName("회원 수정")
+    @DisplayName("수정하려는 회원을 찾아 존재 시 회원 수정")
     void modifyUser() throws Exception {
         // when
         mockMvc.perform(patch("/users/" + DEFAULT_ID)
@@ -193,7 +193,7 @@ class UserControllerTest {
     }
 
     @Test
-    @DisplayName("회원 삭제")
+    @DisplayName("삭제하려는 회원을 찾아 존재 시 회원 삭제")
     void deleteUser() throws Exception {
         // when
         mockMvc.perform(delete("/users/" + DEFAULT_ID)

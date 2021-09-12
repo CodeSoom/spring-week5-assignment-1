@@ -1,10 +1,9 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
-import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -64,7 +63,7 @@ class UserServiceTest {
 
 
     @Test
-    @DisplayName("유저 검색")
+    @DisplayName("회원 검색")
     void selectUser() {
         // when
         UserData user = userService.selectUser(createUserId);
@@ -75,7 +74,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 검색 실패")
+    @DisplayName("회원 검색 실패 - 존재하지 않는 회원 ID")
     void selectUserFail() {
         // when
         // then
@@ -85,7 +84,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 리스트 검색")
+    @DisplayName("회원 리스트 검색")
     void selectUsers() {
         // when
         List<UserData> users = userService.selectUsers();
@@ -96,7 +95,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 수정")
+    @DisplayName("수정하려는 회원을 찾아 존재 시 회원 수정")
     void modifyUser() {
         // when
         UserData user = userService.modifyUser(createUserId, modifyUserData);
@@ -107,7 +106,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 수정 실패 - 존재하지 않는 ID")
+    @DisplayName("회원 수정 실패 - 존재하지 않는 ID")
     void notExistsUserModifyFail() {
         // when
         // then
@@ -116,7 +115,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 삭제")
+    @DisplayName("삭제하려는 회원을 찾아 존재 시 회원 삭제")
     void deleteUser() {
         // when
         userService.deleteUser(createUserId);
@@ -127,7 +126,7 @@ class UserServiceTest {
     }
 
     @Test
-    @DisplayName("유저 삭제 실패 - 존재하지 않는 ID")
+    @DisplayName("회원 삭제 실패 - 존재하지 않는 ID")
     void notExistsUserDeleteFail() {
         // when
         // then

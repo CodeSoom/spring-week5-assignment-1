@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -24,7 +25,7 @@ public class UserData {
     @Mapping("name")
     private String name;
 
-    @NotBlank
+    @NotNull
     @Mapping("email")
     private String email;
 
