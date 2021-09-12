@@ -34,6 +34,7 @@ class ProductTest {
                 .name("쥐순이")
                 .maker("코드숨")
                 .price(10000)
+                .imageUrl("http://localhost:8080/rat")
                 .build());
 
         assertThat(product.getName()).isEqualTo("쥐순이");
