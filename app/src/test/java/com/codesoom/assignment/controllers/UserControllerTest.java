@@ -32,7 +32,7 @@ class UserControllerTest {
     void registerUser() throws Exception {
         User user = User.builder().build();
         given(userService.registerUser(any(UserData.class))).willReturn(user);
-        
+
         mockMvc.perform(
                 post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
