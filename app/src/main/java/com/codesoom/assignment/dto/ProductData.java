@@ -1,10 +1,16 @@
 package com.codesoom.assignment.dto;
 
-import lombok.*;
-
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+/**
+ * 상품 데이터.
+ */
 @Setter
 @Getter
 @Builder
