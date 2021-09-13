@@ -1,5 +1,6 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.product.domain;
 
+import javax.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,6 +20,7 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String name;
 
     private String maker;
