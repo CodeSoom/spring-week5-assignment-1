@@ -29,23 +29,37 @@ class UserControllerTest {
     private UserService userService;
 
     @Test
-    void registerUser() throws Exception {
-        User user = User.builder().build();
-        given(userService.registerUser(any(UserData.class))).willReturn(user);
+    void registerUserWithValidAttributes() throws Exception {
+        given(userService.registerUser(any(UserData.class)))
+                .will(invocation -> {
+                    UserData userData = invocation.getArgument(0);
+                    User user = User.builder()
+                            .Email(userData.getEmail())
+                            .build();
+                    return user;
+                });
 
         mockMvc.perform(
-                post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"슭\",\n" +
-                                "\"email\":\"bloomspes@gmail.com\"}")
-        )
+                        post("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"슭\",\n" +
+                                        "\"email\":\"bloomspes@gmail.com\"}")
+                )
                 .andExpect(status().isCreated())
                 .andExpect(content().string(
                         containsString("\"email\":\"bloomspes@gmail.com\"")
-                        ));
-
-        // 테스트가 잘 되는지 알아보자...
+                ));
         verify(userService).registerUser(any(UserData.class));
+
     }
 
+    @Test
+    void registerUserWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                        post("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{}")
+                )
+                .andExpect(status().isBadRequest());
+    }
 }

@@ -10,9 +10,12 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -26,8 +29,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    UserData createAccount() {
-        UserData userData = UserData.builder().build();
+    UserData createAccount(@RequestBody @Valid UserData userData) {
         User user = userService.registerUser(userData);
         return UserData.builder()
                 .email(user.getEmail())
