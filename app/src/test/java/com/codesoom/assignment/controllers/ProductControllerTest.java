@@ -12,6 +12,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
@@ -40,8 +41,8 @@ class ProductControllerTest {
                 .price(5000)
                 .build();
 
-        given(productService.getProducts()).willReturn(List.of(product));
 
+        given(productService.getProducts()).willReturn(Arrays.asList(product));
         given(productService.getProduct(1L)).willReturn(product);
 
         given(productService.getProduct(1000L))
