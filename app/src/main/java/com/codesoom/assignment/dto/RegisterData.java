@@ -1,16 +1,19 @@
 package com.codesoom.assignment.dto;
 
+import lombok.Getter;
+
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
-import static org.checkerframework.checker.units.UnitsTools.min;
-
-@NotBlank
+@Getter
 public class RegisterData {
+    @NotBlank
     @Size(min = 8)
     private String password;
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String email;
 }
