@@ -9,6 +9,7 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.RegisterData;
 import com.codesoom.assignment.dto.UserData;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -33,6 +34,8 @@ public class UserController {
     UserData createAccount(@RequestBody @Valid RegisterData registerData) {
         User user = userService.registerUser(registerData);
         return UserData.builder()
+                .email(user.getId())
+                .email(user.getName())
                 .email(user.getEmail())
                 .build();
     }
