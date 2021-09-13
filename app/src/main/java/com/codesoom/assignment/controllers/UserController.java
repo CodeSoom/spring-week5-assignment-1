@@ -7,6 +7,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.RegisterData;
 import com.codesoom.assignment.dto.UserData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -29,8 +30,8 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    UserData createAccount(@RequestBody @Valid UserData userData) {
-        User user = userService.registerUser(userData);
+    UserData createAccount(@RequestBody @Valid RegisterData registerData) {
+        User user = userService.registerUser(registerData);
         return UserData.builder()
                 .email(user.getEmail())
                 .build();
