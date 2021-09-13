@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.RegisterData;
 import com.codesoom.assignment.dto.UserData;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
@@ -30,11 +31,12 @@ class UserControllerTest {
 
     @Test
     void registerUserWithValidAttributes() throws Exception {
-        given(userService.registerUser(any(UserData.class)))
+        given(userService.registerUser(any(RegisterData.class)))
                 .will(invocation -> {
-                    UserData userData = invocation.getArgument(0);
+                    RegisterData registerData = invocation.getArgument(0);
                     User user = User.builder()
-                            .Email(userData.getEmail())
+                            .name(registerData.getName())
+                            .email(registerData.getEmail())
                             .build();
                     return user;
                 });
@@ -49,7 +51,7 @@ class UserControllerTest {
                 .andExpect(content().string(
                         containsString("\"email\":\"bloomspes@gmail.com\"")
                 ));
-        verify(userService).registerUser(any(UserData.class));
+        verify(userService).registerUser(any(RegisterData.class));
 
     }
 
