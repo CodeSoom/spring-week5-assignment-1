@@ -34,8 +34,8 @@ public class UserController {
     UserData createAccount(@RequestBody @Valid RegisterData registerData) {
         User user = userService.registerUser(registerData);
         return UserData.builder()
-                .email(user.getId())
-                .email(user.getName())
+                .id(user.getId())
+                .name(user.getName())
                 .email(user.getEmail())
                 .build();
     }
