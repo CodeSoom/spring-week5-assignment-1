@@ -2,7 +2,7 @@
 
 ![demo mov](https://user-images.githubusercontent.com/14071105/107878422-e7ddc800-6f15-11eb-99de-f2436bb26112.gif)
 
-## 과제 목표
+## 과제 목표1
 
 1. 고양이 장난감가게 유효성 검사 추가하기
 
