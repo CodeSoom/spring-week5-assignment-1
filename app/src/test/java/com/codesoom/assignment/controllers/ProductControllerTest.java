@@ -110,6 +110,7 @@ class ProductControllerTest {
         verify(productService).createProduct(any(ProductData.class));
     }
 
+
     @Test
     void createWithValidAttributes() throws Exception {
         mockMvc.perform(
