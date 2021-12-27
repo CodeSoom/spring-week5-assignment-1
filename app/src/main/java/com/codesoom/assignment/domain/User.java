@@ -24,4 +24,10 @@ public class User {
     private String password;
 
     private String email;
+
+    public void changeWith(User source) {
+        this.name = source.name;
+        this.password = source.password;
+        this.email = source.email;
+    }
 }
