@@ -62,5 +62,19 @@ class UserServiceTest {
                 assertThat(users).isNotEmpty();
             }
         }
+        @Nested
+        @DisplayName("등록된 사용자가 없으면")
+        class Context_hasnot_user {
+            @BeforeEach
+            void setUp() {
+                given(userRepository.findAll()).willReturn(List.of());
+            }
+
+            @Test
+            @DisplayName("빈 목록을 리턴한다.")
+            void it_return_users() {
+                assertThat(userService.getUsers()).isEmpty();
+            }
+        }
     }
 }
