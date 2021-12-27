@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
@@ -10,8 +11,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -37,8 +40,8 @@ class UserServiceTest {
     }
 
     @Nested
-    @DisplayName("GET 메소드는")
-    class Describe_get {
+    @DisplayName("getUsers 메소드는")
+    class Describe_getUsers {
         @Nested
         @DisplayName("등록된 사용자가 있으면")
         class Context_has_user {
@@ -74,6 +77,45 @@ class UserServiceTest {
             @DisplayName("빈 목록을 리턴한다.")
             void it_return_users() {
                 assertThat(userService.getUsers()).isEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("getUser 메소드는")
+    class Describe_getUser {
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 있으면")
+        class Context_With_Exist_userId {
+            @BeforeEach
+            void setUp() {
+                User user = User.builder()
+                        .id(1L)
+                        .name(USER_NAME)
+                        .password(USER_PASSWORD)
+                        .email(USER_EMAIL)
+                        .build();
+
+                given(userRepository.findById(1L)).willReturn(Optional.of(user));
+            }
+
+            @Test
+            @DisplayName("사용자 정보를 리턴한다.")
+            void it_return_user() {
+                User user = userService.getUser(1L);
+
+                assertThat(user).isNotNull();
+                assertThat(user.getName()).isEqualTo(USER_NAME);
+            }
+        }
+        @Nested
+        @DisplayName("등록된 사용자가 없으면")
+        class Context_hasnot_user {
+            @Test
+            @DisplayName("id에 해당하는 사용자를 찾을 수 없다는 예외를 던진다.")
+            void it_return_users() {
+                assertThatThrownBy(() -> userService.getUser(1000L))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
