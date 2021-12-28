@@ -99,6 +99,17 @@ class UserServiceTest {
         }
     }
 
+    @Nested
+    class deleteUser_메소드는 {
+        @Nested
+        class 주어진_아이디의_회원이_있다면 {
+            @Test
+            void 회원을_삭제한다() {
+
+            }
+        }
+    }
+
     private void setUpSaveUser(Long id, String name) {
         User user = User.testUser(id, name, null, null);
 
