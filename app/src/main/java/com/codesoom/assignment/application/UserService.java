@@ -36,7 +36,7 @@ public class UserService {
                 source.getPassword(),
                 source.getEmail());
 
-        return user;
+        return userRepository.save(user);
     }
 
     public void deleteUser(Long targetId) {

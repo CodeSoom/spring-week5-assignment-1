@@ -2,6 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.exception.ProductNotFoundException;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -15,6 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 @DisplayName("UserService 클래스")
@@ -60,8 +63,10 @@ class UserServiceTest {
             void User를_생성하고_리턴한다() {
                 User user = userService.createUser(givenUserData);
 
-                assertThat(user.getName()).isEqualTo(givenUserData.getName());
-                assertThat(user.getEmail()).isEqualTo(givenUserData.getEmail());
+                User foundUser = userService.getUser(user.getId());
+
+                assertThat(foundUser.getName()).isEqualTo(givenUserData.getName());
+                assertThat(foundUser.getEmail()).isEqualTo(givenUserData.getEmail());
             }
         }
     }
@@ -86,10 +91,30 @@ class UserServiceTest {
 
             @Test
             void 해당_id의_User를_수정하고_리턴한다() {
-                User user = userService.updateUser(givenId, givenUserData);
+                userService.updateUser(givenId, givenUserData);
 
-                assertThat(user).isNotNull();
-                assertThat(user.getName()).isEqualTo(givenUserData.getName());
+                User foundUser = userService.getUser(givenId);
+
+                assertThat(foundUser).isNotNull();
+                assertThat(foundUser.getName()).isEqualTo(givenUserData.getName());
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 등록되지_User의_id와_수정할_User가_주어진다면 {
+
+            UserData givenUserData;
+            Long givenInvalidId = 9999L;
+
+            @BeforeEach
+            void prepaer() {
+                givenUserData = testUserDatas.get(1);
+            }
+
+            @Test
+            void 해당_id의_User를_수정하고_리턴한다() {
+                assertThatThrownBy(() -> userService.updateUser(givenInvalidId, givenUserData)).isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -113,6 +138,8 @@ class UserServiceTest {
             @Test
             void 등록된_User를_삭제하고_빈값이_리턴한다() {
                 userService.deleteUser(givenId);
+
+                assertThatThrownBy(() -> userService.getUser(givenId)).isInstanceOf(UserNotFoundException.class);
             }
         }
     }
