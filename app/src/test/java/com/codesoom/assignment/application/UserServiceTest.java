@@ -61,7 +61,7 @@ class UserServiceTest {
     }
 
     @Nested
-    class updateProduct_메소드는 {
+    class updateUser_메소드는 {
         @Nested
         class 주어진_아이디의_회원이_있다면 {
             private final String UPDATE_USER_NAME = USER_NAME + "!!!";
@@ -75,7 +75,7 @@ class UserServiceTest {
             void 회원을_수정한다() {
                 User source = User.testUser(null, UPDATE_USER_NAME, null, null);
 
-                User user = userService.updateProduct(USER_ID, source);
+                User user = userService.updateUser(USER_ID, source);
 
                 assertThat(user.getName()).isEqualTo(UPDATE_USER_NAME);
             }
@@ -92,7 +92,7 @@ class UserServiceTest {
             void 예외를_던진다() {
                 User source = User.testUser(null, null, null, null);
 
-                assertThatThrownBy(() -> userService.updateProduct(WROUNG_ID, source))
+                assertThatThrownBy(() -> userService.updateUser(WROUNG_ID, source))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
