@@ -110,7 +110,7 @@ describe('Users', () => {
 
       it('responses bad request', async () => {
         await frisby.del(`/users/${id}`)
-          .expect('status', 404);
+          .expect('status', 400);
       });
     });
   });
