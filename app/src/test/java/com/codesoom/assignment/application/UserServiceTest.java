@@ -50,11 +50,6 @@ class UserServiceTest {
                 .email(USER_EMAIL)
                 .build();
 
-        User findUser = userRepository.findById(NOT_EXIST_ID).orElse(null);
-        if (findUser != null) {
-            userService.deleteUser(NOT_EXIST_ID);
-        }
-
         given(userRepository.findAll()).willReturn(List.of(user));
         given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(user));
     }
