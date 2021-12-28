@@ -203,4 +203,20 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("deleteUser 메소드는")
+    class Describe_deleteUser {
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 있다면")
+        class Context_When_Exist_user {
+            @Test
+            @DisplayName("사용자를 삭제하고 리턴한다.")
+            void it_return_user() {
+                userService.deleteUser(1L);
+
+                verify(userRepository).delete(any(User.class));
+            }
+        }
+    }
 }
