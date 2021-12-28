@@ -16,6 +16,7 @@ import static org.mockito.Mockito.verify;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("UserService 클래스")
+@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserServiceTest {
 
     private UserRepository userRepository = mock(UserRepository.class);
@@ -23,7 +24,6 @@ class UserServiceTest {
     private UserService userService = new UserService(userRepository);
 
     @Nested
-    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class createUser_메소드는 {
 
         @BeforeEach
@@ -52,5 +52,19 @@ class UserServiceTest {
 
             verify(userRepository).save(any(User.class));
         }
+    }
+
+    @Nested
+    class updateProduct_메소드는 {
+
+        @Nested
+        class 주어진_아이디의_유저가_있다면 {
+
+            @Test
+            void 유저를_수정한다() {
+
+            }
+        }
+
     }
 }
