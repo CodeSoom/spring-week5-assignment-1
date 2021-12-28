@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -11,6 +12,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,6 +38,8 @@ class UserControllerTest {
             void 회원을_저장한다() throws Exception {
                 mockMvc.perform(post("/users", "{name:\"test\", email:\"test@naver.com\", password:\"1234\"}"))
                         .andExpect(status().isOk());
+
+                verify(userService).createUser(any(User.class));
             }
         }
 
