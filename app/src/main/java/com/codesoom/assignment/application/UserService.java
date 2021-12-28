@@ -6,7 +6,12 @@ import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.UserNotFoundException;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
+import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
+@Service
+@Transactional
 public class UserService {
 
     private final Mapper mapper;
