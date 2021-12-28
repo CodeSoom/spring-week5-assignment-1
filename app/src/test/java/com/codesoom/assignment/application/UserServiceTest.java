@@ -100,6 +100,11 @@ class UserServiceTest {
             }
         }
 
+        @BeforeEach
+        void setUp() {
+            // TO-DO 1000L 아이디 사용자를 삭제하여 사용자 정보가 없는 상태로 만들어라
+        }
+
         @Nested
         @DisplayName("등록된 사용자가 없으면")
         class Context_hasnot_user {
@@ -148,6 +153,53 @@ class UserServiceTest {
                 assertThat(user.getName()).isEqualTo(NEW_NAME);
                 assertThat(user.getPassword()).isEqualTo(NEW_PASSWORD);
                 assertThat(user.getEmail()).isEqualTo(NEW_EMAIL);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("updateUser 메서드는")
+    class Discribe_updateUser {
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 있다면")
+        class Context_When_Exist_user {
+            @Test
+            @DisplayName("사용자 정보를 수정하고 리턴한다.")
+            void it_update_user_return() {
+                UserData userData = UserData.builder()
+                        .name(NEW_NAME)
+                        .password(NEW_PASSWORD)
+                        .email(NEW_EMAIL)
+                        .build();
+
+                User user = userService.updateUser(1L, userData);
+
+                assertThat(user.getId()).isEqualTo(1L);
+                assertThat(user.getName()).isEqualTo(NEW_NAME);
+                assertThat(user.getPassword()).isEqualTo(NEW_PASSWORD);
+                assertThat(user.getEmail()).isEqualTo(NEW_EMAIL);
+            }
+        }
+
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 없다면")
+        class Context_When_NotExist_user {
+            @BeforeEach
+            void setUp() {
+                // TO-DO 1000L 아이디 사용자를 삭제하여 사용자 정보가 없는 상태로 만들어라
+            }
+
+            @Test
+            @DisplayName("사용자를 찾을 수 없다는 예외를 던진다.")
+            void it_throw_UserNotFoundException() {
+                UserData userData = UserData.builder()
+                        .name(NEW_NAME)
+                        .password(NEW_PASSWORD)
+                        .email(NEW_EMAIL)
+                        .build();
+
+                assertThatThrownBy(() -> userService.updateUser(1000L, userData))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
