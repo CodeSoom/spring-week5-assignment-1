@@ -14,6 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @WebMvcTest(UserController.class)
 @DisplayName("UserController 클래스")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
