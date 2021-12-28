@@ -60,4 +60,15 @@ class UserControllerTest {
             }
         }
     }
+
+    @Nested
+    class 회원을_수정하는_핸들러는 {
+        @Nested
+        class 주어진_아이디의_회원이_있다면 {
+            @Test
+            void 회원을_수정한다() {
+
+            }
+        }
+    }
 }
