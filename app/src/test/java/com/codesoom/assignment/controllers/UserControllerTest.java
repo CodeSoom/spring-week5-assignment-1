@@ -23,8 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -111,7 +110,11 @@ class UserControllerTest {
                         .andExpect(status().isBadRequest());
             }
         }
+    }
 
+    @Nested
+    @DisplayName("Patch 요청은")
+    class Describe_Patch {
         @Nested
         @DisplayName("id에 해당하는 사용자가 있다면")
         class Context_With_Exist_user {
@@ -140,7 +143,7 @@ class UserControllerTest {
                         .build();
                 String userContext = objectMapper.writeValueAsString(userData);
 
-                mockMvc.perform(post("/user/1")
+                mockMvc.perform(patch("/user/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userContext))
                         .andExpect(status().isOk())
@@ -160,7 +163,7 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("사용자 정보를 수정하고 리턴한다.")
+            @DisplayName("사용자 정보를 찾을 수 없다고 응답한다.")
             void it_fix_user_return() throws Exception {
                 UserData userData = UserData.builder()
                         .name(NEW_NAME)
@@ -169,7 +172,7 @@ class UserControllerTest {
                         .build();
                 String userContext = objectMapper.writeValueAsString(userData);
 
-                mockMvc.perform(post("/user/1000")
+                mockMvc.perform(patch("/user/1000")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userContext))
                         .andExpect(status().isNotFound());
@@ -199,10 +202,11 @@ class UserControllerTest {
         @DisplayName("id에 해당하는 사용자가 없다면")
         class Context_With_Not_Exist_user {
             @BeforeEach
-            void setUp(){
+            void setUp() {
                 given(userService.deleteUser(1000L))
                         .willThrow(new UserNotFoundException(1000L));
             }
+
             @Test
             @DisplayName("사용자를 찾을 수 없다고 응답한다.")
             void it_return_user() throws Exception {
