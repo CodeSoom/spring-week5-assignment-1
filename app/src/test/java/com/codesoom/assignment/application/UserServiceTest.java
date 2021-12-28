@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,17 +12,18 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("UserService 클래스")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserServiceTest {
 
-    private UserRepository userRepository = mock(UserRepository.class);
+    private UserRepository userRepository = spy(UserRepository.class);
 
     private UserService userService = new UserService(userRepository);
 
@@ -58,33 +60,50 @@ class UserServiceTest {
 
     @Nested
     class updateProduct_메소드는 {
+        private final String USER_NAME = "test";
 
         @Nested
         class 주어진_아이디의_회원이_있다면 {
             private final Long USER_ID = 1L;
-            private final String USER_NAME = "test";
+            private final String UPDATE_USER_NAME = USER_NAME + "!!!";
 
             @BeforeEach
             void setUp() {
-                User user = User.testUser(USER_ID, USER_NAME, null, null);
-
-                given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
+                setUpSaveUser(USER_ID, USER_NAME);
             }
 
             @Test
             void 회원을_수정한다() {
-                User source = User.testUser(null, USER_NAME, null, null);
+                User source = User.testUser(null, UPDATE_USER_NAME, null, null);
 
-                userService.updateProduct(USER_ID, source);
+                User user = userService.updateProduct(USER_ID, source);
+
+                assertThat(user.getName()).isEqualTo(UPDATE_USER_NAME);
             }
         }
 
         @Nested
         class 주어진_아이디의_회원이_없다면 {
+            private final Long WROUNG_ID = 100L;
+
+            @BeforeEach
+            void setUp() {
+                setUpSaveUser(WROUNG_ID + 1, USER_NAME);
+            }
+
             @Test
             void 예외를_던진다() {
+                User source = User.testUser(null, null, null, null);
 
+                assertThatThrownBy(() -> userService.updateProduct(WROUNG_ID, source))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
+    }
+
+    private void setUpSaveUser(Long id, String name) {
+        User user = User.testUser(id, name, null, null);
+
+        given(userRepository.findById(id)).willReturn(Optional.of(user));
     }
 }
