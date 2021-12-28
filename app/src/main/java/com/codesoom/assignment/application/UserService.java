@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -30,5 +31,18 @@ public class UserService {
         );
 
         return userRepository.save(savedUser);
+    }
+
+    public User updateProduct(Long id, User source) {
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        user.change(
+                source.getName(),
+                source.getEmail(),
+                source.getPassword()
+        );
+
+        return user;
     }
 }

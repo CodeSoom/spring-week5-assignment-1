@@ -39,4 +39,10 @@ public class User {
         user.password = password;
         return user;
     }
+
+    public void change(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }

@@ -9,6 +9,8 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -41,7 +43,7 @@ class UserServiceTest {
         }
 
         @Test
-        void 유저를_저장한다() {
+        void 회원을_저장한다() {
             User user = User.createSaveUser(
                     "홍길동",
                     "test@naver.com",
@@ -58,13 +60,23 @@ class UserServiceTest {
     class updateProduct_메소드는 {
 
         @Nested
-        class 주어진_아이디의_유저가_있다면 {
+        class 주어진_아이디의_회원이_있다면 {
+            private final Long USER_ID = 1L;
+            private final String USER_NAME = "test";
+
+            @BeforeEach
+            void setUp() {
+                User user = User.testUser(USER_ID, USER_NAME, null, null);
+
+                given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
+            }
 
             @Test
-            void 유저를_수정한다() {
+            void 회원을_수정한다() {
+                User source = User.testUser(null, USER_NAME, null, null);
 
+                userService.updateProduct(USER_ID, source);
             }
         }
-
     }
 }
