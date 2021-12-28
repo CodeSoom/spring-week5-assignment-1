@@ -29,23 +29,18 @@ class UserServiceTest {
 
     private UserRepository userRepository;
 
-    List<UserData> userDatas = new ArrayList<>();
+    UserData testUserData;
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         userService = new UserService(userRepository);
 
-        UserData userData = UserData.builder()
+        testUserData = UserData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
                 .build();
-
-        IntStream.range(0, 5).forEach(i -> {
-            userData.setId(Long.valueOf(i));
-            userDatas.add(userData);
-        });
     }
 
     @Nested
@@ -61,7 +56,7 @@ class UserServiceTest {
 
             @BeforeEach
             void prepare() {
-                givenUserData = userDatas.get(0);
+                givenUserData = testUserData;
 
                 given(userRepository.save(any(User.class))).will(invocation -> {
                     User user = invocation.getArgument(0);
@@ -95,7 +90,7 @@ class UserServiceTest {
 
             @BeforeEach
             void prepaer() {
-                givenUserData = userDatas.get(0);
+                givenUserData = testUserData;
                 givenUserData.setName("Update Hyuk");
                 givenUser.change(givenUserData.getName(), givenUserData.getPassword(), givenUserData.getEmail());
 
@@ -132,7 +127,7 @@ class UserServiceTest {
 
             @BeforeEach
             void prepare() {
-                UserData userData = userDatas.get(0);
+                UserData userData = testUserData;
                 givenUser.change(userData.getName(), userData.getPassword(), userData.getEmail());
 
                 given(userRepository.findById(givenId)).willReturn(Optional.of(givenUser));

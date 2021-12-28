@@ -15,10 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.IntStream;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -29,7 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(UserController.class)
-@DisplayName("UserController 클래스는")
+@DisplayName("UserController 클래스")
 class UserControllerTest {
 
     @Autowired
@@ -41,20 +37,15 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    List<UserData> userDatas = new ArrayList<>();
+    UserData testUserData;
 
     @BeforeEach
     void setUp() {
-        UserData userData = UserData.builder()
+        testUserData = UserData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
                 .build();
-
-        IntStream.range(0, 5).forEach(i -> {
-            userData.setId(Long.valueOf(i));
-            userDatas.add(userData);
-        });
     }
 
     @Nested
@@ -62,7 +53,7 @@ class UserControllerTest {
     class Describe_post{
 
         @Nested
-        @DisplayName("등록된 User가 주어진다면")
+        @DisplayName("등록될 user가 주어진다면")
         class Context_with_user {
 
             UserData givenUserData;
@@ -70,7 +61,7 @@ class UserControllerTest {
 
             @BeforeEach
             void prepare() {
-                givenUserData = userDatas.get(0);
+                givenUserData = testUserData;
                 givenUser.change(givenUserData.getName(), givenUserData.getPassword(), givenUserData.getEmail());
                 given(userService.createUser(any(UserData.class))).willReturn(givenUser);
             }
@@ -86,6 +77,96 @@ class UserControllerTest {
                         .andDo(print());
             }
         }
+
+        @Nested
+        @DisplayName("등록될 user가 없다면")
+        class Context_without_user {
+
+            @Test
+            @DisplayName("400(Bad Request)를 응답합니다.")
+            void it_return_bad_request() throws Exception {
+                mockMvc.perform(post("/user")
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayName("등록될 user의 name이 빈값이라면")
+        class Context_with_user_with_empty_name {
+
+            UserData givenInvalidUserData;
+
+            @BeforeEach
+            void prepare() {
+                givenInvalidUserData = UserData.builder()
+                        .password("!234")
+                        .email("pjh0819@naver.com")
+                        .build();
+            }
+
+            @Test
+            @DisplayName("400(Bad Request)를 응답합니다.")
+            void it_return_bad_request() throws Exception {
+                mockMvc.perform(post("/user")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userDataToContent(givenInvalidUserData)))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayName("등록될 user의 password가 빈값이라면")
+        class Context_with_user_with_empty_password {
+
+            UserData givenInvalidUserData;
+
+            @BeforeEach
+            void prepare() {
+                givenInvalidUserData = UserData.builder()
+                        .name("Hyuk")
+                        .email("pjh0819@naver.com")
+                        .build();
+            }
+
+            @Test
+            @DisplayName("400(Bad Request)를 응답합니다.")
+            void it_return_bad_request() throws Exception {
+                mockMvc.perform(post("/user")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userDataToContent(givenInvalidUserData)))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayName("등록될 user의 email의 형식이 잘못되었다면")
+        class Context_with_user_with_invalid_email {
+
+            UserData givenInvalidUserData;
+
+            @BeforeEach
+            void prepare() {
+                givenInvalidUserData = UserData.builder()
+                        .name("Hyuk")
+                        .password("!234")
+                        .email("pjh0819")
+                        .build();
+            }
+
+            @Test
+            @DisplayName("400(Bad Request)를 응답합니다.")
+            void it_return_bad_request() throws Exception {
+                mockMvc.perform(post("/user")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userDataToContent(givenInvalidUserData)))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+        }
     }
 
     @Nested
@@ -97,22 +178,23 @@ class UserControllerTest {
         class Context_with_id_and_user {
 
             UserData givenUserData;
-            User givenUser = new User();
-            Long givenId;
+            Long givenId= 1L;
 
             @BeforeEach
             void prepare() {
-                givenUserData = userDatas.get(0);
+                givenUserData = testUserData;
+                givenUserData.setName("업데이트 Hyuk");
 
                 given(userService.updateUser(eq(givenId), any(UserData.class)))
                         .will(invocation -> {
                             Long id = invocation.getArgument(0);
                             UserData userData = invocation.getArgument(1);
 
-                            givenUser.change(userData.getName(), userData.getPassword(), userData.getEmail());
-                            givenUser.setId(id);
+                            User user = new User();
+                            user.change(userData.getName(), userData.getPassword(), userData.getEmail());
+                            user.setId(id);
 
-                            return userData;
+                            return user;
                         });
             }
 
