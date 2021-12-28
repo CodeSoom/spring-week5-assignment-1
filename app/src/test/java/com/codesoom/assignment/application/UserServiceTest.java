@@ -11,7 +11,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.*;
@@ -42,8 +41,6 @@ class UserServiceTest {
                 .password(USER_PASSWORD)
                 .email(USER_EMAIL)
                 .build();
-
-        given(userRepository.findAll()).willReturn(List.of(user));
 
         given(userRepository.findById(1L)).willReturn(Optional.of(user));
 
