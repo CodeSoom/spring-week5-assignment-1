@@ -108,9 +108,9 @@ describe('Users', () => {
         id = 9999;
       });
 
-      it('responses bad request', async () => {
+      it('responses Not Found', async () => {
         await frisby.del(`/users/${id}`)
-          .expect('status', 400);
+          .expect('status', 404);
       });
     });
   });
