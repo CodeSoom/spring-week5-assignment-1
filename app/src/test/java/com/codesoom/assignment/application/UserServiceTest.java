@@ -2,45 +2,42 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
-import com.codesoom.assignment.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
-import java.util.stream.IntStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
 
+@SpringBootTest
 @DisplayName("UserService 클래스")
 class UserServiceTest {
 
+    @Autowired
     private UserService userService;
 
-    private UserRepository userRepository;
-
-    UserData testUserData;
+    List<UserData> testUserDatas = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        userRepository = mock(UserRepository.class);
-        userService = new UserService(userRepository);
-
-        testUserData = UserData.builder()
+        testUserDatas.add(UserData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
-                .build();
+                .build());
+
+        testUserDatas.add(UserData.builder()
+                .name("Update Hyuk")
+                .password("123$")
+                .email("pjh9999@naver.com")
+                .build());
     }
 
     @Nested
@@ -52,17 +49,10 @@ class UserServiceTest {
         class 등록할_User가_주어진다면 {
 
             UserData givenUserData;
-            Long givenId = 1L;
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserData;
-
-                given(userRepository.save(any(User.class))).will(invocation -> {
-                    User user = invocation.getArgument(0);
-                    user.setId(givenId);
-                    return user;
-                });
+                givenUserData = testUserDatas.get(0);
             }
 
             @Test
@@ -85,31 +75,21 @@ class UserServiceTest {
         class 등록된_User의_id와_수정할_User가_주어진다면 {
 
             UserData givenUserData;
-            User givenUser = new User();
-            Long givenId = 1L;
+            Long givenId;
 
             @BeforeEach
             void prepaer() {
-                givenUserData = testUserData;
-                givenUserData.setName("Update Hyuk");
-                givenUser.change(givenUserData.getName(), givenUserData.getPassword(), givenUserData.getEmail());
-
-                given(userRepository.findById(eq(givenId))).willReturn(Optional.of(givenUser));
-                given(userRepository.save(any(User.class))).will(invocation -> {
-                    User user = invocation.getArgument(1);
-                    user.setId(givenId);
-                    return user;
-                });
+                User user = userService.createUser(testUserDatas.get(0));
+                givenId = user.getId();
+                givenUserData = testUserDatas.get(1);
             }
 
             @Test
             void 해당_id의_User를_수정하고_리턴한다() {
                 User user = userService.updateUser(givenId, givenUserData);
 
-                verify(userRepository).findById(givenId);
-
                 assertThat(user).isNotNull();
-                assertThat(user.getName()).isEqualTo(user.getName());
+                assertThat(user.getName()).isEqualTo(givenUserData.getName());
             }
         }
     }
@@ -122,23 +102,17 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록된_User의_id가_주어진다면 {
 
-            Long givenId = 1L;
-            User givenUser = new User();
+            Long givenId;
 
             @BeforeEach
             void prepare() {
-                UserData userData = testUserData;
-                givenUser.change(userData.getName(), userData.getPassword(), userData.getEmail());
-
-                given(userRepository.findById(givenId)).willReturn(Optional.of(givenUser));
+                User user = userService.createUser(testUserDatas.get(0));
+                givenId = user.getId();
             }
 
             @Test
             void 등록된_User를_삭제하고_빈값이_리턴한다() {
                 userService.deleteUser(givenId);
-
-                verify(userRepository).findById(givenId);
-                verify(userRepository).delete(any(User.class));
             }
         }
     }
