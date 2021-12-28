@@ -13,8 +13,15 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 public class NotFoundErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler({ProductNotFoundException.class, UserNotFoundException.class})
+    @ExceptionHandler({ProductNotFoundException.class})
     public ErrorResponse handleProductTaskNotFound() {
         return new ErrorResponse("Product not found");
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler({UserNotFoundException.class})
+    public ErrorResponse handleUserTaskNotFound() {
+        return new ErrorResponse("User not found");
     }
 }
