@@ -84,7 +84,7 @@ class UserControllerTest {
                         .build();
                 String userContext = objectMapper.writeValueAsString(userData);
 
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userContext))
                         .andExpect(status().isCreated())
@@ -104,7 +104,7 @@ class UserControllerTest {
                         .build();
                 String userContext = objectMapper.writeValueAsString(userData);
 
-                mockMvc.perform(post("/user")
+                mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userContext))
                         .andExpect(status().isBadRequest());
@@ -143,7 +143,7 @@ class UserControllerTest {
                         .build();
                 String userContext = objectMapper.writeValueAsString(userData);
 
-                mockMvc.perform(patch("/user/1")
+                mockMvc.perform(patch("/users/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userContext))
                         .andExpect(status().isOk())
@@ -172,7 +172,7 @@ class UserControllerTest {
                         .build();
                 String userContext = objectMapper.writeValueAsString(userData);
 
-                mockMvc.perform(patch("/user/1000")
+                mockMvc.perform(patch("/users/1000")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userContext))
                         .andExpect(status().isNotFound());
@@ -191,7 +191,7 @@ class UserControllerTest {
             @Test
             @DisplayName("사용자를 삭제하고 NoContent를 응답한다.")
             void it_return_user() throws Exception {
-                mockMvc.perform(delete("/user/1"))
+                mockMvc.perform(delete("/users/1"))
                         .andExpect(status().isNoContent());
 
                 verify(userService).deleteUser(1L);
@@ -210,7 +210,7 @@ class UserControllerTest {
             @Test
             @DisplayName("사용자를 찾을 수 없다고 응답한다.")
             void it_return_user() throws Exception {
-                mockMvc.perform(delete("/user/1000"))
+                mockMvc.perform(delete("/users/1000"))
                         .andExpect(status().isNotFound());
 
                 verify(userService).deleteUser(1000L);
