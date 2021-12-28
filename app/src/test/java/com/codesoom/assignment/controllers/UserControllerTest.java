@@ -37,5 +37,12 @@ class UserControllerTest {
             }
         }
 
+        @Nested
+        class 유효하지_않는_회원_파라미터인_경우 {
+            @Test
+            void 예외코드를_보낸다() {
+
+            }
+        }
     }
 }
