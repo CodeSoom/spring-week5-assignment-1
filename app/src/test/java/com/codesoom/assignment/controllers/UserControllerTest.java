@@ -23,6 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -174,6 +175,23 @@ class UserControllerTest {
                         .andExpect(status().isNotFound());
 
                 verify(userService).updateUser(eq(1000L), any(UserData.class));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Delete 요청은")
+    class Describe_Delete {
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 있다면")
+        class Context_With_Exist_user {
+            @Test
+            @DisplayName("사용자를 삭제하고 NoContent를 응답한다.")
+            void it_return_user() throws Exception {
+                mockMvc.perform(delete("/user/1"))
+                        .andExpect(status().isNoContent());
+
+                verify(userService).deleteUser(1L);
             }
         }
     }
