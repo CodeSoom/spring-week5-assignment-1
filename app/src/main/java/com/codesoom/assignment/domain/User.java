@@ -32,9 +32,7 @@ public class User {
         this.email = email;
     }
 
-    public void change(String name,
-                       String password,
-                       String email) {
+    public void change(String name, String password, String email) {
         this.name = name;
         this.password = password;
         this.email = email;

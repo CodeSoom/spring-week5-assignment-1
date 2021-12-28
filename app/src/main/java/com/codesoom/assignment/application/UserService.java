@@ -4,7 +4,6 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.codesoom.assignment.repository.UserRepository;
-import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -18,7 +17,6 @@ public class UserService {
 
     public User getUser(Long id) {
         return userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
-
     }
 
     public User createUser(UserData userData) {
