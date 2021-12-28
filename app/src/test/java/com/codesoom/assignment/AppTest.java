@@ -6,10 +6,5 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AppTest {
-    @Test
-    void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
-        assertEquals(classUnderTest.getGreeting(), "Hello, world!");
-    }
+    // TODO: 언젠가 필요하면 다시 돌아온다
 }
