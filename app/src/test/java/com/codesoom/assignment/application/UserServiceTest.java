@@ -49,8 +49,6 @@ class UserServiceTest {
                 .password(USER_PASSWORD)
                 .email(USER_EMAIL)
                 .build();
-
-        given(userRepository.findAll()).willReturn(List.of(user));
         given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(user));
     }
 
@@ -60,6 +58,17 @@ class UserServiceTest {
         @Nested
         @DisplayName("등록된 사용자가 있으면")
         class Context_has_user {
+            @BeforeEach
+            void setUp() {
+                User user = User.builder()
+                        .id(EXIST_ID)
+                        .name(USER_NAME)
+                        .password(USER_PASSWORD)
+                        .email(USER_EMAIL)
+                        .build();
+
+                given(userRepository.findAll()).willReturn(List.of(user));
+            }
 
             @Test
             @DisplayName("전체 목록을 리턴한다.")
@@ -93,7 +102,6 @@ class UserServiceTest {
         @Nested
         @DisplayName("id에 해당하는 사용자가 있으면")
         class Context_With_Exist_userId {
-
             @Test
             @DisplayName("사용자 정보를 리턴한다.")
             void it_return_user() {
