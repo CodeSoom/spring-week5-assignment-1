@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.repository.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
