@@ -194,5 +194,23 @@ class UserControllerTest {
                 verify(userService).deleteUser(1L);
             }
         }
+
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 없다면")
+        class Context_With_Not_Exist_user {
+            @BeforeEach
+            void setUp(){
+                given(userService.deleteUser(1000L))
+                        .willThrow(new UserNotFoundException(1000L));
+            }
+            @Test
+            @DisplayName("사용자를 찾을 수 없다고 응답한다.")
+            void it_return_user() throws Exception {
+                mockMvc.perform(delete("/user/1000"))
+                        .andExpect(status().isNotFound());
+
+                verify(userService).deleteUser(1000L);
+            }
+        }
     }
 }
