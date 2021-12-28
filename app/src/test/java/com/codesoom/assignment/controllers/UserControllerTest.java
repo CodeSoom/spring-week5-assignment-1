@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -109,43 +110,71 @@ class UserControllerTest {
                         .andExpect(status().isBadRequest());
             }
         }
-    }
 
-    @Nested
-    @DisplayName("id에 해당하는 사용자가 있다면")
-    class Context_With_Exist_user {
-        @BeforeEach
-        void setUp() {
-            given(userService.updateUser(eq(1L), any(UserData.class)))
-                    .will(invocation -> {
-                        Long id = invocation.getArgument(0);
-                        UserData userData = invocation.getArgument(1);
-                        return User.builder()
-                                .id(id)
-                                .name(userData.getName())
-                                .password(userData.getPassword())
-                                .email(userData.getEmail())
-                                .build();
-                    });
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 있다면")
+        class Context_With_Exist_user {
+            @BeforeEach
+            void setUp() {
+                given(userService.updateUser(eq(1L), any(UserData.class)))
+                        .will(invocation -> {
+                            Long id = invocation.getArgument(0);
+                            UserData userData = invocation.getArgument(1);
+                            return User.builder()
+                                    .id(id)
+                                    .name(userData.getName())
+                                    .password(userData.getPassword())
+                                    .email(userData.getEmail())
+                                    .build();
+                        });
+            }
+
+            @Test
+            @DisplayName("사용자 정보를 수정하고 리턴한다.")
+            void it_fix_user_return() throws Exception {
+                UserData userData = UserData.builder()
+                        .name(NEW_NAME)
+                        .password(NEW_PASSWORD)
+                        .email(NEW_EMAIL)
+                        .build();
+                String userContext = objectMapper.writeValueAsString(userData);
+
+                mockMvc.perform(post("/user/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userContext))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(NEW_NAME)));
+
+                verify(userService).updateUser(eq(1L), any(UserData.class));
+            }
         }
 
-        @Test
-        @DisplayName("사용자 정보를 수정하고 리턴한다.")
-        void it_fix_user_return() throws Exception {
-            UserData userData = UserData.builder()
-                    .name(NEW_NAME)
-                    .password(NEW_PASSWORD)
-                    .email(NEW_EMAIL)
-                    .build();
-            String userContext = objectMapper.writeValueAsString(userData);
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 없다면")
+        class Context_With_not_exist_user {
+            @BeforeEach
+            void setUp() {
+                given(userService.updateUser(eq(1000L), any(UserData.class)))
+                        .willThrow(new UserNotFoundException(1000L));
+            }
 
-            mockMvc.perform(post("/user/1")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(userContext))
-                    .andExpect(status().isOk())
-                    .andExpect(content().string(containsString(NEW_NAME)));
+            @Test
+            @DisplayName("사용자 정보를 수정하고 리턴한다.")
+            void it_fix_user_return() throws Exception {
+                UserData userData = UserData.builder()
+                        .name(NEW_NAME)
+                        .password(NEW_PASSWORD)
+                        .email(NEW_EMAIL)
+                        .build();
+                String userContext = objectMapper.writeValueAsString(userData);
 
-            verify(userService).updateUser(eq(1L), any(UserData.class));
+                mockMvc.perform(post("/user/1000")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userContext))
+                        .andExpect(status().isNotFound());
+
+                verify(userService).updateUser(eq(1000L), any(UserData.class));
+            }
         }
     }
 }
