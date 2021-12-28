@@ -43,4 +43,12 @@ public class UserService {
 
         return userRepository.save(user);
     }
+
+    public User updateUser(long id, UserData userData) {
+        User user = findUser(id);
+
+        user.changeWith(mapper.map(userData, User.class));
+
+        return user;
+    }
 }
