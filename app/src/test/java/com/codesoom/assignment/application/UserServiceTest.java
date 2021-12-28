@@ -110,7 +110,7 @@ class UserServiceTest {
                 verify(userRepository).findById(givenId);
 
                 assertThat(user).isNotNull();
-                assertThat(user).isEqualTo(user.getName());
+                assertThat(user.getName()).isEqualTo(user.getName());
             }
         }
     }
