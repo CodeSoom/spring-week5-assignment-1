@@ -204,7 +204,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/user/" + givenId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userDataToContent(givenUserData)))
-                        .andExpect(status().isCreated())
+                        .andExpect(status().isOk())
                         .andExpect(jsonPath("$.name").value(givenUserData.getName()))
                         .andDo(print());
             }
