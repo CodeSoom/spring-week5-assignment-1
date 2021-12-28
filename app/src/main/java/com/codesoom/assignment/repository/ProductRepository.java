@@ -1,4 +1,6 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.repository;
+
+import com.codesoom.assignment.domain.Product;
 
 import java.util.List;
 import java.util.Optional;
