@@ -4,6 +4,8 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,5 +32,17 @@ public class UserController {
     @PostMapping
     public User create(@Valid @RequestBody UserData userData) {
         return userService.createUser(userData);
+    }
+
+    /**
+     * 수정된 회원을 리턴한다.
+     *
+     * @param id 수정할 회원의 아이디
+     * @param userData 수정할 회원
+     * @return 수정된 회원
+     */
+    @PatchMapping("{id}")
+    public User update(@PathVariable Long id, @Valid @RequestBody UserData userData) {
+        return userService.updateUser(id, userData);
     }
 }

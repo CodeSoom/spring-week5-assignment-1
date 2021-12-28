@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -14,9 +15,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
@@ -30,6 +36,8 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    private final Long USER_ID = 1L;
 
     @Nested
     class 회원을_저장하는_핸들러는 {
@@ -55,8 +63,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"test\",\"email\":\"test@naver.com\"}")
-                        )
-                        .andExpect(status().isBadRequest());
+                        ).andExpect(status().isBadRequest());
             }
         }
     }
@@ -65,9 +72,29 @@ class UserControllerTest {
     class 회원을_수정하는_핸들러는 {
         @Nested
         class 주어진_아이디의_회원이_있다면 {
-            @Test
-            void 회원을_수정한다() {
+            @BeforeEach
+            void setUp() {
+                given(userService.updateUser(eq(USER_ID), any(UserData.class)))
+                        .will(invocation -> {
+                            UserData userData = invocation.getArgument(1);
+                            return User.testUser(
+                                    userData.getId(),
+                                    userData.getName(),
+                                    userData.getEmail(),
+                                    userData.getPassword()
+                            );
+                        });
 
+            }
+
+            @Test
+            void 회원을_수정한다() throws Exception {
+                mockMvc.perform(patch("/users/1")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\",\"password\":\"1234\"}")
+                        )
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString("updateName")));
             }
         }
     }

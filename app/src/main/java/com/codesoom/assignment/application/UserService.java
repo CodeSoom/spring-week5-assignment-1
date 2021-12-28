@@ -42,7 +42,7 @@ public class UserService {
      * @return 수정된 회원
      * @throws UserNotFoundException 회원을 찾지 못한 경우
      */
-    public User updateUser(Long id, User source) {
+    public User updateUser(Long id, UserData source) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 

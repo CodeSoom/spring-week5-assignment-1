@@ -76,7 +76,9 @@ class UserServiceTest {
 
             @Test
             void 회원을_수정한다() {
-                User source = User.testUser(null, UPDATE_USER_NAME, null, null);
+                UserData source = UserData.builder()
+                        .name(UPDATE_USER_NAME)
+                        .build();
 
                 User user = userService.updateUser(USER_ID, source);
 
@@ -93,7 +95,7 @@ class UserServiceTest {
 
             @Test
             void 예외를_던진다() {
-                User source = User.testUser(null, null, null, null);
+                UserData source = UserData.builder().build();
 
                 assertThatThrownBy(() -> userService.updateUser(WROUNG_ID, source))
                         .isInstanceOf(UserNotFoundException.class);
