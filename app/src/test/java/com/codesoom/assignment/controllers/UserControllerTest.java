@@ -89,5 +89,23 @@ class UserControllerTest {
                         .andExpect(content().string(containsString(USER_NAME)));
             }
         }
+        @Nested
+        @DisplayName("사용자 정보가 누락되었다면")
+        class Context_With_InValid_Attributes {
+            @Test
+            @DisplayName("잘못된 요청을 응답한다.")
+            void it_return_status() throws Exception {
+                UserData userData = UserData.builder()
+                        .name(USER_NAME)
+                        .password(USER_PASSWORD)
+                        .build();
+                String userContext = objectMapper.writeValueAsString(userData);
+
+                mockMvc.perform(post("/user")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userContext))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 }
