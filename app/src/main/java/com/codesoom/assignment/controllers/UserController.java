@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,7 +30,7 @@ public class UserController {
         return userService.createUser(userData);
     }
 
-    @PostMapping("{id}")
+    @PatchMapping("/{id}")
     public User update(
             @PathVariable Long id,
             @RequestBody @Valid UserData userData
@@ -37,7 +38,7 @@ public class UserController {
         return userService.updateUser(id, userData);
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long id) {
         userService.deleteUser(id);
