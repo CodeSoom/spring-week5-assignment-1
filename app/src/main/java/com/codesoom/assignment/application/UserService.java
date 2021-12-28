@@ -1,9 +1,13 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.codesoom.assignment.repository.UserRepository;
+import lombok.Setter;
+import org.springframework.stereotype.Service;
 
+@Service
 public class UserService {
 
     private final UserRepository userRepository;
@@ -17,11 +21,17 @@ public class UserService {
 
     }
 
-    public User createUser(User user) {
+    public User createUser(UserData userData) {
+        User user = User.builder()
+                .name(userData.getName())
+                .password(userData.getPassword())
+                .email(userData.getEmail())
+                .build();
+
         return userRepository.save(user);
     }
 
-    public User updateUser(Long targetId, User source) {
+    public User updateUser(Long targetId, UserData source) {
         User user = getUser(targetId);
 
         user.change(source.getName(),

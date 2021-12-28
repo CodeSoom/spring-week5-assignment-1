@@ -19,7 +19,6 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @Setter
     private String name;
 
     private String password;

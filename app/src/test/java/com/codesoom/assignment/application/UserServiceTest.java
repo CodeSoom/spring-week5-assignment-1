@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -28,22 +29,22 @@ class UserServiceTest {
 
     private UserRepository userRepository;
 
-    List<User> users = new ArrayList<>();
+    List<UserData> userDatas = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
         userRepository = mock(UserRepository.class);
         userService = new UserService(userRepository);
 
-        User user = User.builder()
+        UserData userData = UserData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
                 .build();
 
         IntStream.range(0, 5).forEach(i -> {
-            user.setId(Long.valueOf(i));
-            users.add(user);
+            userData.setId(Long.valueOf(i));
+            userDatas.add(userData);
         });
     }
 
@@ -55,12 +56,13 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록할_User가_주어진다면 {
 
-            User givenUser;
+            UserData givenUserData;
             Long givenId = 1L;
 
             @BeforeEach
             void prepare() {
-                givenUser = users.get(0);
+                givenUserData = userDatas.get(0);
+
                 given(userRepository.save(any(User.class))).will(invocation -> {
                     User user = invocation.getArgument(0);
                     user.setId(givenId);
@@ -71,10 +73,10 @@ class UserServiceTest {
             @Test
             @DisplayName("User 객체를 생성한다")
             void User를_생성하고_리턴한다() {
-                User user = userService.createUser(givenUser);
+                User user = userService.createUser(givenUserData);
 
-                assertThat(user.getName()).isEqualTo(givenUser.getName());
-                assertThat(user.getEmail()).isEqualTo(givenUser.getEmail());
+                assertThat(user.getName()).isEqualTo(givenUserData.getName());
+                assertThat(user.getEmail()).isEqualTo(givenUserData.getEmail());
             }
         }
     }
@@ -87,13 +89,15 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록된_User의_id와_수정할_User가_주어진다면 {
 
-            User givenUser;
+            UserData givenUserData;
+            User givenUser = new User();
             Long givenId = 1L;
 
             @BeforeEach
             void prepaer() {
-                givenUser = users.get(0);
-                givenUser.setName("Update Hyuk");
+                givenUserData = userDatas.get(0);
+                givenUserData.setName("Update Hyuk");
+                givenUser.change(givenUserData.getName(), givenUserData.getPassword(), givenUserData.getEmail());
 
                 given(userRepository.findById(eq(givenId))).willReturn(Optional.of(givenUser));
                 given(userRepository.save(any(User.class))).will(invocation -> {
@@ -105,7 +109,7 @@ class UserServiceTest {
 
             @Test
             void 해당_id의_User를_수정하고_리턴한다() {
-                User user = userService.updateUser(givenId, givenUser);
+                User user = userService.updateUser(givenId, givenUserData);
 
                 verify(userRepository).findById(givenId);
 
@@ -124,10 +128,14 @@ class UserServiceTest {
         class 등록된_User의_id가_주어진다면 {
 
             Long givenId = 1L;
+            User givenUser = new User();
 
             @BeforeEach
             void prepare() {
-                given(userRepository.findById(givenId)).willReturn(Optional.of(users.get(0)));
+                UserData userData = userDatas.get(0);
+                givenUser.change(userData.getName(), userData.getPassword(), userData.getEmail());
+
+                given(userRepository.findById(givenId)).willReturn(Optional.of(givenUser));
             }
 
             @Test
