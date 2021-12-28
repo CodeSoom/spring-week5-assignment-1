@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/{id}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(HttpStatus.OK)
     public User update(@PathVariable Long id, @RequestBody @Valid UserData userData) {
         return userService.updateUser(id, userData);
     }
