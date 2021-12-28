@@ -27,10 +27,12 @@ class UserServiceTest {
 
     private UserRepository userRepository = mock(UserRepository.class);
 
+    private static final Long EXIST_ID = 1L;
     private static final String USER_NAME = "코드숨";
     private static final String USER_PASSWORD = "1234";
     private static final String USER_EMAIL = "codesoom@gmail.com";
 
+    private static final Long NOT_EXIST_ID = 1000L;
     private static final String NEW_NAME = "스프링";
     private static final String NEW_PASSWORD = "5678";
     private static final String NEW_EMAIL = "spring@gmail.com";
@@ -42,14 +44,19 @@ class UserServiceTest {
         userService = new UserService(mapper, userRepository);
 
         User user = User.builder()
-                .id(1L)
+                .id(EXIST_ID)
                 .name(USER_NAME)
                 .password(USER_PASSWORD)
                 .email(USER_EMAIL)
                 .build();
 
+        User findUser = userRepository.findById(NOT_EXIST_ID).orElse(null);
+        if (findUser != null) {
+            userService.deleteUser(NOT_EXIST_ID);
+        }
+
         given(userRepository.findAll()).willReturn(List.of(user));
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(user));
     }
 
     @Nested
@@ -71,6 +78,7 @@ class UserServiceTest {
         @Nested
         @DisplayName("등록된 사용자가 없으면")
         class Context_hasnot_user {
+
             @BeforeEach
             void setUp() {
                 given(userRepository.findAll()).willReturn(List.of());
@@ -94,24 +102,20 @@ class UserServiceTest {
             @Test
             @DisplayName("사용자 정보를 리턴한다.")
             void it_return_user() {
-                User user = userService.getUser(1L);
+                User user = userService.getUser(EXIST_ID);
 
                 assertThat(user.getName()).isEqualTo(USER_NAME);
             }
         }
 
-        @BeforeEach
-        void setUp() {
-            // TO-DO 1000L 아이디 사용자를 삭제하여 사용자 정보가 없는 상태로 만들어라
-        }
-
         @Nested
         @DisplayName("등록된 사용자가 없으면")
         class Context_hasnot_user {
+
             @Test
             @DisplayName("id에 해당하는 사용자를 찾을 수 없다는 예외를 던진다.")
             void it_return_users() {
-                assertThatThrownBy(() -> userService.getUser(1000L))
+                assertThatThrownBy(() -> userService.getUser(NOT_EXIST_ID))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
@@ -172,9 +176,9 @@ class UserServiceTest {
                         .email(NEW_EMAIL)
                         .build();
 
-                User user = userService.updateUser(1L, userData);
+                User user = userService.updateUser(EXIST_ID, userData);
 
-                assertThat(user.getId()).isEqualTo(1L);
+                assertThat(user.getId()).isEqualTo(EXIST_ID);
                 assertThat(user.getName()).isEqualTo(NEW_NAME);
                 assertThat(user.getPassword()).isEqualTo(NEW_PASSWORD);
                 assertThat(user.getEmail()).isEqualTo(NEW_EMAIL);
@@ -184,11 +188,6 @@ class UserServiceTest {
         @Nested
         @DisplayName("id에 해당하는 사용자가 없다면")
         class Context_When_NotExist_user {
-            @BeforeEach
-            void setUp() {
-                // TO-DO 1000L 아이디 사용자를 삭제하여 사용자 정보가 없는 상태로 만들어라
-            }
-
             @Test
             @DisplayName("사용자를 찾을 수 없다는 예외를 던진다.")
             void it_throw_UserNotFoundException() {
@@ -198,7 +197,7 @@ class UserServiceTest {
                         .email(NEW_EMAIL)
                         .build();
 
-                assertThatThrownBy(() -> userService.updateUser(1000L, userData))
+                assertThatThrownBy(() -> userService.updateUser(NOT_EXIST_ID, userData))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
@@ -213,9 +212,20 @@ class UserServiceTest {
             @Test
             @DisplayName("사용자를 삭제하고 리턴한다.")
             void it_return_user() {
-                userService.deleteUser(1L);
+                userService.deleteUser(EXIST_ID);
 
                 verify(userRepository).delete(any(User.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("id에 해당하는 사용자가 없다면")
+        class Context_When_NotExist_user {
+            @Test
+            @DisplayName("사용자를 찾을 수 없다는 예외를 던진다.")
+            void it_return_user() {
+                assertThatThrownBy(() -> userService.deleteUser(NOT_EXIST_ID))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
