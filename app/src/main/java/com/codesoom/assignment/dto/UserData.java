@@ -12,10 +12,8 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserData {
 
-    @Setter
     private Long id;
 
-    @Setter
     @NotBlank
     private String name;
 

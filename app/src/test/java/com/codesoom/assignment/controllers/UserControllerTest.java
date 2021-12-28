@@ -15,6 +15,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
@@ -37,15 +40,21 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    UserData testUserData;
+    List<UserData> testUserDatas = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        testUserData = UserData.builder()
+        testUserDatas.add(UserData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
-                .build();
+                .build());
+
+        testUserDatas.add(UserData.builder()
+                .name("Update Hyuk")
+                .password("123$")
+                .email("pjh9999@naver.com")
+                .build());
     }
 
     @Nested
@@ -61,7 +70,7 @@ class UserControllerTest {
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserData;
+                givenUserData = testUserDatas.get(0);
                 givenUser.change(givenUserData.getName(), givenUserData.getPassword(), givenUserData.getEmail());
                 given(userService.createUser(any(UserData.class))).willReturn(givenUser);
             }
@@ -73,7 +82,7 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userDataToContent(givenUserData)))
                         .andExpect(status().isCreated())
-                        .andExpect(jsonPath("$.name").value(givenUserData.getName()))
+                        .andExpect(jsonPath("$.name").value(givenUser.getName()))
                         .andDo(print());
             }
         }
@@ -182,20 +191,10 @@ class UserControllerTest {
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserData;
-                givenUserData.setName("업데이트 Hyuk");
-
-                given(userService.updateUser(eq(givenId), any(UserData.class)))
-                        .will(invocation -> {
-                            Long id = invocation.getArgument(0);
-                            UserData userData = invocation.getArgument(1);
-
-                            User user = new User();
-                            user.change(userData.getName(), userData.getPassword(), userData.getEmail());
-                            user.setId(id);
-
-                            return user;
-                        });
+                givenUserData = testUserDatas.get(1);
+                User user = new User();
+                user.change(givenUserData.getName(), givenUserData.getPassword(), givenUserData.getEmail());
+                given(userService.updateUser(eq(givenId), any(UserData.class))).willReturn(user);
             }
 
             @Test
