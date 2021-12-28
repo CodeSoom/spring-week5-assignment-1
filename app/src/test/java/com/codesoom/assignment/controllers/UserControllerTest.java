@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -43,15 +44,19 @@ class UserControllerTest {
                         )
                         .andExpect(status().isOk());
 
-                verify(userService).createUser(any(User.class));
+                verify(userService).createUser(any(UserData.class));
             }
         }
 
         @Nested
         class 유효하지_않는_회원_파라미터인_경우 {
             @Test
-            void 예외코드를_보낸다() {
-
+            void 예외코드를_보낸다() throws Exception {
+                mockMvc.perform(post("/users")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"test\",\"email\":\"test@naver.com\"}")
+                        )
+                        .andExpect(status().isBadRequest());
             }
         }
     }

@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -50,7 +51,9 @@ class UserServiceTest {
 
         @Test
         void 회원을_저장한다() {
-            User source = User.createSaveUser(USER_NAME, null, null);
+            UserData source = UserData.builder()
+                    .name(USER_NAME)
+                    .build();
 
             User user = userService.createUser(source);
 

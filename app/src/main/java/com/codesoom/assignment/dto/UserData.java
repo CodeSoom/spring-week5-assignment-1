@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,4 +20,12 @@ public class UserData {
 
     @NotEmpty
     private String password;
+
+    @Builder
+    public UserData(Long id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
