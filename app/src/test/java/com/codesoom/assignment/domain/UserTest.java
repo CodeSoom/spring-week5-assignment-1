@@ -9,7 +9,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("User 클래스")
 class UserTest {
     @Nested
-    @DisplayName("빌더를 사용해 생성자를 만든다면")
+    @DisplayName("빌더를 사용해 사용자를 만든다면")
     class Describe_create {
         @Test
         @DisplayName("user가 생성된다.")
@@ -31,7 +31,7 @@ class UserTest {
     @DisplayName("change 메서드는")
     class Decribe_change {
         @Test
-        @DisplayName("사용자 정보를 바꿔준다.")
+        @DisplayName("사용자 정보를 변경한다.")
         void it_change_user() {
             User user = User.builder()
                     .id(1L)
