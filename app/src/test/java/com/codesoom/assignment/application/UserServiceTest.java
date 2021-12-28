@@ -78,5 +78,13 @@ class UserServiceTest {
                 userService.updateProduct(USER_ID, source);
             }
         }
+
+        @Nested
+        class 주어진_아이디의_회원이_없다면 {
+            @Test
+            void 예외를_던진다() {
+
+            }
+        }
     }
 }
