@@ -3,6 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.infra.UserNotFoundException;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 
 public class UserService {
@@ -16,15 +18,31 @@ public class UserService {
     }
 
     public User createUser(UserData userData){
-        return null;
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        User user =mapper.map(userData, User.class);
+
+        return userRepository.save(user);
     }
 
     public User updateUser(Long id, UserData userData){
-        return null;
+        User user = findUser(id);
+
+        user.changeWith(mapper.map(userData, User.class));
+
+        return user;
     }
 
     public User deleteUser(Long id){
-        return null;
+        User user = findUser(id);
+
+        userRepository.delete(user);
+
+        return user;
+    }
+
+    private User findUser(Long id){
+        return userRepository.findById(id)
+                .orElseThrow(()-> new UserNotFoundException(id));
     }
 
 }

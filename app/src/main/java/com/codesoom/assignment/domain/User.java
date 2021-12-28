@@ -29,7 +29,7 @@ public class User {
     @NotBlank
     private String password;
 
-현    public void changeWith(User source) {
+    public void changeWith(User source) {
         this.name = source.name;
         this.email = source.email;
         this.password = source.password;
