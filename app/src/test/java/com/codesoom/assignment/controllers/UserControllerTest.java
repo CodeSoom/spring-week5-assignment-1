@@ -3,7 +3,6 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +19,9 @@ import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -83,12 +84,13 @@ class UserControllerTest {
                 String userContext = objectMapper.writeValueAsString(userData);
 
                 mockMvc.perform(post("/user")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(userContext))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(userContext))
                         .andExpect(status().isCreated())
                         .andExpect(content().string(containsString(USER_NAME)));
             }
         }
+
         @Nested
         @DisplayName("사용자 정보가 누락되었다면")
         class Context_With_InValid_Attributes {
@@ -106,6 +108,44 @@ class UserControllerTest {
                                 .content(userContext))
                         .andExpect(status().isBadRequest());
             }
+        }
+    }
+
+    @Nested
+    @DisplayName("id에 해당하는 사용자가 있다면")
+    class Context_With_Exist_user {
+        @BeforeEach
+        void setUp() {
+            given(userService.updateUser(eq(1L), any(UserData.class)))
+                    .will(invocation -> {
+                        Long id = invocation.getArgument(0);
+                        UserData userData = invocation.getArgument(1);
+                        return User.builder()
+                                .id(id)
+                                .name(userData.getName())
+                                .password(userData.getPassword())
+                                .email(userData.getEmail())
+                                .build();
+                    });
+        }
+
+        @Test
+        @DisplayName("사용자 정보를 수정하고 리턴한다.")
+        void it_fix_user_return() throws Exception {
+            UserData userData = UserData.builder()
+                    .name(NEW_NAME)
+                    .password(NEW_PASSWORD)
+                    .email(NEW_EMAIL)
+                    .build();
+            String userContext = objectMapper.writeValueAsString(userData);
+
+            mockMvc.perform(post("/user/1")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(userContext))
+                    .andExpect(status().isOk())
+                    .andExpect(content().string(containsString(NEW_NAME)));
+
+            verify(userService).updateUser(eq(1L), any(UserData.class));
         }
     }
 }
