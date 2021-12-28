@@ -29,10 +29,9 @@ public class User {
     @NotBlank
     private String password;
 
-    public User(User source) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.password = password;
+현    public void changeWith(User source) {
+        this.name = source.name;
+        this.email = source.email;
+        this.password = source.password;
     }
 }
