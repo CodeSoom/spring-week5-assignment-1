@@ -27,6 +27,8 @@ class UserServiceTest {
 
     private UserService userService = new UserService(userRepository);
 
+    private final String USER_NAME = "test";
+
     @Nested
     class createUser_메소드는 {
 
@@ -46,22 +48,18 @@ class UserServiceTest {
 
         @Test
         void 회원을_저장한다() {
-            User user = User.createSaveUser(
-                    "홍길동",
-                    "test@naver.com",
-                    "1234"
-            );
+            User source = User.createSaveUser(USER_NAME, null, null);
 
-            userService.createUser(user);
+            User user = userService.createUser(source);
 
             verify(userRepository).save(any(User.class));
+
+            assertThat(user).isNotNull();
         }
     }
 
     @Nested
     class updateProduct_메소드는 {
-        private final String USER_NAME = "test";
-
         @Nested
         class 주어진_아이디의_회원이_있다면 {
             private final Long USER_ID = 1L;
