@@ -27,6 +27,8 @@ class UserServiceTest {
 
     private UserService userService = new UserService(userRepository);
 
+    private final Long USER_ID = 1L;
+    private final Long WROUNG_ID = 100L;
     private final String USER_NAME = "test";
 
     @Nested
@@ -62,7 +64,6 @@ class UserServiceTest {
     class updateProduct_메소드는 {
         @Nested
         class 주어진_아이디의_회원이_있다면 {
-            private final Long USER_ID = 1L;
             private final String UPDATE_USER_NAME = USER_NAME + "!!!";
 
             @BeforeEach
@@ -82,8 +83,6 @@ class UserServiceTest {
 
         @Nested
         class 주어진_아이디의_회원이_없다면 {
-            private final Long WROUNG_ID = 100L;
-
             @BeforeEach
             void setUp() {
                 setUpSaveUser(WROUNG_ID + 1, USER_NAME);
@@ -103,9 +102,16 @@ class UserServiceTest {
     class deleteUser_메소드는 {
         @Nested
         class 주어진_아이디의_회원이_있다면 {
+            @BeforeEach
+            void setUp() {
+                setUpSaveUser(USER_ID, USER_NAME);
+            }
+
             @Test
             void 회원을_삭제한다() {
+                userService.deleteUser(USER_ID);
 
+                verify(userRepository).delete(any(User.class));
             }
         }
     }

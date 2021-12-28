@@ -13,4 +13,6 @@ public interface JpaUserRepository extends UserRepository, CrudRepository<User, 
     User save(User user);
 
     Optional<User> findById(Long id);
+
+    void delete(User user);
 }
