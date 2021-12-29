@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -9,9 +10,13 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -21,14 +26,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
-@SpringBootTest
-@AutoConfigureMockMvc
+@WebMvcTest(UserController.class)
 @DisplayName("UserController 클래스")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserControllerTest {
@@ -36,16 +39,13 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @SpyBean
+    @MockBean
     private UserService userService;
-
-    private final Long USER_ID = 1L;
 
     @Nested
     class 회원을_저장하는_핸들러는 {
         @Nested
         class 유효한_회원_파라미터인_경우 {
-
             @Test
             void 회원을_저장한다() throws Exception {
                 mockMvc.perform(post("/users")
@@ -74,9 +74,11 @@ class UserControllerTest {
     class 회원을_수정하는_핸들러는 {
         @Nested
         class 주어진_아이디의_회원이_있다면 {
+            private Long userId = 1L;
+
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(USER_ID), any(UserData.class)))
+                given(userService.updateUser(eq(userId), any(UserData.class)))
                         .will(invocation -> {
                             UserData userData = invocation.getArgument(1);
                             return User.testUser(
@@ -91,7 +93,7 @@ class UserControllerTest {
 
             @Test
             void 회원을_수정한다() throws Exception {
-                mockMvc.perform(patch("/users/1")
+                mockMvc.perform(patch("/users/" + userId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\",\"password\":\"1234\"}")
                         )
@@ -102,18 +104,19 @@ class UserControllerTest {
 
         @Nested
         class 주어진_아이디의_회원이_없다면 {
-            private Long wroungId;
+            private Long wroungId = 100L;
             
             @BeforeEach
             void setUp() {
-                UserData source = UserData.builder()
-                        .name("홍길동")
-                        .email("test@test.com")
-                        .password("1234")
-                        .build();
+                //TODO
+                //SpyBean으로 실제 메소드를 호출했으나
+                //수정 성공 로직에는 mock 메소드를 호출하고
+                //수정 실패 로직에는 실제 메소드를 호출하니
+                //같은 수정 메소드를 서로 다른 2개의 호출을 한다고 에러 메시지가 출력되는 현상
+                //구현에 대하여 고민중
 
-                User savedUser = userService.createUser(source);
-                wroungId = savedUser.getId() + 1;
+                given(userService.updateUser(eq(wroungId), any(UserData.class)))
+                        .willThrow(new UserNotFoundException(wroungId));
             }
             
             @Test
@@ -130,9 +133,23 @@ class UserControllerTest {
     class 회원을_삭제하는_핸들러는 {
         @Nested
         class 주어진_아이디의_회원이_있다면 {
-            @Test
-            void 회원을_삭제한다() {
+            private Long userId = 1L;
 
+            @BeforeEach
+            void setUp() {
+                //TODO
+                //현재 setUp과 상관없이 이 테스트는 무조건 통과된다.
+                //어떻게 구현해야 할지 고민중
+
+                User user = User.createSaveUser("홍길동", "test@test.com", "1234");
+
+                given(userService.deleteUser(eq(userId))).willReturn(user);
+            }
+
+            @Test
+            void 회원을_삭제한다() throws Exception {
+                mockMvc.perform(delete("/users/1"))
+                        .andExpect(status().isNoContent());
             }
         }
     }
