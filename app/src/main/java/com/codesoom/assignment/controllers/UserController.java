@@ -15,6 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * 사용자에 대한 HTTP 요청의 처리를 담당한다.
+ */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -24,12 +27,25 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 사용자를 저장하고 리턴한다.
+     *
+     * @param userData 저장할 사용자 데이터
+     * @return 사용자
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody @Valid UserData userData) {
         return userService.createUser(userData);
     }
 
+    /**
+     * 요청받은 id의 사용자 정보를 수정한다.
+     *
+     * @param userData 사용자의 수정된 정보
+     * @param id       수정할 사용자 id
+     * @return 수정된 사용자
+     */
     @PatchMapping("/{id}")
     public User update(
             @PathVariable Long id,
@@ -38,6 +54,11 @@ public class UserController {
         return userService.updateUser(id, userData);
     }
 
+    /**
+     * 요청받은 id의 사용자를 삭제한다.
+     *
+     * @param id 삭제할 사용자 id
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long id) {
