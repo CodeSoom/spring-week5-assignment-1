@@ -3,6 +3,7 @@ package com.codesoom.assignment.dto;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import org.dozer.Mapping;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -13,12 +14,15 @@ public class UserData {
     private Long id;
 
     @NotEmpty
+    @Mapping
     private String name;
 
     @NotEmpty
+    @Mapping
     private String email;
 
     @NotEmpty
+    @Mapping
     private String password;
 
     @Builder

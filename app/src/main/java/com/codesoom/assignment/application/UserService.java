@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import lombok.RequiredArgsConstructor;
+import org.dozer.Mapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,8 @@ public class UserService {
 
     private final UserRepository userRepository;
 
+    private final Mapper mapper;
+
     /**
      * 유저를 저장하고 저장된 유저를 리턴한다.
      *
@@ -25,13 +28,9 @@ public class UserService {
      * @return 저장된 유저
      */
     public User createUser(UserData source) {
-        User savedUser = User.createSaveUser(
-                source.getName(),
-                source.getEmail(),
-                source.getPassword()
-        );
+        User user = mapper.map(source, User.class);
 
-        return userRepository.save(savedUser);
+        return userRepository.save(user);
     }
 
     /**

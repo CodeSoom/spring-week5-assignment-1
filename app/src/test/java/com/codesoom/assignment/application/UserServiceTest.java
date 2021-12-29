@@ -4,6 +4,8 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -25,8 +27,9 @@ import static org.mockito.Mockito.*;
 class UserServiceTest {
 
     private UserRepository userRepository = spy(UserRepository.class);
+    private Mapper mapper = new DozerBeanMapper();
 
-    private UserService userService = new UserService(userRepository);
+    private UserService userService = new UserService(userRepository, mapper);
 
     private final Long USER_ID = 1L;
     private final Long WROUNG_ID = 100L;
