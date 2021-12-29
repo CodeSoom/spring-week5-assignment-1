@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.User;
@@ -87,8 +88,8 @@ class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("PATCH /user/{id}")
-    class Describe_request_patch_to_users_id_path {
+    @DisplayName("POST /user/{id}")
+    class Describe_request_post_to_users_id_path {
 
         @Nested
         @DisplayName("만약 조회하는 id의 user가 존재한다면")
@@ -98,13 +99,14 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(existId), any(User.class))).willReturn(user0);
+                given(userService.updateUser(eq(existId), any(UserData.class))).willReturn(user0);
             }
 
             @Test
             @DisplayName("수정된 user를 응답합니다.")
-            void it_responses_200_and_updated_user_by_json_type() throws Exception {
-                mockMvc.perform(patch("/user/" + existId)
+            void it_responses_updated_user() throws Exception {
+                mockMvc.perform(post("/user/" + existId)
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(contentUser))
                         .andExpect(status().isOk())
@@ -120,13 +122,14 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(notExistId), any(User.class))).willThrow(new UserNotFoundException(notExistId));
+                given(userService.updateUser(eq(notExistId), any(UserData.class))).willThrow(new UserNotFoundException(notExistId));
             }
 
             @Test
             @DisplayName("NOT_FOUND(404) 상태를 응답합니다.")
             void it_responses_404() throws Exception {
-                mockMvc.perform(patch("/user/" + notExistId)
+                mockMvc.perform(post("/user/" + notExistId)
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(contentUser))
                         .andExpect(status().isNotFound());
