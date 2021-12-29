@@ -101,11 +101,11 @@ class UserControllerTest {
         void setUp() {
             given(userService.update(eq(1L), any(User.class))).will(invocation -> {
                 User source = invocation.getArgument(1);
-                return new User(
-                        source.getName(),
-                        source.getEmail(),
-                        source.getPassword()
-                );
+                return User.builder()
+                        .name(source.getName())
+                        .email(source.getEmail())
+                        .password(source.getPassword())
+                        .build();
             });
 
             given(userService.update(eq(1000L), any(User.class)))

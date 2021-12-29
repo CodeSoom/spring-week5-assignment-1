@@ -34,18 +34,19 @@ class UserServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class create_메소드는 {
 
-        private User source = new User("홍길동", "test@test.com", "asdqwe1234");
+//        private User source = new User("홍길동", "test@test.com", "asdqwe1234");
+        private User source = User.builder().name("홍길동").email("test@test.com").password("asdqwe1234").build();
         private User createdUser;
 
         @BeforeEach
         void setUpCreation() {
             given(userRepository.save(any(User.class))).will(invocation -> {
                 User source = invocation.getArgument(0);
-                return new User(
-                        source.getName(),
-                        source.getEmail(),
-                        source.getPassword()
-                );
+                return User.builder()
+                        .name(source.getName())
+                        .email(source.getEmail())
+                        .password(source.getPassword())
+                        .build();
             });
         }
 
@@ -66,7 +67,7 @@ class UserServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class update_메소드는 {
 
-        private User source = new User("철수", "cjftn@test.com", "asdfg");
+        private User source = User.builder().name("철수").email("cjftn@test.com").password("asdfg").build();
         private User updatedUser;
 
         @Nested
@@ -103,7 +104,7 @@ class UserServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class delete_메소드는 {
 
-        private User source = new User("철수", "cjftn@test.com", "asdfg");
+        private User source = User.builder().name("철수").email("cjftn@test.com").password("asdfg").build();
         private User deletedUser;
 
         @Nested
