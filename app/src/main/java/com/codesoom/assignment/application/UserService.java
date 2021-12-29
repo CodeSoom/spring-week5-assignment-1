@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.Mapper;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -38,5 +39,14 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
+    }
+
+    public void deleteById(Long id) {
+        try{
+            userRepository.deleteById(id);
+        }
+        catch (EmptyResultDataAccessException e){
+            throw new UserNotFoundException(id);
+        }
     }
 }
