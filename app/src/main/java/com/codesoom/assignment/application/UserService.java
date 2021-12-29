@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,8 +38,8 @@ public class UserService {
      * @throws '유저를 찾지 못했다'는 예외
      */
     User findUserById(Long id) {
-        // TODO : null이 아닌 예외를 던지도록 변경 필요!
-        return userRepository.findById(id).orElse(null);
+        return userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 조회할 수 없습니다."));
     }
 
     /**
@@ -57,10 +58,12 @@ public class UserService {
      * @param id     유저 id
      * @param source 변경할 유저의 source
      * @return 변경한 유저
+     * @throws '유저를 찾지 못했다'는 예외
      */
     User updateUser(Long id, User source) {
-        // TODO : null이 아닌 예외를 던지도록 변경 필요!
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 업데이트할 수 없습니다."
+                ));
         user.setName(source.getName());
         user.setEmail(source.getEmail());
         user.setPassword(source.getPassword());
@@ -72,10 +75,11 @@ public class UserService {
      * 주어진 id와 일치하는 유저를 삭제합니다.
      *
      * @param id 유저 id
+     * @throws '유저를 찾지 못했다'는 예외
      */
     void deleteUser(Long id) {
-        // TODO : null이 아닌 예외를 던지도록 변경 필요!
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(() ->
+                new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 삭제할 수 없습니다."));
 
         userRepository.delete(user);
     }
