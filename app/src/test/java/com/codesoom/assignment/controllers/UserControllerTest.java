@@ -3,7 +3,9 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserTestCase;
+import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -11,6 +13,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
@@ -18,11 +22,18 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
+import static org.mockito.BDDMockito.willThrow;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 class UserControllerTest {
     // 회원 생성하기 - POST /user
     // 회원 수정하기 - POST /user/{id}
@@ -60,13 +71,14 @@ class UserControllerTest {
 
         @BeforeEach
         void setUp() {
-            given(userService.createUser(any(User.class))).willReturn(user0);
+            given(userService.createUser(any(UserData.class))).willReturn(user0);
         }
 
         @Test
         @DisplayName("생성한 user를 응답합니다.")
         void it_responses_created_user() throws Exception {
-            mockMvc.perform(post("/users")
+            mockMvc.perform(post("/user")
+                            .accept(MediaType.APPLICATION_JSON_UTF8)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(contentUser))
                     .andExpect(status().isCreated())
@@ -74,5 +86,52 @@ class UserControllerTest {
         }
     }
 
+    @Nested
+    @DisplayName("PATCH /user/{id}")
+    class Describe_request_patch_to_users_id_path {
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 user가 존재한다면")
+        class Context_with_exist_id {
+
+            private final Long existId = 0L;
+
+            @BeforeEach
+            void setUp() {
+                given(userService.updateUser(eq(existId), any(User.class))).willReturn(user0);
+            }
+
+            @Test
+            @DisplayName("수정된 user를 응답합니다.")
+            void it_responses_200_and_updated_user_by_json_type() throws Exception {
+                mockMvc.perform(patch("/user/" + existId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(contentUser))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(contentUser));
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 user가 존재하지 않는다면")
+        class Context_with_not_exist_id {
+
+            private final Long notExistId = 100L;
+
+            @BeforeEach
+            void setUp() {
+                given(userService.updateUser(eq(notExistId), any(User.class))).willThrow(new UserNotFoundException(notExistId));
+            }
+
+            @Test
+            @DisplayName("NOT_FOUND(404) 상태를 응답합니다.")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(patch("/user/" + notExistId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(contentUser))
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
 
 }
