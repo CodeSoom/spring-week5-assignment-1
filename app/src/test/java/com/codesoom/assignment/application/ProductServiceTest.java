@@ -18,6 +18,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
 class ProductServiceTest {
+
     private ProductService productService;
 
     private ProductRepository productRepository = mock(ProductRepository.class);

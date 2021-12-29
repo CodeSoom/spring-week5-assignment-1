@@ -11,6 +11,7 @@ import java.util.Optional;
 @Primary
 public interface JpaProductRepository
         extends ProductRepository, CrudRepository<Product, Long> {
+
     List<Product> findAll();
 
     Optional<Product> findById(Long id);
