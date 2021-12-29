@@ -10,14 +10,9 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -155,9 +150,18 @@ class UserControllerTest {
 
         @Nested
         class 주어진_아이디의_회원이_없다면 {
-            @Test
-            void 에러_코드를_보낸다() {
+            private Long wroungId = 100L;
 
+            @BeforeEach
+            void setUp() {
+                given(userService.deleteUser(wroungId))
+                        .willThrow(new UserNotFoundException(wroungId));
+            }
+
+            @Test
+            void 에러_코드를_보낸다() throws Exception {
+                mockMvc.perform(delete("/users/" + wroungId))
+                        .andExpect(status().isNotFound());
             }
         }
     }
