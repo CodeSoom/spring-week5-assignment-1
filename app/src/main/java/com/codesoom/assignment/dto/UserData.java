@@ -25,6 +25,7 @@ public class UserData {
     @Mapping("email")
     private String email;
 
+    @NotBlank
     @Mapping("password")
     private String password;
 }

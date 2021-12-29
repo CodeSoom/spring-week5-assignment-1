@@ -157,7 +157,7 @@ class UserControllerTest {
                 String userContent = objectMapper.writeValueAsString(userData);
 
                 mockMvc.perform(
-                        patch("/user/1")
+                        patch("/users/1")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userContent))
                         .andExpect(status().isOk())
@@ -177,16 +177,16 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("400을 응답한다")
+            @DisplayName("404을 응답한다")
             void it_return_status() throws Exception {
                 UserData userData = updateUserData();
                 String userContent = objectMapper.writeValueAsString(userData);
 
                 mockMvc.perform(
-                        patch("/user/1000")
+                        patch("/users/1000")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(userContent))
-                        .andExpect(status().isBadRequest());
+                        .andExpect(status().isNotFound());
 
                 verify(userService).updateUser(eq(1000L), any(UserData.class));
             }
@@ -204,7 +204,7 @@ class UserControllerTest {
             @DisplayName("user를 삭제하고 204를 응답한다")
             void it_return_status() throws Exception {
                 mockMvc.perform(
-                        delete("/user/1"))
+                        delete("/users/1"))
                         .andExpect(status().isNoContent());
 
                 verify(userService).deleteUser(1L);
@@ -223,7 +223,7 @@ class UserControllerTest {
             @DisplayName("404을 응답한다")
             void it_return_status() throws Exception {
                 mockMvc.perform(
-                        delete("/user/1000"))
+                        delete("/users/1000"))
                         .andExpect(status().isNotFound());
 
                 verify(userService).deleteUser(1000L);
