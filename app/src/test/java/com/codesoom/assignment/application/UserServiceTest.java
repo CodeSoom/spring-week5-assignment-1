@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,6 +13,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("UserService")
@@ -92,6 +94,16 @@ public class UserServiceTest {
                 assertThat(result.getPassword()).isEqualTo(exitedUser.getPassword());
             }
         }
+
+        @Nested
+        @DisplayName("등록되지않은 유저의 id가 주어진다면")
+        class Context_with_not_existed_user_id {
+            @Test
+            @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
+            void it_throws_not_found_user_exception() {
+                assertThatThrownBy(() -> subject(0L)).isInstanceOf(UserNotFoundException.class);
+            }
+        }
     }
 
     @Nested
@@ -169,6 +181,31 @@ public class UserServiceTest {
                 assertThat(result.getPassword()).isEqualTo(updateUser.getPassword());
             }
         }
+
+        @Nested
+        @DisplayName("등록되지않은 유저의 id가 주어진다면")
+        class Context_with_not_existed_user_id {
+            private static final String UPDATE_USER_NAME = "new_홍길동";
+            private static final String UPDATE_USER_EMAIL = "new_hong@gmail.com";
+            private static final String UPDATE_USER_PASSWORD = "new_password";
+
+            User updateUser;
+
+            @BeforeEach
+            void prepareUpdateUser() {
+                updateUser = User.builder()
+                        .name(UPDATE_USER_NAME)
+                        .email(UPDATE_USER_EMAIL)
+                        .password(UPDATE_USER_PASSWORD)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
+            void it_throws_not_found_user_exception() {
+                assertThatThrownBy(() -> subject(0L, updateUser)).isInstanceOf(UserNotFoundException.class);
+            }
+        }
     }
 
     @Nested
@@ -191,6 +228,16 @@ public class UserServiceTest {
             void it_deletes_user() {
                 subject(exitedUser.getId());
                 assertThat(userRepository.findById(exitedUser.getId()).isEmpty()).isTrue();
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지않은 유저의 id가 주어진다면")
+        class Context_with_not_existed_user_id {
+            @Test
+            @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
+            void it_throws_not_found_user_exception() {
+                assertThatThrownBy(() -> subject(0L)).isInstanceOf(UserNotFoundException.class);
             }
         }
     }
