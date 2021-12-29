@@ -89,7 +89,7 @@ class UserControllerTest {
 
     @Nested
     @DisplayName("POST /user/{id}")
-    class Describe_request_post_to_users_id_path {
+    class Describe_request_post_to_user_id_path {
 
         @Nested
         @DisplayName("만약 조회하는 id의 user가 존재한다면")
@@ -136,5 +136,49 @@ class UserControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("/user/{id} 로 DELETE 요청을 보내면")
+    class Describe_request_delete_to_user_id_path {
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 user가 존재한다면")
+        class Context_with_exist_id {
+
+            private final Long existId = 0L;
+
+            @BeforeEach
+            void setUp() {
+                willDoNothing().given(userService).deleteById(existId);
+            }
+
+            @Test
+            @DisplayName("NO_CONTENT(204) 상태를 응답합니다.")
+            void it_responses_204() throws Exception {
+                mockMvc.perform(delete("/user/" + existId))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 조회하는 id의 user가 존재하지 않는다면")
+        class Context_with_not_exist_id {
+
+            private final Long notExistId = 100L;
+
+            @BeforeEach
+            void setUp() {
+                willThrow(new UserNotFoundException(notExistId)).given(userService).deleteById(notExistId);
+            }
+
+            @Test
+            @DisplayName("NOT_FOUND(404) 상태를 응답합니다.")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(delete("/user/" + notExistId))
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
 
 }
