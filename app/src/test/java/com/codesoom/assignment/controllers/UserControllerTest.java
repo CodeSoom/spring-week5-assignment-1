@@ -7,6 +7,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -44,6 +46,14 @@ class UserControllerTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class createUser_메소드는 {
 
+        @BeforeEach
+        void setUp() {
+            given(userService.create(any(User.class))).will(invocation -> {
+                User user = invocation.getArgument(0);
+                return user;
+            });
+        }
+
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 필수_파라메타가_모두_있다면 {
@@ -51,11 +61,6 @@ class UserControllerTest {
             @Test
             @DisplayName("새로운 회원을 생성한다")
             void 새로운_회원을_생성한다() throws Exception {
-                given(userService.create(any(User.class))).will(invocation -> {
-                    User user = invocation.getArgument(0);
-                    return user;
-                });
-
                 mockMvc.perform(
                                 post("/users")
                                         .contentType(MediaType.APPLICATION_JSON)
@@ -93,6 +98,21 @@ class UserControllerTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class updateUser_메소드는 {
 
+        @BeforeEach
+        void setUp() {
+            given(userService.update(eq(1L), any(User.class))).will(invocation -> {
+                User source = invocation.getArgument(1);
+                return new User(
+                        source.getName(),
+                        source.getEmail(),
+                        source.getPassword()
+                );
+            });
+
+            given(userService.update(eq(1000L), any(User.class)))
+                    .willThrow(new UserNotFoundException(1000L));
+        }
+
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class ID가_존재하는_회원이라면 {
@@ -100,26 +120,17 @@ class UserControllerTest {
             @Test
             @DisplayName("기존 회원의 정보가 변경된 회원을 리턴한다")
             void 정보가_변경된_회원을_리턴한다() throws Exception {
-                given(userService.update(eq(1L), any(User.class))).will(invocation -> {
-                    User source = invocation.getArgument(1);
-                    return new User(
-                            source.getName(),
-                            source.getEmail(),
-                            source.getPassword()
-                            );
-                });
-
                 mockMvc.perform(
                                 patch("/users/1")
                                         .accept(MediaType.APPLICATION_JSON_UTF8)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content("{\"name\": \"홍길동\"," +
                                                 "\"email\": \"test222@test.com\"," +
-                                                " \"password\": \"123qweasd\"}"
+                                                " \"password\": \"1234qweasd\"}"
                                         )
                         )
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("홍길동")));
+                        .andExpect(content().string(containsString("1234qweasd")));
             }
         }
 
@@ -130,9 +141,6 @@ class UserControllerTest {
             @Test
             @DisplayName("Not found 예외를 던진다")
             void Not_found_예외를_던진다() throws Exception {
-                given(userService.update(eq(1000L), any(User.class)))
-                        .willThrow(new UserNotFoundException(1000L));
-
                 mockMvc.perform(
                                 patch("/users/1000")
                                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -191,8 +199,9 @@ class UserControllerTest {
 
             @Test
             @DisplayName("Not found 예외를 던진다")
-            void 회원_정보를_삭제한다() throws Exception {
-                given(userService.delete(1000L)).willThrow(new UserNotFoundException(1000L));
+            void Not_found_예외를_던진다() throws Exception {
+                given(userService.delete(1000L))
+                        .willThrow(new UserNotFoundException(1000L));
 
                 mockMvc.perform(delete("/users/1000"))
                         .andExpect(status().isNotFound());
