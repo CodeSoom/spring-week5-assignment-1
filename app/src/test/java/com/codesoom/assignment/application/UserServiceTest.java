@@ -21,6 +21,7 @@ public class UserServiceTest {
     private static final String EXISTED_USER_NAME = "홍길동";
     private static final String EXISTED_USER_EMAIL = "hong@gmail.com";
     private static final String EXISTED_USER_PASSWORD = "password";
+    private static final Long NOT_EXISTED_USER_ID = 0L;
 
     User exitedUser;
     private UserService userService;
@@ -101,7 +102,7 @@ public class UserServiceTest {
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(0L)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID)).isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -145,33 +146,33 @@ public class UserServiceTest {
     @Nested
     @DisplayName("updateUser는")
     class Describe_updateUser {
+        private static final String UPDATE_USER_NAME = "new_홍길동";
+        private static final String UPDATE_USER_EMAIL = "new_hong@gmail.com";
+        private static final String UPDATE_USER_PASSWORD = "new_password";
+
+        User updateUser;
+
         User subject(Long id, User source) {
             return userService.updateUser(id, source);
+        }
+
+        @BeforeEach
+        void prepareUpdateUser() {
+            updateUser = User.builder()
+                    .name(UPDATE_USER_NAME)
+                    .email(UPDATE_USER_EMAIL)
+                    .password(UPDATE_USER_PASSWORD)
+                    .build();
+        }
+
+        @BeforeEach
+        void prepare() {
+            prepareExitedUser();
         }
 
         @Nested
         @DisplayName("등록된 유저 id가 주어진다면")
         class Context_with_exited_user_id {
-            private static final String UPDATE_USER_NAME = "new_홍길동";
-            private static final String UPDATE_USER_EMAIL = "new_hong@gmail.com";
-            private static final String UPDATE_USER_PASSWORD = "new_password";
-
-            User updateUser;
-
-            @BeforeEach
-            void prepareUpdateUser() {
-                updateUser = User.builder()
-                        .name(UPDATE_USER_NAME)
-                        .email(UPDATE_USER_EMAIL)
-                        .password(UPDATE_USER_PASSWORD)
-                        .build();
-            }
-
-            @BeforeEach
-            void prepare() {
-                prepareExitedUser();
-            }
-
             @Test
             @DisplayName("해당 id의 유저를 주어진 유저와 일치하도록 변경하고 리턴한다.")
             void it_returns_updated_user() {
@@ -185,25 +186,10 @@ public class UserServiceTest {
         @Nested
         @DisplayName("등록되지않은 유저의 id가 주어진다면")
         class Context_with_not_existed_user_id {
-            private static final String UPDATE_USER_NAME = "new_홍길동";
-            private static final String UPDATE_USER_EMAIL = "new_hong@gmail.com";
-            private static final String UPDATE_USER_PASSWORD = "new_password";
-
-            User updateUser;
-
-            @BeforeEach
-            void prepareUpdateUser() {
-                updateUser = User.builder()
-                        .name(UPDATE_USER_NAME)
-                        .email(UPDATE_USER_EMAIL)
-                        .password(UPDATE_USER_PASSWORD)
-                        .build();
-            }
-
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(0L, updateUser)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID, updateUser)).isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -237,7 +223,7 @@ public class UserServiceTest {
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(0L)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID)).isInstanceOf(UserNotFoundException.class);
             }
         }
     }
