@@ -152,5 +152,13 @@ class UserControllerTest {
                         .andExpect(status().isNoContent());
             }
         }
+
+        @Nested
+        class 주어진_아이디의_회원이_없다면 {
+            @Test
+            void 에러_코드를_보낸다() {
+
+            }
+        }
     }
 }
