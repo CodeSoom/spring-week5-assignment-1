@@ -16,18 +16,15 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @NotBlank
     private String name;
 
-    @NotBlank
     private String email;
 
-    @NotBlank
     private String password;
 
-    public void change(User source) {
-        this.name = source.getName();
-        this.email = source.getEmail();
-        this.password = source.getPassword();
+    public void change(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
     }
 }

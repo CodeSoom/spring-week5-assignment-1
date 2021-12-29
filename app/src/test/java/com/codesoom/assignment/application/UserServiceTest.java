@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,7 +24,7 @@ import static org.mockito.Mockito.verify;
 class UserServiceTest {
     private UserService userService;
 
-    private UserRepository userRepository = mock(UserRepository.class);
+    private final UserRepository userRepository = mock(UserRepository.class);
 
     @BeforeEach
     void setUp() {
@@ -34,8 +35,8 @@ class UserServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class create_메소드는 {
 
-//        private User source = new User("홍길동", "test@test.com", "asdqwe1234");
-        private User source = User.builder().name("홍길동").email("test@test.com").password("asdqwe1234").build();
+        private UserData source = UserData.builder()
+            .name("홍길동").email("test@test.com").password("asdqwe1234").build();
         private User createdUser;
 
         @BeforeEach
@@ -66,9 +67,20 @@ class UserServiceTest {
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class update_메소드는 {
-
-        private User source = User.builder().name("철수").email("cjftn@test.com").password("asdfg").build();
+        private UserData source = UserData.builder()
+                .name("철수").email("cjftn@test.com").password("asdfg").build();
         private User updatedUser;
+
+        @BeforeEach
+        void setUp() {
+            User user = User.builder()
+                    .name("홍길동")
+                    .email("test@test.com")
+                    .password("asdqwe1234")
+                    .build();
+
+            given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        }
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -77,8 +89,6 @@ class UserServiceTest {
             @Test
             @DisplayName("수정된 회원 정보를 리턴한다")
             void 수정된_회원_정보를_리턴한다() {
-                given(userRepository.findById(1L)).willReturn(Optional.of(source));
-
                 updatedUser = userService.update(1L, source);
 
                 verify(userRepository).findById(1L);
@@ -104,7 +114,8 @@ class UserServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class delete_메소드는 {
 
-        private User source = User.builder().name("철수").email("cjftn@test.com").password("asdfg").build();
+        private User source = User.builder()
+                .name("철수").email("cjftn@test.com").password("asdfg").build();
         private User deletedUser;
 
         @Nested

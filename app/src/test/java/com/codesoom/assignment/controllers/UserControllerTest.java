@@ -7,6 +7,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -47,8 +48,14 @@ class UserControllerTest {
 
         @BeforeEach
         void setUp() {
-            given(userService.create(any(User.class))).will(invocation -> {
-                User user = invocation.getArgument(0);
+            given(userService.create(any(UserData.class))).will(invocation -> {
+                UserData userData = invocation.getArgument(0);
+                User user = User.builder()
+                        .name(userData.getName())
+                        .email(userData.getEmail())
+                        .password(userData.getPassword())
+                        .build();
+
                 return user;
             });
         }
@@ -99,16 +106,16 @@ class UserControllerTest {
 
         @BeforeEach
         void setUp() {
-            given(userService.update(eq(1L), any(User.class))).will(invocation -> {
-                User source = invocation.getArgument(1);
+            given(userService.update(eq(1L), any(UserData.class))).will(invocation -> {
+                UserData userData = invocation.getArgument(1);
                 return User.builder()
-                        .name(source.getName())
-                        .email(source.getEmail())
-                        .password(source.getPassword())
+                        .name(userData.getName())
+                        .email(userData.getEmail())
+                        .password(userData.getPassword())
                         .build();
             });
 
-            given(userService.update(eq(1000L), any(User.class)))
+            given(userService.update(eq(1000L), any(UserData.class)))
                     .willThrow(new UserNotFoundException(1000L));
         }
 
