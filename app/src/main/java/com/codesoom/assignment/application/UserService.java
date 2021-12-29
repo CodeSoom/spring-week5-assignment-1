@@ -18,4 +18,9 @@ public class UserService {
         // TODO: 실제로 구현할 것
         return null;
     }
+
+    public User delete(Long id) {
+        // TODO: 실제로 구현할 것
+        return null;
+    }
 }

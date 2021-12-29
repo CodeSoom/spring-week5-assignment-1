@@ -23,8 +23,8 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -163,6 +163,39 @@ class UserControllerTest {
                                         )
                         )
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class deleteUser_메소드는 {
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class ID가_존재하는_회원이라면 {
+
+            @Test
+            @DisplayName("회원 정보를 삭제한다")
+            void 회원_정보를_삭제한다() throws Exception {
+                mockMvc.perform(delete("/users/1"))
+                        .andExpect(status().isNoContent());
+
+                verify(userService).delete(1L);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class ID가_존재하지않는_회원이라면 {
+
+            @Test
+            @DisplayName("Not found 예외를 던진다")
+            void 회원_정보를_삭제한다() throws Exception {
+                given(userService.delete(1000L)).willThrow(new UserNotFoundException(1000L));
+
+                mockMvc.perform(delete("/users/1000"))
+                        .andExpect(status().isNotFound());
             }
         }
     }
