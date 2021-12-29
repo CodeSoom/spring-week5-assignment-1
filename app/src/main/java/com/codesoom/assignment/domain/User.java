@@ -55,4 +55,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public void change(User source) {
+        this.name = source.getName();
+        this.email = source.getEmail();
+        this.password = source.getPassword();
+    }
 }
