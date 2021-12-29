@@ -10,8 +10,9 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -26,7 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
-@WebMvcTest(UserController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
 @DisplayName("UserController 클래스")
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserControllerTest {
@@ -34,7 +36,7 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @SpyBean
     private UserService userService;
 
     private final Long USER_ID = 1L;
@@ -100,9 +102,26 @@ class UserControllerTest {
 
         @Nested
         class 주어진_아이디의_회원이_없다면 {
-            @Test
-            void 에러코드를_보낸다() {
+            private Long wroungId;
+            
+            @BeforeEach
+            void setUp() {
+                UserData source = UserData.builder()
+                        .name("홍길동")
+                        .email("test@test.com")
+                        .password("1234")
+                        .build();
 
+                User savedUser = userService.createUser(source);
+                wroungId = savedUser.getId() + 1;
+            }
+            
+            @Test
+            void 에러코드를_보낸다() throws Exception {
+                mockMvc.perform(patch("/users/" + wroungId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\",\"password\":\"1234\"}")
+                ).andExpect(status().isNotFound());
             }
         }
     }
