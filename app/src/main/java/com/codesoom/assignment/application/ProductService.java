@@ -11,6 +11,9 @@ import org.springframework.stereotype.Service;
 import javax.transaction.Transactional;
 import java.util.List;
 
+/**
+ * 상품을 관리합니다.
+ */
 @Service
 @Transactional
 public class ProductService {
@@ -25,20 +28,43 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
+    /**
+     * 상품 리스트를 반환합니다.
+     *
+     * @return 상품 리스트
+     */
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
+    /**
+     * id에 해당하는 상품을 반환합니다.
+     *
+     * @param id 상품 id
+     * @return 해당하는 상품
+     */
     public Product getProduct(Long id) {
         return findProduct(id);
     }
 
+    /**
+     * 상품을 저장하고 반환합니다.
+     *
+     * @param productData 저장할 상품
+     * @return 저장된 상품
+     */
     public Product createProduct(ProductData productData) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         Product product = mapper.map(productData, Product.class);
         return productRepository.save(product);
     }
 
+    /**
+     * id에 해당하는 상품을 수정하고 반환합니다.
+     *
+     * @param productData 수정할 상품
+     * @return 수정된 상품
+     */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
@@ -48,6 +74,12 @@ public class ProductService {
         return product;
     }
 
+    /**
+     * id에 해당하는 상품을 삭제하고 남은 목록을 반환합니다.
+     *
+     * @param id 삭제할 상품id
+     * @return 삭제 후 남은 상품 목록
+     */
     public Product deleteProduct(Long id) {
         Product product = findProduct(id);
 
