@@ -49,5 +49,4 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(()-> new UserNotFoundException(id));
     }
-
 }
