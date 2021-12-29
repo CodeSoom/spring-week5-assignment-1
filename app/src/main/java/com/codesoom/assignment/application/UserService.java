@@ -1,13 +1,24 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 /**
  * 유저를 관리합니다.
  */
+@Service
 public class UserService {
+
+    private UserRepository userRepository;
+
+    @Autowired
+    UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * 유저 목록을 반환합니다.
@@ -15,7 +26,7 @@ public class UserService {
      * @return 유저 목록
      */
     List<User> findAllUsers() {
-        return null;
+        return userRepository.findAll();
     }
 
     /**
@@ -26,7 +37,8 @@ public class UserService {
      * @throws '유저를 찾지 못했다'는 예외
      */
     User findUserById(Long id) {
-        return null;
+        // TODO : null이 아닌 예외를 던지도록 변경 필요!
+        return userRepository.findById(id).orElse(null);
     }
 
     /**
@@ -36,7 +48,7 @@ public class UserService {
      * @return 생성한 유저
      */
     User createUser(User user) {
-        return null;
+        return userRepository.save(user);
     }
 
     /**
@@ -47,7 +59,13 @@ public class UserService {
      * @return 변경한 유저
      */
     User updateUser(Long id, User source) {
-        return null;
+        // TODO : null이 아닌 예외를 던지도록 변경 필요!
+        User user = userRepository.findById(id).orElse(null);
+        user.setName(source.getName());
+        user.setEmail(source.getEmail());
+        user.setPassword(source.getPassword());
+
+        return userRepository.save(user);
     }
 
     /**
@@ -56,5 +74,9 @@ public class UserService {
      * @param id 유저 id
      */
     void deleteUser(Long id) {
+        // TODO : null이 아닌 예외를 던지도록 변경 필요!
+        User user = userRepository.findById(id).orElse(null);
+
+        userRepository.delete(user);
     }
 }
