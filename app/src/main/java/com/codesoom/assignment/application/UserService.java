@@ -40,8 +40,10 @@ public class UserService {
     }
 
     public void deleteUser(Long targetId) {
-        User user = getUser(targetId);
-
-        userRepository.delete(user);
+        try {
+            userRepository.deleteById(targetId);
+        } catch (Exception e) {
+            throw new UserNotFoundException(targetId);
+        }
     }
 }

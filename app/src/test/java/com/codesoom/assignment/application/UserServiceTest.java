@@ -101,7 +101,7 @@ class UserServiceTest {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 등록되지_User의_id와_수정할_User가_주어진다면 {
+        class 등록되지_않은_User의_id와_수정할_User가_주어진다면 {
 
             UserData givenUserData;
             Long givenInvalidId = 9999L;
@@ -139,6 +139,17 @@ class UserServiceTest {
                 userService.deleteUser(givenId);
 
                 assertThatThrownBy(() -> userService.getUser(givenId)).isInstanceOf(UserNotFoundException.class);
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 등록되지_않은_User의_id가_주어진다면 {
+
+            Long givenId = 100L;
+
+            @Test
+            void 등록된_User를_삭제한다() {
+                assertThatThrownBy(() -> userService.deleteUser(givenId))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
