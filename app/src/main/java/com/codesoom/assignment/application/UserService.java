@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -25,5 +26,17 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User updateUser(Long id, UserData userData) {
+        User target = findUserById(id);
 
+        target.changeWith(mapper.map(userData, User.class));
+
+        return target;
+    }
+
+    private User findUserById(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+    }
 }
