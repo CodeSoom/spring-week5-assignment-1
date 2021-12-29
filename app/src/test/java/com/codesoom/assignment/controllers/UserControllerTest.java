@@ -59,7 +59,7 @@ class UserControllerTest {
         @Nested
         class 유효하지_않는_회원_파라미터인_경우 {
             @Test
-            void 예외코드를_보낸다() throws Exception {
+            void 에러코드를_보낸다() throws Exception {
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"test\",\"email\":\"test@naver.com\"}")
@@ -95,6 +95,14 @@ class UserControllerTest {
                         )
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("updateName")));
+            }
+        }
+
+        @Nested
+        class 주어진_아이디의_회원이_없다면 {
+            @Test
+            void 에러코드를_보낸다() {
+
             }
         }
     }
