@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserBadRequestException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
@@ -122,6 +123,26 @@ class UserServiceTest {
 
                 assertThatThrownBy(() -> userService.updateUser(WRONG_ID, source))
                         .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+
+        @DisplayName("주어진 회원의 값이 null이라면")
+        @Nested
+        class haveUserIsNull {
+            @BeforeEach
+            void setUp() {
+                User user = createTestUser();
+
+                given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
+            }
+
+            @DisplayName("예외를 던진다.")
+            @Test
+            void throwError() {
+                UserData userData = null;
+
+                assertThatThrownBy(() -> userService.updateUser(USER_ID, userData))
+                        .isInstanceOf(UserBadRequestException.class);
             }
         }
     }
