@@ -54,7 +54,14 @@ public class UserController {
      * @return 수정된 회원
      */
     @PatchMapping("{id}")
-    public User update(@PathVariable Long id, @Valid @RequestBody UserData userData) {
+    public User update(@PathVariable Long id,
+                       @Valid @RequestBody UserData userData,
+                       BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            throw new UserNotFoundException("요청에 대한 유효성 검사에 실패하여, 회원을 저장할 수 없습니다.");
+        }
+
         return userService.updateUser(id, userData);
     }
 

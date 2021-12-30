@@ -103,7 +103,10 @@ class UserControllerTest {
 
             @Test
             void 에러코드를_보낸다() throws Exception {
-                mockMvc.perform(patch("/users/" + userId))
+                mockMvc.perform(patch("/users/" + userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\"}")
+                        )
                         .andExpect(status().isNotFound());
             }
         }
