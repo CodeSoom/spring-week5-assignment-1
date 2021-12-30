@@ -98,32 +98,32 @@ public class UserControllerTest {
     @Nested
     @DisplayName("PATCH /users/{id}")
     class Describe_patch_users_id {
+        private final String UPDATE_USER_NAME = "update_홍길동";
+        private final String UPDATE_USER_EMAIL = "update_hong@gmail.com";
+        private final String UPDATE_USER_PASSWORD = "update_password";
+
+        String requestContent;
+        User updateUser;
+
+        @BeforeEach
+        void prepare() {
+            prepareExistedUser();
+        }
+
+        @BeforeEach
+        void prepareUpdateUser() throws JsonProcessingException {
+            updateUser = User.builder()
+                    .name(UPDATE_USER_NAME)
+                    .email(UPDATE_USER_EMAIL)
+                    .password(UPDATE_USER_PASSWORD)
+                    .build();
+
+            requestContent = objectMapper.writeValueAsString(updateUser);
+        }
+
         @Nested
         @DisplayName("등록된 유저의 id와 변경할 유저 정보가 주어진다면")
         class Context_with_existed_user {
-            private final String UPDATE_USER_NAME = "update_홍길동";
-            private final String UPDATE_USER_EMAIL = "update_hong@gmail.com";
-            private final String UPDATE_USER_PASSWORD = "update_password";
-
-            String requestContent;
-            User updateUser;
-
-            @BeforeEach
-            void prepare() {
-                prepareExistedUser();
-            }
-
-            @BeforeEach
-            void prepareUpdateUser() throws JsonProcessingException {
-                updateUser = User.builder()
-                        .name(UPDATE_USER_NAME)
-                        .email(UPDATE_USER_EMAIL)
-                        .password(UPDATE_USER_PASSWORD)
-                        .build();
-
-                requestContent = objectMapper.writeValueAsString(updateUser);
-            }
-
             @Test
             @DisplayName("해당 id의 유저를 주어진 유저 정보로 변경하고, 변경된 유저를 응답한다.")
             void it_responses_updated_user() throws Exception {
@@ -132,6 +132,24 @@ public class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(updateUser.getName())));
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 유저의 id가 주어진다면")
+        class Context_with_not_existed_user_id {
+            @BeforeEach
+            void prepare() {
+                userRepository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("Not Found를 응답한다.")
+            void it_responses_not_found() throws Exception {
+                mockMvc.perform(patch("/users/0")
+                                .content(requestContent)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
             }
         }
     }
@@ -154,6 +172,22 @@ public class UserControllerTest {
                         .andExpect(status().isNoContent());
 
                 assertThat(userRepository.findById(existedUser.getId())).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("등록되지 않은 유저의 id가 주어진다면")
+        class Context_with_not_existed_user_id {
+            @BeforeEach
+            void prepare() {
+                userRepository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("Not Found를 응답한다.")
+            void it_responses_not_found() throws Exception {
+                mockMvc.perform(delete("/users/0"))
+                        .andExpect(status().isNotFound());
             }
         }
     }
