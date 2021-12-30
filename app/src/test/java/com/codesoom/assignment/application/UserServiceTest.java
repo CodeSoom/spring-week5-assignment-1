@@ -25,7 +25,7 @@ import static org.mockito.Mockito.verify;
 class UserServiceTest {
     private UserService userService;
 
-    private UserRepository userRepository = mock(UserRepository.class);
+    private final UserRepository userRepository = mock(UserRepository.class);
 
     private static final Long EXIST_ID = 1L;
     private static final String USER_NAME = "코드숨";
@@ -36,6 +36,8 @@ class UserServiceTest {
     private static final String NEW_NAME = "스프링";
     private static final String NEW_PASSWORD = "5678";
     private static final String NEW_EMAIL = "spring@gmail.com";
+
+    UserData userData;
 
     @BeforeEach
     void setUp() {
@@ -49,6 +51,13 @@ class UserServiceTest {
                 .password(USER_PASSWORD)
                 .email(USER_EMAIL)
                 .build();
+
+        userData = UserData.builder()
+                .name(NEW_NAME)
+                .password(NEW_PASSWORD)
+                .email(NEW_EMAIL)
+                .build();
+
         given(userRepository.findById(EXIST_ID)).willReturn(Optional.of(user));
     }
 
@@ -146,12 +155,6 @@ class UserServiceTest {
             @Test
             @DisplayName("사용자를 생성하고 리턴한다.")
             void it_return_user() {
-                UserData userData = UserData.builder()
-                        .name(NEW_NAME)
-                        .password(NEW_PASSWORD)
-                        .email(NEW_EMAIL)
-                        .build();
-
                 User user = userService.createUser(userData);
 
                 verify(userRepository).save(any(User.class));
@@ -173,12 +176,6 @@ class UserServiceTest {
             @Test
             @DisplayName("사용자 정보를 수정하고 리턴한다.")
             void it_update_user_return() {
-                UserData userData = UserData.builder()
-                        .name(NEW_NAME)
-                        .password(NEW_PASSWORD)
-                        .email(NEW_EMAIL)
-                        .build();
-
                 User user = userService.updateUser(EXIST_ID, userData);
 
                 assertThat(user.getId()).isEqualTo(EXIST_ID);
@@ -194,12 +191,6 @@ class UserServiceTest {
             @Test
             @DisplayName("사용자를 찾을 수 없다는 예외를 던진다.")
             void it_throw_UserNotFoundException() {
-                UserData userData = UserData.builder()
-                        .name(NEW_NAME)
-                        .password(NEW_PASSWORD)
-                        .email(NEW_EMAIL)
-                        .build();
-
                 assertThatThrownBy(() -> userService.updateUser(NOT_EXIST_ID, userData))
                         .isInstanceOf(UserNotFoundException.class);
             }
