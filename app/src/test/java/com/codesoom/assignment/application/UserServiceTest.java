@@ -147,6 +147,16 @@ class UserServiceTest {
                 verify(userRepository).delete(any(User.class));
             }
         }
+
+        @DisplayName("주어진 아이디의 회원이 없다면")
+        @Nested
+        class notHaveUserWithId {
+            @DisplayName("예외를 던진다.")
+            @Test
+            void throwError() {
+
+            }
+        }
     }
 
     private User createTestUser() {
