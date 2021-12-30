@@ -143,18 +143,23 @@ class ProductServiceTest {
     @Nested
     @DisplayName("updateProduct 메소드는")
     class Describe_update {
+        ProductData productData;
+
+        @BeforeEach
+        void setUp() {
+            productData = ProductData.builder()
+                    .name("쥐순이")
+                    .maker("냥이월드")
+                    .price(5000)
+                    .build();
+        }
+
         @Nested
         @DisplayName("등록된 id가 주어진다면")
         class Context_when_product_is_exist {
             @Test
             @DisplayName("id에 해당하는 Product 정보를 수정하고 리턴한다.")
             void it_fix_product_return() {
-                ProductData productData = ProductData.builder()
-                        .name("쥐순이")
-                        .maker("냥이월드")
-                        .price(5000)
-                        .build();
-
                 Product product = productService.updateProduct(1L, productData);
 
                 assertThat(product.getId()).isEqualTo(1L);
@@ -168,12 +173,6 @@ class ProductServiceTest {
             @Test
             @DisplayName("id에 해당하는 Product를 찾을 수 없어 수정할 수 없다고 예외를 던진다.")
             void it_throw_ProductNotFoundException() {
-                ProductData productData = ProductData.builder()
-                        .name("쥐순이")
-                        .maker("냥이월드")
-                        .price(5000)
-                        .build();
-
                 assertThatThrownBy(() -> productService.updateProduct(1000L, productData))
                         .isInstanceOf(ProductNotFoundException.class);
             }
