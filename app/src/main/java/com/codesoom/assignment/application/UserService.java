@@ -14,7 +14,7 @@ import java.util.List;
 @Service
 public class UserService {
 
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Autowired
     public UserService(UserRepository userRepository) {
@@ -35,7 +35,7 @@ public class UserService {
      *
      * @param id 유저 id
      * @return 주어진 id와 일치하는 유저
-     * @throws '유저를 찾지 못했다'는 예외
+     * @throws UserNotFoundException '유저를 찾지 못했다'는 예외
      */
     public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
@@ -58,24 +58,28 @@ public class UserService {
      * @param id     유저 id
      * @param source 변경할 유저의 source
      * @return 변경한 유저
-     * @throws '유저를 찾지 못했다'는 예외
+     * @throws UserNotFoundException '유저를 찾지 못했다'는 예외
      */
     public User updateUser(Long id, User source) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 업데이트할 수 없습니다."
                 ));
-        user.setName(source.getName());
-        user.setEmail(source.getEmail());
-        user.setPassword(source.getPassword());
 
-        return userRepository.save(user);
+        User updatedUser = User.builder()
+                .id(user.getId())
+                .name(source.getName())
+                .email(source.getEmail())
+                .password(source.getPassword())
+                .build();
+
+        return userRepository.save(updatedUser);
     }
 
     /**
      * 주어진 id와 일치하는 유저를 삭제합니다.
      *
      * @param id 유저 id
-     * @throws '유저를 찾지 못했다'는 예외
+     * @throws UserNotFoundException '유저를 찾지 못했다'는 예외
      */
     public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
