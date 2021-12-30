@@ -47,7 +47,7 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"test\",\"email\":\"test@naver.com\",\"password\":\"1234\"}")
                         )
-                        .andExpect(status().isOk());
+                        .andExpect(status().isCreated());
 
                 verify(userService).createUser(any(UserData.class));
             }

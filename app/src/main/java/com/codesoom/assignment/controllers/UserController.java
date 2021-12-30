@@ -33,6 +33,7 @@ public class UserController {
      * @return 저장된 회원
      */
     @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
     public User create(@Valid @RequestBody UserData userData) {
         return userService.createUser(userData);
     }
