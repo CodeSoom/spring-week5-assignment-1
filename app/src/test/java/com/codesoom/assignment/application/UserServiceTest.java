@@ -73,9 +73,6 @@ class UserServiceTest {
 
                 User user = userService.createUser(userData);
 
-                verify(userRepository).save(any(User.class));
-
-                assertThat(user.getId()).isEqualTo(2L);
                 assertThat(user.getName()).isEqualTo(USER_NAME);
                 assertThat(user.getPassword()).isEqualTo(USER_PASSWORD);
                 assertThat(user.getEmail()).isEqualTo(USER_EMAIL);
