@@ -55,7 +55,7 @@ public class ProductController {
     /**
      * 상품을 저장하고 리턴한다.
      *
-     * @param product 저장할 상품
+     * @param productData 저장할 상품
      * @return 저장된 상품
      */
     @PostMapping
@@ -67,7 +67,7 @@ public class ProductController {
     /**
      * 요청받은 id의 상품을 수정한다
      *
-     * @param product 상품의 수정된 정보
+     * @param productData 상품의 수정된 정보
      * @param id      수정할 상품의 id
      * @return 수정된 상품
      */
