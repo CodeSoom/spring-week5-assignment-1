@@ -17,7 +17,7 @@ public class ProductService {
     private final Mapper mapper;
     private final ProductRepository productRepository;
 
-    public ProductService(Mapper dozerMapper,ProductRepository productRepository) {
+    public ProductService(Mapper dozerMapper, ProductRepository productRepository) {
         this.mapper = dozerMapper;
         this.productRepository = productRepository;
     }
@@ -53,7 +53,6 @@ public class ProductService {
     }
 
     private Product findProduct(Long id) {
-        return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 }
