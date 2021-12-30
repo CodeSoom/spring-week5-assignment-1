@@ -98,6 +98,17 @@ class UserControllerTest {
         }
 
         @Nested
+        class 유효하지_않는_수정할_회원에_대한_값이면 {
+            private Long userId = 1L;
+
+            @Test
+            void 에러코드를_보낸다() throws Exception {
+                mockMvc.perform(patch("/users/" + userId))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
         class 주어진_아이디의_회원이_없다면 {
             private Long wrongId = 100L;
             
