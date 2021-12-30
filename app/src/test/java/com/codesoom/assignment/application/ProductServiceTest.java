@@ -56,8 +56,8 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("GET 메소드는")
-    class Describe_get {
+    @DisplayName("getProducts 메소드는")
+    class Describe_getProducts {
         @Nested
         @DisplayName("등록된 Product가 있다면")
         class Context_has_product {
@@ -66,8 +66,6 @@ class ProductServiceTest {
             void it_return_list() {
 
                 List<Product> products = productService.getProducts();
-
-                assertThat(products).isNotEmpty();
 
                 Product product = products.get(0);
 
@@ -86,7 +84,11 @@ class ProductServiceTest {
                 assertThat(productService.getProducts()).isEmpty();
             }
         }
+    }
 
+    @Nested
+    @DisplayName("getProduct 메소드는")
+    class Describe_getProduct {
         @Nested
         @DisplayName("등록된 id 값이 주어졌을때")
         class Context_when_product_is_exist {
