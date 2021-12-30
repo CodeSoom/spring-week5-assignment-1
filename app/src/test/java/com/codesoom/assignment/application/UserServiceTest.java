@@ -4,6 +4,8 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -28,7 +30,8 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        userService = new UserService(userRepository);
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        userService = new UserService(mapper, userRepository);
     }
 
     @Nested
@@ -54,7 +57,7 @@ class UserServiceTest {
         @Test
         @DisplayName("새로운 회원을 생성하여 리턴한다")
         void create() {
-            this.createdUser = userService.create(source);
+            createdUser = userService.create(source);
 
             verify(userRepository).save(any(User.class));
 

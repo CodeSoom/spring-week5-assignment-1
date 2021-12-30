@@ -8,23 +8,21 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
+    private final Mapper mapper;
     private final UserRepository userRepository;
 
-    public UserService(UserRepository userRepository) {
+    public UserService(Mapper dozerMapper, UserRepository userRepository) {
         this.userRepository = userRepository;
+        this.mapper = dozerMapper;
     }
 
     public User create(UserData userData) {
-        User user = User.builder()
-                .name(userData.getName())
-                .email(userData.getEmail())
-                .password(userData.getPassword())
-                .build();
-
+        User user = mapper.map(userData, User.class);
         return userRepository.save(user);
     }
 
