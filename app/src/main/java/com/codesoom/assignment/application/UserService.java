@@ -17,7 +17,7 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -26,7 +26,7 @@ public class UserService {
      *
      * @return 유저 목록
      */
-    List<User> findAllUsers() {
+    public List<User> findAllUsers() {
         return userRepository.findAll();
     }
 
@@ -37,7 +37,7 @@ public class UserService {
      * @return 주어진 id와 일치하는 유저
      * @throws '유저를 찾지 못했다'는 예외
      */
-    User findUserById(Long id) {
+    public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 조회할 수 없습니다."));
     }
@@ -48,7 +48,7 @@ public class UserService {
      * @param user 생성할 유저
      * @return 생성한 유저
      */
-    User createUser(User user) {
+    public User createUser(User user) {
         return userRepository.save(user);
     }
 
@@ -60,7 +60,7 @@ public class UserService {
      * @return 변경한 유저
      * @throws '유저를 찾지 못했다'는 예외
      */
-    User updateUser(Long id, User source) {
+    public User updateUser(Long id, User source) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 업데이트할 수 없습니다."
                 ));
@@ -77,7 +77,7 @@ public class UserService {
      * @param id 유저 id
      * @throws '유저를 찾지 못했다'는 예외
      */
-    void deleteUser(Long id) {
+    public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 삭제할 수 없습니다."));
 
