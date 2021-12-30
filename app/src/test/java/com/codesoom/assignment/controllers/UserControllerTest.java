@@ -60,7 +60,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"test\",\"email\":\"test@naver.com\"}")
-                        ).andExpect(status().isBadRequest());
+                        ).andExpect(status().isNotFound());
             }
         }
     }

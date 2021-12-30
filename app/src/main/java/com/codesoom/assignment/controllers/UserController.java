@@ -1,10 +1,12 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -34,7 +36,13 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@Valid @RequestBody UserData userData) {
+    public User create(@Valid @RequestBody UserData userData,
+                       BindingResult bindingResult
+    ) {
+        if (bindingResult.hasErrors()) {
+            throw new UserNotFoundException("요청에 대한 유효성 검사에 실패하여, 회원을 저장할 수 없습니다.");
+        }
+
         return userService.createUser(userData);
     }
 
