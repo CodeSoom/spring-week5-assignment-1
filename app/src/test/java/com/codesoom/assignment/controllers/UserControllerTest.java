@@ -19,6 +19,9 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.hamcrest.Matchers.containsString;
 
@@ -28,6 +31,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -42,6 +46,17 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    @Autowired
+    private WebApplicationContext wac;
+
+    @BeforeEach
+    void setUpMockMvc() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .alwaysDo(print())
+                .build();
+    }
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -129,7 +144,6 @@ class UserControllerTest {
             void 정보가_변경된_회원을_리턴한다() throws Exception {
                 mockMvc.perform(
                                 patch("/users/1")
-                                        .accept(MediaType.APPLICATION_JSON_UTF8)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content("{\"name\": \"홍길동\"," +
                                                 "\"email\": \"test222@test.com\"," +
@@ -150,7 +164,6 @@ class UserControllerTest {
             void Not_found_예외를_던진다() throws Exception {
                 mockMvc.perform(
                                 patch("/users/1000")
-                                        .accept(MediaType.APPLICATION_JSON_UTF8)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content("{\"name\": \"홍길동\"," +
                                                 "\"email\": \"test222@test.com\"," +
@@ -170,7 +183,6 @@ class UserControllerTest {
             void Bad_request를_응답한다() throws Exception {
                 mockMvc.perform(
                                 patch("/users/1")
-                                        .accept(MediaType.APPLICATION_JSON_UTF8)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content("{\"name\": \"\"," +
                                                 "\"email\": \"test222@test.com\"," +
