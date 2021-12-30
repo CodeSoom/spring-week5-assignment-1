@@ -14,8 +14,13 @@ import javax.transaction.Transactional;
 @Transactional
 public class UserService {
 
-
     public User createUser(User user) {
         return null;
     }
+
+    public User updateUser(Long id, User user) {
+        return null;
+    }
+
+
 }

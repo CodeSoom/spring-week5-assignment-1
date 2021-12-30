@@ -1,31 +1,34 @@
 package com.codesoom.assignment.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+
+@Entity
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class User {
+
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String name;
+
     private String email;
+
     private int password;
 
-    public User(Long id, String name, String email, int password) {
-        this.id = id;
+    public void changeWithUser(User member) {
         this.name = name;
         this.email = email;
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public int getPassword() {
-        return password;
     }
 }
