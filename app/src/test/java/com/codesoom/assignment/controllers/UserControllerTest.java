@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -71,11 +72,11 @@ public class UserControllerTest {
             private final String NEW_USER_PASSWORD = "new_password";
 
             String requestContent;
-            User newUser;
+            UserData newUser;
 
             @BeforeEach
             void prepareNewUser() throws JsonProcessingException {
-                newUser = User.builder()
+                newUser = UserData.builder()
                         .name(NEW_USER_NAME)
                         .email(NEW_USER_EMAIL)
                         .password(NEW_USER_PASSWORD)
@@ -93,6 +94,36 @@ public class UserControllerTest {
                         .andExpect(content().string(containsString(newUser.getName())));
             }
         }
+
+        @Nested
+        @DisplayName("이름이 없는 유저가 주어진다면")
+        class Context_with_noname_user {
+            private final String NEW_USER_NAME = "";
+            private final String NEW_USER_EMAIL = "new_hong@gmail.com";
+            private final String NEW_USER_PASSWORD = "new_password";
+
+            String requestContent;
+            UserData newUser;
+
+            @BeforeEach
+            void prepareNewUser() throws JsonProcessingException {
+                newUser = UserData.builder()
+                        .name(NEW_USER_NAME)
+                        .email(NEW_USER_EMAIL)
+                        .password(NEW_USER_PASSWORD)
+                        .build();
+
+                requestContent = objectMapper.writeValueAsString(newUser);
+            }
+
+            @Test
+            @DisplayName("Bad Request를 응답한다.")
+            void it_responses_new_user() throws Exception {
+                mockMvc.perform(post("/users").content(requestContent)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 
     @Nested
@@ -103,7 +134,7 @@ public class UserControllerTest {
         private final String UPDATE_USER_PASSWORD = "update_password";
 
         String requestContent;
-        User updateUser;
+        UserData updateUser;
 
         @BeforeEach
         void prepare() {
@@ -112,7 +143,7 @@ public class UserControllerTest {
 
         @BeforeEach
         void prepareUpdateUser() throws JsonProcessingException {
-            updateUser = User.builder()
+            updateUser = UserData.builder()
                     .name(UPDATE_USER_NAME)
                     .email(UPDATE_USER_EMAIL)
                     .password(UPDATE_USER_PASSWORD)

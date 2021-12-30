@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 
 /**
  * 유저의 Http 요청을 처리합니다.
@@ -24,7 +27,7 @@ public class UserController {
     private final UserService userService;
 
     @Autowired
-    UserController(UserService userService) {
+    public UserController(UserService userService) {
         this.userService = userService;
     }
 
@@ -36,7 +39,7 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    User create(@RequestBody User user) {
+    public User create(@RequestBody @Valid UserData user) {
         return userService.createUser(user);
     }
 
@@ -48,7 +51,7 @@ public class UserController {
      * @return
      */
     @PatchMapping("{id}")
-    User update(@PathVariable Long id, @RequestBody User user) {
+    public User update(@PathVariable Long id, @RequestBody @Valid UserData user) {
         return userService.updateUser(id, user);
     }
 
@@ -59,7 +62,7 @@ public class UserController {
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         userService.deleteUser(id);
     }
 }

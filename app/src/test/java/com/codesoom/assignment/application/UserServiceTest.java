@@ -3,6 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -29,10 +31,13 @@ public class UserServiceTest {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private Mapper mapper;
+
     @BeforeEach
     void prepareUserService() {
         userRepository.deleteAll();
-        userService = new UserService(userRepository);
+        userService = new UserService(userRepository, mapper);
     }
 
     void prepareExitedUser() {
@@ -110,7 +115,7 @@ public class UserServiceTest {
     @Nested
     @DisplayName("createUser는")
     class Describe_createUser {
-        User subject(User user) {
+        User subject(UserData user) {
             return userService.createUser(user);
         }
 
@@ -121,11 +126,11 @@ public class UserServiceTest {
             private static final String NEW_USER_EMAIL = "new_hong@gmail.com";
             private static final String NEW_USER_PASSWORD = "new_password";
 
-            User newUser;
+            UserData newUser;
 
             @BeforeEach
             void prepareNewUser() {
-                newUser = User.builder()
+                newUser = UserData.builder()
                         .name(NEW_USER_NAME)
                         .email(NEW_USER_EMAIL)
                         .password(NEW_USER_PASSWORD)
@@ -150,15 +155,15 @@ public class UserServiceTest {
         private static final String UPDATE_USER_EMAIL = "new_hong@gmail.com";
         private static final String UPDATE_USER_PASSWORD = "new_password";
 
-        User updateUser;
+        UserData updateUser;
 
-        User subject(Long id, User source) {
+        User subject(Long id, UserData source) {
             return userService.updateUser(id, source);
         }
 
         @BeforeEach
         void prepareUpdateUser() {
-            updateUser = User.builder()
+            updateUser = UserData.builder()
                     .name(UPDATE_USER_NAME)
                     .email(UPDATE_USER_EMAIL)
                     .password(UPDATE_USER_PASSWORD)

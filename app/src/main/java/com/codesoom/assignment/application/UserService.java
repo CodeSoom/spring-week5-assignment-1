@@ -3,8 +3,10 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.github.dozermapper.core.Mapper;
 
 import java.util.List;
 
@@ -15,10 +17,12 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final Mapper mapper;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    public UserService(UserRepository userRepository, Mapper dozerMapper) {
         this.userRepository = userRepository;
+        this.mapper = dozerMapper;
     }
 
     /**
@@ -45,10 +49,12 @@ public class UserService {
     /**
      * 주어진 유저와 동일한 유저를 생성하고 반환합니다.
      *
-     * @param user 생성할 유저
+     * @param userData 생성할 유저
      * @return 생성한 유저
      */
-    public User createUser(User user) {
+    public User createUser(UserData userData) {
+        User user = mapper.map(userData, User.class);
+
         return userRepository.save(user);
     }
 
@@ -60,7 +66,7 @@ public class UserService {
      * @return 변경한 유저
      * @throws UserNotFoundException '유저를 찾지 못했다'는 예외
      */
-    public User updateUser(Long id, User source) {
+    public User updateUser(Long id, UserData source) {
         User user = userRepository.findById(id).orElseThrow(() ->
                 new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 업데이트할 수 없습니다."
                 ));
