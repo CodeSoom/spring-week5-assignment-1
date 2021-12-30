@@ -26,11 +26,13 @@ import static org.mockito.Mockito.verify;
 class UserServiceTest {
     private UserService userService;
 
+    private Mapper mapper;
+
     private final UserRepository userRepository = mock(UserRepository.class);
 
     @BeforeEach
     void setUp() {
-        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        mapper = DozerBeanMapperBuilder.buildDefault();
         userService = new UserService(mapper, userRepository);
     }
 
@@ -38,48 +40,57 @@ class UserServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class create_메소드는 {
 
-        private UserData source = UserData.builder()
-            .name("홍길동").email("test@test.com").password("asdqwe1234").build();
-        private User createdUser;
+        private User user;
+        private UserData source;
+
+        @BeforeEach
+        void setUp() {
+            source = UserData.builder()
+                    .name("홍길동")
+                    .email("test@test.com")
+                    .password("asdqwe1234")
+                    .build();
+
+            user = mapper.map(source, User.class);
+        }
 
         @BeforeEach
         void setUpCreation() {
-            given(userRepository.save(any(User.class))).will(invocation -> {
-                User source = invocation.getArgument(0);
-                return User.builder()
-                        .name(source.getName())
-                        .email(source.getEmail())
-                        .password(source.getPassword())
-                        .build();
-            });
+            given(userRepository.save(any(User.class))).willReturn(user);
         }
 
         @Test
         @DisplayName("새로운 회원을 생성하여 리턴한다")
         void create() {
-            createdUser = userService.create(source);
+            User createdUser = userService.create(source);
 
             verify(userRepository).save(any(User.class));
 
-            assertThat(createdUser.getName()).isEqualTo("홍길동");
-            assertThat(createdUser.getEmail()).isEqualTo("test@test.com");
-            assertThat(createdUser.getPassword()).isEqualTo("asdqwe1234");
+            assertThat(createdUser.getName()).isEqualTo(user.getName());
+            assertThat(createdUser.getEmail()).isEqualTo(user.getEmail());
+            assertThat(createdUser.getPassword()).isEqualTo(user.getPassword());
         }
     }
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class update_메소드는 {
-        private UserData source = UserData.builder()
-                .name("철수").email("cjftn@test.com").password("asdfg").build();
-        private User updatedUser;
+
+        private User user;
+        private UserData source;
 
         @BeforeEach
         void setUp() {
-            User user = User.builder()
+            user = User.builder()
                     .name("홍길동")
                     .email("test@test.com")
                     .password("asdqwe1234")
+                    .build();
+
+            source = UserData.builder()
+                    .name("철수")
+                    .email("cjftn@test.com")
+                    .password("asdfg")
                     .build();
 
             given(userRepository.findById(1L)).willReturn(Optional.of(user));
@@ -92,11 +103,11 @@ class UserServiceTest {
             @Test
             @DisplayName("수정된 회원 정보를 리턴한다")
             void 수정된_회원_정보를_리턴한다() {
-                updatedUser = userService.update(1L, source);
+                User updatedUser = userService.update(1L, source);
 
                 verify(userRepository).findById(1L);
 
-                assertThat(updatedUser.getName()).isEqualTo("철수");
+                assertThat(updatedUser.getName()).isEqualTo(source.getName());
             }
         }
 
@@ -117,9 +128,16 @@ class UserServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class delete_메소드는 {
 
-        private User source = User.builder()
-                .name("철수").email("cjftn@test.com").password("asdfg").build();
-        private User deletedUser;
+        private User source;
+
+        @BeforeEach
+        void setUp() {
+            source = User.builder()
+                    .name("철수")
+                    .email("cjftn@test.com")
+                    .password("asdfg")
+                    .build();
+        }
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -130,13 +148,13 @@ class UserServiceTest {
             void 회원_정보를_삭제하고_삭제된_회원을_리턴한다() {
                 given(userRepository.findById(1L)).willReturn(Optional.of(source));
 
-                deletedUser = userService.delete(1L);
+                User deletedUser = userService.delete(1L);
 
                 verify(userRepository).findById(1L);
                 verify(userRepository).delete(source);
 
-                assertThat(deletedUser.getName()).isEqualTo("철수");
-                assertThat(deletedUser.getEmail()).isEqualTo("cjftn@test.com");
+                assertThat(deletedUser.getName()).isEqualTo(source.getName());
+                assertThat(deletedUser.getEmail()).isEqualTo(source.getEmail());
             }
         }
 
