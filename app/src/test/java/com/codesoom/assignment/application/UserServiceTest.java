@@ -80,9 +80,11 @@ class UserServiceTest {
     }
 
     @Nested
-    class updateUser_메소드는 {
+    @DisplayName("updateUser 메소드는")
+    class updateUserMethod {
+        @DisplayName("주어진 아이디의 회원이 있다면")
         @Nested
-        class 주어진_아이디의_회원이_있다면 {
+        class haveUserWithId {
             private final String UPDATE_USER_NAME = USER_NAME + "!!!";
 
             @BeforeEach
@@ -92,8 +94,9 @@ class UserServiceTest {
                 given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
             }
 
+            @DisplayName("회원을 수정한다.")
             @Test
-            void 회원을_수정한다() {
+            void updateUser() {
                 UserData source = UserData.builder()
                         .name(UPDATE_USER_NAME)
                         .build();
@@ -104,15 +107,17 @@ class UserServiceTest {
             }
         }
 
+        @DisplayName("주어진 아이디의 회원이 없다면")
         @Nested
-        class 주어진_아이디의_회원이_없다면 {
+        class NotHaveUserWithId {
             @BeforeEach
             void setUp() {
                 given(userRepository.findById(WRONG_ID)).willReturn(Optional.empty());
             }
 
+            @DisplayName("예외를 던진다.")
             @Test
-            void 예외를_던진다() {
+            void throwError() {
                 UserData source = UserData.builder().build();
 
                 assertThatThrownBy(() -> userService.updateUser(WRONG_ID, source))
@@ -121,10 +126,12 @@ class UserServiceTest {
         }
     }
 
+    @DisplayName("deleteUser 메소드는")
     @Nested
-    class deleteUser_메소드는 {
+    class deleteUserMethod {
+        @DisplayName("주어진 아이디의 회원이 있다면")
         @Nested
-        class 주어진_아이디의_회원이_있다면 {
+        class haveUserWithId {
             @BeforeEach
             void setUp() {
                 User user = createTestUser();
@@ -132,8 +139,9 @@ class UserServiceTest {
                 given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
             }
 
+            @DisplayName("회원을 삭제한다.")
             @Test
-            void 회원을_삭제한다() {
+            void deleteUser() {
                 userService.deleteUser(USER_ID);
 
                 verify(userRepository).delete(any(User.class));
