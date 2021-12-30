@@ -9,14 +9,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 class UserTest {
     @Nested
     @DisplayName("User 클래스는")
-    class Describe_create{
+    class Describe_create {
         @Nested
         @DisplayName("사용자를 생성한다면")
-        class Context_with_product{
+        class Context_with_product {
 
             @Test
             @DisplayName("User가 생성된다.")
-            void it_return_user(){
+            void it_return_user() {
                 User user = User.builder()
                         .id(1L)
                         .name("김태우")

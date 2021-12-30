@@ -22,14 +22,14 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(UserData userData){
+    public User createUser(UserData userData) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-        User user =mapper.map(userData, User.class);
+        User user = mapper.map(userData, User.class);
 
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, UserData userData){
+    public User updateUser(Long id, UserData userData) {
         User user = findUser(id);
 
         user.changeWith(mapper.map(userData, User.class));
@@ -37,7 +37,7 @@ public class UserService {
         return user;
     }
 
-    public User deleteUser(Long id){
+    public User deleteUser(Long id) {
         User user = findUser(id);
 
         userRepository.delete(user);
@@ -45,8 +45,8 @@ public class UserService {
         return user;
     }
 
-    private User findUser(Long id){
+    private User findUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(()-> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

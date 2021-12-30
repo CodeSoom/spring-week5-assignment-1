@@ -69,7 +69,7 @@ class UserControllerTest {
     }
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(wac)
                 .addFilters(new CharacterEncodingFilter("UTF-8", true))
                 .alwaysDo(print())
@@ -87,14 +87,14 @@ class UserControllerTest {
 
     @Nested
     @DisplayName("POST /user 요청은")
-    class Describe_create{
+    class Describe_create {
         @Nested
         @DisplayName("등록되어 있는 user가 주어진다면")
-        class Context_with_user{
+        class Context_with_user {
 
             @Test
             @DisplayName("user을 저장하고 201을 응답한다")
-            void it_return_status()throws Exception{
+            void it_return_status() throws Exception {
                 UserData userData = getUserData();
                 String userContent = objectMapper.writeValueAsString(userData);
 
@@ -110,7 +110,7 @@ class UserControllerTest {
 
         @Nested
         @DisplayName("user가 없다면")
-        class Context_withOut_user{
+        class Context_withOut_user {
 
             @Test
             @DisplayName("400을 응답한다")
@@ -130,13 +130,13 @@ class UserControllerTest {
 
     @Nested
     @DisplayName("PATCH /user/{id} 요청은")
-    class Describe_patch{
+    class Describe_patch {
         @Nested
         @DisplayName("id가 올바르면")
-        class Context_with_id{
+        class Context_with_id {
 
             @BeforeEach
-            void setUp(){
+            void setUp() {
                 given(userService.updateUser(eq(1L), any(UserData.class)))
                         .will(invocation -> {
                             Long id = invocation.getArgument(0);
@@ -157,9 +157,9 @@ class UserControllerTest {
                 String userContent = objectMapper.writeValueAsString(userData);
 
                 mockMvc.perform(
-                        patch("/users/1")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(userContent))
+                                patch("/users/1")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(userContent))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(NEW_NAME)));
 
@@ -169,10 +169,10 @@ class UserControllerTest {
 
         @Nested
         @DisplayName("user의 id가 올바르지 않다면")
-        class Context_withOut_id{
+        class Context_withOut_id {
 
             @BeforeEach
-            void setUp(){
+            void setUp() {
                 given(userService.updateUser(eq(1000L), any(UserData.class))).willThrow(new UserNotFoundException(1000L));
             }
 
@@ -183,9 +183,9 @@ class UserControllerTest {
                 String userContent = objectMapper.writeValueAsString(userData);
 
                 mockMvc.perform(
-                        patch("/users/1000")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(userContent))
+                                patch("/users/1000")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(userContent))
                         .andExpect(status().isNotFound());
 
                 verify(userService).updateUser(eq(1000L), any(UserData.class));
@@ -195,16 +195,16 @@ class UserControllerTest {
 
     @Nested
     @DisplayName("DELETE /user/{id} 요청은")
-    class Describe_delete{
+    class Describe_delete {
         @Nested
         @DisplayName("user의 id가 올바르면")
-        class Context_with_id{
+        class Context_with_id {
 
             @Test
             @DisplayName("user를 삭제하고 204를 응답한다")
             void it_return_status() throws Exception {
                 mockMvc.perform(
-                        delete("/users/1"))
+                                delete("/users/1"))
                         .andExpect(status().isNoContent());
 
                 verify(userService).deleteUser(1L);
@@ -213,17 +213,18 @@ class UserControllerTest {
 
         @Nested
         @DisplayName("user의 id가 올바르지 않다면")
-        class Context_withOut_id{
+        class Context_withOut_id {
 
             @BeforeEach
-            void setUp(){
+            void setUp() {
                 given(userService.deleteUser(1000L)).willThrow(new UserNotFoundException(1000L));
             }
+
             @Test
             @DisplayName("404을 응답한다")
             void it_return_status() throws Exception {
                 mockMvc.perform(
-                        delete("/users/1000"))
+                                delete("/users/1000"))
                         .andExpect(status().isNotFound());
 
                 verify(userService).deleteUser(1000L);
