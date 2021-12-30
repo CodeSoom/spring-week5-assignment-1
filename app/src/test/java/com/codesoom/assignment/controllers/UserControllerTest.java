@@ -71,7 +71,10 @@ class UserControllerTest {
             @BeforeEach
             void prepare() {
                 givenUserData = testUserDatas.get(0);
-                givenUser.change(givenUserData.getName(), givenUserData.getPassword(), givenUserData.getEmail());
+                givenUser.change(givenUserData.getName(),
+                        givenUserData.getPassword(),
+                        givenUserData.getEmail());
+
                 given(userService.createUser(any(UserData.class))).willReturn(givenUser);
             }
 
@@ -193,7 +196,10 @@ class UserControllerTest {
             void prepare() {
                 givenUserData = testUserDatas.get(1);
                 User user = new User();
-                user.change(givenUserData.getName(), givenUserData.getPassword(), givenUserData.getEmail());
+                user.change(givenUserData.getName(),
+                        givenUserData.getPassword(),
+                        givenUserData.getEmail());
+
                 given(userService.updateUser(eq(givenId), any(UserData.class))).willReturn(user);
             }
 

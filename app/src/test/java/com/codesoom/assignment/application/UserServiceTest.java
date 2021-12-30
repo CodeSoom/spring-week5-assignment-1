@@ -113,7 +113,8 @@ class UserServiceTest {
 
             @Test
             void 해당_id의_User를_수정하고_리턴한다() {
-                assertThatThrownBy(() -> userService.updateUser(givenInvalidId, givenUserData)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> userService.updateUser(givenInvalidId, givenUserData))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -135,10 +136,13 @@ class UserServiceTest {
             }
 
             @Test
-            void 등록된_User를_삭제하고_빈값이_리턴한다() {
+            void 등록된_User를_삭제한다() {
                 userService.deleteUser(givenId);
 
-                assertThatThrownBy(() -> userService.getUser(givenId)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> userService.getUser(givenId))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
