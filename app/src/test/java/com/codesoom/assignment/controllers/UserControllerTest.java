@@ -173,25 +173,6 @@ class UserControllerTest {
                         .andExpect(status().isNotFound());
             }
         }
-
-        @Nested
-        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 필수_파라메타가_없다면 {
-
-            @Test
-            @DisplayName("Bad request를 응답한다")
-            void Bad_request를_응답한다() throws Exception {
-                mockMvc.perform(
-                                patch("/users/1")
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content("{\"name\": \"\"," +
-                                                "\"email\": \"test222@test.com\"," +
-                                                " \"password\": \"\"}"
-                                        )
-                        )
-                        .andExpect(status().isBadRequest());
-            }
-        }
     }
 
     @Nested
