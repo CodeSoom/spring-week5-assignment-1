@@ -37,7 +37,7 @@ class UserServiceTest {
     private static final String NEW_PASSWORD = "5678";
     private static final String NEW_EMAIL = "spring@gmail.com";
 
-    UserData userData;
+    private UserData userData;
 
     @BeforeEach
     void setUp() {
