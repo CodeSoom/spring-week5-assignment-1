@@ -30,7 +30,7 @@ class UserServiceTest {
     private static final String USER_EMAIL = "xodnzlzl1597@gmail.com";
 
     @BeforeEach
-    void setUp(){
+    void setUp() {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 
         userService = new UserService(mapper, userRepository);
@@ -57,14 +57,14 @@ class UserServiceTest {
 
     @Nested
     @DisplayName("createUser 메서드는")
-    class Describe_createUser{
+    class Describe_createUser {
         @Nested
-        @DisplayName("등록한 user가 주어진다면")
-        class Context_with_user{
+        @DisplayName("등록할 user가 주어진다면")
+        class Context_with_user {
 
             @Test
-            @DisplayName("user을 생성하고 리턶나다")
-            void it_return_user(){
+            @DisplayName("user을 생성하고 리턴합니다")
+            void it_return_user() {
                 UserData userData = UserData.builder()
                         .name(USER_NAME)
                         .password(USER_PASSWORD)
@@ -85,14 +85,14 @@ class UserServiceTest {
 
     @Nested
     @DisplayName("updateUser 메서드는")
-    class Describe_updateUser{
+    class Describe_updateUser {
         @Nested
         @DisplayName("user의 id가 주어진다면")
-        class Context_with_userId{
+        class Context_with_userId {
 
             @Test
             @DisplayName("user을 수정하고 리턴한다.")
-            void it_return_user(){
+            void it_return_user() {
                 UserData userData = UserData.builder()
                         .name("코드숨")
                         .password("1597")
@@ -109,29 +109,29 @@ class UserServiceTest {
 
         @Nested
         @DisplayName("등록되지 않은 User의 id가 주어진다면")
-        class Context_withOut_userId{
+        class Context_withOut_userId {
 
             @Test
             @DisplayName("User를 찾을 수 없다는 예외를 던진다.")
-            void it_return_user(){
+            void it_return_user() {
                 UserData source = new UserData();
                 source.setName("코드숨");
 
-                assertThatThrownBy(()-> userService.updateUser(100L, source)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> userService.updateUser(100L, source)).isInstanceOf(UserNotFoundException.class);
             }
         }
     }
 
     @Nested
     @DisplayName("delete 메서드는")
-    class Describe_deleteUser{
+    class Describe_deleteUser {
         @Nested
         @DisplayName("user의 id가 주어진다면")
-        class Context_with_userId{
+        class Context_with_userId {
 
             @Test
             @DisplayName("user를 삭제하고 리턴한다")
-            void it_return_user(){
+            void it_return_user() {
                 userService.deleteUser(USER_ID);
 
                 verify(userRepository).delete(any(User.class));
@@ -140,12 +140,12 @@ class UserServiceTest {
 
         @Nested
         @DisplayName("등록되지 않은 User의 id가 주어진다면")
-        class Context_withOut_userId{
+        class Context_withOut_userId {
 
             @Test
             @DisplayName("User를 찾을 수 없다는 예외를 던진다.")
-            void it_return_error(){
-                assertThatThrownBy(()-> userService.deleteUser(100L)).isInstanceOf(UserNotFoundException.class);
+            void it_return_error() {
+                assertThatThrownBy(() -> userService.deleteUser(100L)).isInstanceOf(UserNotFoundException.class);
 
                 verify(userRepository).findById(100L);
             }
