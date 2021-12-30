@@ -8,6 +8,11 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class Config {
 
+    /**
+     * DozerMapper 객체를 Bean에 등록합니다.
+     *
+     * @return Mapper 객체
+     */
     @Bean
     public Mapper dozerMapper() {
         return DozerBeanMapperBuilder.buildDefault();

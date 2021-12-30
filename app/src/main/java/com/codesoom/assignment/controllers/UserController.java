@@ -26,18 +26,36 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * userData로 User를 생성하고, 생성된 User와 201(Created)를 응답합니다.
+     *
+     * @param userData 생성할 User 데이터
+     * @return 생성된 User
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User create(@RequestBody @Valid UserData userData) {
         return userService.createUser(userData);
     }
 
+    /**
+     * id와 일치하는 User를 userData로 변경하고, 변경된 User와 200(ok)를 응답합니다.
+     *
+     * @param id 변경할 User의 id
+     * @param userData 변경될 User 데이터
+     * @return 변경된 User
+     */
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User update(@PathVariable Long id, @RequestBody @Valid UserData userData) {
         return userService.updateUser(id, userData);
     }
 
+    /**
+     * id와 일치하는 User를 삭제하고, 204(No content)를 응답합니다.
+     *
+     * @param id 삭제할 User의 id
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
