@@ -1,7 +1,6 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.UserBadRequestException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -23,13 +22,6 @@ public class NotFoundErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUserNotFound(UserNotFoundException e) {
-        return new ErrorResponse(e.getMessage());
-    }
-
-    @ResponseBody
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(UserBadRequestException.class)
-    public ErrorResponse handleUserBadRequest(UserBadRequestException e) {
         return new ErrorResponse(e.getMessage());
     }
 }

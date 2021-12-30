@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.UserBadRequestException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
@@ -27,13 +26,8 @@ public class UserService {
      *
      * @param source 저장할 유저
      * @return 저장된 유저
-     * @throws UserBadRequestException 저장할 유저의 값이 null인 경우
      */
     public User createUser(UserData source) {
-        if (source == null) {
-            throw new UserBadRequestException("회원에 대한 잘못된 null 요청으로, 회원을 저장할 수 없습니다.");
-        }
-
         User user = mapper.map(source, User.class);
 
         return userRepository.save(user);
@@ -46,17 +40,12 @@ public class UserService {
      * @param source 수정할 회원
      * @return 수정된 회원
      * @throws UserNotFoundException 회원을 찾지 못한 경우
-     * @throws UserBadRequestException 수정할 회원에 대한 값이 null인 경우
      */
     public User updateUser(Long id, UserData source) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(
                         String.format("[%d] 회원을 찾을 수 없으므로, 회원을 수정할 수 없습니다.", id))
                 );
-
-        if (source == null) {
-            throw new UserBadRequestException("회원에 대한 잘못된 null 요청으로, 회원을 수정할 수 없습니다.");
-        }
 
         user.change(
                 source.getName(),
