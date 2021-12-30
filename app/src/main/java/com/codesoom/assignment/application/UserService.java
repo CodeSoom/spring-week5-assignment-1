@@ -22,12 +22,28 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
+
+    /**
+     * user을 생성하고 리턴한다
+     *
+     * @param userData 저장될 user
+     * @return 생성된 user
+     */
+
     public User createUser(UserData userData) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         User user = mapper.map(userData, User.class);
 
         return userRepository.save(user);
     }
+
+    /**
+     *  id에 해당하는 user를 수정하고 리턴한다.
+     *
+     * @param id user의 id
+     * @param userData 수정할 userData
+     * @return 수정된 user
+     */
 
     public User updateUser(Long id, UserData userData) {
         User user = findUser(id);
@@ -37,6 +53,12 @@ public class UserService {
         return user;
     }
 
+    /**
+     * id에 해당하는 user을 삭제하고 리턴한다.
+     *
+     * @param id user의 id
+     */
+
     public User deleteUser(Long id) {
         User user = findUser(id);
 
@@ -44,6 +66,14 @@ public class UserService {
 
         return user;
     }
+
+    /**
+     * id에 해당하는 user을 찾고 없다면 예외를 던진다.
+     *
+     * @param id user의 id
+     * @return user의 정보
+     * @throws UserNotFoundException 예외를 던진다.
+     */
 
     private User findUser(Long id) {
         return userRepository.findById(id)
