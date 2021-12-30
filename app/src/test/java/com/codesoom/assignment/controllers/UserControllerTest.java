@@ -111,7 +111,7 @@ class UserControllerTest {
                 //구현에 대하여 고민중
 
                 given(userService.updateUser(eq(wrongId), any(UserData.class)))
-                        .willThrow(new UserNotFoundException(wrongId));
+                        .willThrow(new UserNotFoundException("회원을 찾을 수 없습니다."));
             }
             
             @Test
@@ -155,7 +155,7 @@ class UserControllerTest {
             @BeforeEach
             void setUp() {
                 given(userService.deleteUser(wrongId))
-                        .willThrow(new UserNotFoundException(wrongId));
+                        .willThrow(new UserNotFoundException("회원을 찾을 수 없습니다."));
             }
 
             @Test

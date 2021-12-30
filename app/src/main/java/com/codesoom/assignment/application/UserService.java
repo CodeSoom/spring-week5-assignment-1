@@ -49,7 +49,9 @@ public class UserService {
      */
     public User updateUser(Long id, UserData source) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format("[%d] 회원을 찾을 수 없으므로, 회원을 수정할 수 없습니다.", id))
+                );
 
         if (source == null) {
             throw new UserBadRequestException("회원에 대한 잘못된 null 요청으로, 회원을 수정할 수 없습니다.");
@@ -72,7 +74,9 @@ public class UserService {
      */
     public User deleteUser(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(
+                        String.format("[%d] 회원을 찾을 수 없으므로, 회원을 삭제할 수 없습니다.", id)
+                ));
 
         userRepository.delete(user);
 
