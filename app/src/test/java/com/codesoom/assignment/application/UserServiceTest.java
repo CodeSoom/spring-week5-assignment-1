@@ -8,8 +8,6 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
@@ -19,50 +17,53 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
-@SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("UserService 클래스")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserServiceTest {
 
-    private UserRepository userRepository = spy(UserRepository.class);
+    private UserRepository userRepository = mock(UserRepository.class);
     private Mapper mapper = new DozerBeanMapper();
 
     private UserService userService = new UserService(userRepository, mapper);
 
     private final Long USER_ID = 1L;
     private final Long WROUNG_ID = 100L;
-    private final String USER_NAME = "test";
+    private final String USER_NAME = "홍길동";
+    private final String USER_EMAIL = "test@naver.com";
+    private final String USER_PASSWORD = "1234";
 
+
+    @DisplayName("createUser 메소드는")
     @Nested
-    class createUser_메소드는 {
+    class createUserMethod {
 
-        @BeforeEach
-        void setUp() {
-            given(userRepository.save(any(User.class)))
-                    .will(invocation -> {
-                        User user = invocation.getArgument(0);
-                        return User.testUser(
-                                1L,
-                                user.getName(),
-                                user.getEmail(),
-                                user.getPassword()
-                        );
-                    });
-        }
+        @DisplayName("null이 아닌 UserData가 주어진다면")
+        @Nested
+        class ifUserDataNotNull {
+            @BeforeEach
+            void setUp() {
+                User user = User.testUser(USER_ID, USER_NAME, USER_EMAIL, USER_PASSWORD);
 
-        @Test
-        void 회원을_저장한다() {
-            UserData source = UserData.builder()
-                    .name(USER_NAME)
-                    .build();
+                given(userRepository.save(any(User.class))).willReturn(user);
+            }
 
-            User user = userService.createUser(source);
+            @DisplayName("회원을 저장한다.")
+            @Test
+            void saveUser() {
+                UserData source = UserData.builder()
+                        .name("홍길동")
+                        .email("test@test.com")
+                        .password("1234")
+                        .build();
 
-            verify(userRepository).save(any(User.class));
+                User user = userService.createUser(source);
 
-            assertThat(user).isNotNull();
+                verify(userRepository).save(any(User.class));
+
+                assertThat(user).isNotNull();
+            }
         }
     }
 
