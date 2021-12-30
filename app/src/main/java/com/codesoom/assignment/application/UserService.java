@@ -27,7 +27,7 @@ public class UserService {
      *
      * @param source 저장할 유저
      * @return 저장된 유저
-     * @throws UserNotFoundException 저장할 유저의 값이 null인 경우
+     * @throws UserBadRequestException 저장할 유저의 값이 null인 경우
      */
     public User createUser(UserData source) {
         if (source == null) {
@@ -46,6 +46,7 @@ public class UserService {
      * @param source 수정할 회원
      * @return 수정된 회원
      * @throws UserNotFoundException 회원을 찾지 못한 경우
+     * @throws UserBadRequestException 수정할 회원에 대한 값이 null인 경우
      */
     public User updateUser(Long id, UserData source) {
         User user = userRepository.findById(id)
