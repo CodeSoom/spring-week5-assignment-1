@@ -25,17 +25,17 @@ class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    List<UserData> testUserDatas = new ArrayList<>();
+    List<UserData> testUserData = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        testUserDatas.add(UserData.builder()
+        testUserData.add(UserData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
                 .build());
 
-        testUserDatas.add(UserData.builder()
+        testUserData.add(UserData.builder()
                 .name("Update Hyuk")
                 .password("123$")
                 .email("pjh9999@naver.com")
@@ -54,7 +54,7 @@ class UserServiceTest {
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserDatas.get(0);
+                givenUserData = testUserData.get(0);
             }
 
             @Test
@@ -83,9 +83,9 @@ class UserServiceTest {
 
             @BeforeEach
             void prepaer() {
-                User user = userService.createUser(testUserDatas.get(0));
+                User user = userService.createUser(testUserData.get(0));
                 givenId = user.getId();
-                givenUserData = testUserDatas.get(1);
+                givenUserData = testUserData.get(1);
             }
 
             @Test
@@ -108,7 +108,7 @@ class UserServiceTest {
 
             @BeforeEach
             void prepaer() {
-                givenUserData = testUserDatas.get(1);
+                givenUserData = testUserData.get(1);
             }
 
             @Test
@@ -131,7 +131,7 @@ class UserServiceTest {
 
             @BeforeEach
             void prepare() {
-                User user = userService.createUser(testUserDatas.get(0));
+                User user = userService.createUser(testUserData.get(0));
                 givenId = user.getId();
             }
 

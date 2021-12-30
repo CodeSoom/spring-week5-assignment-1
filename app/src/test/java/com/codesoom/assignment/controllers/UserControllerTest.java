@@ -40,17 +40,17 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    List<UserData> testUserDatas = new ArrayList<>();
+    List<UserData> testUserData = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        testUserDatas.add(UserData.builder()
+        testUserData.add(UserData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
                 .build());
 
-        testUserDatas.add(UserData.builder()
+        testUserData.add(UserData.builder()
                 .name("Update Hyuk")
                 .password("123$")
                 .email("pjh9999@naver.com")
@@ -70,7 +70,7 @@ class UserControllerTest {
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserDatas.get(0);
+                givenUserData = testUserData.get(0);
                 givenUser.change(givenUserData.getName(),
                         givenUserData.getPassword(),
                         givenUserData.getEmail());
@@ -194,7 +194,7 @@ class UserControllerTest {
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserDatas.get(1);
+                givenUserData = testUserData.get(1);
                 User user = new User();
                 user.change(givenUserData.getName(),
                         givenUserData.getPassword(),
