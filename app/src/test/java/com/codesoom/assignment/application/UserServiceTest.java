@@ -34,7 +34,6 @@ class UserServiceTest {
     private final String USER_EMAIL = "test@naver.com";
     private final String USER_PASSWORD = "1234";
 
-
     @DisplayName("createUser 메소드는")
     @Nested
     class createUserMethod {
@@ -44,7 +43,7 @@ class UserServiceTest {
         class ifUserDataNotNull {
             @BeforeEach
             void setUp() {
-                User user = User.testUser(USER_ID, USER_NAME, USER_EMAIL, USER_PASSWORD);
+                User user = createTestUser();
 
                 given(userRepository.save(any(User.class))).willReturn(user);
             }
@@ -75,7 +74,9 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                setUpSaveUser(USER_ID, USER_NAME);
+                User user = createTestUser();
+
+                given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
             }
 
             @Test
@@ -94,7 +95,7 @@ class UserServiceTest {
         class 주어진_아이디의_회원이_없다면 {
             @BeforeEach
             void setUp() {
-                setUpSaveUser(WROUNG_ID + 1, USER_NAME);
+                given(userRepository.findById(WROUNG_ID)).willReturn(Optional.empty());
             }
 
             @Test
@@ -113,7 +114,9 @@ class UserServiceTest {
         class 주어진_아이디의_회원이_있다면 {
             @BeforeEach
             void setUp() {
-                setUpSaveUser(USER_ID, USER_NAME);
+                User user = createTestUser();
+
+                given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
             }
 
             @Test
@@ -125,9 +128,7 @@ class UserServiceTest {
         }
     }
 
-    private void setUpSaveUser(Long id, String name) {
-        User user = User.testUser(id, name, null, null);
-
-        given(userRepository.findById(id)).willReturn(Optional.of(user));
+    private User createTestUser() {
+        return User.testUser(USER_ID, USER_NAME, USER_EMAIL, USER_PASSWORD);
     }
 }
