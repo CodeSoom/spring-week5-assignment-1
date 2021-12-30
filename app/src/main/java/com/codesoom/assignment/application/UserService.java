@@ -26,8 +26,13 @@ public class UserService {
      *
      * @param source 저장할 유저
      * @return 저장된 유저
+     * @throws UserNotFoundException 저장할 유저의 값이 null인 경우
      */
     public User createUser(UserData source) {
+        if (source == null) {
+            throw new UserNotFoundException(0L);
+        }
+
         User user = mapper.map(source, User.class);
 
         return userRepository.save(user);
