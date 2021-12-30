@@ -1,6 +1,5 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -14,8 +13,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -30,6 +32,7 @@ public class UserControllerTest {
     private static final String EXISTED_USER_PASSWORD = "password";
 
     @Autowired
+    private WebApplicationContext wac;
     private MockMvc mockMvc;
 
     @Autowired
@@ -39,6 +42,14 @@ public class UserControllerTest {
     private ObjectMapper objectMapper;
 
     private User existedUser;
+
+    @BeforeEach
+    void prepareMockMvc() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(wac)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .build();
+
+    }
 
     void prepareExistedUser() {
         User user = User.builder()
@@ -142,8 +153,7 @@ public class UserControllerTest {
                 mockMvc.perform(delete("/users/" + existedUser.getId()))
                         .andExpect(status().isNoContent());
 
-                assertThatThrownBy(() -> userRepository.findById(existedUser.getId()))
-                        .isInstanceOf(UserNotFoundException.class);
+                assertThat(userRepository.findById(existedUser.getId())).isEmpty();
             }
         }
     }

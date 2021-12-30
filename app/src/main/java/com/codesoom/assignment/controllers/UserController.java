@@ -1,31 +1,43 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
 
 /**
  * 유저의 Http 요청을 처리합니다.
  */
+@RestController
+@RequestMapping("/users")
 public class UserController {
+    private final UserService userService;
+
+    @Autowired
+    UserController(UserService userService) {
+        this.userService = userService;
+    }
+
     /**
      * 요청 유저와 동일한 유저를 생성하고, 생성한 유저를 응답 합니다.
      *
      * @param user 요청 유저
      * @return 생성한 유저
      */
-    User create(User user) {
-        return null;
-    }
-
-    /**
-     * 요청 id의 유저를 응답합니다.
-     *
-     * @param id 요청 id
-     * @return 요청 id의 유저
-     */
-    User detail(Long id) {
-        return null;
+    @PostMapping
+    @ResponseStatus(HttpStatus.CREATED)
+    User create(@RequestBody User user) {
+        return userService.createUser(user);
     }
 
     /**
@@ -35,8 +47,9 @@ public class UserController {
      * @param user 요청 유저
      * @return
      */
-    User update(Long id, User user) {
-        return null;
+    @PatchMapping("{id}")
+    User update(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
     }
 
     /**
@@ -44,15 +57,9 @@ public class UserController {
      *
      * @param id 요청 id
      */
-    void delete(Long id) {
-    }
-
-    /**
-     * 등록된 모든 유저들의 목록을 응답합니다.
-     *
-     * @return 등록된 모든 유저 목록
-     */
-    List<User> list() {
-
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    void delete(@PathVariable Long id) {
+        userService.deleteUser(id);
     }
 }
