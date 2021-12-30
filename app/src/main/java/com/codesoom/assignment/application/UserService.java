@@ -31,7 +31,7 @@ public class UserService {
      */
     public User createUser(UserData source) {
         if (source == null) {
-            throw new UserNotFoundException(0L);
+            throw new UserBadRequestException("회원에 대한 잘못된 null 요청으로, 회원을 저장할 수 없습니다.");
         }
 
         User user = mapper.map(source, User.class);

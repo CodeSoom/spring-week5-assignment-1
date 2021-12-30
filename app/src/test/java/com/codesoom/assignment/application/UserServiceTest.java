@@ -69,13 +69,13 @@ class UserServiceTest {
         @DisplayName("UserData의 값이 null이라면")
         @Nested
         class UserDataIsNull {
-            @DisplayName("회원을 찾을 수 없다는 예외를 던진다.")
+            @DisplayName("예외를 던진다.")
             @Test
             void test() {
                 UserData source = null;
 
                 assertThatThrownBy(() -> userService.createUser(source))
-                        .isInstanceOf(UserNotFoundException.class);
+                        .isInstanceOf(UserBadRequestException.class);
             }
         }
     }
