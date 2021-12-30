@@ -99,7 +99,7 @@ class UserControllerTest {
 
         @Nested
         class 주어진_아이디의_회원이_없다면 {
-            private Long wroungId = 100L;
+            private Long wrongId = 100L;
             
             @BeforeEach
             void setUp() {
@@ -110,13 +110,13 @@ class UserControllerTest {
                 //같은 수정 메소드를 서로 다른 2개의 호출을 한다고 에러 메시지가 출력되는 현상
                 //구현에 대하여 고민중
 
-                given(userService.updateUser(eq(wroungId), any(UserData.class)))
-                        .willThrow(new UserNotFoundException(wroungId));
+                given(userService.updateUser(eq(wrongId), any(UserData.class)))
+                        .willThrow(new UserNotFoundException(wrongId));
             }
             
             @Test
             void 에러코드를_보낸다() throws Exception {
-                mockMvc.perform(patch("/users/" + wroungId)
+                mockMvc.perform(patch("/users/" + wrongId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\",\"password\":\"1234\"}")
                 ).andExpect(status().isNotFound());
@@ -150,17 +150,17 @@ class UserControllerTest {
 
         @Nested
         class 주어진_아이디의_회원이_없다면 {
-            private Long wroungId = 100L;
+            private Long wrongId = 100L;
 
             @BeforeEach
             void setUp() {
-                given(userService.deleteUser(wroungId))
-                        .willThrow(new UserNotFoundException(wroungId));
+                given(userService.deleteUser(wrongId))
+                        .willThrow(new UserNotFoundException(wrongId));
             }
 
             @Test
             void 에러_코드를_보낸다() throws Exception {
-                mockMvc.perform(delete("/users/" + wroungId))
+                mockMvc.perform(delete("/users/" + wrongId))
                         .andExpect(status().isNotFound());
             }
         }

@@ -29,7 +29,7 @@ class UserServiceTest {
     private UserService userService = new UserService(userRepository, mapper);
 
     private final Long USER_ID = 1L;
-    private final Long WROUNG_ID = 100L;
+    private final Long WRONG_ID = 100L;
     private final String USER_NAME = "홍길동";
     private final String USER_EMAIL = "test@naver.com";
     private final String USER_PASSWORD = "1234";
@@ -95,14 +95,14 @@ class UserServiceTest {
         class 주어진_아이디의_회원이_없다면 {
             @BeforeEach
             void setUp() {
-                given(userRepository.findById(WROUNG_ID)).willReturn(Optional.empty());
+                given(userRepository.findById(WRONG_ID)).willReturn(Optional.empty());
             }
 
             @Test
             void 예외를_던진다() {
                 UserData source = UserData.builder().build();
 
-                assertThatThrownBy(() -> userService.updateUser(WROUNG_ID, source))
+                assertThatThrownBy(() -> userService.updateUser(WRONG_ID, source))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
