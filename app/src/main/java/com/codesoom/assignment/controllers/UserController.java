@@ -1,8 +1,10 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserBadRequestException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.ErrorResponse;
 import com.codesoom.assignment.dto.UserData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -33,6 +35,7 @@ public class UserController {
      *
      * @param userData 저장할 회원
      * @return 저장된 회원
+     * @throws UserBadRequestException 저장할 회원에 대한 유효성 검사가 실패한 경우
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -40,7 +43,7 @@ public class UserController {
                        BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            throw new UserNotFoundException("요청에 대한 유효성 검사에 실패하여, 회원을 저장할 수 없습니다.");
+            throw new UserBadRequestException(bindingResult);
         }
 
         return userService.createUser(userData);
@@ -52,6 +55,7 @@ public class UserController {
      * @param id       수정할 회원의 아이디
      * @param userData 수정할 회원
      * @return 수정된 회원
+     * @throws UserBadRequestException 저장할 회원에 대한 유효성 검사가 실패한 경우
      */
     @PatchMapping("{id}")
     public User update(@PathVariable Long id,
@@ -59,7 +63,7 @@ public class UserController {
                        BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            throw new UserNotFoundException("요청에 대한 유효성 검사에 실패하여, 회원을 저장할 수 없습니다.");
+            throw  new UserBadRequestException(bindingResult);
         }
 
         return userService.updateUser(id, userData);

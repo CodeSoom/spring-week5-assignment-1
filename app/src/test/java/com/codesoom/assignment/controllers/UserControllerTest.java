@@ -60,7 +60,7 @@ class UserControllerTest {
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"test\",\"email\":\"test@naver.com\"}")
-                        ).andExpect(status().isNotFound());
+                        ).andExpect(status().isBadRequest());
             }
         }
     }
@@ -107,7 +107,7 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\"}")
                         )
-                        .andExpect(status().isNotFound());
+                        .andExpect(status().isBadRequest());
             }
         }
 
@@ -125,7 +125,7 @@ class UserControllerTest {
                 //구현에 대하여 고민중
 
                 given(userService.updateUser(eq(wrongId), any(UserData.class)))
-                        .willThrow(new UserNotFoundException("회원을 찾을 수 없습니다."));
+                        .willThrow(new UserNotFoundException(wrongId));
             }
             
             @Test
@@ -150,7 +150,7 @@ class UserControllerTest {
                 //현재 setUp과 상관없이 이 테스트는 무조건 통과된다.
                 //어떻게 구현해야 할지 고민중
 
-                User user = User.createSaveUser("홍길동", "test@test.com", "1234");
+                User user = User.createUserForSave("홍길동", "test@test.com", "1234");
 
                 given(userService.deleteUser(eq(userId))).willReturn(user);
             }
@@ -169,7 +169,7 @@ class UserControllerTest {
             @BeforeEach
             void setUp() {
                 given(userService.deleteUser(wrongId))
-                        .willThrow(new UserNotFoundException("회원을 찾을 수 없습니다."));
+                        .willThrow(new UserNotFoundException(wrongId));
             }
 
             @Test
