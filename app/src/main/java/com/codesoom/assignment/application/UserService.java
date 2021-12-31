@@ -43,9 +43,7 @@ public class UserService {
      */
     public User updateUser(Long id, UserData source) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format("[%d] 회원을 찾을 수 없으므로, 회원을 수정할 수 없습니다.", id))
-                );
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         user.change(
                 source.getName(),
@@ -64,9 +62,7 @@ public class UserService {
      */
     public User deleteUser(Long id) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(
-                        String.format("[%d] 회원을 찾을 수 없으므로, 회원을 삭제할 수 없습니다.", id)
-                ));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         userRepository.delete(user);
 
