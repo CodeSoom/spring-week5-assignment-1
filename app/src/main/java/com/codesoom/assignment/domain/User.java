@@ -32,7 +32,7 @@ public class User {
         return user;
     }
 
-    public static User createSaveUser(String name, String email, String password) {
+    public static User createUserForSave(String name, String email, String password) {
         User user = new User();
         user.name = name;
         user.email = email;
