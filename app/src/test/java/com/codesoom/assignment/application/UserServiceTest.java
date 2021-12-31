@@ -25,6 +25,7 @@ class UserServiceTest {
     private UserService userService;
 
     private static final Long USER_ID = 1L;
+    private static Long WRONG_ID = 100L;
     private static final String USER_NAME = "김태우";
     private static final String USER_PASSWORD = "1234";
     private static final String USER_EMAIL = "xodnzlzl1597@gmail.com";
@@ -42,7 +43,7 @@ class UserServiceTest {
                 .email(USER_EMAIL)
                 .build();
 
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
 
         given(userRepository.save(any(User.class))).will(invocation -> {
             User source = invocation.getArgument(0);
@@ -96,7 +97,7 @@ class UserServiceTest {
                         .email("codesoom@gmail.com")
                         .build();
 
-                User user = userService.updateUser(1L, userData);
+                User user = userService.updateUser(USER_ID, userData);
 
                 assertThat(user.getName()).isEqualTo("코드숨");
                 assertThat(user.getPassword()).isEqualTo("1597");
@@ -108,13 +109,17 @@ class UserServiceTest {
         @DisplayName("등록되지 않은 User의 id가 주어진다면")
         class Context_withOut_userId {
 
+            @BeforeEach
+            void setUp(){
+                given(userRepository.findById(WRONG_ID)).willReturn(Optional.empty());
+            }
             @Test
             @DisplayName("User를 찾을 수 없다는 예외를 던진다.")
             void it_return_user() {
                 UserData source = new UserData();
                 source.setName("코드숨");
 
-                assertThatThrownBy(() -> userService.updateUser(100L, source)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> userService.updateUser(WRONG_ID, source)).isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -142,9 +147,9 @@ class UserServiceTest {
             @Test
             @DisplayName("User를 찾을 수 없다는 예외를 던진다.")
             void it_return_error() {
-                assertThatThrownBy(() -> userService.deleteUser(100L)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> userService.deleteUser(WRONG_ID)).isInstanceOf(UserNotFoundException.class);
 
-                verify(userRepository).findById(100L);
+                verify(userRepository).findById(WRONG_ID);
             }
         }
     }
