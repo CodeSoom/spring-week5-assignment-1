@@ -20,7 +20,7 @@ public class UserService {
      *
      * @param id 조회할 User의 id
      * @return User의 id와 일치하는 User
-     * @throws UserNotFoundException User의 id와 일치하는 User가 없을 때 던집니다.
+     * @throws UserNotFoundException User의 id와 일치하는 User가 없을 경우
      */
     public User getUser(Long id) {
         return userRepository.findById(id)
@@ -49,7 +49,7 @@ public class UserService {
      * @param targetId 변경할 User의 id
      * @param source 변경될 User 데이터
      * @return 변경된 User
-     * @throws UserNotFoundException User의 targetId와 일치하는 User가 없을 때 던집니다.
+     * @throws UserNotFoundException User의 targetId와 일치하는 User가 없을 경우
      */
     public User updateUser(Long targetId, UserData source) {
         User user = getUser(targetId);
@@ -65,7 +65,7 @@ public class UserService {
      * targetId 값과 일치하는 User를 삭제합니다.
      *
      * @param targetId 삭제할 User의 id
-     * @throws UserNotFoundException User의 targetId와 일치하는 User가 없을 때 던집니다.
+     * @throws UserNotFoundException User의 targetId와 일치하는 User가 없을 경우
      */
     public void deleteUser(Long targetId) {
         try {

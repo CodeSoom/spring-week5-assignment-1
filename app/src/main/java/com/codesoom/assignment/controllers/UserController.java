@@ -27,7 +27,7 @@ public class UserController {
     }
 
     /**
-     * userData로 User를 생성하고, 생성된 User와 201(Created)를 응답합니다.
+     * userData로 User를 생성합니다.
      *
      * @param userData 생성할 User 데이터
      * @return 생성된 User
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     /**
-     * id와 일치하는 User를 userData로 변경하고, 변경된 User와 200(ok)를 응답합니다.
+     * id와 일치하는 User를 userData로 변경합니다.
      *
      * @param id 변경할 User의 id
      * @param userData 변경될 User 데이터
@@ -52,7 +52,7 @@ public class UserController {
     }
 
     /**
-     * id와 일치하는 User를 삭제하고, 204(No content)를 응답합니다.
+     * id와 일치하는 User를 삭제합니다.
      *
      * @param id 삭제할 User의 id
      */
