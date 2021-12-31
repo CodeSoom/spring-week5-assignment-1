@@ -4,6 +4,8 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -36,6 +38,8 @@ class UserControllerTest {
 
     @MockBean
     private UserService userService;
+
+    private Mapper mapper = new DozerBeanMapper();
 
     @Nested
     class 회원을_저장하는_핸들러는 {
@@ -76,14 +80,10 @@ class UserControllerTest {
                 given(userService.updateUser(eq(userId), any(UserData.class)))
                         .will(invocation -> {
                             UserData userData = invocation.getArgument(1);
-                            return User.testUser(
-                                    userData.getId(),
-                                    userData.getName(),
-                                    userData.getEmail(),
-                                    userData.getPassword()
-                            );
-                        });
+                            userData.setId(userId);
 
+                            return mapper.map(userData, User.class);
+                        });
             }
 
             @Test

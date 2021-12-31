@@ -36,7 +36,14 @@ class UserServiceTest {
 
     @BeforeEach
     void setUp() {
-        User user = User.testUser(USER_ID, USER_NAME, USER_EMAIL, USER_PASSWORD);
+        UserData userData = UserData.builder()
+                .id(USER_ID)
+                .name(USER_NAME)
+                .email(USER_EMAIL)
+                .password(USER_PASSWORD)
+                .build();
+
+        User user = mapper.map(userData, User.class);
 
         given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
     }

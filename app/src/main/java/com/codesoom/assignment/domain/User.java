@@ -23,15 +23,6 @@ public class User {
 
     private String password; // 비밀번호
 
-    public static User testUser(Long id, String name, String email, String password) {
-        User user = new User();
-        user.id = id;
-        user.name = name;
-        user.email = email;
-        user.password = password;
-        return user;
-    }
-
     public static User createUserForSave(String name, String email, String password) {
         User user = new User();
         user.name = name;
