@@ -19,6 +19,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+/**
+ * 회원의 Http 요청을 처리합니다.
+ * */
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -29,17 +32,35 @@ public class UserController {
         this.userService = userService;
     }
 
+    /**
+     * 회원 정보를 받아 새로운 회원을 생성하여 리턴합니다.
+     *
+     * @param userData 생성하려는 회원의 정보 입니다
+     * @return 새로 생성된 회원
+     * */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public User createUser(@RequestBody @Valid UserData userData) {
         return userService.create(userData);
     }
 
+    /**
+     * 요청받은 id의 회원을 찾아 요청받은 회원 정보로 변경하고 변경된 회원을 리턴합니다.
+     *
+     * @param id 요청 id
+     * @param userData 요청 회원 정보
+     * @return 변경된 회원 정보
+     * */
     @PatchMapping("{id}")
     public User updateUser(@PathVariable Long id, @RequestBody @Valid UserData userData) {
         return userService.update(id, userData);
     }
 
+    /**
+     * 요청받은 id의 유저를 제거합니다.
+     *
+     * @param id 요청 id
+     * */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteUser(@PathVariable Long id) {
