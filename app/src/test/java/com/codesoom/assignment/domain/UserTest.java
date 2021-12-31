@@ -42,22 +42,28 @@ class UserTest {
     @DisplayName("changeWith 메소드는")
     class Describe_changeWith{
 
-        @BeforeEach
-        void setUp(){
-            user.changeWith(User.builder()
-                    .name("이영희")
-                    .email("123@exmaple.com")
-                    .pw("abcd")
-                    .build()
-            );
-        }
-        @Test
-        @DisplayName("수정한 User를 리턴한다.")
-        void it_returns_user(){
-            assertThat(user.getId()).isEqualTo(1L);
-            assertThat(user.getName()).isEqualTo("이영희");
-            assertThat(user.getEmail()).isEqualTo("123@exmaple.com");
-            assertThat(user.getPw()).isEqualTo("abcd");
+        @Nested
+        @DisplayName("User 객체가 주어지면")
+        class Context_with_a_user{
+
+            @BeforeEach
+            void setUp(){
+                user.changeWith(User.builder()
+                        .name("이영희")
+                        .email("123@exmaple.com")
+                        .pw("abcd")
+                        .build()
+                );
+            }
+            
+            @Test
+            @DisplayName("주어진 객체의 내용으로 수정한 User를 리턴한다.")
+            void it_returns_user(){
+                assertThat(user.getId()).isEqualTo(1L);
+                assertThat(user.getName()).isEqualTo("이영희");
+                assertThat(user.getEmail()).isEqualTo("123@exmaple.com");
+                assertThat(user.getPw()).isEqualTo("abcd");
+            }
         }
     }
 
