@@ -8,8 +8,6 @@ import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.DisplayNameGeneration;
-import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +25,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @WebMvcTest(UserController.class)
 @DisplayName("UserController 클래스")
-@DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class UserControllerTest {
 
     @Autowired
@@ -41,12 +37,16 @@ class UserControllerTest {
 
     private Mapper mapper = new DozerBeanMapper();
 
+    @DisplayName("회원저장 요청을 처리하는 핸들러는")
     @Nested
-    class 회원을_저장하는_핸들러는 {
+    class requestForSaveUserHandler {
+
+        @DisplayName("저장할 회원 파라미터가 유효성 검사를 통과한 경우")
         @Nested
-        class 유효한_회원_파라미터인_경우 {
+        class UserParamValid {
+            @DisplayName("회원을 저장한다")
             @Test
-            void 회원을_저장한다() throws Exception {
+            void saveUser() throws Exception {
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"test\",\"email\":\"test@naver.com\",\"password\":\"1234\"}")
@@ -57,10 +57,12 @@ class UserControllerTest {
             }
         }
 
+        @DisplayName("저장할 회원 파라미터가 유효성 검사에 실패한 경우")
         @Nested
-        class 유효하지_않는_회원_파라미터인_경우 {
+        class UserParamInValid {
+            @DisplayName("에러코드를 보낸다")
             @Test
-            void 에러코드를_보낸다() throws Exception {
+            void sendErrorCode() throws Exception {
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"test\",\"email\":\"test@naver.com\"}")
@@ -69,10 +71,12 @@ class UserControllerTest {
         }
     }
 
+    @DisplayName("회원수정 요청을 처리하는 핸들러는")
     @Nested
-    class 회원을_수정하는_핸들러는 {
+    class requestForUpdateUserHandler {
+        @DisplayName("주어진 아이디의 회원이 있다면")
         @Nested
-        class 주어진_아이디의_회원이_있다면 {
+        class existUserToId {
             private Long userId = 1L;
 
             @BeforeEach
@@ -86,8 +90,9 @@ class UserControllerTest {
                         });
             }
 
+            @DisplayName("회원을 수정한다")
             @Test
-            void 회원을_수정한다() throws Exception {
+            void updateUser() throws Exception {
                 mockMvc.perform(patch("/users/" + userId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\",\"password\":\"1234\"}")
@@ -97,12 +102,14 @@ class UserControllerTest {
             }
         }
 
+        @DisplayName("수정할 회원 파라미터가 유효성 검사에 실패한 경우")
         @Nested
-        class 유효하지_않는_수정할_회원에_대한_값이면 {
+        class UserParamInValid {
             private Long userId = 1L;
 
+            @DisplayName("에러코드를 보낸다")
             @Test
-            void 에러코드를_보낸다() throws Exception {
+            void sendErrorCode() throws Exception {
                 mockMvc.perform(patch("/users/" + userId)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\"}")
@@ -111,8 +118,9 @@ class UserControllerTest {
             }
         }
 
+        @DisplayName("주어진 아이디의 회원이 없다면")
         @Nested
-        class 주어진_아이디의_회원이_없다면 {
+        class NotExistUserToId {
             private Long wrongId = 100L;
             
             @BeforeEach
@@ -127,9 +135,10 @@ class UserControllerTest {
                 given(userService.updateUser(eq(wrongId), any(UserData.class)))
                         .willThrow(new UserNotFoundException(wrongId));
             }
-            
+
+            @DisplayName("에러코드를 보낸다")
             @Test
-            void 에러코드를_보낸다() throws Exception {
+            void sendErrorCode() throws Exception {
                 mockMvc.perform(patch("/users/" + wrongId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\",\"password\":\"1234\"}")
@@ -138,10 +147,12 @@ class UserControllerTest {
         }
     }
 
+    @DisplayName("회원삭제 요청을 처리하는 핸들러는")
     @Nested
-    class 회원을_삭제하는_핸들러는 {
+    class requestForDeleteUserHandler {
+        @DisplayName("주어진 아이디의 회원이 있다면")
         @Nested
-        class 주어진_아이디의_회원이_있다면 {
+        class existUserToId {
             private Long userId = 1L;
 
             @BeforeEach
@@ -155,15 +166,17 @@ class UserControllerTest {
                 given(userService.deleteUser(eq(userId))).willReturn(user);
             }
 
+            @DisplayName("회원을 삭제한다")
             @Test
-            void 회원을_삭제한다() throws Exception {
+            void deleteUser() throws Exception {
                 mockMvc.perform(delete("/users/1"))
                         .andExpect(status().isNoContent());
             }
         }
 
+        @DisplayName("주어진 아이디의 회원이 없다면")
         @Nested
-        class 주어진_아이디의_회원이_없다면 {
+        class NotExistUserToId {
             private Long wrongId = 100L;
 
             @BeforeEach
@@ -172,8 +185,9 @@ class UserControllerTest {
                         .willThrow(new UserNotFoundException(wrongId));
             }
 
+            @DisplayName("에러코드를 보낸다")
             @Test
-            void 에러_코드를_보낸다() throws Exception {
+            void sendErrorCode() throws Exception {
                 mockMvc.perform(delete("/users/" + wrongId))
                         .andExpect(status().isNotFound());
             }
