@@ -29,18 +29,16 @@ public class ProductService {
      *
      * @return 상품목록
      */
-
     public List<Product> getProducts() {
         return productRepository.findAll();
     }
 
     /**
-     * id에 해당하는 상품을 리턴한다
+     * id에 해당하는 상품을 리턴한다.
      *
      * @param id 상품의 id
      * @return 찾는 상품
      */
-
     public Product getProduct(Long id) {
         return findProduct(id);
     }
@@ -51,7 +49,6 @@ public class ProductService {
      * @param productData 저장될 상품
      * @return 생성된 상품
      */
-
     public Product createProduct(ProductData productData) {
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         Product product = mapper.map(productData, Product.class);
@@ -62,11 +59,10 @@ public class ProductService {
     /**
      * id에 해당되는 상품을 수정하고 리턴한다.
      *
-     * @param id 상품의 id
+     * @param id          상품의 id
      * @param productData 수정할 productData
      * @return 수정된 상품
      */
-
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
@@ -80,7 +76,6 @@ public class ProductService {
      *
      * @param id 상품의 id
      */
-
     public Product deleteProduct(Long id) {
         Product product = findProduct(id);
 
@@ -96,7 +91,6 @@ public class ProductService {
      * @return 상품의 정보
      * @throws ProductNotFoundException 예외를 던진다.
      */
-
     private Product findProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
