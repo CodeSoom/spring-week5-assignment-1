@@ -34,6 +34,13 @@ class UserServiceTest {
     private final String USER_EMAIL = "test@naver.com";
     private final String USER_PASSWORD = "1234";
 
+    @BeforeEach
+    void setUp() {
+        User user = User.testUser(USER_ID, USER_NAME, USER_EMAIL, USER_PASSWORD);
+
+        given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
+    }
+
     @DisplayName("createUser 메소드는")
     @Nested
     class createUserMethod {
@@ -43,9 +50,8 @@ class UserServiceTest {
         class ifUserDataNotNull {
             @BeforeEach
             void setUp() {
-                User user = createTestUser();
-
-                given(userRepository.save(any(User.class))).willReturn(user);
+                given(userRepository.save(any(User.class)))
+                        .will(invocation -> invocation.getArgument(0));
             }
 
             @DisplayName("회원을 저장한다.")
@@ -73,13 +79,6 @@ class UserServiceTest {
         @Nested
         class haveUserWithId {
             private final String UPDATE_USER_NAME = USER_NAME + "!!!";
-
-            @BeforeEach
-            void setUp() {
-                User user = createTestUser();
-
-                given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
-            }
 
             @DisplayName("회원을 수정한다.")
             @Test
@@ -119,13 +118,6 @@ class UserServiceTest {
         @DisplayName("주어진 아이디의 회원이 있다면")
         @Nested
         class haveUserWithId {
-            @BeforeEach
-            void setUp() {
-                User user = createTestUser();
-
-                given(userRepository.findById(USER_ID)).willReturn(Optional.of(user));
-            }
-
             @DisplayName("회원을 삭제한다.")
             @Test
             void deleteUser() {
@@ -146,9 +138,5 @@ class UserServiceTest {
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
-    }
-
-    private User createTestUser() {
-        return User.testUser(USER_ID, USER_NAME, USER_EMAIL, USER_PASSWORD);
     }
 }
