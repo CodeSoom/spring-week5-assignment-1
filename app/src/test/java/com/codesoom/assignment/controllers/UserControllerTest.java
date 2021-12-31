@@ -75,7 +75,8 @@ class UserControllerTest {
                         givenUserData.getPassword(),
                         givenUserData.getEmail());
 
-                given(userService.createUser(any(UserData.class))).willReturn(givenUser);
+                given(userService.createUser(any(UserData.class)))
+                        .willReturn(givenUser);
             }
 
             @Test
@@ -200,7 +201,8 @@ class UserControllerTest {
                         givenUserData.getPassword(),
                         givenUserData.getEmail());
 
-                given(userService.updateUser(eq(givenId), any(UserData.class))).willReturn(user);
+                given(userService.updateUser(eq(givenId), any(UserData.class)))
+                        .willReturn(user);
             }
 
             @Test
