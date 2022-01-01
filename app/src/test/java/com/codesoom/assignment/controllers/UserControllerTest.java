@@ -175,7 +175,8 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(WRONG_ID), any(UserData.class))).willThrow(new UserNotFoundException(1000L));
+                given(userService.updateUser(eq(WRONG_ID), any(UserData.class)))
+                        .willThrow(new UserNotFoundException(WRONG_ID));
             }
 
             @Test
@@ -220,8 +221,9 @@ class UserControllerTest {
             private Long WRONG_ID = 1000L;
 
             @BeforeEach
-            void setUp(){
-                given(userService.deleteUser(WRONG_ID)).willThrow(new UserNotFoundException(WRONG_ID));
+            void setUp() {
+                given(userService.deleteUser(WRONG_ID))
+                        .willThrow(new UserNotFoundException(WRONG_ID));
             }
 
             @Test
