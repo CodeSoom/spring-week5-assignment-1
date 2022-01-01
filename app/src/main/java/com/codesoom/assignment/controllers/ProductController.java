@@ -35,7 +35,7 @@ public class ProductController {
      * @param productId 상품의 id
      * @return 찾는 상품
      */
-    @GetMapping("{id}")
+    @GetMapping("{productId}")
     public Product detail(@PathVariable Long productId) {
         return productService.getProduct(productId);
     }
@@ -59,7 +59,7 @@ public class ProductController {
      * @param productData 수정한 상품 정보
      * @return 수정된 상품 정보
      */
-    @PatchMapping("{id}")
+    @PatchMapping("{productId}")
     public Product update(
             @PathVariable Long productId,
             @RequestBody @Valid ProductData productData
@@ -72,7 +72,7 @@ public class ProductController {
      *
      * @param productId 삭제할 상푸 id
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping("{productId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long productId) {
         productService.deleteProduct(productId);

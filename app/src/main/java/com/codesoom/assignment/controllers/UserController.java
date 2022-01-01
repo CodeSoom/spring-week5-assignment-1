@@ -37,7 +37,7 @@ public class UserController {
      * @param userData 수정한 user 정보
      * @return 수정된 user 정보
      */
-    @PatchMapping("/{id}")
+    @PatchMapping("/{userId}")
     public User update(
             @PathVariable Long userId,
             @RequestBody @Valid UserData userData) {
@@ -48,7 +48,7 @@ public class UserController {
      * id에 해당되는 user을 삭제한다.
      * @param userId 삭제할 user id
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/{userId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long userId) {
         userService.deleteUser(userId);
