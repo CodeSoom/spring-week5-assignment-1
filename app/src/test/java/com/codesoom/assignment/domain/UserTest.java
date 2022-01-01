@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -16,14 +15,13 @@ class UserTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class User_생성자는 {
+    class User_Builder는 {
 
-        String givenName = "Hyuk";
-        String givenPassword = "!234";
-        String givenEmail = "pjh0819@naver.com";
+        final String givenName = "Hyuk";
+        final String givenPassword = "!234";
+        final String givenEmail = "pjh0819@naver.com";
 
         @Test
-        @DisplayName("User 객체를 생성한다")
         void User_객체를_생성한다() {
             User user = User.builder()
                             .name(givenName)
@@ -38,5 +36,3 @@ class UserTest {
         }
     }
 }
-
-
