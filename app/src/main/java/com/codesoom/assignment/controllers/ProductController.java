@@ -32,12 +32,12 @@ public class ProductController {
     /**
      * id에 해당되는 상품정보를 리턴한다.
      *
-     * @param id 상품의 id
+     * @param productId 상품의 id
      * @return 찾는 상품
      */
     @GetMapping("{id}")
-    public Product detail(@PathVariable Long id) {
-        return productService.getProduct(id);
+    public Product detail(@PathVariable Long productId) {
+        return productService.getProduct(productId);
     }
 
     /**
@@ -55,26 +55,26 @@ public class ProductController {
     /**
      * id에 해당되는 상품을 수정하에 productData에 저장하고 리턴한다.
      *
-     * @param id 수정할 상품의 id
+     * @param productId 수정할 상품의 id
      * @param productData 수정한 상품 정보
      * @return 수정된 상품 정보
      */
     @PatchMapping("{id}")
     public Product update(
-            @PathVariable Long id,
+            @PathVariable Long productId,
             @RequestBody @Valid ProductData productData
     ) {
-        return productService.updateProduct(id, productData);
+        return productService.updateProduct(productId, productData);
     }
 
     /**
      * id에 해당되는 상품을 삭제한다.
      *
-     * @param id 삭제할 상푸 id
+     * @param productId 삭제할 상푸 id
      */
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable Long id) {
-        productService.deleteProduct(id);
+    public void destroy(@PathVariable Long productId) {
+        productService.deleteProduct(productId);
     }
 }

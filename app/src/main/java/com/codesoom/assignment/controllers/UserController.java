@@ -33,24 +33,24 @@ public class UserController {
     /**
      * id에 해당되는 user을 수정하여 userData 리턴한다.
      *
-     * @param id 수정할 user의 id
+     * @param userId 수정할 user의 id
      * @param userData 수정한 user 정보
      * @return 수정된 user 정보
      */
     @PatchMapping("/{id}")
     public User update(
-            @PathVariable Long id,
+            @PathVariable Long userId,
             @RequestBody @Valid UserData userData) {
-        return userService.updateUser(id, userData);
+        return userService.updateUser(userId, userData);
     }
 
     /**
      * id에 해당되는 user을 삭제한다.
-     * @param id 삭제할 user id
+     * @param userId 삭제할 user id
      */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable Long id) {
-        userService.deleteUser(id);
+    public void destroy(@PathVariable Long userId) {
+        userService.deleteUser(userId);
     }
 }
