@@ -38,12 +38,12 @@ public class UserService {
     /**
      *  id에 해당하는 user를 수정하고 리턴한다.
      *
-     * @param id user의 id
+     * @param userId user의 id
      * @param userData 수정할 userData
      * @return 수정된 user
      */
-    public User updateUser(Long id, UserData userData) {
-        User user = findUser(id);
+    public User updateUser(Long userId, UserData userData) {
+        User user = findUser(userId);
 
         user.changeWith(mapper.map(userData, User.class));
 
@@ -53,10 +53,10 @@ public class UserService {
     /**
      * id에 해당하는 user을 삭제하고 리턴한다.
      *
-     * @param id user의 id
+     * @param userId user의 id
      */
-    public User deleteUser(Long id) {
-        User user = findUser(id);
+    public User deleteUser(Long userId) {
+        User user = findUser(userId);
 
         userRepository.delete(user);
 
@@ -66,12 +66,12 @@ public class UserService {
     /**
      * id에 해당하는 user을 찾고 없다면 예외를 던진다.
      *
-     * @param id user의 id
+     * @param userId user의 id
      * @return user의 정보
      * @throws UserNotFoundException 예외를 던진다.
      */
-    private User findUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+    private User findUser(Long userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException(userId));
     }
 }
