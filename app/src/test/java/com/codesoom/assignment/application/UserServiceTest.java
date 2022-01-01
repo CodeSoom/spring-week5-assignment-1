@@ -148,7 +148,7 @@ class UserServiceTest {
             void 회원_정보를_삭제하고_삭제된_회원을_리턴한다() {
                 given(userRepository.findById(1L)).willReturn(Optional.of(source));
 
-                User deletedUser = userService.delete(1L);
+                User deletedUser = userService.deleteUserById(1L);
 
                 verify(userRepository).findById(1L);
                 verify(userRepository).delete(source);
@@ -165,7 +165,7 @@ class UserServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void 예외를_던진다() {
-                assertThatThrownBy(() -> userService.delete(1000L))
+                assertThatThrownBy(() -> userService.deleteUserById(1000L))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }

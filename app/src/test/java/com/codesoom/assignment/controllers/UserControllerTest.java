@@ -200,7 +200,7 @@ class UserControllerTest {
 
         @BeforeEach
         void setUp() {
-            doThrow(new UserNotFoundException(1000L)).when(userService).delete(1000L);
+            doThrow(new UserNotFoundException(1000L)).when(userService).deleteUserById(1000L);
         }
 
         @Nested
@@ -213,7 +213,7 @@ class UserControllerTest {
                 mockMvc.perform(delete("/users/1"))
                         .andExpect(status().isNoContent());
 
-                verify(userService).delete(1L);
+                verify(userService).deleteUserById(1L);
             }
         }
 

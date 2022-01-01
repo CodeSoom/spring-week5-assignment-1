@@ -57,11 +57,11 @@ public class UserService {
     /**
      * 기존 회원 목록 중 id가 일치하는 회원을 찾아 회원을 삭제하고 삭제된 회원을 리턴합니다.
      *
-     * @param id 회원 id
+     * @param targetId 회원 id
      * @return 삭제된 회원
      * */
-    public User delete(Long id) {
-        User user = findUser(id);
+    public User deleteUserById(Long targetId) {
+        User user = findUser(targetId);
 
         userRepository.delete(user);
 
