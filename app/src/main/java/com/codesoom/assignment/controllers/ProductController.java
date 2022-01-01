@@ -10,6 +10,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/products")
 public class ProductController {
     private final ProductService productService;
