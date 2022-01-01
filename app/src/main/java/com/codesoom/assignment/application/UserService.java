@@ -43,7 +43,8 @@ public class UserService {
      */
     public User findUserById(Long id) {
         return userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 조회할 수 없습니다."));
+                new UserNotFoundException(
+                        String.format("유저 id: %d를 찾을 수 없어, 조회할 수 없습니다.", id)));
     }
 
     /**
@@ -68,8 +69,8 @@ public class UserService {
      */
     public User updateUser(Long id, UserData source) {
         User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 업데이트할 수 없습니다."
-                ));
+                new UserNotFoundException(
+                        String.format("유저 id: %d를 찾을 수 없어, 업데이트할 수 없습니다.", id)));
 
         User updatedUser = User.builder()
                 .id(user.getId())
@@ -89,7 +90,8 @@ public class UserService {
      */
     public void deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(() ->
-                new UserNotFoundException("유저 id: " + id + "를 찾을 수 없어, 삭제할 수 없습니다."));
+                new UserNotFoundException(
+                        String.format("유저 id: %d를 찾을 수 없어, 삭제할 수 없습니다.", id)));
 
         userRepository.delete(user);
     }
