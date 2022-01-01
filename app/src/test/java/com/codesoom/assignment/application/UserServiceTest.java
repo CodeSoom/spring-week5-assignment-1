@@ -25,7 +25,6 @@ class UserServiceTest {
     private UserService userService;
 
     private static final Long USER_ID = 1L;
-    private static Long WRONG_ID = 100L;
     private static final String USER_NAME = "김태우";
     private static final String USER_PASSWORD = "1234";
     private static final String USER_EMAIL = "xodnzlzl1597@gmail.com";
@@ -109,6 +108,8 @@ class UserServiceTest {
         @DisplayName("등록되지 않은 User의 id가 주어진다면")
         class Context_withOut_userId {
 
+            private Long WRONG_ID = 100L;
+
             @BeforeEach
             void setUp(){
                 given(userRepository.findById(WRONG_ID)).willReturn(Optional.empty());
@@ -143,6 +144,8 @@ class UserServiceTest {
         @Nested
         @DisplayName("등록되지 않은 User의 id가 주어진다면")
         class Context_withOut_userId {
+
+            private Long WRONG_ID = 100L;
 
             @Test
             @DisplayName("User를 찾을 수 없다는 예외를 던진다.")

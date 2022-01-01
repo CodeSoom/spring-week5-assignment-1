@@ -137,7 +137,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(1L), any(UserData.class)))
+                given(userService.updateUser(eq(USER_ID), any(UserData.class)))
                         .will(invocation -> {
                             Long id = invocation.getArgument(0);
                             UserData userData = invocation.getArgument(1);
@@ -157,13 +157,13 @@ class UserControllerTest {
                 String userContent = objectMapper.writeValueAsString(userData);
 
                 mockMvc.perform(
-                                patch("/users/1")
+                                patch("/users/" + USER_ID)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(userContent))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(NEW_NAME)));
 
-                verify(userService).updateUser(eq(1L), any(UserData.class));
+                verify(userService).updateUser(eq(USER_ID), any(UserData.class));
             }
         }
 
@@ -171,9 +171,11 @@ class UserControllerTest {
         @DisplayName("user의 id가 올바르지 않다면")
         class Context_withOut_id {
 
+            private Long WRONG_ID = 1000L;
+
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(1000L), any(UserData.class))).willThrow(new UserNotFoundException(1000L));
+                given(userService.updateUser(eq(WRONG_ID), any(UserData.class))).willThrow(new UserNotFoundException(1000L));
             }
 
             @Test
@@ -183,12 +185,12 @@ class UserControllerTest {
                 String userContent = objectMapper.writeValueAsString(userData);
 
                 mockMvc.perform(
-                                patch("/users/1000")
+                                patch("/users/" + WRONG_ID)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(userContent))
                         .andExpect(status().isNotFound());
 
-                verify(userService).updateUser(eq(1000L), any(UserData.class));
+                verify(userService).updateUser(eq(WRONG_ID), any(UserData.class));
             }
         }
     }
@@ -204,10 +206,10 @@ class UserControllerTest {
             @DisplayName("user를 삭제하고 204를 응답한다")
             void it_return_status() throws Exception {
                 mockMvc.perform(
-                                delete("/users/1"))
+                                delete("/users/" + USER_ID))
                         .andExpect(status().isNoContent());
 
-                verify(userService).deleteUser(1L);
+                verify(userService).deleteUser(USER_ID);
             }
         }
 
@@ -215,19 +217,19 @@ class UserControllerTest {
         @DisplayName("user의 id가 올바르지 않다면")
         class Context_withOut_id {
 
+            private Long WRONG_ID = 1000L;
+
             @BeforeEach
-            void setUp() {
-                given(userService.deleteUser(1000L)).willThrow(new UserNotFoundException(1000L));
+            void setUp(){
+                given(userService.deleteUser(WRONG_ID)).willThrow(new UserNotFoundException(WRONG_ID));
             }
 
             @Test
             @DisplayName("404을 응답한다")
             void it_return_status() throws Exception {
                 mockMvc.perform(
-                                delete("/users/1000"))
+                                delete("/users/" + WRONG_ID))
                         .andExpect(status().isNotFound());
-
-                verify(userService).deleteUser(1000L);
             }
         }
     }

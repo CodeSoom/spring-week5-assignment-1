@@ -8,7 +8,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class UserTest {
     @Nested
-    @DisplayName("User 클래스는")
+    @DisplayName("User.builder는")
     class Describe_create {
         @Nested
         @DisplayName("사용자를 생성한다면")
