@@ -97,7 +97,6 @@ class ProductServiceTest {
             void it_return_product() {
                 Product product = productService.getProduct(1L);
 
-                assertThat(product).isNotNull();
                 assertThat(product.getName()).isEqualTo("쥐돌이");
             }
         }
@@ -163,7 +162,7 @@ class ProductServiceTest {
                 Product product = productService.updateProduct(1L, productData);
 
                 assertThat(product.getId()).isEqualTo(1L);
-                assertThat(product.getName()).isEqualTo("쥐순이");
+                assertThat(product.getName()).isEqualTo(productData.getName());
             }
         }
 
