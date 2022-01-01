@@ -32,6 +32,8 @@ public class UserControllerTest {
     private static final String EXISTED_USER_EMAIL = "hong@gmail.com";
     private static final String EXISTED_USER_PASSWORD = "password";
 
+    private static final Long NOT_EXISTED_USER_ID = 0L;
+
     @Autowired
     private WebApplicationContext wac;
     private MockMvc mockMvc;
@@ -177,7 +179,7 @@ public class UserControllerTest {
             @Test
             @DisplayName("Not Found를 응답한다.")
             void it_responses_not_found() throws Exception {
-                mockMvc.perform(patch("/users/0")
+                mockMvc.perform(patch("/users/" + NOT_EXISTED_USER_ID)
                                 .content(requestContent)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound());
@@ -217,7 +219,7 @@ public class UserControllerTest {
             @Test
             @DisplayName("Not Found를 응답한다.")
             void it_responses_not_found() throws Exception {
-                mockMvc.perform(delete("/users/0"))
+                mockMvc.perform(delete("/users/" + NOT_EXISTED_USER_ID))
                         .andExpect(status().isNotFound());
             }
         }
