@@ -15,7 +15,6 @@ import javax.persistence.Id;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
-
     @Id
     @GeneratedValue
     private Long id;
@@ -24,7 +23,7 @@ public class User {
 
     private String email;
 
-    private int password;
+    private String password;
 
     public void changeWithUser(User member) {
         this.name = name;

@@ -15,7 +15,7 @@ class UserTest {
                 .id(1L)
                 .name("삼돌이")
                 .email("jihwooon@gmail.com")
-                .password(1234)
+                .password("1234")
                 .build();
 
         assertThat(user.getId()).isEqualTo(1L);
@@ -30,13 +30,13 @@ class UserTest {
                 .id(1L)
                 .name("삼돌이")
                 .email("jihwooon@gmail.com")
-                .password(1234)
+                .password("1234")
                 .build();
 
         user.changeWithUser(User.builder()
                 .name("삼순이")
                 .email("jung@gmail.com")
-                .password(12345)
+                .password("12345")
                 .build());
 
         assertThat(user.getName()).isEqualTo("삼순이");

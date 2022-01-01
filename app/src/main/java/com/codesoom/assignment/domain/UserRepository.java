@@ -1,8 +1,10 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.application.UserService;
+
 public interface UserRepository {
 
-    User sava(User user);
+    User save(User user);
 
-    void delete(User user);
+    boolean existsByEmail(String email);
 }

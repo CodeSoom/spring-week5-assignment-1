@@ -2,7 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegisterationData;
+import com.codesoom.assignment.dto.UserResultData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
+
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -35,44 +36,66 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        User user = new User(1L, "쥐돌이", "jihwooon@gmail.com", 1234);
-
-        given(userService.createUser(any(User.class))).willReturn(user);
-        given(userService.createUser(any(User.class))).willReturn(user);
+        given(userService.registerUser(any(UserRegisterationData.class)))
+                .will(invocations -> {
+                    UserRegisterationData registrationData = invocations.getArgument(0);
+                    User user = User.builder()
+                            .id(13L)
+                            .email(registrationData.getEmail())
+                            .name(registrationData.getName())
+                            .password(registrationData.getPassword())
+                            .build();
+                    return user;
+                });
     }
 
 
     @Test
-    void create() throws Exception {
+    void registerUserWithValidAttributes() throws Exception {
         mockMvc.perform(
                         post("/user")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                        "\"price\":5000}")
+                                .content("{\"email\":\"jihwooon@gmail.com\"," +
+                                        "\"name\":\"jihwooon\",\"password\":\"test\"}")
                 )
                 .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
+                .andExpect(content().string(
+                        containsString("\"id\":13")
+                ))
+                .andExpect(content().string(
+                        containsString("\"email\":\"jihwooon@gmail.com\"")
+                ))
+                .andExpect(content().string(
+                        containsString("\"name\":\"jihwooon")
+                ))
+                .andExpect(content().string(
+                        containsString("\"password\":\"test")
+                ));
 
-        verify(userService).createUser(any(User.class));
+        verify(userService).registerUser(any(UserRegisterationData.class));
+    }
+
+    @Test
+    void registerUserWithInValidAttributes() throws Exception {
+        mockMvc.perform(
+                        post("/user")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{}")
+                )
+                .andExpect(status().isBadRequest());
     }
 
     @Test
     void update() throws Exception {
         mockMvc.perform(
-                        post("/user/1")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                        patch("/user/1")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"쥐순이\",\"email\":\"jihwooon@gmail.com\"," +
-                                        "\"password\":1234}")
+                                .content("{\"email\":\"junghwaaan@gmail.com\"}")
                 )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
+                .andExpect(status().isOk())
+                .andExpect(content().string(
+                        containsString("\"email\":\"junghwaaan@gmail.com\"")
+                ));
 
-        verify(userService).updateUser(eq(1L),any(User.class));
     }
-
-
-
-
 }

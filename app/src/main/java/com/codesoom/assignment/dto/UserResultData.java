@@ -4,26 +4,25 @@ import com.github.dozermapper.core.Mapping;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
-@Setter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class UserData {
+public class UserResultData {
     private Long id;
 
     @NotBlank
     @Mapping("name")
     private String name;
 
+    @NotBlank
     @Mapping("email")
     private String email;
 
     @Mapping("password")
-    private int password;
+    @Size(min=4)
+    private String password;
 }
