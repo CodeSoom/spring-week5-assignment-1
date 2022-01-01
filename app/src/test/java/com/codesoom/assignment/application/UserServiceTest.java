@@ -112,8 +112,9 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp(){
-                given(userRepository.findById(WRONG_ID)).willReturn(Optional.empty());
+                userRepository.deleteAll();
             }
+
             @Test
             @DisplayName("User를 찾을 수 없다는 예외를 던진다.")
             void it_return_user() {
@@ -146,6 +147,11 @@ class UserServiceTest {
         class Context_withOut_userId {
 
             private Long WRONG_ID = 100L;
+
+            @BeforeEach
+            void setUp(){
+                userRepository.deleteAll();
+            }
 
             @Test
             @DisplayName("User를 찾을 수 없다는 예외를 던진다.")
