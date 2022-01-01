@@ -48,7 +48,7 @@ public class UserController {
      *
      * @param id   요청 id
      * @param user 요청 유저
-     * @return
+     * @return 변경한 유저
      */
     @PatchMapping("{id}")
     public User update(@PathVariable Long id, @RequestBody @Valid UserData user) {
