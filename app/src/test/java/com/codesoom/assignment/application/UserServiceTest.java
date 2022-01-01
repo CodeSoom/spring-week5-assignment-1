@@ -107,7 +107,8 @@ public class UserServiceTest {
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -194,7 +195,8 @@ public class UserServiceTest {
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID, updateUser)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID, updateUser))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -218,7 +220,8 @@ public class UserServiceTest {
             @DisplayName("해당 id의 유저를 삭제한다.")
             void it_deletes_user() {
                 subject(exitedUser.getId());
-                assertThat(userRepository.findById(exitedUser.getId()).isEmpty()).isTrue();
+                assertThat(userRepository.findById(exitedUser.getId()).isEmpty())
+                        .isTrue();
             }
         }
 
@@ -228,7 +231,8 @@ public class UserServiceTest {
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
