@@ -121,7 +121,9 @@ class UserServiceTest {
                 UserData source = new UserData();
                 source.setName("코드숨");
 
-                assertThatThrownBy(() -> userService.updateUser(WRONG_ID, source)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> userService
+                        .updateUser(WRONG_ID, source))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
@@ -134,7 +136,7 @@ class UserServiceTest {
         class Context_with_userId {
 
             @Test
-            @DisplayName("user를 삭제하고 리턴한다")
+            @DisplayName("user를 삭제한다")
             void it_return_user() {
                 userService.deleteUser(USER_ID);
 
@@ -156,7 +158,9 @@ class UserServiceTest {
             @Test
             @DisplayName("User를 찾을 수 없다는 예외를 던진다.")
             void it_return_error() {
-                assertThatThrownBy(() -> userService.deleteUser(WRONG_ID)).isInstanceOf(UserNotFoundException.class);
+                assertThatThrownBy(() -> userService
+                        .deleteUser(WRONG_ID))
+                        .isInstanceOf(UserNotFoundException.class);
 
                 verify(userRepository).findById(WRONG_ID);
             }
