@@ -58,7 +58,6 @@ class UserServiceTest {
             }
 
             @Test
-            @DisplayName("User 객체를 생성한다")
             void User를_생성하고_리턴한다() {
                 User user = userService.createUser(givenUserData);
 
@@ -104,7 +103,7 @@ class UserServiceTest {
         class 등록되지_않은_User의_id와_수정할_User가_주어진다면 {
 
             UserData givenUserData;
-            Long givenInvalidId = 9999L;
+            final Long givenInvalidId = 9999L;
 
             @BeforeEach
             void prepaer() {
@@ -113,7 +112,8 @@ class UserServiceTest {
 
             @Test
             void 등록된_User가_없다는_예외를_던진다() {
-                assertThatThrownBy(() -> userService.updateUser(givenInvalidId, givenUserData))
+                assertThatThrownBy(() -> userService.updateUser(givenInvalidId, givenUserData),
+                        "등록된 User가 없으므로, 업데이트할 User가 없어야 합니다.")
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
@@ -145,11 +145,12 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록되지_않은_User의_id가_주어진다면 {
 
-            Long givenId = 9999L;
+            final Long givenId = 9999L;
 
             @Test
             void 등록된_User가_없다는_예외를_던진다() {
-                assertThatThrownBy(() -> userService.deleteUser(givenId))
+                assertThatThrownBy(() -> userService.deleteUser(givenId),
+                        "등록된 User가 없으므로, 삭제할 User가 없어야 합니다.")
                         .isInstanceOf(UserNotFoundException.class);
             }
         }

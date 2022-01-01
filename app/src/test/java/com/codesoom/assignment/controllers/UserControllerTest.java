@@ -80,7 +80,7 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("User를 생성하고, 201(Created)와 user를 응답합니다.")
+            @DisplayName("201(Created)와 생성된 user 응답합니다.")
             void it_create_user_return_created_and_user() throws Exception {
                 mockMvc.perform(post("/user")
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -191,7 +191,7 @@ class UserControllerTest {
         class Context_with_id_and_user {
 
             UserData givenUserData;
-            Long givenId= 1L;
+            final Long givenId= 1L;
 
             @BeforeEach
             void prepare() {
@@ -206,7 +206,7 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("User를 업데이트하고, 200(ok)와 user를 응답합니다.")
+            @DisplayName("200(ok)와 업데이트된 User를 응답합니다.")
             void it_update_user_return_ok_and_user() throws Exception {
                 mockMvc.perform(post("/user/" + givenId)
                                 .contentType(MediaType.APPLICATION_JSON)
@@ -226,7 +226,7 @@ class UserControllerTest {
         @DisplayName("삭제할 id가 주어진다면")
         class Context_with_id {
 
-            Long givenId = 1L;
+            final Long givenId = 1L;
 
             @Test
             @DisplayName("204(No Content)과 빈값을 응답합니다.")
