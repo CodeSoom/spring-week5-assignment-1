@@ -54,8 +54,8 @@ public class UserService {
      */
     public User createUser(UserData userData) {
         String email = userData.getEmail();
-        User found = userRepository.findByEmail(email);
-        if (found != null) {
+
+        if (userRepository.existsByEmail(email)) {
             throw new UserEmailDuplicationException(email);
         }
         User user = mapper.map(userData, User.class);
