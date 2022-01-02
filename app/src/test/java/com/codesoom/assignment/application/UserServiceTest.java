@@ -23,7 +23,6 @@ public class UserServiceTest {
     private static final String EXISTED_USER_NAME = "홍길동";
     private static final String EXISTED_USER_EMAIL = "hong@gmail.com";
     private static final String EXISTED_USER_PASSWORD = "password";
-    private static final Long NOT_EXISTED_USER_ID = 0L;
 
     User exitedUser;
     private UserService userService;
@@ -104,10 +103,19 @@ public class UserServiceTest {
         @Nested
         @DisplayName("등록되지않은 유저의 id가 주어진다면")
         class Context_with_not_existed_user_id {
+            User notExistedUser;
+
+            @BeforeEach
+            void prepare() {
+                prepareExitedUser();
+                userRepository.deleteById(exitedUser.getId());
+                notExistedUser = exitedUser;
+            }
+
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID))
+                assertThatThrownBy(() -> subject(notExistedUser.getId()))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
@@ -192,10 +200,19 @@ public class UserServiceTest {
         @Nested
         @DisplayName("등록되지않은 유저의 id가 주어진다면")
         class Context_with_not_existed_user_id {
+            User notExistedUser;
+
+            @BeforeEach
+            void prepare() {
+                prepareExitedUser();
+                userRepository.deleteById(exitedUser.getId());
+                notExistedUser = exitedUser;
+            }
+
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID, updateUser))
+                assertThatThrownBy(() -> subject(notExistedUser.getId(), updateUser))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
@@ -228,10 +245,19 @@ public class UserServiceTest {
         @Nested
         @DisplayName("등록되지않은 유저의 id가 주어진다면")
         class Context_with_not_existed_user_id {
+            User notExistedUser;
+
+            @BeforeEach
+            void prepare() {
+                prepareExitedUser();
+                userRepository.deleteById(exitedUser.getId());
+                notExistedUser = exitedUser;
+            }
+
             @Test
             @DisplayName("'유저를 찾을수 없다'는 예외를 던진다.")
             void it_throws_not_found_user_exception() {
-                assertThatThrownBy(() -> subject(NOT_EXISTED_USER_ID))
+                assertThatThrownBy(() -> subject(notExistedUser.getId()))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
