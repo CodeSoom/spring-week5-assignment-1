@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.errors.UserEmailAlreadyExistedException;
+import com.codesoom.assignment.errors.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -41,35 +42,68 @@ class UserServiceTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class create_메소드는 {
 
-        private User user;
-        private UserRegistrationData source;
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 존재하지_않는_이메일이라면 {
 
-        @BeforeEach
-        void setUp() {
-            source = UserRegistrationData.builder()
-                    .name("홍길동")
-                    .email("test@test.com")
-                    .password("asdqwe1234")
-                    .build();
+            private User user;
 
-            user = mapper.map(source, User.class);
+            private UserRegistrationData userRegistrationData;
+
+            @BeforeEach
+            void setUp() {
+                userRegistrationData = UserRegistrationData.builder()
+                        .name("홍길동")
+                        .email("test@test.com")
+                        .password("asdqwe1234")
+                        .build();
+
+                user = mapper.map(userRegistrationData, User.class);
+
+                given(userRepository.save(any(User.class))).willReturn(user);
+            }
+
+            @Test
+            @DisplayName("새로운 회원을 생성하여 리턴한다")
+            void 새로운_회원을_생성하여_리턴한다() {
+                User createdUser = userService.create(userRegistrationData);
+
+                verify(userRepository).save(any(User.class));
+
+                assertThat(createdUser.getName()).isEqualTo(user.getName());
+                assertThat(createdUser.getEmail()).isEqualTo(user.getEmail());
+                assertThat(createdUser.getPassword()).isEqualTo(user.getPassword());
+            }
         }
 
-        @BeforeEach
-        void setUpCreation() {
-            given(userRepository.save(any(User.class))).willReturn(user);
-        }
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 이미_존재하는_이메일이라면 {
 
-        @Test
-        @DisplayName("새로운 회원을 생성하여 리턴한다")
-        void create() {
-            User createdUser = userService.create(source);
+            private UserRegistrationData existedUser;
 
-            verify(userRepository).save(any(User.class));
+            private static final String ALREADY_EXISTED_EMAIL = "existedEmail@test.com";
 
-            assertThat(createdUser.getName()).isEqualTo(user.getName());
-            assertThat(createdUser.getEmail()).isEqualTo(user.getEmail());
-            assertThat(createdUser.getPassword()).isEqualTo(user.getPassword());
+            @BeforeEach
+            void setUp() {
+                given(userRepository.existsByEmail(ALREADY_EXISTED_EMAIL))
+                        .willThrow(new UserEmailAlreadyExistedException(ALREADY_EXISTED_EMAIL));
+
+                existedUser = UserRegistrationData.builder()
+                        .email(ALREADY_EXISTED_EMAIL)
+                        .name("tester")
+                        .password("asdqwe1234")
+                        .build();
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> userService.create(existedUser))
+                        .isInstanceOf(UserEmailAlreadyExistedException.class);
+
+                verify(userRepository).existsByEmail(ALREADY_EXISTED_EMAIL);
+            }
         }
     }
 

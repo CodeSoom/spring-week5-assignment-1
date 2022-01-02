@@ -1,7 +1,8 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.errors.ProductNotFoundException;
+import com.codesoom.assignment.errors.UserEmailAlreadyExistedException;
+import com.codesoom.assignment.errors.UserNotFoundException;
 import com.codesoom.assignment.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -10,7 +11,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class NotFoundErrorAdvice {
+public class ControllerErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
@@ -23,5 +24,13 @@ public class NotFoundErrorAdvice {
     @ExceptionHandler(UserNotFoundException.class)
     public ErrorResponse handleUserNotFound() {
         return new ErrorResponse("User not found");
+    }
+
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(UserEmailAlreadyExistedException.class)
+    public ErrorResponse handleUserEmailAlreadyExisted() {
+        return new ErrorResponse("User's email address is already existed");
     }
 }

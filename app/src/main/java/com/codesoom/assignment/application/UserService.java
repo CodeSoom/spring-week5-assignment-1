@@ -4,7 +4,8 @@
 
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.errors.UserEmailAlreadyExistedException;
+import com.codesoom.assignment.errors.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -12,10 +13,13 @@ import com.codesoom.assignment.dto.UserRegistrationData;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 /**
  * 회원을 생성, 수정, 삭제하는 service 입니다.
  * */
 @Service
+@Transactional
 public class UserService {
     private final Mapper mapper;
     private final UserRepository userRepository;
@@ -32,6 +36,11 @@ public class UserService {
      * @return 새로 생성된 회원
      * */
     public User create(UserRegistrationData registrationData) {
+        String email = registrationData.getEmail();
+        if(userRepository.existsByEmail(email)) {
+            throw new UserEmailAlreadyExistedException(email);
+        }
+
         User user = mapper.map(registrationData, User.class);
         return userRepository.save(user);
     }
