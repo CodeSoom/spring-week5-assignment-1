@@ -77,9 +77,17 @@ public class UserService {
      * @param targetId 삭제할 User의 id
      * @throws UserNotFoundException User의 targetId와 일치하는 User가 없을 경우
      */
-    public void deleteUser(Long targetId) {
+    public User deleteUser(Long targetId) {
         try {
-            userRepository.deleteById(targetId);
+         User user = getUser(targetId);
+
+         if (user.isDeleted()) {
+             throw new UserNotFoundException(targetId);
+         }
+         
+         user.destory();
+
+         return user;
         } catch (Exception e) {
             throw new UserNotFoundException(targetId);
         }

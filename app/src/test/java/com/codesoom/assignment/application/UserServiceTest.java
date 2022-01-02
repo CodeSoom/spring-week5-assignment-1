@@ -42,7 +42,7 @@ class UserServiceTest {
         testUserRegistrationData.add(UserRegistrationData.builder()
                 .name("Hyuk1")
                 .password("123$5")
-                .email("pjh1111@naver.com")
+                .email("pjh1234@naver.com")
                 .build());
 
         testUserRegistrationData.add(UserRegistrationData.builder()
@@ -116,7 +116,7 @@ class UserServiceTest {
 
             @BeforeEach
             void prepaer() {
-                User user = userService.createUser(testUserRegistrationData.get(0));
+                User user = userService.createUser(testUserRegistrationData.get(1));
                 givenId = user.getId();
                 givenUserModificationData = testUserModificationData.get(0);
             }
