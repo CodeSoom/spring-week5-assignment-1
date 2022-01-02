@@ -229,13 +229,35 @@ class UserControllerTest {
             final Long givenId = 1L;
 
             @Test
-            @DisplayName("204(No Content)과 빈값을 응답합니다.")
+            @DisplayName("204(No Content)를 응답합니다.")
             void it_delete_user_return_noContent() throws Exception {
                 mockMvc.perform(delete("/user/" + givenId))
                         .andExpect(status().isNoContent())
                         .andDo(print());
             }
         }
+
+        @Nested
+        @DisplayName("삭제할 id로 등록되지 않는 id가 주어진다면")
+        class Context_with_invalidId {
+
+            final Long givenInvalidId = Long.MAX_VALUE;
+
+            @BeforeEach
+            void prepare() {
+                given(userService.deleteUser(givenInvalidId))
+                        .willThrow(new UserNotFoundException(givenInvalidId));
+            }
+
+            @Test
+            @DisplayName("404(Not Found)를 응답합니다.")
+            void it_delete_user_return_noContent() throws Exception {
+                mockMvc.perform(delete("/user/" + givenInvalidId))
+                        .andExpect(status().isNotFound())
+                        .andDo(print());
+            }
+        }
+
     }
 
     private String userDataToContent(UserRegistrationData userRegistrationData) throws JsonProcessingException {

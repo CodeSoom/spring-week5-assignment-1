@@ -23,6 +23,8 @@ public class User {
 
     private String email;
 
+    private boolean deleted = false;
+
     @Builder
     public User(String name, String password, String email) {
         this.name = name;
@@ -39,5 +41,9 @@ public class User {
         this.name = name;
         this.password = password;
         this.email = email;
+    }
+
+    public void destory() {
+        deleted = true;
     }
 }
