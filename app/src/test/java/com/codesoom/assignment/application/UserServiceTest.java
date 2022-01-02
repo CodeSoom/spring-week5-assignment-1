@@ -52,30 +52,26 @@ class UserServiceTest {
     @Nested
     class createUserMethod {
 
-        @DisplayName("null이 아닌 UserData가 주어진다면")
-        @Nested
-        class ifUserDataNotNull {
-            @BeforeEach
-            void setUp() {
-                given(userRepository.save(any(User.class)))
-                        .will(invocation -> invocation.getArgument(0));
-            }
+        @BeforeEach
+        void setUp() {
+            given(userRepository.save(any(User.class)))
+                    .will(invocation -> invocation.getArgument(0));
+        }
 
-            @DisplayName("회원을 저장한다.")
-            @Test
-            void saveUser() {
-                UserData source = UserData.builder()
-                        .name("홍길동")
-                        .email("test@test.com")
-                        .password("1234")
-                        .build();
+        @DisplayName("주어진 회원을 저장한다.")
+        @Test
+        void saveUser() {
+            UserData source = UserData.builder()
+                    .name("홍길동")
+                    .email("test@test.com")
+                    .password("1234")
+                    .build();
 
-                User user = userService.createUser(source);
+            User user = userService.createUser(source);
 
-                verify(userRepository).save(any(User.class));
+            verify(userRepository).save(any(User.class));
 
-                assertThat(user).isNotNull();
-            }
+            assertThat(user).isNotNull();
         }
     }
 
