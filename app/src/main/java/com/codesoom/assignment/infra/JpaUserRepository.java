@@ -16,4 +16,6 @@ public interface JpaUserRepository
     User save(User user);
 
     void delete(User user);
+
+    User findByEmail(String email);
 }
