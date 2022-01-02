@@ -1,7 +1,8 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.exception.UserEmailDuplicationException;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,20 +26,32 @@ class UserServiceTest {
     @Autowired
     private UserService userService;
 
-    List<UserData> testUserData = new ArrayList<>();
+    List<UserRegistrationData> testUserRegistrationData = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        testUserData.add(UserData.builder()
+        testUserRegistrationData.add(UserRegistrationData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
                 .build());
 
-        testUserData.add(UserData.builder()
+        testUserRegistrationData.add(UserRegistrationData.builder()
                 .name("Update Hyuk")
                 .password("123$")
                 .email("pjh9999@naver.com")
+                .build());
+
+        testUserRegistrationData.add(UserRegistrationData.builder()
+                .name("Hyuk1")
+                .password("123$5")
+                .email("pjh1111@naver.com")
+                .build());
+
+        testUserRegistrationData.add(UserRegistrationData.builder()
+                .name("Hyuk2")
+                .password("123$55")
+                .email("pjh1111@naver.com")
                 .build());
     }
 
@@ -50,21 +63,40 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록할_User가_주어진다면 {
 
-            UserData givenUserData;
+            UserRegistrationData givenUserRegistrationData;
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserData.get(0);
+                givenUserRegistrationData = testUserRegistrationData.get(0);
             }
 
             @Test
             void User를_생성하고_리턴한다() {
-                User user = userService.createUser(givenUserData);
+                User user = userService.createUser(givenUserRegistrationData);
 
                 User foundUser = userService.getUser(user.getId());
 
-                assertThat(foundUser.getName()).isEqualTo(givenUserData.getName());
-                assertThat(foundUser.getEmail()).isEqualTo(givenUserData.getEmail());
+                assertThat(foundUser.getName()).isEqualTo(givenUserRegistrationData.getName());
+                assertThat(foundUser.getEmail()).isEqualTo(givenUserRegistrationData.getEmail());
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 중복된_User의_Email이_주어진다면 {
+
+            UserRegistrationData givenUserRegistrationData;
+
+            @BeforeEach
+            void prepare() {
+                givenUserRegistrationData = testUserRegistrationData.get(3);
+                userService.createUser(givenUserRegistrationData);
+            }
+
+            @Test
+            void 중복된_email의_유저가_있다는_예외를_던진다() {
+                assertThatThrownBy(() -> userService.createUser(givenUserRegistrationData))
+                        .isInstanceOf(UserEmailDuplicationException.class);
             }
         }
     }
@@ -77,24 +109,24 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록된_User의_id와_수정할_User가_주어진다면 {
 
-            UserData givenUserData;
+            UserRegistrationData givenUserRegistrationData;
             Long givenId;
 
             @BeforeEach
             void prepaer() {
-                User user = userService.createUser(testUserData.get(0));
+                User user = userService.createUser(testUserRegistrationData.get(0));
                 givenId = user.getId();
-                givenUserData = testUserData.get(1);
+                givenUserRegistrationData = testUserRegistrationData.get(1);
             }
 
             @Test
             void 해당_id의_User를_수정하고_리턴한다() {
-                userService.updateUser(givenId, givenUserData);
+                userService.updateUser(givenId, givenUserRegistrationData);
 
                 User foundUser = userService.getUser(givenId);
 
                 assertThat(foundUser).isNotNull();
-                assertThat(foundUser.getName()).isEqualTo(givenUserData.getName());
+                assertThat(foundUser.getName()).isEqualTo(givenUserRegistrationData.getName());
             }
         }
 
@@ -102,17 +134,17 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록되지_않은_User의_id와_수정할_User가_주어진다면 {
 
-            UserData givenUserData;
+            UserRegistrationData givenUserRegistrationData;
             final Long givenInvalidId = Long.MAX_VALUE;
 
             @BeforeEach
             void prepaer() {
-                givenUserData = testUserData.get(1);
+                givenUserRegistrationData = testUserRegistrationData.get(1);
             }
 
             @Test
             void 등록된_User가_없다는_예외를_던진다() {
-                assertThatThrownBy(() -> userService.updateUser(givenInvalidId, givenUserData),
+                assertThatThrownBy(() -> userService.updateUser(givenInvalidId, givenUserRegistrationData),
                         "등록된 User가 없으므로, 업데이트할 User가 없어야 합니다.")
                         .isInstanceOf(UserNotFoundException.class);
             }
@@ -131,7 +163,7 @@ class UserServiceTest {
 
             @BeforeEach
             void prepare() {
-                User user = userService.createUser(testUserData.get(0));
+                User user = userService.createUser(testUserRegistrationData.get(0));
                 givenId = user.getId();
             }
 

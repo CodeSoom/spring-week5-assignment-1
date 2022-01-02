@@ -6,10 +6,11 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 @Getter
 @NoArgsConstructor
-public class UserData {
+public class UserRegistrationData {
 
     private Long id;
 
@@ -17,13 +18,14 @@ public class UserData {
     private String name;
 
     @NotBlank
+    @Size(min = 4, max = 1024)
     private String password;
 
     @Email
     private String email;
 
     @Builder
-    public UserData(String name, String password, String email) {
+    public UserRegistrationData(String name, String password, String email) {
         this.name = name;
         this.password = password;
         this.email = email;

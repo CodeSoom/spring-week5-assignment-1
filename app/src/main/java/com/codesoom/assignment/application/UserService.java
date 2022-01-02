@@ -1,12 +1,16 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.exception.UserEmailDuplicationException;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.codesoom.assignment.repository.UserRepository;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -30,14 +34,20 @@ public class UserService {
     /**
      * userData로 User를 생성하고, 생성된 User를 리턴합니다.
      *
-     * @param userData 생성할 User 데이터
+     * @param userRegistrationData 생성할 User 데이터
      * @return 생성된 User
      */
-    public User createUser(UserData userData) {
+    public User createUser(UserRegistrationData userRegistrationData) {
+        String email = userRegistrationData.getEmail();
+
+        if (userRepository.existsByEmail(email)) {
+            throw new UserEmailDuplicationException(email);
+        }
+
         User user = User.builder()
-                .name(userData.getName())
-                .password(userData.getPassword())
-                .email(userData.getEmail())
+                .name(userRegistrationData.getName())
+                .password(userRegistrationData.getPassword())
+                .email(userRegistrationData.getEmail())
                 .build();
 
         return userRepository.save(user);
@@ -51,7 +61,7 @@ public class UserService {
      * @return 변경된 User
      * @throws UserNotFoundException User의 targetId와 일치하는 User가 없을 경우
      */
-    public User updateUser(Long targetId, UserData source) {
+    public User updateUser(Long targetId, UserRegistrationData source) {
         User user = getUser(targetId);
 
         user.change(source.getName(),

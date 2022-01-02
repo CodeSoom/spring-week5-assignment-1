@@ -2,7 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.dto.UserResultData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,26 +30,30 @@ public class UserController {
     /**
      * userData로 User를 생성합니다.
      *
-     * @param userData 생성할 User 데이터
+     * @param userRegistrationData 생성할 User 데이터
      * @return 생성된 User
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid UserData userData) {
-        return userService.createUser(userData);
+    public UserResultData create(@RequestBody @Valid UserRegistrationData userRegistrationData) {
+        User user = userService.createUser(userRegistrationData);
+
+        return getUserResultData(user);
     }
 
     /**
      * id와 일치하는 User를 userData로 변경합니다.
      *
      * @param id 변경할 User의 id
-     * @param userData 변경될 User 데이터
+     * @param userRegistrationData 변경될 User 데이터
      * @return 변경된 User
      */
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User update(@PathVariable Long id, @RequestBody @Valid UserData userData) {
-        return userService.updateUser(id, userData);
+    public UserResultData update(@PathVariable Long id, @RequestBody @Valid UserRegistrationData userRegistrationData) {
+        User user = userService.updateUser(id, userRegistrationData);
+
+        return getUserResultData(user);
     }
 
     /**
@@ -60,5 +65,19 @@ public class UserController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         userService.deleteUser(id);
+    }
+
+    /**
+     * User를 UserResultData로 매핑하여 반환합니다.
+     *
+     * @param user 매핑될 User 객체
+     * @return UserResultData 빌더로 만들어진 UserResultData
+     */
+    private UserResultData getUserResultData(User user) {
+        return UserResultData.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
     }
 }

@@ -2,7 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegistrationData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -40,17 +40,17 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    List<UserData> testUserData = new ArrayList<>();
+    List<UserRegistrationData> testUserRegistrationData = new ArrayList<>();
 
     @BeforeEach
     void setUp() {
-        testUserData.add(UserData.builder()
+        testUserRegistrationData.add(UserRegistrationData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
                 .build());
 
-        testUserData.add(UserData.builder()
+        testUserRegistrationData.add(UserRegistrationData.builder()
                 .name("Update Hyuk")
                 .password("123$")
                 .email("pjh9999@naver.com")
@@ -65,17 +65,17 @@ class UserControllerTest {
         @DisplayName("등록될 user가 주어진다면")
         class Context_with_user {
 
-            UserData givenUserData;
+            UserRegistrationData givenUserRegistrationData;
             User givenUser = new User();
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserData.get(0);
-                givenUser.change(givenUserData.getName(),
-                        givenUserData.getPassword(),
-                        givenUserData.getEmail());
+                givenUserRegistrationData = testUserRegistrationData.get(0);
+                givenUser.change(givenUserRegistrationData.getName(),
+                        givenUserRegistrationData.getPassword(),
+                        givenUserRegistrationData.getEmail());
 
-                given(userService.createUser(any(UserData.class)))
+                given(userService.createUser(any(UserRegistrationData.class)))
                         .willReturn(givenUser);
             }
 
@@ -84,7 +84,7 @@ class UserControllerTest {
             void it_create_user_return_created_and_user() throws Exception {
                 mockMvc.perform(post("/user")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(userDataToContent(givenUserData)))
+                                .content(userDataToContent(givenUserRegistrationData)))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.name").value(givenUser.getName()))
                         .andDo(print());
@@ -109,11 +109,11 @@ class UserControllerTest {
         @DisplayName("등록될 user의 name이 빈값이라면")
         class Context_with_user_with_empty_name {
 
-            UserData givenInvalidUserData;
+            UserRegistrationData givenInvalidUserRegistrationData;
 
             @BeforeEach
             void prepare() {
-                givenInvalidUserData = UserData.builder()
+                givenInvalidUserRegistrationData = UserRegistrationData.builder()
                         .password("!234")
                         .email("pjh0819@naver.com")
                         .build();
@@ -124,7 +124,7 @@ class UserControllerTest {
             void it_return_bad_request() throws Exception {
                 mockMvc.perform(post("/user")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(userDataToContent(givenInvalidUserData)))
+                                .content(userDataToContent(givenInvalidUserRegistrationData)))
                         .andExpect(status().isBadRequest())
                         .andDo(print());
             }
@@ -134,11 +134,11 @@ class UserControllerTest {
         @DisplayName("등록될 user의 password가 빈값이라면")
         class Context_with_user_with_empty_password {
 
-            UserData givenInvalidUserData;
+            UserRegistrationData givenInvalidUserRegistrationData;
 
             @BeforeEach
             void prepare() {
-                givenInvalidUserData = UserData.builder()
+                givenInvalidUserRegistrationData = UserRegistrationData.builder()
                         .name("Hyuk")
                         .email("pjh0819@naver.com")
                         .build();
@@ -149,7 +149,7 @@ class UserControllerTest {
             void it_return_bad_request() throws Exception {
                 mockMvc.perform(post("/user")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(userDataToContent(givenInvalidUserData)))
+                                .content(userDataToContent(givenInvalidUserRegistrationData)))
                         .andExpect(status().isBadRequest())
                         .andDo(print());
             }
@@ -159,11 +159,11 @@ class UserControllerTest {
         @DisplayName("등록될 user의 email의 형식이 잘못되었다면")
         class Context_with_user_with_invalid_email {
 
-            UserData givenInvalidUserData;
+            UserRegistrationData givenInvalidUserRegistrationData;
 
             @BeforeEach
             void prepare() {
-                givenInvalidUserData = UserData.builder()
+                givenInvalidUserRegistrationData = UserRegistrationData.builder()
                         .name("Hyuk")
                         .password("!234")
                         .email("pjh0819")
@@ -175,7 +175,7 @@ class UserControllerTest {
             void it_return_bad_request() throws Exception {
                 mockMvc.perform(post("/user")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(userDataToContent(givenInvalidUserData)))
+                                .content(userDataToContent(givenInvalidUserRegistrationData)))
                         .andExpect(status().isBadRequest())
                         .andDo(print());
             }
@@ -190,18 +190,18 @@ class UserControllerTest {
         @DisplayName("수정할 id와 user가 주어진다면")
         class Context_with_id_and_user {
 
-            UserData givenUserData;
+            UserRegistrationData givenUserRegistrationData;
             final Long givenId= 1L;
 
             @BeforeEach
             void prepare() {
-                givenUserData = testUserData.get(1);
+                givenUserRegistrationData = testUserRegistrationData.get(1);
                 User user = new User();
-                user.change(givenUserData.getName(),
-                        givenUserData.getPassword(),
-                        givenUserData.getEmail());
+                user.change(givenUserRegistrationData.getName(),
+                        givenUserRegistrationData.getPassword(),
+                        givenUserRegistrationData.getEmail());
 
-                given(userService.updateUser(eq(givenId), any(UserData.class)))
+                given(userService.updateUser(eq(givenId), any(UserRegistrationData.class)))
                         .willReturn(user);
             }
 
@@ -210,9 +210,9 @@ class UserControllerTest {
             void it_update_user_return_ok_and_user() throws Exception {
                 mockMvc.perform(post("/user/" + givenId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(userDataToContent(givenUserData)))
+                                .content(userDataToContent(givenUserRegistrationData)))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.name").value(givenUserData.getName()))
+                        .andExpect(jsonPath("$.name").value(givenUserRegistrationData.getName()))
                         .andDo(print());
             }
         }
@@ -238,7 +238,7 @@ class UserControllerTest {
         }
     }
 
-    private String userDataToContent(UserData userData) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(userData);
+    private String userDataToContent(UserRegistrationData userRegistrationData) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(userRegistrationData);
     }
 }
