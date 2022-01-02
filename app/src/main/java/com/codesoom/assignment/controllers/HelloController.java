@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class HelloController {
 
     /**
-     * 서버 생존 확인용 문구를 응답합니다
-     *
-     * @return String
+     * 서버 생존 확인용 문구를 응답합니다.
      */
     @RequestMapping("/")
     public String sayHello() {

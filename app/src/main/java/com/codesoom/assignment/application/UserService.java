@@ -16,7 +16,7 @@ public class UserService {
     }
 
     /**
-     * id 값과 일치하는 User를 리턴합니다
+     * id 값과 일치하는 User를 리턴합니다.
      *
      * @param id 조회할 User의 id
      * @return User의 id와 일치하는 User
@@ -28,7 +28,7 @@ public class UserService {
     }
 
     /**
-     * userData로 User를 생성하고, 생성된 User를 리턴합니다
+     * userData로 User를 생성하고, 생성된 User를 리턴합니다.
      *
      * @param userData 생성할 User 데이터
      * @return 생성된 User
@@ -44,7 +44,7 @@ public class UserService {
     }
 
     /**
-     * targetId 값과 일치하는 User를 찾아 source 데이터로 변경하고, 변경된 User를 리턴합니다
+     * targetId 값과 일치하는 User를 찾아 source 데이터로 변경하고, 변경된 User를 리턴합니다.
      *
      * @param targetId 변경할 User의 id
      * @param source 변경될 User 데이터
@@ -62,7 +62,7 @@ public class UserService {
     }
 
     /**
-     * targetId 값과 일치하는 User를 삭제합니다
+     * targetId 값과 일치하는 User를 삭제합니다.
      *
      * @param targetId 삭제할 User의 id
      * @throws UserNotFoundException User의 targetId와 일치하는 User가 없을 경우
