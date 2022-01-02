@@ -74,7 +74,7 @@ public class UserController {
      * User를 UserResultData로 매핑하여 반환합니다.
      *
      * @param user 매핑될 User 객체
-     * @return UserResultData 빌더로 만들어진 UserResultData
+     * @return UserResultData 응답할 객체
      */
     private UserResultData getUserResultData(User user) {
         return UserResultData.builder()
