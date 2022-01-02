@@ -10,31 +10,30 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("User 클래스")
 class UserTest {
-
-    private User user;
-
-    @BeforeEach
-    void setUp(){
-        user = User.builder()
-                .id(1L)
-                .name("김철수")
-                .email("abc@exmaple.com")
-                .pw("1234")
-                .build();
-    }
-
-
+    
     @Nested
     @DisplayName("builder는")
     class Describe_creationWithBuilder{
 
+        User givenUser;
+
+        @BeforeEach
+        void setUp(){
+            givenUser = User.builder()
+                    .id(1L)
+                    .name("김철수")
+                    .email("abc@exmaple.com")
+                    .pw("1234")
+                    .build();
+        }
+
         @Test
         @DisplayName("User를 리턴한다.")
         void it_returns_user(){
-            assertThat(user.getId()).isEqualTo(1L);
-            assertThat(user.getName()).isEqualTo("김철수");
-            assertThat(user.getEmail()).isEqualTo("abc@exmaple.com");
-            assertThat(user.getPw()).isEqualTo("1234");
+            assertThat(givenUser.getId()).isEqualTo(1L);
+            assertThat(givenUser.getName()).isEqualTo("김철수");
+            assertThat(givenUser.getEmail()).isEqualTo("abc@exmaple.com");
+            assertThat(givenUser.getPw()).isEqualTo("1234");
         }
     }
 
@@ -46,23 +45,32 @@ class UserTest {
         @DisplayName("User 객체가 주어지면")
         class Context_with_a_user{
 
+            User givenUser;
+
             @BeforeEach
             void setUp(){
-                user.changeWith(User.builder()
+                givenUser = User.builder()
+                        .id(1L)
+                        .name("김철수")
+                        .email("abc@exmaple.com")
+                        .pw("1234")
+                        .build();
+
+                givenUser.changeWith(User.builder()
                         .name("이영희")
                         .email("123@exmaple.com")
                         .pw("abcd")
                         .build()
                 );
             }
-            
+
             @Test
             @DisplayName("주어진 객체의 내용으로 수정한 User를 리턴한다.")
             void it_returns_user(){
-                assertThat(user.getId()).isEqualTo(1L);
-                assertThat(user.getName()).isEqualTo("이영희");
-                assertThat(user.getEmail()).isEqualTo("123@exmaple.com");
-                assertThat(user.getPw()).isEqualTo("abcd");
+                assertThat(givenUser.getId()).isEqualTo(1L);
+                assertThat(givenUser.getName()).isEqualTo("이영희");
+                assertThat(givenUser.getEmail()).isEqualTo("123@exmaple.com");
+                assertThat(givenUser.getPw()).isEqualTo("abcd");
             }
         }
     }
