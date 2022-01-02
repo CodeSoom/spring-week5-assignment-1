@@ -21,6 +21,7 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -152,8 +153,9 @@ class UserControllerTest {
             
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(wrongId), any(UserData.class)))
-                        .willThrow(new UserNotFoundException(wrongId));
+                doThrow(new UserNotFoundException(wrongId))
+                        .when(userService)
+                        .updateUser(eq(wrongId), any(UserData.class));
             }
 
             @DisplayName("에러코드를 보낸다")
