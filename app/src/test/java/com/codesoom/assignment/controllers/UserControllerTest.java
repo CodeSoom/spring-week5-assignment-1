@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,6 +38,7 @@ class UserControllerTest {
     private UserService userService;
 
     private Mapper mapper = new DozerBeanMapper();
+    private ObjectMapper objectMapper = new ObjectMapper();
 
     @DisplayName("회원저장 요청을 처리하는 핸들러는")
     @Nested
@@ -63,9 +66,21 @@ class UserControllerTest {
             @DisplayName("에러코드를 보낸다")
             @Test
             void sendErrorCode() throws Exception {
+                String requiredName = "홍길동";
+                String requiredEmail = "test@naver.com";
+                String requiredPassword = null;
+
+                UserData userData = UserData.builder()
+                        .name(requiredName)
+                        .email(requiredEmail)
+                        .password(requiredPassword)
+                        .build();
+
+                String json = objectMapper.writeValueAsString(userData);
+
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"test\",\"email\":\"test@naver.com\"}")
+                                .content(json)
                         ).andExpect(status().isBadRequest());
             }
         }
@@ -110,9 +125,21 @@ class UserControllerTest {
             @DisplayName("에러코드를 보낸다")
             @Test
             void sendErrorCode() throws Exception {
+                String requiredName = "홍길동!!!";
+                String requiredEmail = "test@naver.com";
+                String requiredPassword = null;
+
+                UserData userData = UserData.builder()
+                        .name(requiredName)
+                        .email(requiredEmail)
+                        .password(requiredPassword)
+                        .build();
+
+                String json = objectMapper.writeValueAsString(userData);
+
                 mockMvc.perform(patch("/users/" + userId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"updateName\",\"email\":\"test@naver.com\"}")
+                                .content(json)
                         )
                         .andExpect(status().isBadRequest());
             }
@@ -125,13 +152,6 @@ class UserControllerTest {
             
             @BeforeEach
             void setUp() {
-                //TODO
-                //SpyBean으로 실제 메소드를 호출했으나
-                //수정 성공 로직에는 mock 메소드를 호출하고
-                //수정 실패 로직에는 실제 메소드를 호출하니
-                //같은 수정 메소드를 서로 다른 2개의 호출을 한다고 에러 메시지가 출력되는 현상
-                //구현에 대하여 고민중
-
                 given(userService.updateUser(eq(wrongId), any(UserData.class)))
                         .willThrow(new UserNotFoundException(wrongId));
             }
@@ -157,10 +177,6 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                //TODO
-                //현재 setUp과 상관없이 이 테스트는 무조건 통과된다.
-                //어떻게 구현해야 할지 고민중
-
                 User user = User.createUserForSave("홍길동", "test@test.com", "1234");
 
                 given(userService.deleteUser(eq(userId))).willReturn(user);
