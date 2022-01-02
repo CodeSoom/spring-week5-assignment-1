@@ -39,7 +39,7 @@ public class UserService {
      * @return 생성된 User
      */
     public User createUser(UserRegistrationData userRegistrationData) {
-        String email = userRegistrationData.getEmail();
+        final String email = userRegistrationData.getEmail();
 
         if (userRepository.existsByEmail(email)) {
             throw new UserEmailDuplicationException(email);
