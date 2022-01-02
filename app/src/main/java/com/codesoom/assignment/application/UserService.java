@@ -8,6 +8,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegistrationData;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
@@ -27,11 +28,11 @@ public class UserService {
     /**
      * userData를 받아 새로운 user를 생성하여 리턴합니다.
      *
-     * @param userData 회원 정보
+     * @param registrationData 회원가입 정보
      * @return 새로 생성된 회원
      * */
-    public User create(UserData userData) {
-        User user = mapper.map(userData, User.class);
+    public User create(UserRegistrationData registrationData) {
+        User user = mapper.map(registrationData, User.class);
         return userRepository.save(user);
     }
 

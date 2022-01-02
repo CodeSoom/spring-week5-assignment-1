@@ -8,6 +8,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegistrationData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -64,12 +65,12 @@ class UserControllerTest {
 
         @BeforeEach
         void setUp() {
-            given(userService.create(any(UserData.class))).will(invocation -> {
-                UserData userData = invocation.getArgument(0);
+            given(userService.create(any(UserRegistrationData.class))).will(invocation -> {
+                UserRegistrationData registrationData = invocation.getArgument(0);
                 User user = User.builder()
-                        .name(userData.getName())
-                        .email(userData.getEmail())
-                        .password(userData.getPassword())
+                        .id(1L)
+                        .name(registrationData.getName())
+                        .email(registrationData.getEmail())
                         .build();
 
                 return user;
@@ -86,13 +87,23 @@ class UserControllerTest {
                 mockMvc.perform(
                                 post("/users")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content("{\"name\": \"codesoom\"," +
-                                                "\"email\": \"test@test.com\"," +
-                                                " \"password\": \"asdqwe1234\"}"
+                                        .content("{\"name\":\"codesoom\"," +
+                                                "\"email\":\"test@test.com\"," +
+                                                " \"password\":\"asdqwe1234\"}"
                                         )
                         )
                         .andExpect(status().isCreated())
-                        .andExpect(content().string(containsString("test@test.com")));
+                        .andExpect(content().string(
+                                containsString("\"id\":1")
+                        ))
+                        .andExpect(content().string(
+                                containsString("\"name\":\"codesoom\"")
+                        ))
+                        .andExpect(content().string(
+                                containsString("\"email\":\"test@test.com\"")
+                        ));
+
+                verify(userService).create(any(UserRegistrationData.class));
             }
         }
 

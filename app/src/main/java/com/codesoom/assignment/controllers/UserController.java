@@ -7,6 +7,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegistrationData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -35,13 +36,13 @@ public class UserController {
     /**
      * 회원 정보를 받아 새로운 회원을 생성하여 리턴합니다.
      *
-     * @param userData 생성하려는 회원의 정보 입니다
+     * @param  registrationData 생성하려는 회원의 정보 입니다
      * @return 새로 생성된 회원
      * */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody @Valid UserData userData) {
-        return userService.create(userData);
+    public User createUser(@RequestBody @Valid UserRegistrationData registrationData) {
+        return userService.create(registrationData);
     }
 
     /**

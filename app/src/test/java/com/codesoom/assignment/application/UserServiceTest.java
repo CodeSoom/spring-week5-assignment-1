@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserRegistrationData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,11 +42,11 @@ class UserServiceTest {
     class create_메소드는 {
 
         private User user;
-        private UserData source;
+        private UserRegistrationData source;
 
         @BeforeEach
         void setUp() {
-            source = UserData.builder()
+            source = UserRegistrationData.builder()
                     .name("홍길동")
                     .email("test@test.com")
                     .password("asdqwe1234")
