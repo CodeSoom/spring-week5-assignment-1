@@ -137,10 +137,14 @@ class UserServiceTest {
         class 등록되지_않은_User의_id와_수정할_User가_주어진다면 {
 
             UserModificationData givenUserModificationData;
-            final Long givenInvalidId = Long.MAX_VALUE;
+            Long givenInvalidId;
 
             @BeforeEach
             void prepaer() {
+                User user = userService.createUser(testUserRegistrationData.get(0));
+                userService.deleteUser(user.getId());
+
+                givenInvalidId = user.getId();
                 givenUserModificationData = testUserModificationData.get(0);
             }
 
@@ -179,11 +183,18 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록되지_않은_User의_id가_주어진다면 {
 
-            final Long givenId = Long.MAX_VALUE;
+            Long givenInvalidId;
+
+            @BeforeEach
+            void prepare() {
+                User user = userService.createUser(testUserRegistrationData.get(0));
+                userService.deleteUser(user.getId());
+                givenInvalidId = user.getId();
+            }
 
             @Test
             void 등록된_User가_없다는_예외를_던진다() {
-                assertThatThrownBy(() -> userService.deleteUser(givenId),
+                assertThatThrownBy(() -> userService.deleteUser(givenInvalidId),
                         "등록된 User가 없으므로, 삭제할 User가 없어야 합니다.")
                         .isInstanceOf(UserNotFoundException.class);
             }

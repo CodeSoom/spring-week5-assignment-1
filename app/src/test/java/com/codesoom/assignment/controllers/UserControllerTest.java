@@ -228,6 +228,17 @@ class UserControllerTest {
 
             final Long givenId = 1L;
 
+            @BeforeEach
+            void prepare() {
+                User user = User.builder()
+                        .name(testUserRegistrationData.getName())
+                        .email(testUserRegistrationData.getEmail())
+                        .build();
+
+                given(userService.deleteUser(givenId))
+                        .willReturn(user);
+            }
+
             @Test
             @DisplayName("204(No Content)를 응답합니다.")
             void it_delete_user_return_noContent() throws Exception {
