@@ -103,7 +103,7 @@ class UserServiceTest {
         class 등록되지_않은_User의_id와_수정할_User가_주어진다면 {
 
             UserData givenUserData;
-            final Long givenInvalidId = 9999L;
+            final Long givenInvalidId = Long.MAX_VALUE;
 
             @BeforeEach
             void prepaer() {
@@ -145,7 +145,7 @@ class UserServiceTest {
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 등록되지_않은_User의_id가_주어진다면 {
 
-            final Long givenId = 9999L;
+            final Long givenId = Long.MAX_VALUE;
 
             @Test
             void 등록된_User가_없다는_예외를_던진다() {
