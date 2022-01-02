@@ -1,9 +1,10 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.errors.UserEmailDuplicationException;
+import com.codesoom.assignment.errors.UserNotFoundException;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -163,6 +164,25 @@ class UserServiceTest {
                 assertThat(user.getName()).isEqualTo(NEW_NAME);
                 assertThat(user.getPassword()).isEqualTo(NEW_PASSWORD);
                 assertThat(user.getEmail()).isEqualTo(NEW_EMAIL);
+            }
+        }
+
+        @Nested
+        @DisplayName("이미 존재하는 이메일이라면")
+        class Context_when_exist_email {
+            @BeforeEach
+            void setUp() {
+                String existedEmail = userData.getEmail();
+                given(userRepository.findByEmail(existedEmail))
+                        .willThrow(new UserEmailDuplicationException(existedEmail));
+            }
+
+            @Test
+            @DisplayName("이미 사용된 이메일이라는 예외를 던진다.")
+            void it_return_DuplicateKwyException() {
+                assertThatThrownBy(() -> userService.createUser(userData))
+                        .isInstanceOf(UserEmailDuplicationException.class);
+                verify(userRepository).findByEmail(userData.getEmail());
             }
         }
     }
