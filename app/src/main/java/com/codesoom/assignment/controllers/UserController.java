@@ -63,7 +63,7 @@ public class UserController {
                        BindingResult bindingResult
     ) {
         if (bindingResult.hasErrors()) {
-            throw  new UserBadRequestException(bindingResult);
+            throw new UserBadRequestException(bindingResult);
         }
 
         return userService.updateUser(id, userData);
