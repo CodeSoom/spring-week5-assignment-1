@@ -173,7 +173,7 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 String existedEmail = userData.getEmail();
-                given(userRepository.findByEmail(existedEmail))
+                given(userRepository.existsByEmail(existedEmail))
                         .willThrow(new UserEmailDuplicationException(existedEmail));
             }
 
@@ -182,7 +182,7 @@ class UserServiceTest {
             void it_return_DuplicateKwyException() {
                 assertThatThrownBy(() -> userService.createUser(userData))
                         .isInstanceOf(UserEmailDuplicationException.class);
-                verify(userRepository).findByEmail(userData.getEmail());
+                verify(userRepository).existsByEmail(userData.getEmail());
             }
         }
     }
