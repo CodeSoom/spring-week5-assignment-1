@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserModificationData;
 import com.codesoom.assignment.dto.UserRegistrationData;
 import com.codesoom.assignment.dto.UserResultData;
 import org.springframework.http.HttpStatus;
@@ -45,13 +46,13 @@ public class UserController {
      * id와 일치하는 User를 userData로 변경합니다.
      *
      * @param id 변경할 User의 id
-     * @param userRegistrationData 변경될 User 데이터
+     * @param userModificationData 변경될 User 데이터
      * @return 변경된 User
      */
     @PostMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public UserResultData update(@PathVariable Long id, @RequestBody @Valid UserRegistrationData userRegistrationData) {
-        User user = userService.updateUser(id, userRegistrationData);
+    public UserResultData update(@PathVariable Long id, @RequestBody @Valid UserModificationData userModificationData) {
+        User user = userService.updateUser(id, userModificationData);
 
         return getUserResultData(user);
     }

@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserModificationData;
 import com.codesoom.assignment.dto.UserRegistrationData;
 import com.codesoom.assignment.exception.UserEmailDuplicationException;
 import com.codesoom.assignment.exception.UserNotFoundException;
@@ -61,12 +62,11 @@ public class UserService {
      * @return 변경된 User
      * @throws UserNotFoundException User의 targetId와 일치하는 User가 없을 경우
      */
-    public User updateUser(Long targetId, UserRegistrationData source) {
+    public User updateUser(Long targetId, UserModificationData source) {
         User user = getUser(targetId);
 
         user.change(source.getName(),
-                source.getPassword(),
-                source.getEmail());
+                source.getPassword());
 
         return userRepository.save(user);
     }

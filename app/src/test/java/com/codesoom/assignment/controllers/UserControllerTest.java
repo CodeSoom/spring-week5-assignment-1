@@ -2,7 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserModificationData;
 import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -14,9 +16,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
@@ -40,21 +39,23 @@ class UserControllerTest {
     @Autowired
     ObjectMapper objectMapper;
 
-    List<UserRegistrationData> testUserRegistrationData = new ArrayList<>();
+    UserRegistrationData testUserRegistrationData;
+
+    UserModificationData testUserModificationData;
+
 
     @BeforeEach
     void setUp() {
-        testUserRegistrationData.add(UserRegistrationData.builder()
+        testUserRegistrationData = UserRegistrationData.builder()
                 .name("Hyuk")
                 .password("!234")
                 .email("pjh0819@naver.com")
-                .build());
+                .build();
 
-        testUserRegistrationData.add(UserRegistrationData.builder()
+        testUserModificationData = UserModificationData.builder()
                 .name("Update Hyuk")
                 .password("123$")
-                .email("pjh9999@naver.com")
-                .build());
+                .build();
     }
 
     @Nested
@@ -70,7 +71,7 @@ class UserControllerTest {
 
             @BeforeEach
             void prepare() {
-                givenUserRegistrationData = testUserRegistrationData.get(0);
+                givenUserRegistrationData = testUserRegistrationData;
                 givenUser.change(givenUserRegistrationData.getName(),
                         givenUserRegistrationData.getPassword(),
                         givenUserRegistrationData.getEmail());
@@ -190,18 +191,17 @@ class UserControllerTest {
         @DisplayName("수정할 id와 user가 주어진다면")
         class Context_with_id_and_user {
 
-            UserRegistrationData givenUserRegistrationData;
+            UserModificationData givenUserModificationData;
             final Long givenId= 1L;
 
             @BeforeEach
             void prepare() {
-                givenUserRegistrationData = testUserRegistrationData.get(1);
+                givenUserModificationData = testUserModificationData;
                 User user = new User();
-                user.change(givenUserRegistrationData.getName(),
-                        givenUserRegistrationData.getPassword(),
-                        givenUserRegistrationData.getEmail());
+                user.change(givenUserModificationData.getName(),
+                        givenUserModificationData.getPassword());
 
-                given(userService.updateUser(eq(givenId), any(UserRegistrationData.class)))
+                given(userService.updateUser(eq(givenId), any(UserModificationData.class)))
                         .willReturn(user);
             }
 
@@ -210,9 +210,9 @@ class UserControllerTest {
             void it_update_user_return_ok_and_user() throws Exception {
                 mockMvc.perform(post("/user/" + givenId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(userDataToContent(givenUserRegistrationData)))
+                                .content(userDataToContent(givenUserModificationData)))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.name").value(givenUserRegistrationData.getName()))
+                        .andExpect(jsonPath("$.name").value(givenUserModificationData.getName()))
                         .andDo(print());
             }
         }
@@ -240,5 +240,9 @@ class UserControllerTest {
 
     private String userDataToContent(UserRegistrationData userRegistrationData) throws JsonProcessingException {
         return objectMapper.writeValueAsString(userRegistrationData);
+    }
+
+    private String userDataToContent(UserModificationData userModificationData) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(userModificationData);
     }
 }

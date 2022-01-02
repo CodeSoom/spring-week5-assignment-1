@@ -30,6 +30,11 @@ public class User {
         this.email = email;
     }
 
+    public void change(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
+
     public void change(String name, String password, String email) {
         this.name = name;
         this.password = password;
