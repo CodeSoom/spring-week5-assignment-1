@@ -7,8 +7,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.errors.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.dto.UserModificationData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -133,16 +133,18 @@ class UserControllerTest {
 
         @BeforeEach
         void setUp() {
-            given(userService.update(eq(1L), any(UserData.class))).will(invocation -> {
-                UserData userData = invocation.getArgument(1);
+            given(userService.update(eq(1L), any(UserModificationData.class))).will(invocation -> {
+                Long id = invocation.getArgument(0);
+                UserModificationData modificationData = invocation.getArgument(1);
                 return User.builder()
-                        .name(userData.getName())
-                        .email(userData.getEmail())
-                        .password(userData.getPassword())
+                        .id(id)
+                        .email("tester@example.com")
+                        .name(modificationData.getName())
+                        .password(modificationData.getPassword())
                         .build();
             });
 
-            given(userService.update(eq(1000L), any(UserData.class)))
+            given(userService.update(eq(1000L), any(UserModificationData.class)))
                     .willThrow(new UserNotFoundException(1000L));
         }
 
@@ -156,13 +158,12 @@ class UserControllerTest {
                 mockMvc.perform(
                                 patch("/users/1")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content("{\"name\": \"홍길동\"," +
-                                                "\"email\": \"test222@test.com\"," +
-                                                " \"password\": \"1234qweasd\"}"
+                                        .content("{\"name\":\"홍길동\"," +
+                                                "\"password\":\"1234qweasd\"}"
                                         )
                         )
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString("1234qweasd")));
+                        .andExpect(content().string(containsString("\"name\":\"홍길동\"")));
             }
         }
 
@@ -176,9 +177,8 @@ class UserControllerTest {
                 mockMvc.perform(
                                 patch("/users/1000")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content("{\"name\": \"홍길동\"," +
-                                                "\"email\": \"test222@test.com\"," +
-                                                " \"password\": \"123qweasd\"}"
+                                        .content("{\"name\":\"홍길동\"," +
+                                                "\"password\":\"123qweasd\"}"
                                         )
                         )
                         .andExpect(status().isNotFound());
@@ -195,10 +195,7 @@ class UserControllerTest {
                 mockMvc.perform(
                                 patch("/users/1")
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content("{\"name\": \"\"," +
-                                                "\"email\": \"\"," +
-                                                " \"password\": \"\"}"
-                                        )
+                                        .content("{\"name\":\"\",\"password\":\"\"}")
                         )
                         .andExpect(status().isBadRequest());
             }

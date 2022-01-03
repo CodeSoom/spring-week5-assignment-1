@@ -6,8 +6,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.dto.UserModificationData;
 import com.codesoom.assignment.dto.UserResultData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -56,12 +56,20 @@ public class UserController {
      * 요청받은 id의 회원을 찾아 요청받은 회원 정보로 변경하고 변경된 회원을 리턴합니다.
      *
      * @param id 요청 id
-     * @param userData 요청 회원 정보
+     * @param modificationData 요청 회원 정보
      * @return 변경된 회원 정보
      * */
     @PatchMapping("{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody @Valid UserData userData) {
-        return userService.update(id, userData);
+    public UserResultData updateUser(
+            @PathVariable Long id,
+            @RequestBody @Valid UserModificationData modificationData
+    ) {
+        User user = userService.update(id, modificationData);
+        return UserResultData.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
     }
 
     /**

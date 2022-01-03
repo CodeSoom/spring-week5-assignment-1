@@ -4,8 +4,8 @@ import com.codesoom.assignment.errors.UserEmailAlreadyExistedException;
 import com.codesoom.assignment.errors.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.dto.UserModificationData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -112,7 +112,7 @@ class UserServiceTest {
     class update_메소드는 {
 
         private User user;
-        private UserData source;
+        private UserModificationData source;
 
         @BeforeEach
         void setUp() {
@@ -122,9 +122,8 @@ class UserServiceTest {
                     .password("asdqwe1234")
                     .build();
 
-            source = UserData.builder()
+            source = UserModificationData.builder()
                     .name("철수")
-                    .email("cjftn@test.com")
                     .password("asdfg")
                     .build();
 

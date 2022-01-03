@@ -8,7 +8,7 @@ import com.codesoom.assignment.errors.UserEmailAlreadyExistedException;
 import com.codesoom.assignment.errors.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserModificationData;
 import com.codesoom.assignment.dto.UserRegistrationData;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
@@ -48,17 +48,16 @@ public class UserService {
     /**
      * 기존 회원 목록 중 id가 일치하는 회원을 찾아 userData 회원 정보로 수정하여 변경된 회원을 리턴합니다.
      *
-     * @param id 회원 id
-     * @param userData 변경하려는 정보
+     * @param id               회원 id
+     * @param modificationData 변경하려는 정보
      * @return 변경된 회원
-     * */
-    public User update(Long id, UserData userData) {
+     */
+    public User update(Long id, UserModificationData modificationData) {
         User user = findUser(id);
 
         user.change(
-                userData.getName(),
-                userData.getEmail(),
-                userData.getPassword()
+                modificationData.getName(),
+                modificationData.getPassword()
         );
 
         return user;
