@@ -130,8 +130,8 @@ class UserServiceTest {
                     .password("asdfg")
                     .build();
 
-            given(userRepository.findById(1L)).willReturn(Optional.of(user));
-            given(userRepository.findById(DELETED_USER_ID)).willReturn(Optional.empty());
+            given(userRepository.findByIdAndDeletedIsFalse(1L)).willReturn(Optional.of(user));
+            given(userRepository.findByIdAndDeletedIsFalse(DELETED_USER_ID)).willReturn(Optional.empty());
         }
 
         @Nested
@@ -143,7 +143,7 @@ class UserServiceTest {
             void 수정된_회원_정보를_리턴한다() {
                 User updatedUser = userService.update(1L, source);
 
-                verify(userRepository).findById(1L);
+                verify(userRepository).findByIdAndDeletedIsFalse(1L);
 
                 assertThat(updatedUser.getName()).isEqualTo(source.getName());
             }
@@ -159,7 +159,7 @@ class UserServiceTest {
                 assertThatThrownBy(() -> userService.update(NOT_EXISTED_ID, source))
                         .isInstanceOf(UserNotFoundException.class);
 
-                verify(userRepository).findById(NOT_EXISTED_ID);
+                verify(userRepository).findByIdAndDeletedIsFalse(NOT_EXISTED_ID);
             }
         }
 
@@ -173,7 +173,7 @@ class UserServiceTest {
                 assertThatThrownBy(() -> userService.update(DELETED_USER_ID, source))
                         .isInstanceOf(UserNotFoundException.class);
 
-                verify(userRepository).findById(DELETED_USER_ID);
+                verify(userRepository).findByIdAndDeletedIsFalse(DELETED_USER_ID);
             }
         }
     }
@@ -200,11 +200,11 @@ class UserServiceTest {
             @Test
             @DisplayName("회원 정보를 삭제하고 삭제된 회원을 리턴한다")
             void 회원_정보를_삭제하고_삭제된_회원을_리턴한다() {
-                given(userRepository.findById(1L)).willReturn(Optional.of(source));
+                given(userRepository.findByIdAndDeletedIsFalse(1L)).willReturn(Optional.of(source));
 
                 User deletedUser = userService.deleteUserById(1L);
 
-                verify(userRepository).findById(1L);
+                verify(userRepository).findByIdAndDeletedIsFalse(1L);
                 verify(userRepository).delete(source);
 
                 assertThat(deletedUser.getName()).isEqualTo(source.getName());

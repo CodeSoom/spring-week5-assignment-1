@@ -85,11 +85,7 @@ public class UserService {
      *                               user가 삭제된 회원일 경우
      */
     public User findUser(Long id) {
-        User user = userRepository.findById(id)
+        return userRepository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
-        if (user.isDeleted()) {
-            throw new UserNotFoundException(id);
-        }
-        return user;
     }
 }
