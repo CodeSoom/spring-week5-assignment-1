@@ -34,6 +34,14 @@ public class UserController {
         this.userService = userService;
     }
 
+    private UserResultData getUserResultData(User user) {
+        return UserResultData.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
+    }
+
     /**
      * 회원 정보를 받아 새로운 회원을 생성하여 리턴합니다.
      *
@@ -44,12 +52,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public UserResultData createUser(@RequestBody @Valid UserRegistrationData registrationData) {
         User user = userService.create(registrationData);
-
-        return UserResultData.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .build();
+        return getUserResultData(user);
     }
 
     /**
@@ -65,11 +68,7 @@ public class UserController {
             @RequestBody @Valid UserModificationData modificationData
     ) {
         User user = userService.update(id, modificationData);
-        return UserResultData.builder()
-                .id(user.getId())
-                .name(user.getName())
-                .email(user.getEmail())
-                .build();
+        return getUserResultData(user);
     }
 
     /**
