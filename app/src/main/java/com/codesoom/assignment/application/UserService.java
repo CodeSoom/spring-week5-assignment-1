@@ -55,10 +55,9 @@ public class UserService {
     public User update(Long id, UserModificationData modificationData) {
         User user = findUser(id);
 
-        user.change(
-                modificationData.getName(),
-                modificationData.getPassword()
-        );
+        User source = mapper.map(modificationData, User.class);
+
+        user.changeWith(source);
 
         return user;
     }
