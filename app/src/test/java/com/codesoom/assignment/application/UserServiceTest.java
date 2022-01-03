@@ -90,7 +90,7 @@ class UserServiceTest {
             @BeforeEach
             void setUp() {
                 given(userRepository.existsByEmail(ALREADY_EXISTED_EMAIL))
-                        .willThrow(new UserEmailAlreadyExistedException(ALREADY_EXISTED_EMAIL));
+                        .willReturn(true);
 
                 existedUser = UserRegistrationData.builder()
                         .email(ALREADY_EXISTED_EMAIL)
