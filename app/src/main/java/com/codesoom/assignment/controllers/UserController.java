@@ -8,6 +8,7 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.dto.UserResultData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,8 +42,14 @@ public class UserController {
      * */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody @Valid UserRegistrationData registrationData) {
-        return userService.create(registrationData);
+    public UserResultData createUser(@RequestBody @Valid UserRegistrationData registrationData) {
+        User user = userService.create(registrationData);
+
+        return UserResultData.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .build();
     }
 
     /**
