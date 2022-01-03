@@ -182,6 +182,8 @@ class UserControllerTest {
                                         )
                         )
                         .andExpect(status().isNotFound());
+
+                verify(userService).update(eq(1000L), any(UserModificationData.class));
             }
         }
 

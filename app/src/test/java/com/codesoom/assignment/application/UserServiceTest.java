@@ -32,6 +32,9 @@ class UserServiceTest {
 
     private final UserRepository userRepository = mock(UserRepository.class);
 
+    private static final Long DELETED_USER_ID = 1000L;
+    private static final Long NOT_EXISTED_ID = 9999L;
+
     @BeforeEach
     void setUp() {
         mapper = DozerBeanMapperBuilder.buildDefault();
@@ -128,6 +131,7 @@ class UserServiceTest {
                     .build();
 
             given(userRepository.findById(1L)).willReturn(Optional.of(user));
+            given(userRepository.findById(DELETED_USER_ID)).willReturn(Optional.empty());
         }
 
         @Nested
@@ -152,8 +156,24 @@ class UserServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void 예외를_던진다() {
-                assertThatThrownBy(() -> userService.update(1000L, source))
+                assertThatThrownBy(() -> userService.update(NOT_EXISTED_ID, source))
                         .isInstanceOf(UserNotFoundException.class);
+
+                verify(userRepository).findById(NOT_EXISTED_ID);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 삭제된_ID라면 {
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void 예외를_던진다() {
+                assertThatThrownBy(() -> userService.update(DELETED_USER_ID, source))
+                        .isInstanceOf(UserNotFoundException.class);
+
+                verify(userRepository).findById(DELETED_USER_ID);
             }
         }
     }
@@ -189,6 +209,7 @@ class UserServiceTest {
 
                 assertThat(deletedUser.getName()).isEqualTo(source.getName());
                 assertThat(deletedUser.getEmail()).isEqualTo(source.getEmail());
+                assertThat(deletedUser.isDeleted()).isTrue();
             }
         }
 
@@ -199,7 +220,7 @@ class UserServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void 예외를_던진다() {
-                assertThatThrownBy(() -> userService.deleteUserById(1000L))
+                assertThatThrownBy(() -> userService.deleteUserById(DELETED_USER_ID))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }

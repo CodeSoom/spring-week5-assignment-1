@@ -19,4 +19,14 @@ class UserTest {
         assertThat(user.getPassword()).isEqualTo("TEST");
     }
 
+    @Test
+    void destroy() {
+        User user = User.builder().build();
+
+        assertThat(user.isDeleted()).isFalse();
+
+        user.destroy();
+
+        assertThat(user.isDeleted()).isTrue();
+    }
 }

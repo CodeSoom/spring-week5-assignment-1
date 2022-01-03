@@ -70,7 +70,11 @@ public class UserService {
      * */
     public User deleteUserById(Long targetId) {
         User user = findUser(targetId);
+        if(user.isDeleted()) {
+            throw new UserNotFoundException(targetId);
+        }
 
+        user.destroy();
         userRepository.delete(user);
 
         return user;

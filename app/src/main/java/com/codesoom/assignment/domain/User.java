@@ -22,6 +22,8 @@ public class User {
 
     private String password;
 
+    private boolean deleted = false;
+
     @Builder
     public User(Long id, String name, String email, String password) {
         this.id = id;
@@ -33,5 +35,9 @@ public class User {
     public void changeWith(User source) {
         name = source.name;
         password = source.password;
+    }
+
+    public void destroy() {
+        deleted = true;
     }
 }
