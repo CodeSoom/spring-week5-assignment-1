@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 
 /**
  * 회원을 생성, 수정, 삭제하는 service 입니다.
- * */
+ */
 @Service
 @Transactional
 public class UserService {
@@ -34,10 +34,10 @@ public class UserService {
      *
      * @param registrationData 회원가입 정보
      * @return 새로 생성된 회원
-     * */
+     */
     public User create(UserRegistrationData registrationData) {
         String email = registrationData.getEmail();
-        if(userRepository.existsByEmail(email)) {
+        if (userRepository.existsByEmail(email)) {
             throw new UserEmailAlreadyExistedException(email);
         }
 
@@ -67,12 +67,9 @@ public class UserService {
      *
      * @param targetId 회원 id
      * @return 삭제된 회원
-     * */
+     */
     public User deleteUserById(Long targetId) {
         User user = findUser(targetId);
-        if(user.isDeleted()) {
-            throw new UserNotFoundException(targetId);
-        }
 
         user.destroy();
         userRepository.delete(user);
@@ -85,9 +82,14 @@ public class UserService {
      *
      * @param id 회원 id
      * @throws UserNotFoundException id가 일치하는 회원이 없는 경우
-     * */
+     *                               user가 삭제된 회원일 경우
+     */
     public User findUser(Long id) {
-        return userRepository.findById(id)
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
+        if (user.isDeleted()) {
+            throw new UserNotFoundException(id);
+        }
+        return user;
     }
 }
