@@ -2,8 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserModificationData;
 import com.codesoom.assignment.dto.UserRegisterationData;
-import com.codesoom.assignment.dto.UserResultData;
+import com.codesoom.assignment.errors.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +16,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -38,7 +39,9 @@ class UserControllerTest {
     void setUp() {
         given(userService.registerUser(any(UserRegisterationData.class)))
                 .will(invocations -> {
-                    UserRegisterationData registrationData = invocations.getArgument(0);
+                    UserRegisterationData registrationData =
+                            invocations.getArgument(0);
+
                     User user = User.builder()
                             .id(13L)
                             .email(registrationData.getEmail())
@@ -47,8 +50,26 @@ class UserControllerTest {
                             .build();
                     return user;
                 });
-    }
 
+        given(userService.updateUser(eq(1L), any(UserModificationData.class)))
+                .will(invocation -> {
+                    Long id = invocation.getArgument(0);
+                    UserModificationData modificationData =
+                            invocation.getArgument(1);
+                    return User.builder()
+                        .id(1L)
+                        .email("jihwooon@gmail.com")
+                        .name(modificationData.getName())
+                        .password(modificationData.getPassword())
+                        .build();
+                });
+
+        given(userService.updateUser(eq(100L), any(UserModificationData.class)))
+                .willThrow(new UserNotFoundException(100L));
+
+        given(userService.deleteUser(100L))
+                .willThrow(new UserNotFoundException(100L));
+    }
 
     @Test
     void registerUserWithValidAttributes() throws Exception {
@@ -86,16 +107,49 @@ class UserControllerTest {
     }
 
     @Test
-    void update() throws Exception {
+    void updateUserWithValidAttributes() throws Exception {
         mockMvc.perform(
-                        patch("/user/1")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"email\":\"junghwaaan@gmail.com\"}")
-                )
+                patch("/user/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"TEST\",\"password\":\"test\"}")
+        )
                 .andExpect(status().isOk())
                 .andExpect(content().string(
-                        containsString("\"email\":\"junghwaaan@gmail.com\"")
+                        containsString("\"id\":1")
+                ))
+                .andExpect(content().string(
+                        containsString("\"name\":\"TEST\"")
                 ));
 
+        verify(userService).updateUser(eq(1L),any(UserModificationData.class));
+    }
+
+    @Test
+    void updateUserWithNotExsitedId() throws Exception {
+        mockMvc.perform(
+                patch("/user/100")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"TEST\",\"password\":\"TEST\"}")
+        )
+                .andExpect(status().isNotFound());
+
+        verify(userService)
+                .updateUser(eq(100L),any(UserModificationData.class));
+    }
+
+    @Test
+    void destroyWithExistedId() throws Exception {
+        mockMvc.perform(delete("/user/1"))
+                .andExpect(status().isOk());
+
+        verify(userService).deleteUser(1L);
+    }
+
+    @Test
+    void destroyWithNotExistedId() throws Exception {
+        mockMvc.perform(delete("/user/100"))
+                .andExpect(status().isNotFound());
+
+        verify(userService).deleteUser(eq(100L));
     }
 }

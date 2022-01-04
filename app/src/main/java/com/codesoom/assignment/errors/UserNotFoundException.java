@@ -1,4 +1,4 @@
-package com.codesoom.assignment;
+package com.codesoom.assignment.errors;
 
 public class UserNotFoundException extends RuntimeException {
     public UserNotFoundException(Long id) {

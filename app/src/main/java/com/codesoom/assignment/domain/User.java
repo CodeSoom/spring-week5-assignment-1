@@ -25,9 +25,15 @@ public class User {
 
     private String password;
 
-    public void changeWithUser(User member) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    @Builder.Default
+    private boolean deleted = false;
+
+    public void changeWith(User source) {
+        name = source.name;
+        password = source.password;
+    }
+
+    public void destory() {
+        deleted = true;
     }
 }
