@@ -1,3 +1,9 @@
+//REST API
+// 1. GET /products
+// 2. GET /products/{id}
+// 3. POST /products
+// 4. PUT/PATCH /products/{id}
+// 5. DELETE /products/{id}
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
@@ -9,9 +15,12 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.List;
 
+// 리팩터링: 기능은 그대로인데, 설계를 개선하는 행위
+
 @RestController
 @RequestMapping("/products")
 public class ProductController {
+
     private final ProductService productService;
 
     public ProductController(ProductService productService) {
@@ -19,18 +28,18 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> list() {
+    public List<Product> list() throws Exception {
         return productService.getProducts();
     }
 
     @GetMapping("{id}")
-    public Product detail(@PathVariable Long id) {
+    public Product detail(@PathVariable Long id) throws Exception {
         return productService.getProduct(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody @Valid ProductData productData) {
+    public Product create(@RequestBody @Valid ProductData productData){
         return productService.createProduct(productData);
     }
 
@@ -43,8 +52,8 @@ public class ProductController {
     }
 
     @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void destroy(@PathVariable Long id) {
+    public void destroy(@PathVariable Long id){
         productService.deleteProduct(id);
     }
+
 }

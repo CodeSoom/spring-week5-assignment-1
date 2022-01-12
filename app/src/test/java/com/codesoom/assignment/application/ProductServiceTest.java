@@ -1,9 +1,18 @@
+//REST API
+// 1. GET /products
+// 2. GET /products/{id}
+// 3. POST /products
+// 4. PUT/PATCH /products/{id}
+// 5. DELETE /products/{id}
+
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.errors.ProductNotFoundException;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -20,16 +29,18 @@ import static org.mockito.Mockito.verify;
 class ProductServiceTest {
     private ProductService productService;
 
-    private ProductRepository productRepository = mock(ProductRepository.class);
+    private final ProductRepository productRepository = mock(ProductRepository.class);
 
     @BeforeEach
-    void setUp() {
-        productService = new ProductService(productRepository);
+    void setUp(){
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+
+        productService = new ProductService(mapper, productRepository);
 
         Product product = Product.builder()
                 .id(1L)
                 .name("쥐돌이")
-                .maker("냥이월드")
+                .maker("ㅇㅇ")
                 .price(5000)
                 .build();
 
@@ -49,17 +60,17 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductsWithNoProduct() {
+    void getProductsWithNoProduct(){
         given(productRepository.findAll()).willReturn(List.of());
 
         assertThat(productService.getProducts()).isEmpty();
     }
 
     @Test
-    void getProducts() {
+    void getProducts(){
         List<Product> products = productService.getProducts();
 
-        assertThat(products).isNotEmpty();
+        assertThat(productService.getProducts()).isNotEmpty();
 
         Product product = products.get(0);
 
@@ -67,7 +78,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductWithExsitedId() {
+    void getProductWithExistedId(){
         Product product = productService.getProduct(1L);
 
         assertThat(product).isNotNull();
@@ -75,13 +86,13 @@ class ProductServiceTest {
     }
 
     @Test
-    void getProductWithNotExsitedId() {
+    void getProductWithNotExistedId(){
         assertThatThrownBy(() -> productService.getProduct(1000L))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 
     @Test
-    void createProduct() {
+    void createProduct(){
         ProductData productData = ProductData.builder()
                 .name("쥐돌이")
                 .maker("냥이월드")
@@ -98,7 +109,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void updateProductWithExistedId() {
+    void updateProductWithExistedId(){
         ProductData productData = ProductData.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
@@ -112,7 +123,7 @@ class ProductServiceTest {
     }
 
     @Test
-    void updateProductWithNotExistedId() {
+    void updateProductWithNotExistedId(){
         ProductData productData = ProductData.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
@@ -124,15 +135,16 @@ class ProductServiceTest {
     }
 
     @Test
-    void deleteProductWithExistedId() {
+    void deleteProductWithExistedId(){
         productService.deleteProduct(1L);
 
         verify(productRepository).delete(any(Product.class));
     }
 
     @Test
-    void deleteProductWithNotExistedId() {
+    void deleteProductWithNotExistedId(){
         assertThatThrownBy(() -> productService.deleteProduct(1000L))
                 .isInstanceOf(ProductNotFoundException.class);
     }
+
 }

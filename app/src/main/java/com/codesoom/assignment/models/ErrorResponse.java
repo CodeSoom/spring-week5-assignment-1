@@ -1,13 +1,13 @@
-package com.codesoom.assignment.dto;
+package com.codesoom.assignment.models;
 
 public class ErrorResponse {
     private String message;
 
-    public ErrorResponse(String message) {
-        this.message = message;
-    }
-
     public String getMessage() {
         return message;
+    }
+
+    public ErrorResponse(String message){
+        this.message = message;
     }
 }
