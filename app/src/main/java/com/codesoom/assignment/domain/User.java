@@ -14,23 +14,26 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class User {
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
 
-    private String maker;
+    private String email;
 
-    private Integer price;
+    private String password;
 
-    private String imageUrl;
+    @Builder.Default
+    private boolean deleted = false;
 
-    public void changeWith(Product source) {
-        this.name = source.name;
-        this.maker = source.maker;
-        this.price = source.price;
+    public void changeWith(User source) {
+        name = source.name;
+        password = source.password;
+    }
 
+    public void destory() {
+        deleted = true;
     }
 }
