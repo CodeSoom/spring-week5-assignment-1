@@ -1,3 +1,9 @@
+// Product
+// 0. 식별자
+// 1. 이름
+// 2. 제조사
+// 3. 가격
+// 4. 이미지 - static, CDN => image URL
 package com.codesoom.assignment.domain;
 
 import lombok.AllArgsConstructor;
@@ -27,13 +33,24 @@ public class Product {
 
     private String imageUrl;
 
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
+    @Override
+    public boolean equals(Object o) {
+        if (o == this) {
+            return true;
+        }
+
+        return this.id.equals(((Product) o).getId());
+    }
+
+    public void change(String name, String maker, Integer price) {
         this.name = name;
         this.maker = maker;
         this.price = price;
-        this.imageUrl = imageUrl;
+    }
+
+    public void changeWith(Product source) {
+        this.name = source.name;
+        this.maker = source.maker;
+        this.price = source.price;
     }
 }
