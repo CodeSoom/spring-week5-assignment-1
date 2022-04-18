@@ -7,14 +7,22 @@ import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.math.BigDecimal;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 @DisplayName("ProductSaveController 클래스")
@@ -33,7 +41,7 @@ public class ProductSaveControllerTest {
     @BeforeEach
     void setup() {
         this.controller = new ProductSaveController(service);
-        repository.deleteAll();
+        cleanup();
     }
 
     @AfterEach
@@ -41,16 +49,31 @@ public class ProductSaveControllerTest {
         repository.deleteAll();
     }
 
-    @DisplayName("상품을 성공적으로 등록한다.")
-    @Test
-    void createTest() {
-        final ProductDto productDto
-                = new ProductDto("어쩌구", "어쩌구컴퍼니", BigDecimal.valueOf(2000), "url");
+    @DisplayName("saveProduct 메서드는")
+    @Nested
+    class Describe_save_product {
 
-        Product product = controller.saveProduct(productDto);
+        @DisplayName("필수값을 모두 입력하면")
+        @Nested
+        class Context_with_valid_data {
 
-        assertThat(product.getName()).isEqualTo(productDto.getName());
-        assertThat(repository.findById(product.getId())).isNotEmpty();
+            private final ProductDto VALID_PRODUCT_DTO
+                    = new ProductDto("어쩌구", "어쩌구컴퍼니", BigDecimal.valueOf(2000), "url");
+
+            @AfterEach
+            void cleanup() {
+                repository.deleteAll();
+            }
+
+            @DisplayName("상품을 성공적으로 등록한다.")
+            @Test
+            void it_will_save_product() {
+                Product product = controller.saveProduct(VALID_PRODUCT_DTO);
+
+                assertThat(product.getName()).isEqualTo(VALID_PRODUCT_DTO.getName());
+                assertThat(repository.findById(product.getId())).isNotEmpty();
+            }
+        }
     }
-
+    
 }
