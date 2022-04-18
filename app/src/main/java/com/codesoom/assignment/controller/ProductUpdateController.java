@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
+import javax.validation.Valid;
+
 @ProductController
 public class ProductUpdateController {
 
@@ -22,7 +24,7 @@ public class ProductUpdateController {
     @ResponseStatus(HttpStatus.OK)
     @RequestMapping(value = "/{id}", method = {RequestMethod.PATCH, RequestMethod.PUT})
     public Product update(@PathVariable Long id,
-                          @RequestBody ProductDto productDto) {
+                          @Valid @RequestBody ProductDto productDto) {
         return service.update(id, productDto);
     }
 
