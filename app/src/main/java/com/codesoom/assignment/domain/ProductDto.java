@@ -3,6 +3,7 @@ package com.codesoom.assignment.domain;
 import com.codesoom.assignment.application.ProductSaveRequest;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 
@@ -12,12 +13,13 @@ import java.math.BigDecimal;
  */
 public class ProductDto implements ProductSaveRequest {
 
-    @NotBlank
+    @NotBlank(message = "이름을 입력하세요.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "판매자를 입력하세요.")
     private String maker;
 
+    @NotNull(message = "가격을 입력하세요.")
     private BigDecimal price;
 
     private String imageUrl;
