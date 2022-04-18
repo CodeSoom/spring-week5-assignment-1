@@ -36,4 +36,16 @@ public class Product {
         this.price = price;
         this.imageUrl = imageUrl;
     }
+
+    @Override
+    public String toString() {
+        return String.format(
+                "{ id = %s name = %s, maker = %s, price = %s, imageUrl = %s}",
+                id,
+                name,
+                maker,
+                price,
+                imageUrl
+        );
+    }
 }

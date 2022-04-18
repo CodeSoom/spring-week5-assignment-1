@@ -5,191 +5,288 @@ import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@WebMvcTest(ProductController.class)
+@SpringBootTest
+@DisplayName("ProductController 에서")
 class ProductControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
+    private static final String PRODUCT_NAME = "상품1";
+    private static final String PRODUCT_MAKER = "메이커1";
+    private static final Integer PRODUCT_PRICE = 100000;
+    private static final String PRODUCT_IMAGE_URL = "https://img1.daumcdn.net/thumb/R1280x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F9941A1385B99240D2E";
 
-    @MockBean
+    private static final Integer UPDATE_PRODUCT_PRICE = 700;
+    private static final String UPDATE_PRODUCT_NAME = "상품100";
+    private static final String UPDATE_PRODUCT_MAKER = "maker100";
+    private static final String UPDATE_PRODUCT_IMAGE_URL = "changedImageUrl";
+
+    @Autowired
     private ProductService productService;
+    private ProductController productController;
 
     @BeforeEach
     void setUp() {
-        Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
+        productController = new ProductController(productService);
+    }
+
+    /**
+     * 하나의 Product 를 생성해 등록합니다.
+     * @return 생성한 Product를 리턴
+     */
+    private Product createProduct() {
+        ProductData productDto = ProductData.builder()
+                .name(PRODUCT_NAME)
+                .maker(PRODUCT_MAKER)
+                .price(PRODUCT_PRICE)
                 .build();
-
-        given(productService.getProducts()).willReturn(List.of(product));
-
-        given(productService.getProduct(1L)).willReturn(product);
-
-        given(productService.getProduct(1000L))
-                .willThrow(new ProductNotFoundException(1000L));
-
-        given(productService.createProduct(any(ProductData.class)))
-                .willReturn(product);
-
-        given(productService.updateProduct(eq(1L), any(ProductData.class)))
-                .will(invocation -> {
-                    Long id = invocation.getArgument(0);
-                    ProductData productData = invocation.getArgument(1);
-                    return Product.builder()
-                            .id(id)
-                            .name(productData.getName())
-                            .maker(productData.getMaker())
-                            .price(productData.getPrice())
-                            .build();
-                });
-
-        given(productService.updateProduct(eq(1000L), any(ProductData.class)))
-                .willThrow(new ProductNotFoundException(1000L));
-
-        given(productService.deleteProduct(1000L))
-                .willThrow(new ProductNotFoundException(1000L));
+        return productService.createProduct(productDto);
     }
 
-    @Test
-    void list() throws Exception {
-        mockMvc.perform(
-                get("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐돌이")));
+    @Nested
+    @DisplayName("list 메소드는")
+    class Describe_of_list {
+
+        @BeforeEach
+        void setUp() {
+            createProduct();
+        }
+
+        @Nested
+        @DisplayName("Product 객체가 없을 경우")
+        class Context_with_empty_list {
+
+            @BeforeEach
+            void setUp() {
+                List<Product> products = productController.list();
+                for (Product product : products) {
+                    productController.destroy(product.getId());
+                }
+            }
+
+            @Test
+            @DisplayName("빈 리스트를 반환한다")
+            void it_return_empty_list() {
+                List<Product> products = productController.list();
+
+                assertThat(products).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("Product 객체가 있을 경우")
+        class Context_with_product_list {
+
+            @Test
+            @DisplayName("Product 객체가 포함된 배열을 반환한다")
+            void it_returns_product_list() {
+                List<Product> products = productController.list();
+                assertThat(products).isNotEmpty();
+            }
+        }
     }
 
-    @Test
-    void deatilWithExsitedProduct() throws Exception {
-        mockMvc.perform(
-                get("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐돌이")));
+    @Nested
+    @DisplayName("detail 메소드는")
+    class Describe_of_detail {
+        private Product product;
+
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
+
+        @Nested
+        @DisplayName("제품이 있을 경우")
+        class Context_with_product {
+            private long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("제품을 반환한다")
+            void it_return_product() {
+                Product found = productController.detail(productId);
+
+                assertThat(found).isNotNull();
+            }
+        }
+
+        @Nested
+        @DisplayName("제품이 없을 경우")
+        class Context_with_invalid_id {
+            private long productId;
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+                productService.deleteProduct(productId);
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productController.detail(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
-    @Test
-    void deatilWithNotExsitedProduct() throws Exception {
-        mockMvc.perform(get("/products/1000"))
-                .andExpect(status().isNotFound());
+    @Nested
+    @DisplayName("create 메소드는")
+    class Describe_of_create {
+
+        @Nested
+        @DisplayName("제품이 생성되었다면")
+        class Context_with_created {
+            private ProductData productData;
+
+            @BeforeEach
+            void setUp() {
+                productData = ProductData
+                        .builder()
+                        .name(PRODUCT_NAME)
+                        .maker(PRODUCT_MAKER)
+                        .price(PRODUCT_PRICE)
+                        .imageUrl(PRODUCT_IMAGE_URL)
+                        .build();
+            }
+
+            @Test
+            @DisplayName("생성된 제품을 반환한다")
+            void it_return_created_product() {
+                Product product = productController.create(productData);
+
+                assertThat(product).isNotNull();
+                assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
+                assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
+            }
+        }
     }
 
-    @Test
-    void create() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
+    @Nested
+    @DisplayName("update 메소드는")
+    class Describe_of_update {
+        private Product product;
 
-        verify(productService).createProduct(any(ProductData.class));
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
+
+        @Nested
+        @DisplayName("Id 에 맞는 제품을 업데이트 했을 경우")
+        class Context_with_valid_id {
+            private Long productId;
+            private final ProductData productDto = ProductData
+                    .builder()
+                    .name(UPDATE_PRODUCT_NAME)
+                    .maker(UPDATE_PRODUCT_MAKER)
+                    .price(UPDATE_PRODUCT_PRICE)
+                    .imageUrl(UPDATE_PRODUCT_IMAGE_URL)
+                    .build();
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+            }
+
+            @Test
+            @DisplayName("업데이트 된 제품을 반환한다")
+            void it_return_updated_product() {
+                Product updatedProduct = productController.update(productId, productDto);
+
+                assertThat(updatedProduct).isNotNull();
+                assertThat(updatedProduct.getPrice()).isEqualTo(UPDATE_PRODUCT_PRICE);
+                assertThat(updatedProduct.getName()).isEqualTo(UPDATE_PRODUCT_NAME);
+            }
+        }
+
+        @Nested
+        @DisplayName("Id 에 맞는 제품이 없을 경우")
+        class Context_with_invalid_id {
+            private Long productId;
+            private final ProductData productDto = ProductData
+                    .builder()
+                    .name(PRODUCT_NAME)
+                    .maker(PRODUCT_MAKER)
+                    .price(PRODUCT_PRICE)
+                    .imageUrl(PRODUCT_IMAGE_URL)
+                    .build();
+
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+                productService.deleteProduct(productId);
+            }
+
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productController.update(productId, productDto))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 
-    @Test
-    void createWithValidAttributes() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
+    @Nested
+    @DisplayName("destroy 메소드는")
+    class Describe_of_delete {
+        private Product product;
 
-        verify(productService).createProduct(any(ProductData.class));
-    }
+        @BeforeEach
+        void setUp() {
+            product = createProduct();
+        }
 
-    @Test
-    void createWithInvalidAttributes() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0}")
-        )
-                .andExpect(status().isBadRequest());
-    }
+        @Nested
+        @DisplayName("Id에 맞는 제품이 존재할 경우")
+        class Context_with_valid_id {
+            private Long productId;
 
-    @Test
-    void updateWithExistedProduct() throws Exception {
-        mockMvc.perform(
-                patch("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐순이")));
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+            }
 
-        verify(productService).updateProduct(eq(1L), any(ProductData.class));
-    }
+            @Test
+            @DisplayName("해당 제품을 삭제한다")
+            void it_return_void_with_delete() {
+                productController.destroy(productId);
 
-    @Test
-    void updateWithNotExistedProduct() throws Exception {
-        mockMvc.perform(
-                patch("/products/1000")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isNotFound());
+                assertThatThrownBy(() -> productService.getProduct(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
 
-        verify(productService).updateProduct(eq(1000L), any(ProductData.class));
-    }
+        @Nested
+        @DisplayName("Id에 맞는 제품이 존재하지 않을 경우")
+        class Context_with_invalid_id {
+            private Long productId;
 
-    @Test
-    void updateWithInvalidAttributes() throws Exception {
-        mockMvc.perform(
-                patch("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0}")
-        )
-                .andExpect(status().isBadRequest());
-    }
+            @BeforeEach
+            void setUp() {
+                productId = product.getId();
+                productService.deleteProduct(productId);
+            }
 
-    @Test
-    void destroyWithExistedProduct() throws Exception {
-        mockMvc.perform(delete("/products/1"))
-                .andExpect(status().isNoContent());
-
-        verify(productService).deleteProduct(1L);
-    }
-
-    @Test
-    void destroyWithNotExistedProduct() throws Exception {
-        mockMvc.perform(delete("/products/1000"))
-                .andExpect(status().isNotFound());
-
-        verify(productService).deleteProduct(1000L);
+            @Test
+            @DisplayName("ProductNotFoundException을 던진다")
+            void it_throw_productNotFoundException() {
+                assertThatThrownBy(() -> productController.destroy(productId))
+                        .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
     }
 }
