@@ -31,11 +31,6 @@ public class ProductSaveControllerMockMvcTest extends ControllerTest{
     @Autowired
     private ObjectMapper objectMapper;
 
-    private static final ProductDto PRODUCT_DTO = new ProductDto("dog nose work toy",
-            "miki international",
-            BigDecimal.valueOf(2000),
-            "url");
-
     @AfterEach
     void cleanup() {
         repository.deleteAll();
@@ -60,11 +55,11 @@ public class ProductSaveControllerMockMvcTest extends ControllerTest{
             @DisplayName("상품을 성공적으로 등록한다.")
             @Test
             void it_will_save_product() throws Exception {
-                mockMvc.perform(post("/products")
-                        .content(objectMapper.writeValueAsString(PRODUCT_DTO))
-                        .contentType(MediaType.APPLICATION_JSON))
+                mockMvc.perform(post("/products").accept(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(VALID_PRODUCT_DTO))
+                        .contentType(MediaType.APPLICATION_JSON ))
                         .andExpect(status().isCreated())
-                        .andExpect(content().string(containsString(PRODUCT_DTO.getName())));
+                        .andExpect(content().string(containsString(VALID_PRODUCT_DTO.getName())));
             }
         }
 
@@ -75,7 +70,7 @@ public class ProductSaveControllerMockMvcTest extends ControllerTest{
             private final ProductDto INVALID_PRODUCT_DTO
                     = new ProductDto("어쩌구", " ", BigDecimal.valueOf(2000), "url");
 
-            @DisplayName("예외를 던진다.")
+            @DisplayName("400 bad request를 응답한다..")
             @Test
             void it_thrown_exception() throws Exception {
                 mockMvc.perform(post("/products")
@@ -85,4 +80,5 @@ public class ProductSaveControllerMockMvcTest extends ControllerTest{
             }
         }
     }
+    
 }

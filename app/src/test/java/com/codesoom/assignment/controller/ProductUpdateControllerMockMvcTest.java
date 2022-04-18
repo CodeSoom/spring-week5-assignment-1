@@ -4,6 +4,7 @@ import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,7 +17,10 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.math.BigDecimal;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -70,7 +74,7 @@ public class ProductUpdateControllerMockMvcTest extends ControllerTest {
             }
         }
 
-        @DisplayName("존재하지 상품의 수정 요청이 오면")
+        @DisplayName("존재하지 않는 상품의 수정 요청이 오면")
         @Nested
         class Context_with_not_exist_id {
             private final Long NOT_EXIST_ID = 100L;
@@ -89,6 +93,62 @@ public class ProductUpdateControllerMockMvcTest extends ControllerTest {
                         .content(objectMapper.writeValueAsString(productToUpdate))
                         .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound());
+            }
+        }
+
+        @DisplayName("필수값을 모두 입력하면")
+        @Nested
+        class Context_with_valid_data {
+
+            private final ProductDto VALID_PRODUCT_DTO
+                    = new ProductDto("어쩌구", "어쩌구컴퍼니", BigDecimal.valueOf(2000), "url");
+
+            private Long EXIST_ID;
+
+            @BeforeEach
+            void setup() {
+                this.EXIST_ID = repository.save(
+                        new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "")).getId();
+            }
+
+            @AfterEach
+            void cleanup() {
+                repository.deleteAll();
+            }
+
+            @DisplayName("상품을 성공적으로 수정한다.")
+            @Test
+            void it_will_save_product() throws Exception {
+                mockMvc.perform(patch("/products/" + EXIST_ID).accept(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(VALID_PRODUCT_DTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(VALID_PRODUCT_DTO.getName())));
+            }
+        }
+
+        @DisplayName("필수값을 하나라도 입력하지 않으면")
+        @Nested
+        class Context_with_invalid_data {
+
+            private final ProductDto INVALID_PRODUCT_DTO
+                    = new ProductDto("어쩌구", " ", BigDecimal.valueOf(2000), "url");
+
+            private Long EXIST_ID;
+
+            @BeforeEach
+            void setup() {
+                this.EXIST_ID = repository.save(
+                        new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "")).getId();
+            }
+
+            @DisplayName("400 bad request를 응답한다..")
+            @Test
+            void it_thrown_exception() throws Exception {
+                mockMvc.perform(patch("/products/" + EXIST_ID)
+                        .content(objectMapper.writeValueAsString(INVALID_PRODUCT_DTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
