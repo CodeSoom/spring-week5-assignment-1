@@ -65,7 +65,7 @@ public class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("GET - /products 요청시")
+    @DisplayName("GET - /products")
     class Describe_of_GET {
         private Product product;
 
@@ -117,7 +117,7 @@ public class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("GET - /products/{id} 요청시")
+    @DisplayName("GET - /products/{id}")
     class Describe_of_detail_product {
         private Product product;
 
@@ -127,7 +127,7 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("{id} 와 동일한 Product가 있을 경우")
+        @DisplayName("조회할수 있는 {id} 가 주어지면")
         class Context_with_product {
             private long productId;
 
@@ -149,7 +149,7 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("{id}와 동일한 Product 가 없을 경우")
+        @DisplayName("조회할수 없는 {id} 가 주어지면")
         class Context_without_product {
             private long productId;
 
@@ -169,7 +169,7 @@ public class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("POST - /products 요청시")
+    @DisplayName("POST - /products")
     class Describe_of_create_product {
 
         @Nested
@@ -199,7 +199,7 @@ public class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("PATCH - /products/{id} 요청시")
+    @DisplayName("PATCH - /products/{id}")
     class Describe_of_patch {
         private Product product;
 
@@ -209,7 +209,7 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("{id}와 동일한 제품이 있을 경우")
+        @DisplayName("업데이트할 수 있는 제품의 id 와 업데이트할 정보가 주어지면")
         class Context_with_valid_id {
             private Long productId;
             private final ProductData productData = ProductData
@@ -240,7 +240,7 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("{id}와 동일한 제품이 없을 경우")
+        @DisplayName("업데이트할 수 없는 제품의 id가 주어지면")
         class Context_with_invalid_id {
             private Long productId;
             private final ProductData productData = ProductData
@@ -268,7 +268,7 @@ public class ProductControllerWebTest {
     }
 
     @Nested
-    @DisplayName("DELETE - /products/{id} 요청시")
+    @DisplayName("DELETE - /products/{id}")
     class Describe_of_delete_product {
         private Product product;
 
@@ -278,7 +278,7 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("{id}와 동일한 제품이 있을 경우")
+        @DisplayName("삭제할 수 있는 제품의 id가 주어지면")
         class Context_with_valid_id {
             private Long productId;
 
@@ -296,7 +296,7 @@ public class ProductControllerWebTest {
         }
 
         @Nested
-        @DisplayName("{id}와 동일한 제품이 없을 경우")
+        @DisplayName("삭제할 수 없는 제품의 id가 주어지면")
         class Context_with_invalid_id {
             private Long productId;
 

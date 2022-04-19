@@ -51,7 +51,7 @@ class ProductRepositoryTest {
     }
 
     @Nested
-    @DisplayName("findAll 메소드를 호출할 때")
+    @DisplayName("findAll 메소드는")
     class Describe_readAll_of_product {
 
         @Nested
@@ -92,7 +92,7 @@ class ProductRepositoryTest {
     }
 
     @Nested
-    @DisplayName("findById 메소드를 호출할 때")
+    @DisplayName("findById 메소드는")
     class Describe_read_of_product {
         private Product product;
 
@@ -101,8 +101,8 @@ class ProductRepositoryTest {
             product = createProduct();
         }
 
-        @Nested
-        @DisplayName("Id 와 동일한 상품이 존재하지 않을 경우")
+        @Nested// 존재하지 않는 ID가 주어진다면
+        @DisplayName("존재하지 않는 객체의 Id 가 주어지면")
         class Context_without_product {
             private Long productId;
 
@@ -113,7 +113,7 @@ class ProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("비어있는 객체가 반환된다.")
+            @DisplayName("비어있는 객체가 반환된다")
             void it_throw_productNotFoundException() {
                 Optional<Product> product = productRepository.findById(productId);
 
@@ -122,7 +122,7 @@ class ProductRepositoryTest {
         }
 
         @Nested
-        @DisplayName("Id 와 동일한 상품이 존재할 경우")
+        @DisplayName("존재하는 객체의 Id 가 주어지면")
         class Context_with_product {
             private long productId;
 
@@ -132,7 +132,7 @@ class ProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("상품을 반환한다")
+            @DisplayName("Id와 동일한 객체를 리턴한다")
             void it_return_product() {
                 Product product = productRepository.findById(productId)
                         .orElseThrow(() -> new ProductNotFoundException(productId));
@@ -142,11 +142,11 @@ class ProductRepositoryTest {
     }
 
     @Nested
-    @DisplayName("save 메소드를 호출할 때")
+    @DisplayName("save 메소드는")
     class Describe_save_of_product {
 
         @Nested
-        @DisplayName("상품을 생성하는 경우")
+        @DisplayName("제품을 생성할 객체가 주어지면")
         class Context_with_create_of_product {
             private Product product;
 
@@ -161,7 +161,7 @@ class ProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("생성한 상품을 반환합니다")
+            @DisplayName("제품을 생성하고, 생성된 제품을 리턴한다")
             void it_return_new_product() {
                 Product createdProduct = productRepository.save(product);
 
@@ -171,7 +171,7 @@ class ProductRepositoryTest {
         }
 
         @Nested
-        @DisplayName("상품을 수정하는 경우")
+        @DisplayName("제품을 업데이트 할 객체가 주어지면")
         class Context_with_update_of_product {
             private Product product;
 
@@ -187,7 +187,7 @@ class ProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("수정된 상품을 반환합니다")
+            @DisplayName("제품을 업데이트하고, 업데이트한 객체를 리턴한다")
             void it_return_updated_product() {
                 Product updatedProduct = productRepository.save(product);
 
@@ -199,11 +199,11 @@ class ProductRepositoryTest {
     }
 
     @Nested
-    @DisplayName("delete 메소드를 호출할 때")
+    @DisplayName("delete 는")
     class Describe_delete_of_product {
 
         @Nested
-        @DisplayName("삭제할 상품이 있다면")
+        @DisplayName("삭제할 수 있는 상품의 아이디가 주어지면")
         class Context_with_delete_of_product {
             private long productId;
 
@@ -214,7 +214,7 @@ class ProductRepositoryTest {
             }
 
             @Test
-            @DisplayName("삭제를 진행한다")
+            @DisplayName("삭제 처리하고, 삭제된 상품 데이터를 리턴한다")
             void it_delete_product() {
                 Optional<Product> product = productRepository.findById(productId);
                 product.ifPresent(value -> productRepository.delete(value));

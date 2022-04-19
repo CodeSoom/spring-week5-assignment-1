@@ -105,7 +105,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("제품이 있을 경우")
+        @DisplayName("조회할수 있는 제품의 id가 주어지면")
         class Context_with_product {
             private long productId;
 
@@ -115,7 +115,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("제품을 반환한다")
+            @DisplayName("id와 동일한 제품을 반환한다")
             void it_return_product() {
                 Product found = productController.detail(productId);
 
@@ -124,7 +124,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("제품이 없을 경우")
+        @DisplayName("조회할수 없는 제품의 id가 주어지면")
         class Context_with_invalid_id {
             private long productId;
 
@@ -148,7 +148,7 @@ class ProductControllerTest {
     class Describe_of_create {
 
         @Nested
-        @DisplayName("제품이 생성되었다면")
+        @DisplayName("생성할 수 있는 객체가 주어지면")
         class Context_with_created {
             private ProductData productData;
 
@@ -164,7 +164,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("생성된 제품을 반환한다")
+            @DisplayName("제품을 생성하고, 생성된 제품을 반환한다")
             void it_return_created_product() {
                 Product product = productController.create(productData);
 
@@ -186,7 +186,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("Id 에 맞는 제품을 업데이트 했을 경우")
+        @DisplayName("업데이트할 수 있는 제품의 id와 업데이트할 정보가 주어지면")
         class Context_with_valid_id {
             private Long productId;
             private final ProductData productDto = ProductData
@@ -203,7 +203,7 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("업데이트 된 제품을 반환한다")
+            @DisplayName("제품을 업데이트하고, 업데이트한 제품을 반환한다")
             void it_return_updated_product() {
                 Product updatedProduct = productController.update(productId, productDto);
 
@@ -214,7 +214,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("Id 에 맞는 제품이 없을 경우")
+        @DisplayName("업데이트할 수 없는 제품의 id가 주어지면")
         class Context_with_invalid_id {
             private Long productId;
             private final ProductData productDto = ProductData
@@ -251,7 +251,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("Id에 맞는 제품이 존재할 경우")
+        @DisplayName("삭제할 수 있는 제품의 id가 주어지면")
         class Context_with_valid_id {
             private Long productId;
 
@@ -271,7 +271,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("Id에 맞는 제품이 존재하지 않을 경우")
+        @DisplayName("삭제할 수 없는 제품의 id가 주어지면")
         class Context_with_invalid_id {
             private Long productId;
 

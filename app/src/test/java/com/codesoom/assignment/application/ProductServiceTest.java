@@ -4,6 +4,7 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import org.assertj.core.api.ThrowableAssert;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,8 +17,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @DisplayName("ProductService 에서")
 class ProductServiceTest {
@@ -54,11 +57,11 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("getProductList 메소드에서")
+    @DisplayName("getProducts 메소드는")
     class Describe_of_readAll_products {
 
         @Nested
-        @DisplayName("Product 객체가 없을 경우")
+        @DisplayName("조회할 수 있는 제품이 없을 경우")
         class Context_without_product {
 
             @Test
@@ -71,7 +74,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("Product 객체가 있을 경우")
+        @DisplayName("조회할 수 있는 제품이 있을 경우")
         class Context_with_product {
 
             @BeforeEach
@@ -92,13 +95,13 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("getProduct 메소드에서")
+    @DisplayName("getProduct 메소드는")
     class Describe_of_read_product {
         final Product product = createProduct();
         final Long productId = product.getId();
 
         @Nested
-        @DisplayName("찾는 Id와 동일한 Product가 존재할 경우")
+        @DisplayName("찾을수 있는 제품의 id가 주어지면")
         class Context_with_valid_id {
 
             @BeforeEach
@@ -107,7 +110,7 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("찾은 Product를 반환한다")
+            @DisplayName("id와 동일한 제품을 반환한다")
             void it_return_product() {
                 Product product = productService.getProduct(productId);
 
@@ -117,7 +120,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("찾는 Id와 동일한 Product가 존재하지 않을 경우")
+        @DisplayName("찾을수 없는 제품의 id가 주어지면")
         class Context_with_invalid_id {
 
             @BeforeEach
@@ -139,7 +142,7 @@ class ProductServiceTest {
     class Describe_of_create_product {
 
         @Nested
-        @DisplayName("상품이 생성된 경우")
+        @DisplayName("생성할 수 있는 제품의 데이터가 주어지면")
         class Context_with_create_product {
             private final ProductData productData = ProductData
                     .builder()
@@ -164,13 +167,16 @@ class ProductServiceTest {
 
 
             @Test
-            @DisplayName("생성된 Product 객체를 반환한다")
+            @DisplayName("제품을 생성하고, 생성된 제품을 반환한다")
             void it_return_created_product() {
                 Product product = productService.createProduct(productData);
 
-                verify(productRepository).save(any(Product.class));
+                when(productService.getProduct(product.getId())).thenReturn(product);
+
+                Product found = productService.getProduct(product.getId());
 
                 assertThat(product).isNotNull();
+                assertThat(product).isEqualTo(found);
                 assertThat(product.getId()).isEqualTo(PRODUCT_ID + 1L);
                 assertThat(product.getPrice()).isEqualTo(PRODUCT_PRICE);
                 assertThat(product.getName()).isEqualTo(PRODUCT_NAME);
@@ -179,7 +185,7 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("updateProduct 메소드에서")
+    @DisplayName("updateProduct 메소드는")
     class Describe_of_update_product {
         private long productId;
 
@@ -192,7 +198,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("찾는 Id와 동일한 Product가 존재할 경우")
+        @DisplayName("업데이트할 수 있는 제품의 id와 데이터가 주어지면")
         class Context_with_valid_id {
             private final ProductData productData = ProductData
                     .builder()
@@ -203,7 +209,7 @@ class ProductServiceTest {
                     .build();
 
             @Test
-            @DisplayName("업데이트 된 객체를 반환한다")
+            @DisplayName("제품을 업데이트하고, 업데이트한 제품을 반환한다")
             void it_return_updated_product() {
                 Product product = productService.updateProduct(productId, productData);
 
@@ -214,7 +220,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("찾는 Id 와 동일한 Product가 존재하지 않을 경우")
+        @DisplayName("업데이트 할 수 없는 제품의 id가 주어지면")
         class Context_with_invalid_id {
             private final ProductData productData = ProductData
                     .builder()
@@ -239,7 +245,7 @@ class ProductServiceTest {
     }
 
     @Nested
-    @DisplayName("deleteProduct 메소드에서")
+    @DisplayName("deleteProduct 메소드는")
     class Describe_of_delete_product {
         private Product product;
 
@@ -249,7 +255,7 @@ class ProductServiceTest {
         }
 
         @Nested
-        @DisplayName("Id 에 맞는 Product가 있을 경우")
+        @DisplayName("삭제할 수 있는 제품의 id가 주어지면")
         class Context_with_valid_id {
 
             @BeforeEach
@@ -259,11 +265,18 @@ class ProductServiceTest {
             }
 
             @Test
-            @DisplayName("정상적으로 삭제를 한다")
+            @DisplayName("제품을 삭제한 후, 삭제한 제품을 반환한다")
             void it_return_void() {
-                productService.deleteProduct(product.getId());
+                Product deleteProduct = productService.deleteProduct(product.getId());
 
-                verify(productRepository).delete(any(Product.class));
+                when(productService.getProduct(deleteProduct.getId()))
+                        .thenThrow(ProductNotFoundException.class);
+
+                assertThatThrownBy(() -> productService.getProduct(deleteProduct.getId()))
+                        .isInstanceOf(ProductNotFoundException.class);
+
+
+
             }
         }
 
