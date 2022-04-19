@@ -56,8 +56,7 @@ public class WebUserControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("id").exists())
                         .andExpect(jsonPath("email").value(TEST_USER_EMAIL))
-                        .andExpect(jsonPath("name").value(TEST_USER_NAME))
-                        .andExpect(jsonPath("password").value(TEST_USER_PASSWORD));
+                        .andExpect(jsonPath("name").value(TEST_USER_NAME));
             }
         }
     }

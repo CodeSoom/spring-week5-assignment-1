@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.users.User;
 import com.codesoom.assignment.dto.UserSaveDto;
+import com.codesoom.assignment.dto.UserViewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,17 +25,14 @@ public class UserController {
     /**
      * 회원을 등록하고 등록 정보를 리턴한다.
      *
-     * @param source 등록할 회원 데이터
+     * @param saveSource 등록할 회원 데이터
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public User save(@RequestBody UserSaveDto source) {
-        final User user = User.builder()
-                .email(source.getEmail())
-                .name(source.getName())
-                .password(source.getPassword())
-                .build();
+    public UserViewDto save(@RequestBody UserSaveDto saveSource) {
 
-        return userService.save(user);
+        final User user = userService.save(saveSource);
+
+        return UserViewDto.from(user);
     }
 }
