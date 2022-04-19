@@ -24,25 +24,11 @@ public class ProductTest {
 
     @DisplayName("생성자로 상품 엔티티를 생성할 수 있다.")
     @Test
-    void createWithBuilderTest() {
+    void createWithAllArgsConstructorTest() {
         Product product = new Product(ID, NAME, MAKER, PRICE, URL);
         assertThat(product).isNotNull();
         assertAll(() -> {
             assertThat(product.getId()).isEqualTo(ID);
-            assertThat(product.getName()).isEqualTo(NAME);
-            assertThat(product.getMaker()).isEqualTo(MAKER);
-            assertThat(product.getPrice()).isEqualTo(PRICE);
-            assertThat(product.getImageUrl()).isEqualTo(URL);
-        });
-    }
-
-    @DisplayName("getter는 각 필드의 값을 반환한다.")
-    @Test
-    void getterTest() {
-        Product product
-                = new Product(NAME, MAKER, PRICE, URL);
-        assertAll(() -> {
-            assertThat(product.getId()).isEqualTo(null);
             assertThat(product.getName()).isEqualTo(NAME);
             assertThat(product.getMaker()).isEqualTo(MAKER);
             assertThat(product.getPrice()).isEqualTo(PRICE);
