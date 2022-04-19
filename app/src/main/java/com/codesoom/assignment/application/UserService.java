@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.users.User;
 import com.codesoom.assignment.domain.users.UserRepository;
 import com.codesoom.assignment.domain.users.UserSaveRequest;
+import com.codesoom.assignment.domain.users.UserUpdateRequest;
 import com.codesoom.assignment.dto.UserUpdateDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -47,10 +48,7 @@ public class UserService {
      * @param user         수정 대상 회원
      * @param updateSource 수정할 회원 데이터
      */
-    public User updateUser(final User user, final UserUpdateDto updateSource) {
-
-        user.update(updateSource);
-
-        return user;
+    public User updateUser(final User user, final UserUpdateRequest updateRequest) {
+        return user.replace(updateRequest);
     }
 }

@@ -28,6 +28,13 @@ public class User {
 
     private String password;
 
+    public User replace(UserUpdateRequest replaceSource) {
+        this.email = replaceSource.getEmail();
+        this.name = replaceSource.getName();
+        this.password = replaceSource.getPassword();
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -46,11 +53,5 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, email, name, password);
-    }
-
-    public void update(UserUpdateDto updateSource) {
-        this.email = updateSource.getEmail();
-        this.name = updateSource.getName();
-        this.password = updateSource.getPassword();
     }
 }
