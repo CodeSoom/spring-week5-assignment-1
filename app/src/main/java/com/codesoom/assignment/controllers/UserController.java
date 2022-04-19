@@ -6,6 +6,7 @@ import com.codesoom.assignment.dto.UserSaveDto;
 import com.codesoom.assignment.dto.UserViewDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,7 +30,7 @@ public class UserController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public UserViewDto save(@RequestBody UserSaveDto saveSource) {
+    public UserViewDto save(@RequestBody @Validated UserSaveDto saveSource) {
 
         final User user = userService.save(saveSource);
 
