@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain.users;
 
+import com.codesoom.assignment.dto.UserUpdateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -45,5 +46,11 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(id, email, name, password);
+    }
+
+    public void update(UserUpdateDto updateSource) {
+        this.email = updateSource.getEmail();
+        this.name = updateSource.getName();
+        this.password = updateSource.getPassword();
     }
 }
