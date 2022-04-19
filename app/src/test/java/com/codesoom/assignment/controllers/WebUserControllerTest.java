@@ -48,29 +48,29 @@ public class WebUserControllerTest {
     @DisplayName("PATCH - /users/{id}")
     class Describe_patch {
 
-        final UserUpdateDto updateSource = UserUpdateDto.builder()
-                .email(TEST_USER_EMAIL + TEST_UPDATE_POSTFIX)
-                .name(TEST_USER_NAME + TEST_UPDATE_POSTFIX)
-                .password(TEST_USER_PASSWORD + TEST_UPDATE_POSTFIX)
+        final User user = User.builder()
+                .email(TEST_USER_EMAIL)
+                .name(TEST_USER_NAME)
+                .password(TEST_USER_PASSWORD)
                 .build();
+
+        Long userId;
+
+        @BeforeEach
+        void setUp() {
+            userRepository.save(user);
+            userId = user.getId();
+        }
 
         @Nested
         @DisplayName("회원 수정에 필요한 데이터로 요청을 한다면")
         class Context_valid {
 
-            final User user = User.builder()
-                    .email(TEST_USER_EMAIL)
-                    .name(TEST_USER_NAME)
-                    .password(TEST_USER_PASSWORD)
+            final UserUpdateDto updateSource = UserUpdateDto.builder()
+                    .email(TEST_USER_EMAIL + TEST_UPDATE_POSTFIX)
+                    .name(TEST_USER_NAME + TEST_UPDATE_POSTFIX)
+                    .password(TEST_USER_PASSWORD + TEST_UPDATE_POSTFIX)
                     .build();
-
-            Long userId;
-
-            @BeforeEach
-            void setUp() {
-                userRepository.save(user);
-                userId = user.getId();
-            }
 
             @Test
             @DisplayName("회원을 수정하고, 회원정보를 응답한다. [200]")
@@ -90,6 +90,12 @@ public class WebUserControllerTest {
         @DisplayName("주어진 아이디와 일치하는 회원이 없다면")
         class Context_notExistId {
 
+            final UserUpdateDto updateSource = UserUpdateDto.builder()
+                    .email(TEST_USER_EMAIL + TEST_UPDATE_POSTFIX)
+                    .name(TEST_USER_NAME + TEST_UPDATE_POSTFIX)
+                    .password(TEST_USER_PASSWORD + TEST_UPDATE_POSTFIX)
+                    .build();
+
             final Long notExistId = 999L;
 
             @Test
@@ -100,6 +106,75 @@ public class WebUserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(updateSource)))
                         .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 이메일을 요청 한다면")
+        class Context_invalidEmail {
+
+            UserSaveDto source;
+
+            void setUp(String givenEmail) {
+                source = UserSaveDto.builder()
+                        .email(givenEmail)
+                        .name(TEST_USER_NAME)
+                        .password(TEST_USER_PASSWORD)
+                        .build();
+            }
+
+            @ParameterizedTest(name = "(\"{0}\") - Bad Request 를 응답한다. [400]")
+            @ValueSource(strings = {"", "testnaver.com", "@testemail"})
+            void it_response_400(String invalidEmail) throws Exception {
+
+                setUp(invalidEmail);
+
+                mockMvc.perform(patch("/users/{userId}", userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(source)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("비어있는 이름을 요청 한다면")
+        class Context_emptyName {
+
+            final UserUpdateDto updateSource = UserUpdateDto.builder()
+                    .email(TEST_USER_EMAIL)
+                    .name("")
+                    .password(TEST_USER_PASSWORD)
+                    .build();
+
+            @Test
+            @DisplayName("Bad Request 를 응답한다. [400]")
+            void it_response_400() throws Exception {
+
+                mockMvc.perform(patch("/users/{userId}", userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateSource)))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("비어있는 비밀번호 요청 한다면")
+        class Context_emptyPassword {
+
+            final UserUpdateDto updateSource = UserUpdateDto.builder()
+                    .email(TEST_USER_EMAIL)
+                    .name(TEST_USER_NAME)
+                    .password("")
+                    .build();
+
+            @Test
+            @DisplayName("Bad Request 를 응답한다. [400]")
+            void it_response_400() throws Exception {
+
+                mockMvc.perform(patch("/users/{userId}", userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateSource)))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
