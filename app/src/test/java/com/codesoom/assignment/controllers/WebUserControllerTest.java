@@ -1,6 +1,9 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.domain.users.User;
+import com.codesoom.assignment.domain.users.UserRepository;
 import com.codesoom.assignment.dto.UserSaveDto;
+import com.codesoom.assignment.dto.UserUpdateDto;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -15,6 +18,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -29,11 +33,59 @@ public class WebUserControllerTest {
     private static final String TEST_USER_NAME = "unknown";
     private static final String TEST_USER_PASSWORD = "1234";
 
+    private static final String TEST_UPDATE_POSTFIX = "_UPDATE";
+
     @Autowired
     MockMvc mockMvc;
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Nested
+    @DisplayName("PATCH - /users/{id}")
+    class Describe_patch {
+
+        final UserUpdateDto updateSource = UserUpdateDto.builder()
+                .email(TEST_USER_EMAIL + TEST_UPDATE_POSTFIX)
+                .name(TEST_USER_NAME + TEST_UPDATE_POSTFIX)
+                .password(TEST_USER_PASSWORD + TEST_UPDATE_POSTFIX)
+                .build();
+
+        @Nested
+        @DisplayName("회원 수정에 필요한 데이터로 요청을 한다면")
+        class Context_valid {
+
+            final User user = User.builder()
+                    .email(TEST_USER_EMAIL)
+                    .name(TEST_USER_NAME)
+                    .password(TEST_USER_PASSWORD)
+                    .build();
+
+            Long userId;
+
+            @BeforeEach
+            void setUp() {
+                userRepository.save(user);
+                userId = user.getId();
+            }
+
+            @Test
+            @DisplayName("회원을 수정하고, 회원정보를 응답한다. [200]")
+            void it_response_200() throws Exception {
+
+                mockMvc.perform(patch("/users/{userId}", userId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateSource)))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("id").value(userId))
+                        .andExpect(jsonPath("email").value(TEST_USER_EMAIL + TEST_UPDATE_POSTFIX))
+                        .andExpect(jsonPath("name").value(TEST_USER_NAME + TEST_UPDATE_POSTFIX));
+            }
+        }
+    }
 
     @Nested
     @DisplayName("POST - /users")
@@ -43,11 +95,11 @@ public class WebUserControllerTest {
         @DisplayName("회원 등록에 필요한 데이터로 요청을 한다면")
         class Context_valid {
 
-            private UserSaveDto source;
+            private UserSaveDto saveSource;
 
             @BeforeEach
             void setUp() {
-                source = UserSaveDto.builder()
+                saveSource = UserSaveDto.builder()
                         .email(TEST_USER_EMAIL)
                         .name(TEST_USER_NAME)
                         .password(TEST_USER_PASSWORD)
@@ -60,7 +112,7 @@ public class WebUserControllerTest {
 
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(source)))
+                                .content(objectMapper.writeValueAsString(saveSource)))
                         .andDo(print())
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("id").exists())
