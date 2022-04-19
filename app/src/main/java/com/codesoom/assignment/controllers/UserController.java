@@ -29,22 +29,27 @@ public class UserController {
     private final UserService userService;
 
     /**
-     * 회원을 등록하고 등록 정보를 리턴한다.
+     * 회원 등록하고 등록 정보를 리턴한다.
      *
      * @param saveSource 등록할 회원 데이터
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public UserViewDto save(@RequestBody @Validated UserSaveDto saveSource) {
+    public UserViewDto save(@RequestBody @Valid UserSaveDto saveSource) {
 
         final User user = userService.save(saveSource);
 
         return UserViewDto.from(user);
     }
 
+    /**
+     * 회원 정보를 수정하고 수정된 정보를 리턴한다.
+     * @param userId    회원 아이디
+     * @param updateSource  수정할 회원 데이터
+     */
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{userId}")
-    public UserViewDto patch(@PathVariable Long userId, @RequestBody @Validated UserUpdateDto updateSource) {
+    public UserViewDto patch(@PathVariable Long userId, @RequestBody @Valid UserUpdateDto updateSource) {
 
         final User foundUser = userService.getUser(userId);
 
