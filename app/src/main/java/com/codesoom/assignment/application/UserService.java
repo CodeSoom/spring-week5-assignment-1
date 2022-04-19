@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.users.UserRepository;
 import com.codesoom.assignment.domain.users.UserSaveRequest;
 import com.codesoom.assignment.domain.users.UserUpdateRequest;
 import com.codesoom.assignment.dto.UserUpdateDto;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +40,8 @@ public class UserService {
      * @param userId 회원 아이디
      */
     public User getUser(final Long userId) {
-        return userRepository.findById(userId).get();
+        return userRepository.findById(userId)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     /**
