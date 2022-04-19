@@ -110,13 +110,13 @@ public class WebUserControllerTest {
         }
 
         @Nested
-        @DisplayName("유효하지 않은 이메일을 요청 한다면")
+        @DisplayName("회원 수정에 필요한 이메일이 유효하지 않다면")
         class Context_invalidEmail {
 
-            UserSaveDto source;
+            UserSaveDto invalidSource;
 
             void setUp(String givenEmail) {
-                source = UserSaveDto.builder()
+                invalidSource = UserSaveDto.builder()
                         .email(givenEmail)
                         .name(TEST_USER_NAME)
                         .password(TEST_USER_PASSWORD)
@@ -131,16 +131,16 @@ public class WebUserControllerTest {
 
                 mockMvc.perform(patch("/users/{userId}", userId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(source)))
+                                .content(objectMapper.writeValueAsString(invalidSource)))
                         .andExpect(status().isBadRequest());
             }
         }
 
         @Nested
-        @DisplayName("비어있는 이름을 요청 한다면")
+        @DisplayName("회원 수정에 필요한 이름이 빈값 이라면")
         class Context_emptyName {
 
-            final UserUpdateDto updateSource = UserUpdateDto.builder()
+            final UserUpdateDto sourceWithEmptyName = UserUpdateDto.builder()
                     .email(TEST_USER_EMAIL)
                     .name("")
                     .password(TEST_USER_PASSWORD)
@@ -152,16 +152,16 @@ public class WebUserControllerTest {
 
                 mockMvc.perform(patch("/users/{userId}", userId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(updateSource)))
+                                .content(objectMapper.writeValueAsString(sourceWithEmptyName)))
                         .andExpect(status().isBadRequest());
             }
         }
 
         @Nested
-        @DisplayName("비어있는 비밀번호 요청 한다면")
+        @DisplayName("회원 수정에 필요한 비밀번호가 빈값 이라면")
         class Context_emptyPassword {
 
-            final UserUpdateDto updateSource = UserUpdateDto.builder()
+            final UserUpdateDto sourceWithEmptyPassword = UserUpdateDto.builder()
                     .email(TEST_USER_EMAIL)
                     .name(TEST_USER_NAME)
                     .password("")
@@ -173,7 +173,7 @@ public class WebUserControllerTest {
 
                 mockMvc.perform(patch("/users/{userId}", userId)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(updateSource)))
+                                .content(objectMapper.writeValueAsString(sourceWithEmptyPassword)))
                         .andExpect(status().isBadRequest());
             }
         }
@@ -214,13 +214,13 @@ public class WebUserControllerTest {
         }
 
         @Nested
-        @DisplayName("유효하지 않은 이메일을 요청 한다면")
+        @DisplayName("회원 등록에 필요한 이메일이 유효하지 않다면")
         class Context_invalidEmail {
 
-            private UserSaveDto source;
+            private UserSaveDto invalidSource;
 
             void setUp(String givenEmail) {
-                source = UserSaveDto.builder()
+                invalidSource = UserSaveDto.builder()
                         .email(givenEmail)
                         .name(TEST_USER_NAME)
                         .password(TEST_USER_PASSWORD)
@@ -236,61 +236,49 @@ public class WebUserControllerTest {
 
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(source)))
+                                .content(objectMapper.writeValueAsString(invalidSource)))
                         .andExpect(status().isBadRequest());
             }
         }
 
         @Nested
-        @DisplayName("유효하지 않은 이름으로 요청 한다면")
-        class Context_invalidName {
+        @DisplayName("회원 등록에 필요한 이름이 빈값 이라면")
+        class Context_emptyName {
 
-            private UserSaveDto source;
+            final UserSaveDto sourceWithEmptyName = UserSaveDto.builder()
+                    .email(TEST_USER_EMAIL)
+                    .name("")
+                    .password(TEST_USER_PASSWORD)
+                    .build();
 
-            void setUp(String name) {
-                source = UserSaveDto.builder()
-                        .email(TEST_USER_EMAIL)
-                        .name(name)
-                        .password(TEST_USER_PASSWORD)
-                        .build();
-            }
-
-            @ParameterizedTest(name = "(\"{0}\") - Bad Request 를 응답한다. [400]")
-            @NullAndEmptySource
-            void it_response_400(String givenName) throws Exception {
-
-                setUp(givenName);
+            @Test
+            @DisplayName("Bad Request 를 응답한다. [400]")
+            void it_response_400() throws Exception {
 
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(source)))
+                                .content(objectMapper.writeValueAsString(sourceWithEmptyName)))
                         .andExpect(status().isBadRequest());
             }
         }
 
         @Nested
-        @DisplayName("유효하지 않은 비밀번호로 요청 한다면")
-        class Context_invalidPassword {
+        @DisplayName("회원 등록에 필요한 비밀번호가 빈값 이라면")
+        class Context_emptyPassword {
 
-            private UserSaveDto source;
+            final UserSaveDto sourceWithEmptyPassword = UserSaveDto.builder()
+                    .email(TEST_USER_EMAIL)
+                    .name(TEST_USER_NAME)
+                    .password("")
+                    .build();
 
-            void setUp(String givenPassword) {
-                source = UserSaveDto.builder()
-                        .email(TEST_USER_EMAIL)
-                        .name(TEST_USER_NAME)
-                        .password(givenPassword)
-                        .build();
-            }
-
-            @ParameterizedTest(name = "(\"{0}\") - Bad Request 를 응답한다. [400]")
-            @NullAndEmptySource
-            void it_response_400(String givenPassword) throws Exception {
-
-                setUp(givenPassword);
+            @Test
+            @DisplayName("Bad Request 를 응답한다. [400]")
+            void it_response_400() throws Exception {
 
                 mockMvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content(objectMapper.writeValueAsString(source)))
+                                .content(objectMapper.writeValueAsString(sourceWithEmptyPassword)))
                         .andExpect(status().isBadRequest());
             }
         }
