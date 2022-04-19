@@ -85,6 +85,23 @@ public class WebUserControllerTest {
                         .andExpect(jsonPath("name").value(TEST_USER_NAME + TEST_UPDATE_POSTFIX));
             }
         }
+
+        @Nested
+        @DisplayName("주어진 아이디와 일치하는 회원이 없다면")
+        class Context_notExistId {
+
+            final Long notExistId = 999L;
+
+            @Test
+            @DisplayName("Not Found 를 응답한다. [404]")
+            void it_response_404() throws Exception {
+
+                mockMvc.perform(patch("/users/{userId}", notExistId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(updateSource)))
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 
     @Nested
