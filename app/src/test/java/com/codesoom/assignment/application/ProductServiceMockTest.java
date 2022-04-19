@@ -32,7 +32,7 @@ public class ProductServiceMockTest {
     class ProductSaveServiceTest {
 
         @InjectMocks
-        private ProductSaveServiceImpl service;
+        private ProductCommandService service;
 
         @Mock
         private ProductRepository repository;
@@ -108,7 +108,7 @@ public class ProductServiceMockTest {
     class ProductUpdateServiceTest {
 
         @InjectMocks
-        private ProductUpdateServiceImpl service;
+        private ProductCommandService service;
 
         @Mock
         private ProductRepository repository;
@@ -126,7 +126,7 @@ public class ProductServiceMockTest {
             given(repository.findById(eq(EXIST_ID))).willReturn(Optional.of(OLD_PRODUCT_ENTITY));
             final ProductDto productDto = new ProductDto(UPDATE_NAME, "", BigDecimal.valueOf(3000), "");
 
-            final Product product = service.update(EXIST_ID, productDto);
+            final Product product = service.updateProduct(EXIST_ID, productDto);
             assertThat(product).isInstanceOf(Product.class);
             assertThat(product.getName()).isEqualTo(UPDATE_NAME);
         }
@@ -137,7 +137,7 @@ public class ProductServiceMockTest {
             given(repository.findById(eq(NOT_EXIST_ID))).willReturn(Optional.empty());
 
             final ProductDto productDto = new ProductDto("", "", BigDecimal.valueOf(3000), "");
-            assertThatThrownBy(()->service.update(NOT_EXIST_ID, productDto))
+            assertThatThrownBy(()->service.updateProduct(NOT_EXIST_ID, productDto))
                     .isInstanceOf(ProductNotFoundException.class);
         }
 
@@ -148,7 +148,7 @@ public class ProductServiceMockTest {
     class ProductDeleteServiceTest {
 
         @InjectMocks
-        private ProductSafeDeleteService service;
+        private ProductCommandService service;
 
         @Mock
         private ProductRepository repository;
@@ -164,7 +164,7 @@ public class ProductServiceMockTest {
         void deleteTest() {
             given(repository.findById(eq(EXIST_ID))).willReturn(Optional.of(PRODUCT));
 
-            service.deleteById(EXIST_ID);
+            service.deleteProduct(EXIST_ID);
             verify(repository).delete(eq(PRODUCT));
         }
 
@@ -173,7 +173,7 @@ public class ProductServiceMockTest {
         void deleteWithNotExistId() {
             given(repository.findById(eq(NOT_EXIST_ID))).willReturn(Optional.empty());
 
-            assertThatThrownBy(() -> service.deleteById(NOT_EXIST_ID))
+            assertThatThrownBy(() -> service.deleteProduct(NOT_EXIST_ID))
                     .isInstanceOf(ProductNotFoundException.class);
         }
     }

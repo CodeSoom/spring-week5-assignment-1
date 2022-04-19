@@ -31,9 +31,9 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-    @DisplayName("findAll 메서드는")
+    @DisplayName("getProducts 메서드는")
     @Nested
-    class Describe_find_all {
+    class Describe_get_products {
 
         private final Product SAVED_PRODUCT
                 = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
@@ -61,11 +61,11 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
         }
     }
 
-    @DisplayName("findById 메서드는")
+    @DisplayName("getProduct 메서드는")
     @Nested
-    class Describe_find_by_id {
+    class Describe_get_product {
 
-        @DisplayName("존재하는 id로 요청하면")
+        @DisplayName("상품을 찾을 수 있으면")
         @Nested
         class Context_with_exist_id {
 
@@ -94,7 +94,7 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
             }
         }
 
-        @DisplayName("존재하지 않는 id로 요청하면")
+        @DisplayName("상품을 찾지 못하면")
         @Nested
         class Context_with_not_exist_id {
 

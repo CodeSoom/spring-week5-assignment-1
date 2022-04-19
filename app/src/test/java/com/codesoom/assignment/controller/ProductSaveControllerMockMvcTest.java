@@ -70,7 +70,7 @@ public class ProductSaveControllerMockMvcTest extends ControllerTest{
             private final ProductDto INVALID_PRODUCT_DTO
                     = new ProductDto("어쩌구", " ", BigDecimal.valueOf(2000), "url");
 
-            @DisplayName("400 bad request를 응답한다..")
+            @DisplayName("400 bad request를 응답한다.")
             @Test
             void it_thrown_exception() throws Exception {
                 mockMvc.perform(post("/products")
@@ -80,5 +80,5 @@ public class ProductSaveControllerMockMvcTest extends ControllerTest{
             }
         }
     }
-    
+
 }

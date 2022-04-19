@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductSaveServiceImpl;
+import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -12,17 +12,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
 import java.math.BigDecimal;
-import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 
 @DisplayName("ProductSaveController 클래스")
@@ -33,7 +26,7 @@ public class ProductSaveControllerTest {
     private ProductSaveController controller;
 
     @Autowired
-    private ProductSaveServiceImpl service;
+    private ProductCommandService service;
 
     @Autowired
     private ProductRepository repository;

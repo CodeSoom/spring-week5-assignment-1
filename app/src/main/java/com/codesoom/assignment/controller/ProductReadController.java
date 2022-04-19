@@ -27,7 +27,7 @@ public class ProductReadController {
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
-    public Product getProductDetail(@PathVariable Long id) {
+    public Product getProduct(@PathVariable Long id) {
         return service.findById(id);
     }
 

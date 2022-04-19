@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductNotFoundException;
-import com.codesoom.assignment.application.ProductSafeDeleteService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.junit.jupiter.api.AfterEach;
@@ -26,7 +26,7 @@ public class ProductDeleteControllerTest {
     private ProductDeleteController controller;
 
     @Autowired
-    private ProductSafeDeleteService service;
+    private ProductCommandService service;
 
     @Autowired
     private ProductRepository repository;
@@ -34,7 +34,7 @@ public class ProductDeleteControllerTest {
     @BeforeEach
     void setup() {
         this.controller = new ProductDeleteController(service);
-        repository.deleteAll();
+        cleanup();
     }
 
     @AfterEach
@@ -42,11 +42,11 @@ public class ProductDeleteControllerTest {
         repository.deleteAll();
     }
 
-    @DisplayName("delete 메서드는")
+    @DisplayName("deleteProduct 메서드는")
     @Nested
-    class Describe_delete {
+    class Describe_delete_product {
 
-        @DisplayName("존재하는 상품 id가 주어지면")
+        @DisplayName("id로 상품을 찾을 수 있다면")
         @Nested
         class Context_with_exist_id {
 
@@ -62,11 +62,11 @@ public class ProductDeleteControllerTest {
             @DisplayName("해당 상품을 삭제한다.")
             @Test
             void it_delete_product() {
-                controller.delete(EXIST_ID);
+                controller.deleteProduct(EXIST_ID);
             }
         }
 
-        @DisplayName("존재하지 않는 상품 id가 주어지면")
+        @DisplayName("id로 상품을 찾지 못하면")
         @Nested
         class Context_with_not_exist_id {
 
@@ -82,7 +82,7 @@ public class ProductDeleteControllerTest {
             @DisplayName("예외를 던진다.")
             @Test
             void will_throw_not_found_exception() {
-                assertThatThrownBy(() -> controller.delete(NOT_EXIST_ID))
+                assertThatThrownBy(() -> controller.deleteProduct(NOT_EXIST_ID))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }

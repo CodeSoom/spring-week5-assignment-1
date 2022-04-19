@@ -13,6 +13,6 @@ public interface ProductDeleteService {
      * @param id 상품의 식별자
      * @throws ProductNotFoundException 식별자와 매칭되는 상품을 찾지 못할 경우
      */
-    void deleteById(Long id);
+    void deleteProduct(Long id);
 
 }

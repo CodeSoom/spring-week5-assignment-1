@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controller;
 
+import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductSaveService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
@@ -14,9 +15,9 @@ import javax.validation.Valid;
 @ProductController
 public class ProductSaveController {
 
-    private final ProductSaveService service;
+    private final ProductCommandService service;
 
-    public ProductSaveController(ProductSaveService service) {
+    public ProductSaveController(ProductCommandService service) {
         this.service = service;
     }
 

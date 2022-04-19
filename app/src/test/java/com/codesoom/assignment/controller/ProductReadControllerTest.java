@@ -40,9 +40,9 @@ public class ProductReadControllerTest {
         repository.deleteAll();
     }
 
-    @DisplayName("findAll 메서드는")
+    @DisplayName("getProducts 메서드는")
     @Nested
-    class Describe_find_all {
+    class Describe_get_products {
         @BeforeEach
         void setup() {
             repository.save(SAVED_PRODUCT);
@@ -55,11 +55,11 @@ public class ProductReadControllerTest {
         }
     }
 
-    @DisplayName("findById 메서드는")
+    @DisplayName("getProduct 메서드는")
     @Nested
-    class Describe_find_by_id {
+    class Describe_get_product {
 
-        @DisplayName("존재하는 id로 조회 요청이 오면")
+        @DisplayName("찾을 수 있는 상품 조회 요청이 오면")
         @Nested
         class Context_with_exist_id {
 
@@ -73,11 +73,11 @@ public class ProductReadControllerTest {
             @DisplayName("해당 상품을 반환한다.")
             @Test
             void will_return_found_product() {
-                assertThat(controller.getProductDetail(EXIST_ID)).isNotNull();
+                assertThat(controller.getProduct(EXIST_ID)).isNotNull();
             }
         }
 
-        @DisplayName("존재하지 않는 id로 조회 요청이 오면")
+        @DisplayName("찾을 수 없는 상품 조회 요청이 오면")
         @Nested
         class Context_with_not_exist_id {
 
@@ -93,7 +93,7 @@ public class ProductReadControllerTest {
             @DisplayName("예외를 던진다.")
             @Test
             void will_throw_not_found_exception() {
-                assertThatThrownBy(() -> controller.getProductDetail(NOT_EXIST_ID))
+                assertThatThrownBy(() -> controller.getProduct(NOT_EXIST_ID))
                         .isInstanceOf(ProductNotFoundException.class);
             }
         }

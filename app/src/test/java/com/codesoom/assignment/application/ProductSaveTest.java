@@ -15,17 +15,17 @@ import java.math.BigDecimal;
 import static org.assertj.core.api.Assertions.assertThat;
 
 
-@DisplayName("ProductCreateServiceImpl 클래스")
-public class ProductSaveServiceTest extends ServiceTest {
+public class ProductSaveTest extends ServiceTest {
 
-    private ProductSaveServiceImpl service;
+    private ProductCommandService service;
 
     @Autowired
     private ProductRepository repository;
 
     @BeforeEach
     void setup() {
-        this.service = new ProductSaveServiceImpl(repository);
+        this.service = new ProductCommandService(repository);
+        cleanup();
     }
 
     @AfterEach
@@ -35,7 +35,7 @@ public class ProductSaveServiceTest extends ServiceTest {
 
     @DisplayName("saveProduct 메서드는")
     @Nested
-    class Describe_create  {
+    class Describe_save_product  {
         @DisplayName("상품을 등록하고, 등록 된 상품을 반환한다.")
         @Test
         void will_return_saved_product() {
