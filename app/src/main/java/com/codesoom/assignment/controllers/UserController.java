@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 /**
  * 회원에 대한 HTTP 요청 처리
  */
@@ -42,7 +44,7 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{userId}")
-    public UserViewDto patch(@PathVariable Long userId, @RequestBody UserUpdateDto updateSource) {
+    public UserViewDto patch(@PathVariable Long userId, @RequestBody @Validated UserUpdateDto updateSource) {
 
         final User foundUser = userService.getUser(userId);
 
