@@ -6,11 +6,11 @@ import java.util.List;
 
 
 /**
- * 상품을 조회하는 역할만 담당합니다.
+ * 상품 조회를 담당합니다.
  */
 public interface ProductReadService {
 
-    /** 모든 상품을 반환합니다. */
+    /** 저장된 모든 상품을 반환합니다. */
     List<Product> findAll();
 
     /**

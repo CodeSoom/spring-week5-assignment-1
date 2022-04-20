@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 
 /**
- * 컨트롤러에서 던지는 예외를 받아 응답합니다.
+ * 상품 컨트롤러에서 던지는 예외를 받아 응답합니다.
  */
-@RestControllerAdvice
+@RestControllerAdvice(annotations = ProductController.class)
 public class ProductControllerAdvice {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)

@@ -5,12 +5,13 @@ import com.codesoom.assignment.domain.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+
 /**
- * 회원 저장, 변경을 담당합니다.
+ * 회원 변경을 담당합니다.
  */
 @Transactional
 @Service
-public class UserCommandService implements UserSaveService{
+public class UserCommandService implements UserSaveService {
 
     private final UserRepository repository;
 

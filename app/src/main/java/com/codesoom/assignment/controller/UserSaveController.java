@@ -1,7 +1,6 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.UserCommandService;
-import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserResponseDto;
 import com.codesoom.assignment.domain.UserSaveDto;
 import org.springframework.http.HttpStatus;
@@ -11,6 +10,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 import javax.validation.Valid;
 
+/**
+ * 회원 생성 요청을 처리합니다.
+ */
 @UserController
 public class UserSaveController {
 
@@ -20,6 +22,12 @@ public class UserSaveController {
         this.service = service;
     }
 
+    /**
+     * 회원 정보를 받아 생성하고, 생성 정보를 반환합니다.
+     *
+     * @param userSaveDto 회원 생성 정보
+     * @return 등록된 회원
+     */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public UserResponseDto saveUser(@Valid @RequestBody UserSaveDto userSaveDto) {

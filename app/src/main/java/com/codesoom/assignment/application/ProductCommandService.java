@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 /**
- * 상품 변경 역할 담당
+ * 상품 변경을 담당합니다.
  */
 @Transactional
 @Service

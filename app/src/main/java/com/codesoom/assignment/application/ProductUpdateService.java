@@ -4,7 +4,7 @@ import com.codesoom.assignment.domain.Product;
 
 
 /**
- * 상품을 수정하는 역할만 담당합니다.
+ * 상품 수정을 담당합니다.
  */
 public interface ProductUpdateService {
 

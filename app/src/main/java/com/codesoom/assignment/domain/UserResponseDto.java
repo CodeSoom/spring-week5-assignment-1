@@ -2,7 +2,9 @@ package com.codesoom.assignment.domain;
 
 import lombok.Getter;
 
-
+/**
+ * 회원 정보 응답 시 사용할 DTO 클래스.
+ */
 @Getter
 public class UserResponseDto {
 
@@ -10,6 +12,9 @@ public class UserResponseDto {
     private String name;
     private String email;
     private String password;
+
+    public UserResponseDto() {
+    }
 
     public UserResponseDto(User user) {
         this.id = user.getId();

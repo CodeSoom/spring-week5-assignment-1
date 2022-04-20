@@ -9,7 +9,7 @@ public class ProductNotFoundException extends RuntimeException{
     private final String code;
 
     public ProductNotFoundException(String code, Long id) {
-        super(String.format("%s에 해당하는 상품을 찾을 수 없습니다.", id));
+        super(String.format("%s로 해당하는 상품을 찾을 수 없습니다.", id));
         this.code = code;
     }
 

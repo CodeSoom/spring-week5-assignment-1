@@ -10,6 +10,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.List;
 
 
+/**
+ * 상품 조회 요청을 처리합니다.
+ */
 @ProductController
 public class ProductReadController {
 
@@ -19,12 +22,19 @@ public class ProductReadController {
         this.service = service;
     }
 
+    /** 모든 등록된 상품을 반환합니다. */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
     public List<Product> getProducts() {
         return service.findAll();
     }
 
+    /**
+     * 요청받은 식별자로 찾은 상품을 반환합니다.
+     *
+     * @param id 상품 식별자
+     * @return 찾은 상품
+     */
     @ResponseStatus(HttpStatus.OK)
     @GetMapping("/{id}")
     public Product getProduct(@PathVariable Long id) {

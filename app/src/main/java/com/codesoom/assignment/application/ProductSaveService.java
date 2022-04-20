@@ -4,7 +4,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Product;
 
 /**
- * 상품을 생성하는 역할만 담당합니다.
+ * 상품 생성을 담당합니다.
  */
 public interface ProductSaveService {
 
