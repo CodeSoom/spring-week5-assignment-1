@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -39,19 +40,85 @@ public class UserSaveControllerMockMvcTest extends ControllerTest{
         repository.deleteAll();
     }
 
-    @DisplayName("회원 정보를 성공적으로 저장한다.")
-    @Test
-    void saveUserTest() throws Exception {
-        final UserSaveDto userSaveDto = new UserSaveDto("홍길동", "email", "password");
-        final MvcResult result = mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
-                .content(objectMapper.writeValueAsString(userSaveDto))
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isCreated())
-                .andReturn();
+    @DisplayName("saveUser 메서드는")
+    @Nested
+    class Describe_save_user {
 
-        final UserResponseDto userResponseDto
-                = objectMapper.readValue(result.getResponse().getContentAsByteArray(), UserResponseDto.class);
-        assertThat(repository.findById(userResponseDto.getId())).isNotEmpty();
+        @DisplayName("필수 입력 값을 모두 입력하면")
+        @Nested
+        class Context_with_valid_data {
+
+            private final UserSaveDto VALID_USER_SAVE_DTO
+                    = new UserSaveDto("홍길동", "email", "password");
+
+            @DisplayName("회원 정보를 성공적으로 저장한다.")
+            @Test
+            void it_save_user() throws Exception {
+
+                final MvcResult result = mockMvc.perform(post("/users")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(VALID_USER_SAVE_DTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated())
+                        .andReturn();
+
+                final UserResponseDto userResponseDto
+                        = objectMapper.readValue(result.getResponse().getContentAsByteArray(), UserResponseDto.class);
+                assertThat(repository.findById(userResponseDto.getId())).isNotEmpty();
+            }
+        }
+
+        @DisplayName("이름을 입력하지 않으면")
+        @Nested
+        class Context_with_empty_name {
+
+            private final UserSaveDto EMPTY_NAME
+                    = new UserSaveDto("", "email", "password");
+
+            @DisplayName("400 bad request를 응답한다.")
+            @Test
+            void it_response_bad_request() throws Exception {
+                mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(EMPTY_NAME))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @DisplayName("이메일을 입력하지 않으면")
+        @Nested
+        class Context_with_empty_email {
+
+            private final UserSaveDto EMPTY_EMAIL
+                    = new UserSaveDto("홍길동", "", "password");
+
+            @DisplayName("400 bad request를 응답한다.")
+            @Test
+            void it_response_bad_request() throws Exception {
+                mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(EMPTY_EMAIL))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @DisplayName("비밀번호를 입력하지 않으면")
+        @Nested
+        class Context_with_empty_password {
+
+            private final UserSaveDto EMPTY_PASSWORD
+                    = new UserSaveDto("홍길동", "email", "");
+
+            @DisplayName("400 bad request를 응답한다.")
+            @Test
+            void it_response_bad_request() throws Exception {
+                mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
+                        .content(objectMapper.writeValueAsString(EMPTY_PASSWORD))
+                        .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
     }
-    
+
 }
