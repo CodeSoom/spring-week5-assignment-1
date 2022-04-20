@@ -9,14 +9,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.stream.Stream;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -34,6 +37,19 @@ public class WebUserControllerTest {
     private static final String TEST_USER_PASSWORD = "1234";
 
     private static final String TEST_UPDATE_POSTFIX = "_UPDATE";
+
+    private static final String[] TEST_INVALID_EMAILS = new String[]{
+            "",
+            "test @example.com",
+            "test",
+            "test.example.com",
+            "test@@example.com",
+            "tes@t@example.com",
+            "tes(t)@example.com",
+            "test..test@example.com",
+            "john.doe@example..com",
+            "t\"est@example.com",
+    };
 
     @Autowired
     MockMvc mockMvc;
@@ -110,6 +126,7 @@ public class WebUserControllerTest {
         }
 
         @Nested
+        @TestInstance(TestInstance.Lifecycle.PER_CLASS)
         @DisplayName("회원 수정에 필요한 이메일이 유효하지 않다면")
         class Context_invalidEmail {
 
@@ -123,8 +140,12 @@ public class WebUserControllerTest {
                         .build();
             }
 
+            Stream<String> provideInvalidEmails() {
+                return Stream.of(TEST_INVALID_EMAILS);
+            }
+
             @ParameterizedTest(name = "(\"{0}\") - Bad Request 를 응답한다. [400]")
-            @ValueSource(strings = {"", "testnaver.com", "@testemail"})
+            @MethodSource("provideInvalidEmails")
             void it_response_400(String invalidEmail) throws Exception {
 
                 setUp(invalidEmail);
@@ -214,6 +235,7 @@ public class WebUserControllerTest {
         }
 
         @Nested
+        @TestInstance(TestInstance.Lifecycle.PER_CLASS)
         @DisplayName("회원 등록에 필요한 이메일이 유효하지 않다면")
         class Context_invalidEmail {
 
@@ -227,8 +249,12 @@ public class WebUserControllerTest {
                         .build();
             }
 
+            Stream<String> provideInvalidEmails() {
+                return Stream.of(TEST_INVALID_EMAILS);
+            }
+
             @ParameterizedTest(name = "(\"{0}\") - Bad Request 를 응답한다. [400]")
-            @ValueSource(strings = {"testnaver.com", "testemail"})
+            @MethodSource("provideInvalidEmails")
             @NullAndEmptySource
             void it_response_400(String invalidEmail) throws Exception {
 
