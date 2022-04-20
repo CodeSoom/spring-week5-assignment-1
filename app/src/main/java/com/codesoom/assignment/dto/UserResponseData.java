@@ -5,11 +5,11 @@ import com.codesoom.assignment.domain.users.User;
 /**
  * 회원 데이터 전송에 필요한 데이터 정의
  */
-public class UserViewDto {
+public class UserResponseData {
 
     private final User user;
 
-    private UserViewDto(User user) {
+    private UserResponseData(User user) {
         this.user = user;
     }
 
@@ -18,8 +18,8 @@ public class UserViewDto {
      *
      * @param user 회원
      */
-    public static UserViewDto from(final User user) {
-        return new UserViewDto(user);
+    public static UserResponseData from(final User user) {
+        return new UserResponseData(user);
     }
 
     public Long getId() {

@@ -13,7 +13,7 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Builder
 @Getter
-public class UserSaveDto implements UserSaveRequest {
+public class UserSaveRequestData implements UserSaveRequest {
 
     @Email
     @NotBlank

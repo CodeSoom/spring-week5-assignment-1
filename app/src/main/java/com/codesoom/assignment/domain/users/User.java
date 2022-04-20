@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain.users;
 
-import com.codesoom.assignment.dto.UserUpdateDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;

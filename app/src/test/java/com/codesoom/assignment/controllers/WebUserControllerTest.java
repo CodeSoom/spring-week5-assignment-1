@@ -2,8 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.domain.users.User;
 import com.codesoom.assignment.domain.users.UserRepository;
-import com.codesoom.assignment.dto.UserSaveDto;
-import com.codesoom.assignment.dto.UserUpdateDto;
+import com.codesoom.assignment.dto.UserSaveRequestData;
+import com.codesoom.assignment.dto.UserUpdateRequestData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -66,7 +66,7 @@ public class WebUserControllerTest {
         @DisplayName("회원 수정에 필요한 데이터로 요청을 한다면")
         class Context_valid {
 
-            final UserUpdateDto updateSource = UserUpdateDto.builder()
+            final UserUpdateRequestData updateSource = UserUpdateRequestData.builder()
                     .email(TEST_USER_EMAIL + TEST_UPDATE_POSTFIX)
                     .name(TEST_USER_NAME + TEST_UPDATE_POSTFIX)
                     .password(TEST_USER_PASSWORD + TEST_UPDATE_POSTFIX)
@@ -90,7 +90,7 @@ public class WebUserControllerTest {
         @DisplayName("주어진 아이디와 일치하는 회원이 없다면")
         class Context_notExistId {
 
-            final UserUpdateDto updateSource = UserUpdateDto.builder()
+            final UserUpdateRequestData updateSource = UserUpdateRequestData.builder()
                     .email(TEST_USER_EMAIL + TEST_UPDATE_POSTFIX)
                     .name(TEST_USER_NAME + TEST_UPDATE_POSTFIX)
                     .password(TEST_USER_PASSWORD + TEST_UPDATE_POSTFIX)
@@ -113,10 +113,10 @@ public class WebUserControllerTest {
         @DisplayName("회원 수정에 필요한 이메일이 유효하지 않다면")
         class Context_invalidEmail {
 
-            UserSaveDto invalidSource;
+            UserSaveRequestData invalidSource;
 
             void setUp(String givenEmail) {
-                invalidSource = UserSaveDto.builder()
+                invalidSource = UserSaveRequestData.builder()
                         .email(givenEmail)
                         .name(TEST_USER_NAME)
                         .password(TEST_USER_PASSWORD)
@@ -140,7 +140,7 @@ public class WebUserControllerTest {
         @DisplayName("회원 수정에 필요한 이름이 빈값 이라면")
         class Context_emptyName {
 
-            final UserUpdateDto sourceWithEmptyName = UserUpdateDto.builder()
+            final UserUpdateRequestData sourceWithEmptyName = UserUpdateRequestData.builder()
                     .email(TEST_USER_EMAIL)
                     .name("")
                     .password(TEST_USER_PASSWORD)
@@ -161,7 +161,7 @@ public class WebUserControllerTest {
         @DisplayName("회원 수정에 필요한 비밀번호가 빈값 이라면")
         class Context_emptyPassword {
 
-            final UserUpdateDto sourceWithEmptyPassword = UserUpdateDto.builder()
+            final UserUpdateRequestData sourceWithEmptyPassword = UserUpdateRequestData.builder()
                     .email(TEST_USER_EMAIL)
                     .name(TEST_USER_NAME)
                     .password("")
@@ -187,11 +187,11 @@ public class WebUserControllerTest {
         @DisplayName("회원 등록에 필요한 데이터로 요청을 한다면")
         class Context_valid {
 
-            private UserSaveDto saveSource;
+            private UserSaveRequestData saveSource;
 
             @BeforeEach
             void setUp() {
-                saveSource = UserSaveDto.builder()
+                saveSource = UserSaveRequestData.builder()
                         .email(TEST_USER_EMAIL)
                         .name(TEST_USER_NAME)
                         .password(TEST_USER_PASSWORD)
@@ -217,10 +217,10 @@ public class WebUserControllerTest {
         @DisplayName("회원 등록에 필요한 이메일이 유효하지 않다면")
         class Context_invalidEmail {
 
-            private UserSaveDto invalidSource;
+            private UserSaveRequestData invalidSource;
 
             void setUp(String givenEmail) {
-                invalidSource = UserSaveDto.builder()
+                invalidSource = UserSaveRequestData.builder()
                         .email(givenEmail)
                         .name(TEST_USER_NAME)
                         .password(TEST_USER_PASSWORD)
@@ -245,7 +245,7 @@ public class WebUserControllerTest {
         @DisplayName("회원 등록에 필요한 이름이 빈값 이라면")
         class Context_emptyName {
 
-            final UserSaveDto sourceWithEmptyName = UserSaveDto.builder()
+            final UserSaveRequestData sourceWithEmptyName = UserSaveRequestData.builder()
                     .email(TEST_USER_EMAIL)
                     .name("")
                     .password(TEST_USER_PASSWORD)
@@ -266,7 +266,7 @@ public class WebUserControllerTest {
         @DisplayName("회원 등록에 필요한 비밀번호가 빈값 이라면")
         class Context_emptyPassword {
 
-            final UserSaveDto sourceWithEmptyPassword = UserSaveDto.builder()
+            final UserSaveRequestData sourceWithEmptyPassword = UserSaveRequestData.builder()
                     .email(TEST_USER_EMAIL)
                     .name(TEST_USER_NAME)
                     .password("")

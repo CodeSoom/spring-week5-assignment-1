@@ -2,12 +2,11 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.users.User;
-import com.codesoom.assignment.dto.UserSaveDto;
-import com.codesoom.assignment.dto.UserUpdateDto;
-import com.codesoom.assignment.dto.UserViewDto;
+import com.codesoom.assignment.dto.UserSaveRequestData;
+import com.codesoom.assignment.dto.UserUpdateRequestData;
+import com.codesoom.assignment.dto.UserResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,11 +34,11 @@ public class UserController {
      */
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public UserViewDto save(@RequestBody @Valid UserSaveDto saveSource) {
+    public UserResponseData save(@RequestBody @Valid UserSaveRequestData saveSource) {
 
         final User user = userService.save(saveSource);
 
-        return UserViewDto.from(user);
+        return UserResponseData.from(user);
     }
 
     /**
@@ -49,12 +48,12 @@ public class UserController {
      */
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{userId}")
-    public UserViewDto patch(@PathVariable Long userId, @RequestBody @Valid UserUpdateDto updateSource) {
+    public UserResponseData patch(@PathVariable Long userId, @RequestBody @Valid UserUpdateRequestData updateSource) {
 
         final User foundUser = userService.getUser(userId);
 
         final User updatedUser = userService.updateUser(foundUser, updateSource);
 
-        return UserViewDto.from(updatedUser);
+        return UserResponseData.from(updatedUser);
     }
 }
