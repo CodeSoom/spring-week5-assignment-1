@@ -101,8 +101,8 @@ class ProductRepositoryTest {
             product = createProduct();
         }
 
-        @Nested// 존재하지 않는 ID가 주어진다면
-        @DisplayName("존재하지 않는 객체의 Id 가 주어지면")
+        @Nested
+        @DisplayName("찾을 수 없는 객체의 Id 가 주어지면")
         class Context_without_product {
             private Long productId;
 
@@ -122,7 +122,7 @@ class ProductRepositoryTest {
         }
 
         @Nested
-        @DisplayName("존재하는 객체의 Id 가 주어지면")
+        @DisplayName("찾을 수 있는 객체의 Id 가 주어지면")
         class Context_with_product {
             private long productId;
 
@@ -203,24 +203,23 @@ class ProductRepositoryTest {
     class Describe_delete_of_product {
 
         @Nested
-        @DisplayName("삭제할 수 있는 상품의 아이디가 주어지면")
+        @DisplayName("삭제할 수 있는 상품이 주어지면")
         class Context_with_delete_of_product {
-            private long productId;
+            private Product createdProduct;
 
             @BeforeEach
             void setUp() {
-                Product product = createProduct();
-                productId = product.getId();
+                createdProduct = createProduct();
             }
 
             @Test
-            @DisplayName("삭제 처리하고, 삭제된 상품 데이터를 리턴한다")
+            @DisplayName("상품을 삭제하고, 삭제되었는지 확인한다")
             void it_delete_product() {
-                Optional<Product> product = productRepository.findById(productId);
-                product.ifPresent(value -> productRepository.delete(value));
+                productRepository.delete(createdProduct);
 
-                Optional<Product> found = productRepository.findById(productId);
-                assertThat(found).isEmpty();
+                Optional<Product> deletedProduct = productRepository.findById(createdProduct.getId());
+
+                assertThat(deletedProduct).isEmpty();
             }
         }
     }

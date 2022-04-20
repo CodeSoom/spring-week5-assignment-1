@@ -274,9 +274,6 @@ class ProductServiceTest {
 
                 assertThatThrownBy(() -> productService.getProduct(deleteProduct.getId()))
                         .isInstanceOf(ProductNotFoundException.class);
-
-
-
             }
         }
 
