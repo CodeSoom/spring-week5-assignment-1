@@ -41,4 +41,11 @@ public class User {
         this.password = password;
     }
 
+    public User update(User user) {
+        this.name = user.name;
+        this.email = user.email;
+        this.password = user.password;
+        return this;
+    }
+
 }

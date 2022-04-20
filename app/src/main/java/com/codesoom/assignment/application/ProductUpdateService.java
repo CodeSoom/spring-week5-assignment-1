@@ -9,7 +9,7 @@ import com.codesoom.assignment.domain.Product;
 public interface ProductUpdateService {
 
     /**
-     * 식별자에 해당하는 상품을 수정합니다. 만약 상품을 찾지 못할 경우 예외를 던집니다.
+     * 식별자에 해당하는 상품을 수정합니다.
      *
      * @param id 상품의 식별자
      * @param productSaveRequest 사용자가 입력한 수정 데이터
