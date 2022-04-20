@@ -48,7 +48,7 @@ public class ProductUpdateControllerMockMvcTest extends ControllerTest {
         private final ProductDto productToUpdate
                 = new ProductDto("소쩍새", "유령회사", BigDecimal.valueOf(3000), "");
 
-        @DisplayName("찾을 수 있는 상품의 수정 요청이 오면")
+        @DisplayName("찾을 수 있는 상품의 id가 주어지면")
         @Nested
         class Context_with_exist_id {
             private Long EXIST_ID;
@@ -74,7 +74,7 @@ public class ProductUpdateControllerMockMvcTest extends ControllerTest {
             }
         }
 
-        @DisplayName("찾을 수 없는 상품의 수정 요청이 오면")
+        @DisplayName("찾을 수 없는 상품의 id가 주어지면")
         @Nested
         class Context_with_not_exist_id {
             private final Long NOT_EXIST_ID = 100L;

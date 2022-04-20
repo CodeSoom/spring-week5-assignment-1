@@ -21,7 +21,7 @@ public class UserSaveTest extends ServiceTest {
     @BeforeEach
     void setup() {
         this.service = new UserCommandService(repository);
-        repository.deleteAll();
+        cleanup();
     }
 
     @AfterEach

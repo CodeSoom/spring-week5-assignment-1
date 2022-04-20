@@ -31,7 +31,7 @@ public class ProductDeleteTest extends ServiceTest {
     @Nested
     class Describe_delete_product {
 
-        @DisplayName("id로 상품을 찾을 수 있다면")
+        @DisplayName("찾을 수 있는 상품 id가 주어지면")
         @Nested
         class Context_with_exist_id {
 
@@ -58,7 +58,7 @@ public class ProductDeleteTest extends ServiceTest {
             }
         }
 
-        @DisplayName("id로 상품을 찾을 수 없다면")
+        @DisplayName("찾을 수 없는 상품 id가 주어지면")
         @Nested
         class Context_with_not_exist_id {
 

@@ -65,7 +65,7 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
     @Nested
     class Describe_get_product {
 
-        @DisplayName("상품을 찾을 수 있으면")
+        @DisplayName("찾을 수 있는 상품의 id가 주어지면")
         @Nested
         class Context_with_exist_id {
 
@@ -94,7 +94,7 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
             }
         }
 
-        @DisplayName("상품을 찾지 못하면")
+        @DisplayName("찾을 수 없는 상품의 id가 주어지면")
         @Nested
         class Context_with_not_exist_id {
 
@@ -107,9 +107,9 @@ public class ProductReadControllerMockMvcTest extends ControllerTest {
                 }
             }
 
-            @DisplayName("404 not found를 던진다.")
+            @DisplayName("404 not found를 응답한다.")
             @Test
-            void will_return_found_product() throws Exception {
+            void will_response_404_not_found() throws Exception {
                 mockMvc.perform(get("/products/" + NOT_EXIST_ID))
                         .andExpect(status().isNotFound());
             }

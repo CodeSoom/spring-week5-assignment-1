@@ -27,6 +27,7 @@ public class ProductReadServiceTest extends ServiceTest {
 
     @BeforeEach
     void setup() {
+        cleanup();
         this.service = new ProductReadServiceImpl(repository);
         final Product product = new Product("쥐돌이", "캣이즈락스타", BigDecimal.valueOf(4000), "");
         SAVED_PRODUCT = repository.save(product);
@@ -51,10 +52,10 @@ public class ProductReadServiceTest extends ServiceTest {
     @Nested
     class Describe_find_by_id {
 
-        @DisplayName("존재하는 상품 id가 주어진다면")
+        @DisplayName("찾을 수 있는 상품의 id가 주어지면")
         @Nested
         class Context_with_exist_id {
-            @DisplayName("성공적으로 상품을 조회한다.")
+            @DisplayName("찾은 상품을 반환한다.")
             @Test
             void will_return_found_product() {
                 final Product product = service.findById(SAVED_PRODUCT.getId());
@@ -64,7 +65,7 @@ public class ProductReadServiceTest extends ServiceTest {
             }
         }
 
-        @DisplayName("존재하지 않는 상품 id가 주어진다면")
+        @DisplayName("찾을 수 없는 상품의 id가 주어지면")
         @Nested
         class Context_with_not_exist_id {
 

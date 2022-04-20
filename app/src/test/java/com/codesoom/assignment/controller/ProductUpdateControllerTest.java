@@ -5,6 +5,7 @@ import com.codesoom.assignment.application.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
 import com.codesoom.assignment.domain.ProductRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -35,6 +36,11 @@ public class ProductUpdateControllerTest {
     @BeforeEach
     void setup() {
         this.controller = new ProductUpdateController(service);
+        cleanup();
+    }
+
+    @AfterEach
+    void cleanup() {
         repository.deleteAll();
     }
 
@@ -45,9 +51,10 @@ public class ProductUpdateControllerTest {
         private final ProductDto productToUpdate
                 = new ProductDto("소쩍새", "유령회사", BigDecimal.valueOf(3000), "");
 
-        @DisplayName("id로 찾을 수 있는 상품 수정 요청이 오면")
+        @DisplayName("찾을 수 있는 상품 id가 주어지면")
         @Nested
         class Context_with_exist_id {
+
             private Long EXIST_ID;
 
             @BeforeEach
@@ -66,7 +73,7 @@ public class ProductUpdateControllerTest {
             }
         }
 
-        @DisplayName("id로 찾을 수 없는 상품 수정 요청이 오면")
+        @DisplayName("찾을 수 없는 상품 id가 주어지면")
         @Nested
         class Context_with_not_exist_id {
             private final Long NOT_EXIST_ID = 100L;

@@ -59,7 +59,7 @@ public class ProductReadControllerTest {
     @Nested
     class Describe_get_product {
 
-        @DisplayName("찾을 수 있는 상품 조회 요청이 오면")
+        @DisplayName("찾을 수 있는 상품의 id가 주어지면")
         @Nested
         class Context_with_exist_id {
 
@@ -77,7 +77,7 @@ public class ProductReadControllerTest {
             }
         }
 
-        @DisplayName("찾을 수 없는 상품 조회 요청이 오면")
+        @DisplayName("찾을 수 없는 상품의 id가 주어지면")
         @Nested
         class Context_with_not_exist_id {
 

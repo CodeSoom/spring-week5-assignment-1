@@ -32,7 +32,7 @@ public class ProductDeleteControllerMockMvcTest extends ControllerTest {
     @Nested
     class Describe_delete {
 
-        @DisplayName("존재하는 상품 id가 주어지면")
+        @DisplayName("찾을 수 있는 상품의 id가 주어지면")
         @Nested
         class Context_with_exist_id {
 
@@ -53,7 +53,7 @@ public class ProductDeleteControllerMockMvcTest extends ControllerTest {
             }
         }
 
-        @DisplayName("존재하지 않는 상품 id가 주어지면")
+        @DisplayName("찾을 수 없는 상품의 id가 주어지면")
         @Nested
         class Context_with_not_exist_id {
 
@@ -66,9 +66,9 @@ public class ProductDeleteControllerMockMvcTest extends ControllerTest {
                 }
             }
 
-            @DisplayName("404 not found를 보낸다.")
+            @DisplayName("404 not found를 응답한다.")
             @Test
-            void will_throw_not_found_exception() throws Exception {
+            void will_response_404_not_found() throws Exception {
                 mockMvc.perform(delete("/products/" + NOT_EXIST_ID))
                         .andExpect(status().isNotFound());
             }

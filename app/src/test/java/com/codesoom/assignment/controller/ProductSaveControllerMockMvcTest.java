@@ -72,7 +72,7 @@ public class ProductSaveControllerMockMvcTest extends ControllerTest{
 
             @DisplayName("400 bad request를 응답한다.")
             @Test
-            void it_thrown_exception() throws Exception {
+            void it_reponse_400_bad_request() throws Exception {
                 mockMvc.perform(post("/products")
                         .content(objectMapper.writeValueAsString(INVALID_PRODUCT_DTO))
                         .contentType(MediaType.APPLICATION_JSON))

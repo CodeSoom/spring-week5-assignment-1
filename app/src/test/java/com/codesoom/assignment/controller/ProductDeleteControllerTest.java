@@ -46,7 +46,7 @@ public class ProductDeleteControllerTest {
     @Nested
     class Describe_delete_product {
 
-        @DisplayName("id로 상품을 찾을 수 있다면")
+        @DisplayName("찾을 수 있는 상품의 id가 주어지면")
         @Nested
         class Context_with_exist_id {
 
@@ -66,7 +66,7 @@ public class ProductDeleteControllerTest {
             }
         }
 
-        @DisplayName("id로 상품을 찾지 못하면")
+        @DisplayName("찾을 수 없는 상품의 id가 주어지면")
         @Nested
         class Context_with_not_exist_id {
 
