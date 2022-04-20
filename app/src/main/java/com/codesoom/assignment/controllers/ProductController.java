@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.domain.product.Product;
+import com.codesoom.assignment.dto.product.ProductData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
