@@ -12,7 +12,6 @@ class UserTest {
     private final String USER_EMAIL = "davidyang2149@gmail.com";
     private final String USER_PASSWORD = "YouHaveNoIdea";
 
-
     @Test
     @DisplayName("빌더로 사용자 엔티티를 생성할 수 있다")
     void creationWithBuilder() {
