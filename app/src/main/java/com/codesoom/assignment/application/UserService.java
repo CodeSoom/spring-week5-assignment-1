@@ -48,4 +48,8 @@ public class UserService {
     public User updateUser(final User user, final UserUpdateRequest updateRequest) {
         return user.update(updateRequest);
     }
+
+    public void deleteUser(final User user) {
+        userRepository.delete(user);
+    }
 }

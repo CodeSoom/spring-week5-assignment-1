@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.users.UserRepository;
 import com.codesoom.assignment.dto.UserSaveRequestData;
 import com.codesoom.assignment.dto.UserUpdateRequestData;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -19,8 +20,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.Optional;
 import java.util.stream.Stream;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -342,6 +345,9 @@ public class WebUserControllerTest {
                 mockMvc.perform(delete("/users/{userId}", existUserId)
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isNoContent());
+
+                Optional<User> foundUser = userRepository.findById(existUserId);
+                assertThat(foundUser.isEmpty()).isTrue();
             }
         }
     }

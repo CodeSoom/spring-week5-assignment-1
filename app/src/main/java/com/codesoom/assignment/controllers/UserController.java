@@ -7,6 +7,7 @@ import com.codesoom.assignment.dto.UserUpdateRequestData;
 import com.codesoom.assignment.dto.UserResponseData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -57,5 +58,18 @@ public class UserController {
         final User updatedUser = userService.updateUser(foundUser, updateSource);
 
         return UserResponseData.from(updatedUser);
+    }
+
+    /**
+     * 회원을 삭제합니다.
+     * @param userId    회원 아이디
+     */
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{userId}")
+    public void delete(@PathVariable Long userId) {
+
+        final User foundUser = userService.getUser(userId);
+
+        userService.deleteUser(foundUser);
     }
 }
