@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -204,7 +205,9 @@ class ProductControllerTest {
                                 .content("{\"name\":\"\",\"maker\":\"냥이월드\"," +
                                         "\"price\":5000}")
                 )
+                .andDo(print())
                 .andExpect(status().isBadRequest());
+
     }
 
     @Test
@@ -217,6 +220,7 @@ class ProductControllerTest {
                                 .content("{\"name\":\"쥐돌이\",\"maker\":\"\"," +
                                         "\"price\":5000}")
                 )
+                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 
@@ -230,6 +234,20 @@ class ProductControllerTest {
                                 .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
                                         "\"price\": null}")
                 )
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createWithoutAll() throws Exception {
+        mockMvc.perform(
+                        post("/products")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"\",\"maker\":\"\"," +
+                                        "\"price\":null}")
+                )
+                .andDo(print())
                 .andExpect(status().isBadRequest());
     }
 }

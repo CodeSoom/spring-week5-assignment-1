@@ -13,13 +13,13 @@ import javax.validation.constraints.NotNull;
 public class ProductData {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "{NotBlank.product.name}")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "{NotBlank.product.maker}")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "{NotBlank.product.price}")
     private Integer price;
 
     private String imageUrl;
