@@ -33,10 +33,10 @@ public class User {
         this.password = password;
     }
 
-    public User update(UserUpdateRequest replaceSource) {
-        this.email = replaceSource.getUpdateEmail();
-        this.name = replaceSource.getUpdateName();
-        this.password = replaceSource.getUpdatePassword();
+    public User update(UserUpdateRequest updateRequest) {
+        this.email = updateRequest.getUpdateEmail();
+        this.name = updateRequest.getUpdateName();
+        this.password = updateRequest.getUpdatePassword();
         return this;
     }
 
