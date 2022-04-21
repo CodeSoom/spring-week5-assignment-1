@@ -31,7 +31,7 @@ public class UserData {
     @Getter
     @Builder
     @ToString
-    public static class ModifyUserRequest {
+    public static class UpdateUserRequest {
         @NotEmpty
         private final int id;
 
