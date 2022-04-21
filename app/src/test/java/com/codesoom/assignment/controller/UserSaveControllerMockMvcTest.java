@@ -14,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -74,14 +76,23 @@ public class UserSaveControllerMockMvcTest extends ControllerTest{
 
             private final UserSaveDto EMPTY_NAME
                     = new UserSaveDto("", "email", "password");
+            private final UserSaveDto BLANK_NAME
+                    = new UserSaveDto(" ", "email", "password");
+            private final UserSaveDto NULL_NAME
+                    = new UserSaveDto(null, "email", "password");
+            private final List<UserSaveDto> INVALID_USER_DTO = List.of(EMPTY_NAME, BLANK_NAME, NULL_NAME);
 
             @DisplayName("400 bad request를 응답한다.")
             @Test
             void it_response_bad_request() throws Exception {
-                mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(EMPTY_NAME))
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest());
+
+                for (UserSaveDto userSaveDto : INVALID_USER_DTO) {
+                    mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
+                            .content(objectMapper.writeValueAsString(userSaveDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest());
+                }
+
             }
         }
 
@@ -91,14 +102,21 @@ public class UserSaveControllerMockMvcTest extends ControllerTest{
 
             private final UserSaveDto EMPTY_EMAIL
                     = new UserSaveDto("홍길동", "", "password");
+            private final UserSaveDto BLANK_EMAIL
+                    = new UserSaveDto("홍길동",   "", "password");
+            private final UserSaveDto NULL_EMAIL
+                    = new UserSaveDto("홍길동", null, "password");
+            private final List<UserSaveDto> INVALID_USER_DTO = List.of(EMPTY_EMAIL, BLANK_EMAIL, NULL_EMAIL);
 
             @DisplayName("400 bad request를 응답한다.")
             @Test
             void it_response_bad_request() throws Exception {
-                mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(EMPTY_EMAIL))
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest());
+                for (UserSaveDto userSaveDto : INVALID_USER_DTO) {
+                    mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
+                            .content(objectMapper.writeValueAsString(userSaveDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest());
+                }
             }
         }
 
@@ -108,14 +126,21 @@ public class UserSaveControllerMockMvcTest extends ControllerTest{
 
             private final UserSaveDto EMPTY_PASSWORD
                     = new UserSaveDto("홍길동", "email", "");
+            private final UserSaveDto BLANK_PASSWORD
+                    = new UserSaveDto("홍길동",   "email", " ");
+            private final UserSaveDto NULL_PASSWORD
+                    = new UserSaveDto("홍길동", "email", null);
+            private final List<UserSaveDto> INVALID_USER_DTO = List.of(EMPTY_PASSWORD, BLANK_PASSWORD, NULL_PASSWORD);
 
             @DisplayName("400 bad request를 응답한다.")
             @Test
             void it_response_bad_request() throws Exception {
-                mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
-                        .content(objectMapper.writeValueAsString(EMPTY_PASSWORD))
-                        .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isBadRequest());
+                for (UserSaveDto userSaveDto : INVALID_USER_DTO) {
+                    mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
+                            .content(objectMapper.writeValueAsString(userSaveDto))
+                            .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest());
+                }
             }
         }
 
