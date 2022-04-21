@@ -11,30 +11,7 @@ import java.nio.charset.StandardCharsets;
 
 @SpringBootApplication
 public class App {
-    public String getGreeting() {
-        return "Hello, world!";
-    }
-
     public static void main(String[] args) {
         SpringApplication.run(App.class, args);
-    }
-
-    @Bean
-    public MessageSource messageSource() {
-        ReloadableResourceBundleMessageSource messageSource =
-                new ReloadableResourceBundleMessageSource();
-
-        messageSource.setBasename("classpath:errors");
-        messageSource.setDefaultEncoding("UTF-8");
-
-        return messageSource;
-    }
-
-    @Bean
-    public LocalValidatorFactoryBean getValidator() {
-        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
-        bean.setValidationMessageSource(messageSource());
-
-        return bean;
     }
 }
