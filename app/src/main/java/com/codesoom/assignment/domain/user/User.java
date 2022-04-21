@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.util.UUID;
 
 /**
  * 사용자
@@ -20,7 +19,7 @@ import java.util.UUID;
 public class User extends AbstractEntity {
     @Id
     @Column(name = "user_id")
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     private String userName;
@@ -29,13 +28,22 @@ public class User extends AbstractEntity {
 
     @Builder
     public User(
-       String userName,
-       String email,
-       String password
+            String userName,
+            String email,
+            String password
     ) {
-        this.userName=userName;
-        this.email=email;
-        this.password=password;
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
+    }
+
+    public void change(String userName,
+                       String email,
+                       String password) {
+
+        this.userName = userName;
+        this.email = email;
+        this.password = password;
     }
 
 }

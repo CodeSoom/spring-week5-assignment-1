@@ -1,8 +1,7 @@
 package com.codesoom.assignment.common.validator;
 
 import com.codesoom.assignment.common.Password;
-import com.codesoom.assignment.domain.policy.PasswordPolicy;
-import com.codesoom.assignment.domain.policy.Policy;
+import com.codesoom.assignment.domain.validator.ValidatorExecutor;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
@@ -10,10 +9,10 @@ import javax.validation.ConstraintValidatorContext;
 public class PasswordValidator implements ConstraintValidator<Password,String> {
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        Policy policy =new Policy(
-                new PasswordPolicy(value)
+        ValidatorExecutor validatorExecutor =new ValidatorExecutor(
+                new com.codesoom.assignment.domain.validator.PasswordValidator(value)
         );
-        boolean isValid = policy.executePolicyStrategy();
+        boolean isValid = validatorExecutor.executePolicyStrategy();
         return isValid;
     }
 }

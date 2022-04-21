@@ -1,6 +1,7 @@
 package com.codesoom.assignment.dto.user;
 
 import com.codesoom.assignment.common.Password;
+import com.codesoom.assignment.domain.user.User;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -26,6 +27,14 @@ public class UserData {
 
         @Password
         private final String password;
+
+        public User toEntity() {
+            return User.builder()
+                    .userName(username)
+                    .email(email)
+                    .password(password)
+                    .build();
+        }
     }
 
     @Getter
@@ -33,7 +42,7 @@ public class UserData {
     @ToString
     public static class UpdateUserRequest {
         @NotEmpty
-        private final int id;
+        private final long id;
 
         @NotEmpty
         private final String username;
@@ -43,6 +52,14 @@ public class UserData {
 
         @Password
         private final String password;
+
+        public User toEntity() {
+            return User.builder()
+                    .userName(username)
+                    .email(email)
+                    .password(password)
+                    .build();
+        }
     }
 
     @Getter
@@ -51,6 +68,7 @@ public class UserData {
     public static class RemoveUserRequest {
         @NotEmpty
         private final int id;
+
     }
 
 }
