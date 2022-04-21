@@ -7,10 +7,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.UUID;
 
 /**
  * 사용자
@@ -21,8 +19,8 @@ import javax.persistence.Id;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends AbstractEntity {
     @Id
-    @GeneratedValue
     @Column(name = "user_id")
+    @GeneratedValue(strategy= GenerationType.IDENTITY)
     private long id;
 
     private String userName;
@@ -39,4 +37,5 @@ public class User extends AbstractEntity {
         this.email=email;
         this.password=password;
     }
+
 }
