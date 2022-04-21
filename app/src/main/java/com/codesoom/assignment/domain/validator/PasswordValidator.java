@@ -1,12 +1,12 @@
-package com.codesoom.assignment.domain.policy;
+package com.codesoom.assignment.domain.validator;
 
 import org.springframework.util.Assert;
 
 
-public class PasswordPolicy implements PolicyStrategy {
+public class PasswordValidator implements Validator {
     private final String password;
 
-    public PasswordPolicy(String password) {
+    public PasswordValidator(String password) {
         this.password = password;
     }
 
