@@ -21,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.stream.Stream;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -309,6 +310,38 @@ public class WebUserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(sourceWithEmptyPassword)))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE - /users/{userId}")
+    class Describe_delete {
+
+        final User user = User.builder()
+                .email(TEST_USER_EMAIL)
+                .name(TEST_USER_NAME)
+                .password(TEST_USER_PASSWORD)
+                .build();
+
+        @Nested
+        @DisplayName("{userId} 와 일치하는 회원이 있다면")
+        class Context_existUserId {
+
+            Long existUserId;
+
+            @BeforeEach
+            void setUp() {
+                userRepository.save(user);
+                existUserId = user.getId();
+            }
+
+            @Test
+            @DisplayName("회원을 삭제하고, No Content 를 응답한다. [204]")
+            void it_response_204() throws Exception {
+                mockMvc.perform(delete("/users/{userId}", existUserId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isNoContent());
             }
         }
     }
