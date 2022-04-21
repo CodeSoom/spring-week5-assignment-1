@@ -1,19 +1,14 @@
 package com.codesoom.assignment.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
-@Entity
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@Entity
 public class Product {
     @Id
     @GeneratedValue
@@ -26,6 +21,18 @@ public class Product {
     private Integer price;
 
     private String imageUrl;
+
+    protected Product() {
+    }
+
+    @Builder
+    public Product(Long id, String name, String maker, Integer price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     public void change(String name,
                        String maker,

@@ -1,16 +1,13 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.users.UserUpdateRequest;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.beans.ConstructorProperties;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Builder
 @Getter
 public class UserUpdateRequestData implements UserUpdateRequest {
@@ -24,4 +21,12 @@ public class UserUpdateRequestData implements UserUpdateRequest {
 
     @NotBlank
     private String password;
+
+    @Builder
+    @ConstructorProperties({"email", "name", "password"})
+    public UserUpdateRequestData(String email, String name, String password) {
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
 }

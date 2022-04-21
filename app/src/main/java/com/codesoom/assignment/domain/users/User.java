@@ -1,19 +1,14 @@
 package com.codesoom.assignment.domain.users;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Objects;
 
-@NoArgsConstructor
-@AllArgsConstructor
 @Getter
-@Builder
 @Entity
 public class User {
 
@@ -26,6 +21,17 @@ public class User {
     private String name;
 
     private String password;
+
+    protected User() {
+    }
+
+    @Builder
+    public User(Long id, String email, String name, String password) {
+        this.id = id;
+        this.email = email;
+        this.name = name;
+        this.password = password;
+    }
 
     public User replace(UserUpdateRequest replaceSource) {
         this.email = replaceSource.getEmail();

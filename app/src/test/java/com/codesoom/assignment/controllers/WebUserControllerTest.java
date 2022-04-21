@@ -49,6 +49,8 @@ public class WebUserControllerTest {
             "test..test@example.com",
             "john.doe@example..com",
             "t\"est@example.com",
+            "test@",
+            "@test",
     };
 
     @Autowired
