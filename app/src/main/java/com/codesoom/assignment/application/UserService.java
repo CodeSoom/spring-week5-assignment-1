@@ -43,6 +43,6 @@ public class UserService {
      * @param updateRequest 수정할 회원 데이터
      */
     public User updateUser(final User user, final UserUpdateRequest updateRequest) {
-        return user.replace(updateRequest);
+        return user.update(updateRequest);
     }
 }

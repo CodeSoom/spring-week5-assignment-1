@@ -33,7 +33,7 @@ public class User {
         this.password = password;
     }
 
-    public User replace(UserUpdateRequest replaceSource) {
+    public User update(UserUpdateRequest replaceSource) {
         this.email = replaceSource.getEmail();
         this.name = replaceSource.getName();
         this.password = replaceSource.getPassword();
