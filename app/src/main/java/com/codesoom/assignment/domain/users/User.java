@@ -34,9 +34,9 @@ public class User {
     }
 
     public User update(UserUpdateRequest replaceSource) {
-        this.email = replaceSource.getEmail();
-        this.name = replaceSource.getName();
-        this.password = replaceSource.getPassword();
+        this.email = replaceSource.getUpdateEmail();
+        this.name = replaceSource.getUpdateName();
+        this.password = replaceSource.getUpdatePassword();
         return this;
     }
 

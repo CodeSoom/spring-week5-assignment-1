@@ -11,9 +11,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     default User save(UserSaveRequest saveRequest) {
 
         final User user = User.builder()
-                .email(saveRequest.getEmail())
-                .name(saveRequest.getName())
-                .password(saveRequest.getPassword())
+                .email(saveRequest.getSaveEmail())
+                .name(saveRequest.getSaveName())
+                .password(saveRequest.getSavePassword())
                 .build();
         return save(user);
     }

@@ -2,13 +2,11 @@ package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.users.UserSaveRequest;
 import lombok.Builder;
-import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.beans.ConstructorProperties;
 
-@Getter
 public class UserSaveRequestData implements UserSaveRequest {
 
     @Email
@@ -27,5 +25,20 @@ public class UserSaveRequestData implements UserSaveRequest {
         this.email = email;
         this.name = name;
         this.password = password;
+    }
+
+    @Override
+    public String getSaveEmail() {
+        return email;
+    }
+
+    @Override
+    public String getSaveName() {
+        return name;
+    }
+
+    @Override
+    public String getSavePassword() {
+        return password;
     }
 }
