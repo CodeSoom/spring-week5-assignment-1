@@ -1,9 +1,8 @@
 package com.codesoom.assignment.dto;
 
-import lombok.AllArgsConstructor;
+import com.codesoom.assignment.domain.User;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.Email;
@@ -12,8 +11,6 @@ import javax.validation.constraints.NotBlank;
 @Setter
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class UserData {
     private Long id;
 
@@ -25,4 +22,13 @@ public class UserData {
 
     @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
+
+    public static User from(UserData userData) {
+        return User.builder()
+                .username(userData.username)
+                .email(userData.email)
+                .password(userData.password)
+                .build();
+    }
+
 }

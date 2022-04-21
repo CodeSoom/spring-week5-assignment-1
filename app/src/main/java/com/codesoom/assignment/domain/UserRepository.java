@@ -13,6 +13,6 @@ public interface UserRepository extends CrudRepository<User, Long> {
     Optional<User> findById(Long id);
 
     default User save(UserData userData) {
-        return save(User.from(userData));
+        return save(UserData.from(userData));
     }
 }
