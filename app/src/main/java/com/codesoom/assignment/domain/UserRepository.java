@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.dto.UserData;
 import org.springframework.data.repository.CrudRepository;
 
@@ -14,5 +15,13 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     default User save(UserData userData) {
         return save(UserData.from(userData));
+    }
+
+    default void deleteById(Long id) {
+        Optional<User> user = findById(id);
+        if (user.isEmpty()) {
+            throw new UserNotFoundException(id);
+        }
+        delete(user.get());
     }
 }
