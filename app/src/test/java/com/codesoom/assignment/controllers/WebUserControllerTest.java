@@ -5,7 +5,6 @@ import com.codesoom.assignment.domain.users.UserRepository;
 import com.codesoom.assignment.dto.UserSaveRequestData;
 import com.codesoom.assignment.dto.UserUpdateRequestData;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -342,12 +341,29 @@ public class WebUserControllerTest {
             @Test
             @DisplayName("회원을 삭제하고, No Content 를 응답한다. [204]")
             void it_response_204() throws Exception {
+
                 mockMvc.perform(delete("/users/{userId}", existUserId)
                         .contentType(MediaType.APPLICATION_JSON)
                 ).andExpect(status().isNoContent());
 
                 Optional<User> foundUser = userRepository.findById(existUserId);
                 assertThat(foundUser.isEmpty()).isTrue();
+            }
+        }
+
+        @Nested
+        @DisplayName("{userId} 와 일치하는 회원이 없다면")
+        class Context_notExistUserId {
+
+            final Long notExistUserId = 9999L;
+
+            @Test
+            @DisplayName("Not Found 를 응답한다. [404]")
+            void it_response_404() throws Exception {
+
+                mockMvc.perform(delete("/users/{userId}", notExistUserId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                ).andExpect(status().isNotFound());
             }
         }
     }
