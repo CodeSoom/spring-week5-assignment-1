@@ -17,6 +17,7 @@ public class UserResponseData {
      * 회원을 받아 전송에 필요한 데이터를 리턴합니다.
      *
      * @param user 회원
+     * @return 회원 데이터
      */
     public static UserResponseData from(final User user) {
         return new UserResponseData(user);

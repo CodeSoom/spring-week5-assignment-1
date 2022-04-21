@@ -21,6 +21,7 @@ public class UserService {
      * 회원 저장 후 리턴합니다.
      *
      * @param saveRequest 회원 등록에 필요한 데이터
+     * @return 회원
      */
     public User save(final UserSaveRequest saveRequest) {
         return userRepository.save(saveRequest);
@@ -30,6 +31,7 @@ public class UserService {
      * 단일 회원을 리턴합니다.
      *
      * @param userId 회원 아이디
+     * @return 회원
      */
     public User getUser(final Long userId) {
         return userRepository.findById(userId)
@@ -41,6 +43,7 @@ public class UserService {
      *
      * @param user          수정 대상 회원
      * @param updateRequest 수정할 회원 데이터
+     * @return 수정된 회원
      */
     public User updateUser(final User user, final UserUpdateRequest updateRequest) {
         return user.update(updateRequest);
