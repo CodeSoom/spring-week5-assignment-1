@@ -39,6 +39,8 @@ public class UserUpdateTest extends ServiceTest {
         @Nested
         class Context_with_exist_user {
             private Long EXIST_USER_ID;
+            private final UserSaveDto USER_TO_UPDATE
+                    = new UserSaveDto("임꺽정", "email", "password");
 
             @BeforeEach
             void setup() {
@@ -49,7 +51,6 @@ public class UserUpdateTest extends ServiceTest {
             @DisplayName("회원 정보를 수정 후 수정된 정보를 반환한다.")
             @Test
             void it_update_user() {
-                final UserSaveDto USER_TO_UPDATE = new UserSaveDto("임꺽정", "email", "password");
                 User user = service.updateUser(EXIST_USER_ID, USER_TO_UPDATE);
 
                 assertThat(user.getName()).isEqualTo("임꺽정");
