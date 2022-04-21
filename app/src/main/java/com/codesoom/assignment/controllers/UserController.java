@@ -38,7 +38,7 @@ public class UserController {
     @PostMapping
     public UserResponseData save(@RequestBody @Valid UserSaveRequestData saveSource) {
 
-        final User user = userService.save(saveSource);
+        final User user = userService.saveUser(saveSource);
 
         return UserResponseData.from(user);
     }

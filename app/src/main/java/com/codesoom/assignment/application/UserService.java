@@ -23,7 +23,7 @@ public class UserService {
      * @param saveRequest 회원 등록에 필요한 데이터
      * @return 회원
      */
-    public User save(final UserSaveRequest saveRequest) {
+    public User saveUser(final UserSaveRequest saveRequest) {
         return userRepository.save(saveRequest);
     }
 
