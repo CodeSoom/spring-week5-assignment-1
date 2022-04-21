@@ -1,6 +1,7 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.users.UserUpdateRequest;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 import javax.validation.constraints.Email;
@@ -29,16 +30,19 @@ public class UserUpdateRequestData implements UserUpdateRequest {
     }
 
     @Override
+    @JsonProperty("email")
     public String getUpdateEmail() {
         return email;
     }
 
     @Override
+    @JsonProperty("name")
     public String getUpdateName() {
         return name;
     }
 
     @Override
+    @JsonProperty("password")
     public String getUpdatePassword() {
         return password;
     }
