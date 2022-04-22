@@ -13,13 +13,13 @@ public class UserTest {
     private static final String EMAIL = "email";
     private static final String PASSWORD = "password";
 
-    @DisplayName("기본 생성자로 사용자 엔티티를 생성할 수 있다.")
+    @DisplayName("기본 생성자는 회원 인스턴스를 만들 수 있다.")
     @Test
     void createNoArgsConstructor () {
         assertThat(new User()).isNotNull();
     }
 
-    @DisplayName("생성자로 사용자 엔티티를 생성할 수 있다.")
+    @DisplayName("생성자에 입력된 값들로 회원 정보를 초기화 할 수 있다.")
     @Test
     void createWithAllArgsConstructorTest() {
         final User user = new User(ID, NAME, EMAIL, PASSWORD);
