@@ -21,7 +21,7 @@ class UserTest {
                 .build();
 
         @Nested
-        @DisplayName("같은 속성의 객체가 주어졌을 때")
+        @DisplayName("같은 값의 속성들을 갖는 User 인스턴스가 주어졌을 때")
         class Context_objectOfSameAttributes {
 
             final User sameUser = User.builder()
@@ -39,7 +39,7 @@ class UserTest {
         }
 
         @Nested
-        @DisplayName("속성이 다른 객체가 주어졌을 때")
+        @DisplayName("다른 값의 속성들을 갖는 User 인스턴스ㄴ가 주어졌을 때")
         class Context_objectOfAnotherAttributes {
 
             final User anotherUser = User.builder()

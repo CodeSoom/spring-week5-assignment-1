@@ -3,7 +3,7 @@ package com.codesoom.assignment.dto;
 import com.codesoom.assignment.domain.users.User;
 
 /**
- * 회원 데이터 전송에 필요한 데이터 정의
+ * 회원 데이터 전송에 필요한 데이터.
  */
 public class UserResponseData {
 
