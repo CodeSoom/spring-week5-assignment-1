@@ -4,18 +4,17 @@ import com.codesoom.assignment.Utf8MockMvc;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -27,12 +26,6 @@ public class UserControllerApiTest {
     @Autowired UserRepository userRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final String validUserInput = "{\"name\": \"김갑생\", \"email\": \"gabseng@naver.com\", \"password\": \"gabgabhada123\"}";
-
-    @BeforeEach
-    void setUp() {
-        // 리포지토리 초기화
-        userRepository.deleteAll();
-    }
 
     @Nested
     @DisplayName("POST /user 요청은")
@@ -49,19 +42,24 @@ public class UserControllerApiTest {
             private final ResultActions actions;
 
             public Context_valid_input() throws Exception {
-                actions = mockMvc.perform(requestBuilder);
+                userRepository.deleteAll();
+
+                actions = mockMvc.perform(requestBuilder
+                        .content(validUserInput)
+                        .contentType(MediaType.APPLICATION_JSON));
             }
 
             @Test
             @DisplayName("201 CREATE 응답을 반환한다.")
             void It_returns_201_created_response() throws Exception {
-                actions.andExpect(status().isCreated());
+                actions.andExpect(status().isCreated())
+                        .andDo(print());
             }
 
             @Test
             @DisplayName("리포지토리에 User 를 추가하고, 추가한 User 를 반환한다.")
             void It_returns_user() throws Exception {
-                assertThat(userRepository.count()).isNotZero();
+//                assertThat(userRepository.count()).isNotZero();
                 User user = userRepository.findAll().iterator().next();
 
                 actions.andExpect(content().string(objectMapper.writeValueAsString(user)));
