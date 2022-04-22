@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductCommandService;
+import com.codesoom.assignment.application.ProductSaveService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -26,7 +26,7 @@ public class ProductSaveControllerTest {
     private ProductSaveController controller;
 
     @Autowired
-    private ProductCommandService service;
+    private ProductSaveService service;
 
     @Autowired
     private ProductRepository repository;

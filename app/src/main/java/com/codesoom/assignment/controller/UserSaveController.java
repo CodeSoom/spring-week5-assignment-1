@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.UserCommandService;
+import com.codesoom.assignment.application.UserSaveService;
 import com.codesoom.assignment.domain.UserResponseDto;
 import com.codesoom.assignment.domain.UserSaveDto;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ import javax.validation.Valid;
 @UserController
 public class UserSaveController {
 
-    private final UserCommandService service;
+    private final UserSaveService service;
 
-    public UserSaveController(UserCommandService service) {
+    public UserSaveController(UserSaveService service) {
         this.service = service;
     }
 

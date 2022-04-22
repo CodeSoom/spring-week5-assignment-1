@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.UserCommandService;
 import com.codesoom.assignment.application.UserNotFoundException;
+import com.codesoom.assignment.application.UserUpdateService;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.domain.UserResponseDto;
 import com.codesoom.assignment.domain.UserSaveDto;
@@ -25,7 +25,7 @@ public class UserUpdateControllerTest {
     private UserUpdateController controller;
 
     @Autowired
-    private UserCommandService service;
+    private UserUpdateService service;
 
     @Autowired
     private UserRepository repository;

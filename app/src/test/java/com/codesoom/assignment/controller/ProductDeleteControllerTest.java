@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controller;
 
 import com.codesoom.assignment.application.ProductCommandService;
+import com.codesoom.assignment.application.ProductDeleteService;
 import com.codesoom.assignment.application.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -26,7 +27,7 @@ public class ProductDeleteControllerTest {
     private ProductDeleteController controller;
 
     @Autowired
-    private ProductCommandService service;
+    private ProductDeleteService service;
 
     @Autowired
     private ProductRepository repository;

@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductNotFoundException;
+import com.codesoom.assignment.application.ProductUpdateService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -28,7 +28,7 @@ public class ProductUpdateControllerTest {
     private ProductUpdateController controller;
 
     @Autowired
-    private ProductCommandService service;
+    private ProductUpdateService service;
 
     @Autowired
     private ProductRepository repository;

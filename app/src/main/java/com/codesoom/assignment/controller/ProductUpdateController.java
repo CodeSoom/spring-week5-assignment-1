@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.ProductCommandService;
+import com.codesoom.assignment.application.ProductUpdateService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductDto;
 import org.springframework.http.HttpStatus;
@@ -18,9 +18,9 @@ import javax.validation.Valid;
 @ProductController
 public class ProductUpdateController {
 
-    private final ProductCommandService service;
+    private final ProductUpdateService service;
 
-    public ProductUpdateController(ProductCommandService service) {
+    public ProductUpdateController(ProductUpdateService service) {
         this.service = service;
     }
 

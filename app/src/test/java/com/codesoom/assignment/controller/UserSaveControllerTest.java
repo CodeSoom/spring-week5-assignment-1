@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controller;
 
-import com.codesoom.assignment.application.UserCommandService;
+import com.codesoom.assignment.application.UserSaveService;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.domain.UserResponseDto;
 import com.codesoom.assignment.domain.UserSaveDto;
@@ -22,7 +22,7 @@ public class UserSaveControllerTest {
     private UserSaveController controller;
 
     @Autowired
-    private UserCommandService service;
+    private UserSaveService service;
 
     @Autowired
     private UserRepository repository;
