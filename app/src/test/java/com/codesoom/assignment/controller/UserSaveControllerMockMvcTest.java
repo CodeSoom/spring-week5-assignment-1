@@ -42,7 +42,7 @@ public class UserSaveControllerMockMvcTest extends ControllerTest{
         repository.deleteAll();
     }
 
-    @DisplayName("saveUser 메서드는")
+    @DisplayName("[POST] /users")
     @Nested
     class Describe_save_user {
 
@@ -51,7 +51,7 @@ public class UserSaveControllerMockMvcTest extends ControllerTest{
         class Context_with_valid_data {
 
             private final UserSaveDto VALID_USER_SAVE_DTO
-                    = new UserSaveDto("홍길동", "email", "password");
+                    = new UserSaveDto("홍길동", "hkd@codesoom.com", "password");
 
             @DisplayName("회원 정보를 성공적으로 저장한다.")
             @Test
@@ -75,75 +75,81 @@ public class UserSaveControllerMockMvcTest extends ControllerTest{
         class Context_with_empty_name {
 
             private final UserSaveDto EMPTY_NAME
-                    = new UserSaveDto("", "email", "password");
+                    = new UserSaveDto("", "hkd@codesoom.com", "password");
             private final UserSaveDto BLANK_NAME
-                    = new UserSaveDto(" ", "email", "password");
+                    = new UserSaveDto(" ", "hkd@codesoom.com", "password");
             private final UserSaveDto NULL_NAME
-                    = new UserSaveDto(null, "email", "password");
-            private final List<UserSaveDto> INVALID_USER_DTO = List.of(EMPTY_NAME, BLANK_NAME, NULL_NAME);
+                    = new UserSaveDto(null, "hkd@codesoom.com", "password");
+            private final List<UserSaveDto> INVALID_NAMES = List.of(EMPTY_NAME, BLANK_NAME, NULL_NAME);
 
             @DisplayName("400 bad request를 응답한다.")
             @Test
             void it_response_bad_request() throws Exception {
-
-                for (UserSaveDto userSaveDto : INVALID_USER_DTO) {
+                for (UserSaveDto invalidNameUserDto : INVALID_NAMES) {
                     mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
-                            .content(objectMapper.writeValueAsString(userSaveDto))
+                            .content(objectMapper.writeValueAsString(invalidNameUserDto))
                             .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isBadRequest());
                 }
-
             }
         }
 
-        @DisplayName("이메일을 입력하지 않으면")
+        @DisplayName("이메일을 입력하지 않거나, 이메일 형식을 지키지 않으면")
         @Nested
         class Context_with_empty_email {
 
             private final UserSaveDto EMPTY_EMAIL
                     = new UserSaveDto("홍길동", "", "password");
             private final UserSaveDto BLANK_EMAIL
-                    = new UserSaveDto("홍길동",   "", "password");
+                    = new UserSaveDto("홍길동",  " ", "password");
             private final UserSaveDto NULL_EMAIL
                     = new UserSaveDto("홍길동", null, "password");
-            private final List<UserSaveDto> INVALID_USER_DTO = List.of(EMPTY_EMAIL, BLANK_EMAIL, NULL_EMAIL);
+            private final UserSaveDto INVALID_EMAIL
+                    = new UserSaveDto("홍길동", "itsNotEmailFormat@", "password");
+            private final List<UserSaveDto> INVALID_EMAILS = List.of(EMPTY_EMAIL, BLANK_EMAIL, NULL_EMAIL);
 
             @DisplayName("400 bad request를 응답한다.")
             @Test
             void it_response_bad_request() throws Exception {
-                for (UserSaveDto userSaveDto : INVALID_USER_DTO) {
+                for (UserSaveDto invalidEmailUserDto : INVALID_EMAILS) {
                     mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
-                            .content(objectMapper.writeValueAsString(userSaveDto))
+                            .content(objectMapper.writeValueAsString(invalidEmailUserDto))
                             .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isBadRequest());
                 }
             }
         }
 
-        @DisplayName("비밀번호를 입력하지 않으면")
+        @DisplayName("비밀번호를 입력하지 않거나, 비밀번호 형식을 지키지 않으면")
         @Nested
         class Context_with_empty_password {
 
             private final UserSaveDto EMPTY_PASSWORD
-                    = new UserSaveDto("홍길동", "email", "");
+                    = new UserSaveDto("홍길동", "hkd@codesoom.com", "");
             private final UserSaveDto BLANK_PASSWORD
-                    = new UserSaveDto("홍길동",   "email", " ");
+                    = new UserSaveDto("홍길동", "hkd@codesoom.com", " ");
             private final UserSaveDto NULL_PASSWORD
-                    = new UserSaveDto("홍길동", "email", null);
-            private final List<UserSaveDto> INVALID_USER_DTO = List.of(EMPTY_PASSWORD, BLANK_PASSWORD, NULL_PASSWORD);
+                    = new UserSaveDto("홍길동", "hkd@codesoom.com", null);
+            private final UserSaveDto TOO_SHORT_PASSWORD
+                    = new UserSaveDto("홍길동", "hkd@codesoom.com", "1234");
+            private final UserSaveDto TOO_LONG_PASSWORD
+                    = new UserSaveDto("홍길동", "hkd@codesoom.com"
+                    , "qwertyuiopasdfghjklzxcvbnm123456789");
+            private final List<UserSaveDto> INVALID_PASSWORDS
+                    = List.of(EMPTY_PASSWORD, BLANK_PASSWORD, NULL_PASSWORD
+                    ,TOO_SHORT_PASSWORD, TOO_LONG_PASSWORD);
 
             @DisplayName("400 bad request를 응답한다.")
             @Test
             void it_response_bad_request() throws Exception {
-                for (UserSaveDto userSaveDto : INVALID_USER_DTO) {
+                for (UserSaveDto invalidPasswordUserDto : INVALID_PASSWORDS) {
                     mockMvc.perform(post("/users").accept(MediaType.APPLICATION_JSON_UTF8)
-                            .content(objectMapper.writeValueAsString(userSaveDto))
+                            .content(objectMapper.writeValueAsString(invalidPasswordUserDto))
                             .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isBadRequest());
                 }
             }
         }
-
     }
 
 }
