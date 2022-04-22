@@ -24,4 +24,9 @@ public class User {
     private String email;
 
     private String password;
+
+    public void change(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }
