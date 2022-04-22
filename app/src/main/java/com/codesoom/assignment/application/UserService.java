@@ -5,17 +5,19 @@ import com.codesoom.assignment.domain.users.UserRepository;
 import com.codesoom.assignment.domain.users.UserSaveRequest;
 import com.codesoom.assignment.domain.users.UserUpdateRequest;
 import com.codesoom.assignment.exception.UserNotFoundException;
-import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
  * 회원 조회, 변경 담당
  */
 @Service
-@AllArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
+
+    public UserService(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     /**
      * 회원 저장 후 리턴합니다.

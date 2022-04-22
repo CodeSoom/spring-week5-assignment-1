@@ -21,12 +21,15 @@ import javax.validation.Valid;
 /**
  * 회원에 대한 HTTP 요청 처리
  */
-@RequiredArgsConstructor
 @RestController
 @RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
 
     /**
      * 회원 등록하고 등록 정보를 리턴한다.
