@@ -3,7 +3,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserCreateData;
+import com.codesoom.assignment.dto.UserUpdateData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-
-import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
@@ -40,13 +39,13 @@ class UserControllerTest {
                 .password("verysecret")
                 .build();
 
-        given(userService.createUser(any(UserData.class)))
+        given(userService.createUser(any(UserCreateData.class)))
                 .willReturn(user);
 
-        given(userService.updateUser(eq(1L), any(UserData.class)))
+        given(userService.updateUser(eq(1L), any(UserUpdateData.class)))
                 .will(invocation -> {
                     Long id = invocation.getArgument(0);
-                    UserData userData = invocation.getArgument(1);
+                    UserUpdateData userData = invocation.getArgument(1);
                     return User.builder()
                             .id(id)
                             .name(userData.getName())
@@ -55,7 +54,7 @@ class UserControllerTest {
                             .build();
                 });
 
-        given(userService.updateUser(eq(1000L), any(UserData.class)))
+        given(userService.updateUser(eq(1000L), any(UserUpdateData.class)))
                 .willThrow(new UserNotFoundException(1000L));
 
         given(userService.deleteUser(1000L))
@@ -74,7 +73,19 @@ class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("johndoe")));
 
-        verify(userService).createUser(any(UserData.class));
+        verify(userService).createUser(any(UserCreateData.class));
+    }
+
+    @Test
+    void createWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                        post("/users")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"\",\"email\":\"\"," +
+                                        "\"password\":\"\"}")
+                )
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -89,7 +100,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("janedoe")));
 
-        verify(userService).updateUser(eq(1L), any(UserData.class));
+        verify(userService).updateUser(eq(1L), any(UserUpdateData.class));
     }
 
     @Test
@@ -102,7 +113,7 @@ class UserControllerTest {
         )
                 .andExpect(status().isNotFound());
 
-        verify(userService).updateUser(eq(1000L), any(UserData.class));
+        verify(userService).updateUser(eq(1000L), any(UserUpdateData.class));
     }
 
     @Test

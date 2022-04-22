@@ -1,9 +1,11 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
-import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.dto.UserCreateData;
+import com.codesoom.assignment.dto.UserUpdateData;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -17,7 +19,7 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(UserData userData) {
+    public User createUser(UserCreateData userData) {
         User user = User.builder()
                 .name(userData.getName())
                 .email(userData.getEmail())
@@ -26,7 +28,7 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public User updateUser(Long id, UserData userData) {
+    public User updateUser(Long id, UserUpdateData userData) {
         User user = findUser(id);
 
         user.update(
@@ -47,7 +49,10 @@ public class UserService {
     }
 
     private User findUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> {
+                    return new UserNotFoundException(id);
+                });
+        return user;
     }
 }

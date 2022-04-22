@@ -2,8 +2,9 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserCreateData;
 import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.dto.UserUpdateData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,7 +48,7 @@ class UserServiceTest {
 
     @Test
     void createUser() {
-        UserData userData = UserData.builder()
+        UserCreateData userData = UserCreateData.builder()
                 .name("johndoe")
                 .email("johndoe@gmail.com")
                 .password("verysecret")
@@ -65,7 +66,7 @@ class UserServiceTest {
 
     @Test
     void updateUserWithExistedId() {
-        UserData userData = UserData.builder()
+        UserUpdateData userData = UserUpdateData.builder()
                 .name("janedoe")
                 .email("janedoe@gmail.com")
                 .password("verysecret!")
@@ -81,13 +82,13 @@ class UserServiceTest {
 
     @Test
     void updateUserWithNotExistedId() {
-        UserData userData = UserData.builder()
+        UserUpdateData source = UserUpdateData.builder()
                 .name("janedoe")
                 .email("janedoe@gmail.com")
                 .password("verysecret!")
                 .build();
 
-        assertThatThrownBy(() -> userService.updateUser(1000L, userData))
+        assertThatThrownBy(() -> userService.updateUser(1000L, source))
                 .isInstanceOf(UserNotFoundException.class);
     }
 
