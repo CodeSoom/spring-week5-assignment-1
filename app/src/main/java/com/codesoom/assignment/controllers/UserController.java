@@ -2,10 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.users.User;
+import com.codesoom.assignment.dto.UserResponseData;
 import com.codesoom.assignment.dto.UserSaveRequestData;
 import com.codesoom.assignment.dto.UserUpdateRequestData;
-import com.codesoom.assignment.dto.UserResponseData;
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -48,8 +47,9 @@ public class UserController {
 
     /**
      * 회원 정보를 수정하고 수정된 정보를 리턴한다.
-     * @param userId    회원 아이디
-     * @param updateSource  수정할 회원 데이터
+     *
+     * @param userId       회원 아이디
+     * @param updateSource 수정할 회원 데이터
      * @return 수정된 회원 데이터
      */
     @ResponseStatus(HttpStatus.OK)
@@ -65,7 +65,8 @@ public class UserController {
 
     /**
      * 회원을 삭제합니다.
-     * @param userId    회원 아이디
+     *
+     * @param userId 회원 아이디
      */
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @DeleteMapping("/{userId}")

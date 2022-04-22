@@ -34,7 +34,7 @@ public class UserService {
      *
      * @param userId 회원 아이디
      * @return 회원
-     * @throws  UserNotFoundException 회원을 찾지 못한 경우
+     * @throws UserNotFoundException 회원을 찾지 못한 경우
      */
     public User getUser(final Long userId) {
         return userRepository.findById(userId)
