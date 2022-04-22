@@ -7,6 +7,9 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.beans.ConstructorProperties;
 
+/**
+ * 회원 등록에 필요한 데이터
+ */
 public class UserSaveRequestData implements UserSaveRequest {
 
     @Email
