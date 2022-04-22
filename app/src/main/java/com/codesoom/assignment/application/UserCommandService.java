@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 @Service
-public class UserCommandService implements UserSaveService, UserUpdateService {
+public class UserCommandService implements UserSaveService, UserUpdateService, UserDeleteService {
 
     private final UserRepository repository;
 
@@ -33,4 +33,13 @@ public class UserCommandService implements UserSaveService, UserUpdateService {
 
         return user;
     }
+
+    @Override
+    public void deleteUser(Long id) {
+        User user = repository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
+
+        repository.delete(user);
+    }
+
 }
