@@ -106,7 +106,8 @@ public class UserSaveControllerMockMvcTest extends ControllerTest{
                     = new UserSaveDto("홍길동", null, "password");
             private final UserSaveDto INVALID_EMAIL
                     = new UserSaveDto("홍길동", "itsNotEmailFormat@", "password");
-            private final List<UserSaveDto> INVALID_EMAILS = List.of(EMPTY_EMAIL, BLANK_EMAIL, NULL_EMAIL);
+            private final List<UserSaveDto> INVALID_EMAILS
+                    = List.of(EMPTY_EMAIL, BLANK_EMAIL, NULL_EMAIL, INVALID_EMAIL);
 
             @DisplayName("400 bad request를 응답한다.")
             @Test
