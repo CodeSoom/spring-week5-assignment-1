@@ -29,7 +29,7 @@ class UserTest {
                 .password("verysecret")
                 .build();
 
-        user.change("janedoe", "janedoe@gmail.com", "verysecret!");
+        user.update("janedoe", "janedoe@gmail.com", "verysecret!");
         assertThat(user.getName()).isEqualTo("janedoe");
         assertThat(user.getEmail()).isEqualTo("janedoe@gmail.com");
         assertThat(user.getPassword()).isEqualTo("verysecret!");
