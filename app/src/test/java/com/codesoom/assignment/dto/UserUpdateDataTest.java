@@ -5,11 +5,11 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-class UserDataTest {
+class UserUpdateDataTest {
 
     @Test
     void builder() {
-        assertThat(UserData.builder().toString())
-                .isEqualTo("UserData.UserDataBuilder(name=null, email=null, password=null)");
+        assertThat(UserUpdateData.builder().toString())
+                .isEqualTo("UserUpdateData.UserUpdateDataBuilder(name=null, email=null, password=null)");
     }
 }

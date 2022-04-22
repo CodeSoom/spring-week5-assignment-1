@@ -8,20 +8,18 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserData {
+public class UserUpdateData {
     @NotBlank
     private String name;
 
-    @NotBlank
     private String email;
 
-    @NotNull
+    @NotBlank
     private String password;
 }
