@@ -55,6 +55,10 @@ public class UserService {
         return user.update(updateRequest);
     }
 
+    /**
+     * 회원을 삭제합니다.
+     * @param user 삭제할 회원
+     */
     public void deleteUser(final User user) {
         userRepository.delete(user);
     }
