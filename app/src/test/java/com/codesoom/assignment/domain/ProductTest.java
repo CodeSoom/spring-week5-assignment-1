@@ -47,7 +47,7 @@ public class ProductTest {
         assertThat(product.getName()).isEqualTo(NAME + "ver2");
     }
 
-    @DisplayName("toString은 상품에 저장된 내용을 보여준다.")
+    @DisplayName("toString은 상품에 저장된 내용을 문자열로 반환한다.")
     @Test
     void toStringTest() {
         Product product = new Product(ID, NAME, MAKER, PRICE, URL);
