@@ -18,6 +18,8 @@ class UserTest {
         assertThat(user.getName()).isEqualTo("johndoe");
         assertThat(user.getEmail()).isEqualTo("johndoe@gmail.com");
         assertThat(user.getPassword()).isEqualTo("verysecret");
+        assertThat(User.builder().toString())
+                .isEqualTo("User.UserBuilder(id=null, name=null, email=null, password=null)");
     }
 
     @Test
