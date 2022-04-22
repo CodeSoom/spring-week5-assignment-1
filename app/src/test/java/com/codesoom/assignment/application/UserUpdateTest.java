@@ -35,16 +35,21 @@ public class UserUpdateTest extends ServiceTest {
     @Nested
     class Describe_update_user {
 
+        private final String UPDATE_NAME = "임꺽정";
+        private final String UPDATE_EMAIL = "ikj@codesoom.com";
+        private final String UPDATE_PASSWORD = "dlaRJrwjd777";
+
         @DisplayName("찾을 수 있는 회원 id가 주어지면")
         @Nested
         class Context_with_exist_user {
             private Long EXIST_USER_ID;
             private final UserSaveDto USER_TO_UPDATE
-                    = new UserSaveDto("임꺽정", "email", "password");
+                    = new UserSaveDto(UPDATE_NAME, UPDATE_EMAIL, UPDATE_PASSWORD);
 
             @BeforeEach
             void setup() {
-                final UserSaveDto userSaveDto = new UserSaveDto("홍길동", "email", "password");
+                final UserSaveDto userSaveDto
+                        = new UserSaveDto("홍길동", "hkd@codesoom.com", "ghdrlfEhd898");
                 this.EXIST_USER_ID = repository.save(userSaveDto.user()).getId();
             }
 
@@ -53,7 +58,9 @@ public class UserUpdateTest extends ServiceTest {
             void it_update_user() {
                 User user = service.updateUser(EXIST_USER_ID, USER_TO_UPDATE);
 
-                assertThat(user.getName()).isEqualTo("임꺽정");
+                assertThat(user.getName()).isEqualTo(UPDATE_NAME);
+                assertThat(user.getEmail()).isEqualTo(UPDATE_EMAIL);
+                assertThat(user.getPassword()).isEqualTo(UPDATE_PASSWORD);
             }
         }
 
@@ -62,6 +69,8 @@ public class UserUpdateTest extends ServiceTest {
         class Context_with_not_exist_user {
 
             private Long NOT_EXIST_USER_ID = 999L;
+            private final UserSaveDto USER_TO_UPDATE
+                    = new UserSaveDto(UPDATE_NAME, UPDATE_EMAIL, UPDATE_PASSWORD);
 
             @BeforeEach
             void setup() {
@@ -73,13 +82,10 @@ public class UserUpdateTest extends ServiceTest {
             @DisplayName("예외를 던진다.")
             @Test
             void it_update_user() {
-                final UserSaveDto USER_TO_UPDATE = new UserSaveDto("임꺽정", "email", "password");
-
                 assertThatThrownBy(() -> service.updateUser(NOT_EXIST_USER_ID, USER_TO_UPDATE))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }
-
     }
 
 }
