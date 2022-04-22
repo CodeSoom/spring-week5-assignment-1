@@ -42,17 +42,17 @@ class UserServiceTest {
 
             UserSaveRequest saveRequest = new UserSaveRequest() {
                 @Override
-                public String getSaveEmail() {
+                public String getEmail() {
                     return TEST_USER_EMAIL;
                 }
 
                 @Override
-                public String getSaveName() {
+                public String getName() {
                     return TEST_USER_NAME;
                 }
 
                 @Override
-                public String getSavePassword() {
+                public String getPassword() {
                     return TEST_USER_PASSWORD;
                 }
             };

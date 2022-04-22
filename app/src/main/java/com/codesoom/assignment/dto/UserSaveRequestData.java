@@ -1,7 +1,6 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.users.UserSaveRequest;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 
 import javax.validation.constraints.Email;
@@ -29,20 +28,17 @@ public class UserSaveRequestData implements UserSaveRequest {
     }
 
     @Override
-    @JsonProperty("email")
-    public String getSaveEmail() {
+    public String getEmail() {
         return email;
     }
 
     @Override
-    @JsonProperty("name")
-    public String getSaveName() {
+    public String getName() {
         return name;
     }
 
     @Override
-    @JsonProperty("password")
-    public String getSavePassword() {
+    public String getPassword() {
         return password;
     }
 }

@@ -5,9 +5,9 @@ package com.codesoom.assignment.domain.users;
  */
 public interface UserSaveRequest {
 
-    String getSaveEmail();
+    String getEmail();
 
-    String getSaveName();
+    String getName();
 
-    String getSavePassword();
+    String getPassword();
 }

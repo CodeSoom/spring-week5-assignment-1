@@ -5,9 +5,9 @@ package com.codesoom.assignment.domain.users;
  */
 public interface UserUpdateRequest {
 
-    String getUpdateEmail();
+    String getEmail();
 
-    String getUpdateName();
+    String getName();
 
-    String getUpdatePassword();
+    String getPassword();
 }

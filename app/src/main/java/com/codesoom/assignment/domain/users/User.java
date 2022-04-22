@@ -34,9 +34,9 @@ public class User {
     }
 
     public User update(UserUpdateRequest updateRequest) {
-        this.email = updateRequest.getUpdateEmail();
-        this.name = updateRequest.getUpdateName();
-        this.password = updateRequest.getUpdatePassword();
+        this.email = updateRequest.getEmail();
+        this.name = updateRequest.getName();
+        this.password = updateRequest.getPassword();
         return this;
     }
 
