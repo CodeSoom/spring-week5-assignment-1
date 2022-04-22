@@ -7,18 +7,18 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import java.beans.ConstructorProperties;
 
-@Builder
+
 public class UserUpdateRequestData implements UserUpdateRequest {
 
     @Email
     @NotBlank
-    private String email;
+    private final String email;
 
     @NotBlank
-    private String name;
+    private final String name;
 
     @NotBlank
-    private String password;
+    private final String password;
 
     @Builder
     @ConstructorProperties({"email", "name", "password"})
