@@ -6,11 +6,13 @@ import com.codesoom.assignment.domain.users.UserSaveRequest;
 import com.codesoom.assignment.domain.users.UserUpdateRequest;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 회원 조회, 변경 담당
  */
 @Service
+@Transactional
 public class UserService {
 
     private final UserRepository userRepository;
@@ -36,6 +38,7 @@ public class UserService {
      * @return 회원
      * @throws UserNotFoundException 회원을 찾지 못한 경우
      */
+    @Transactional(readOnly = true)
     public User getUser(final Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
