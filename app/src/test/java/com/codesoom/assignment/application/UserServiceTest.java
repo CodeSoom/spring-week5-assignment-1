@@ -19,7 +19,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertAll;
 
 @DataJpaTest
-@DisplayName("UserService 클래스 테스트")
+@DisplayName("UserService 클래스")
 class UserServiceTest {
 
     private final static String TEST_USER_EMAIL = "test@example.com";

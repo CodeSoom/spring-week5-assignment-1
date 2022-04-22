@@ -31,7 +31,7 @@ public class UserController {
     }
 
     /**
-     * 회원 등록하고 등록 정보를 리턴한다.
+     * 회원을 등록하고 등록된 회원 데이터를 리턴합니다.
      *
      * @param saveSource 등록할 회원 데이터
      * @return 등록된 회원 데이터
@@ -46,7 +46,7 @@ public class UserController {
     }
 
     /**
-     * 회원 정보를 수정하고 수정된 정보를 리턴한다.
+     * 회원 정보를 수정하고 수정된 회원 데이터를 리턴합니다.
      *
      * @param userId       회원 아이디
      * @param updateSource 수정할 회원 데이터

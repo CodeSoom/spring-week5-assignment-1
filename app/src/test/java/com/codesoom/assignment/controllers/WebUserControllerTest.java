@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@DisplayName("회원 대한 HTTP 요청")
+@DisplayName("회원에 대한 HTTP 요청")
 public class WebUserControllerTest {
 
     private static final String TEST_USER_EMAIL = "unknown@naver.com";
