@@ -10,4 +10,8 @@ public final class UserNotFoundException extends IllegalStateException {
     public UserNotFoundException() {
         super(MESSAGE);
     }
+
+    public UserNotFoundException(final Long userId) {
+        super(String.format("%s : %d", MESSAGE, userId));
+    }
 }
