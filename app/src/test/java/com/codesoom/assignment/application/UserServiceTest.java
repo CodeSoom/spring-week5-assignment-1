@@ -46,7 +46,7 @@ class UserServiceTest {
     }
 
     @Test
-    void createProduct() {
+    void createUser() {
         UserData userData = UserData.builder()
                 .name("johndoe")
                 .email("johndoe@gmail.com")
