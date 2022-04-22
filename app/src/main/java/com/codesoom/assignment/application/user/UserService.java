@@ -24,8 +24,7 @@ public class UserService {
 
     public User updateUser(UserData.UpdateUserRequest request){
         User user = findUser(request.getId());
-
-        user.change(
+        user = user.change(
                 request.getUsername(),
                 request.getEmail(),
                 request.getPassword()

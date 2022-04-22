@@ -37,13 +37,14 @@ public class User extends AbstractEntity {
         this.password = password;
     }
 
-    public void change(String userName,
+    public User change(String userName,
                        String email,
                        String password) {
 
         this.userName = userName;
         this.email = email;
         this.password = password;
+        return this;
     }
 
 }
