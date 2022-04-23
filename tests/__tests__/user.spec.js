@@ -46,6 +46,7 @@ describe('Users', () => {
     const userData = {
       name: 'updated name',
       password: 12345678,
+      email: 'code@soom.com'
     };
 
     let id;
@@ -76,6 +77,11 @@ describe('Users', () => {
     });
 
     context('with wrong parameter', () => {
+      beforeEach(async () => {
+        const { json } = await frisby.post('/users', user());
+        id = json.id;
+      });
+
       it('responses Bad Request', async () => {
         const promises = [
           { name: '' },
