@@ -20,7 +20,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     default void deleteById(Long id) {
         Optional<User> user = findById(id);
         if (user.isEmpty()) {
-            throw new UserNotFoundException(id);
+            throw new UserNotFoundException("삭제할 수 없는 ID[" + id + "] 입니다");
         }
         delete(user.get());
     }

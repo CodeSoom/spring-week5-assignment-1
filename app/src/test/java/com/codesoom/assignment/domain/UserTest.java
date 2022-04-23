@@ -24,7 +24,7 @@ class UserTest {
     }
 
     @Test
-    @DisplayName("파라미터가 있는 생성자로 사용자 엔티티를 생성할 수 있다")
+    @DisplayName("생성자로 사용자 인스턴스를 리턴한다")
     void createWithArgsConstructor() {
         User user = new User(USERNAME, EMAIL, PASSWORD);
 
