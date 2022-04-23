@@ -21,7 +21,9 @@ public class ProductReadServiceImpl implements ProductReadService {
 
     @Override
     public Product findById(Long id) {
-        Product product = repository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
+        Product product = repository.findById(id)
+                .orElseThrow(() ->
+                        new ProductNotFoundException("요청하신 상품을 찾지 못했습니다."));
         return product;
     }
 
