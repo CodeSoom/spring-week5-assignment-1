@@ -27,7 +27,7 @@ class UserServiceTest {
     }
 
     @Nested
-    @DisplayName("create() 메서드에서")
+    @DisplayName("create() 메서드는")
     class Context_create_method {
         @Nested
         @DisplayName("id가 없는 User 객체를 받았을 때")
