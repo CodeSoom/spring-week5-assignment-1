@@ -2,21 +2,29 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 
 @DisplayName("UserController 클래스")
+@ExtendWith(MockitoExtension.class)
 class UserControllerTest {
+    private UserRepository userRepository;
+
+    @Mock
     private UserService userService;
+    @InjectMocks
     private UserController userController;
 
     private final Long USER_ID = 1L;
@@ -28,12 +36,11 @@ class UserControllerTest {
     private final String NEW_USER_EMAIL = "JamesGosling@gmail.com";
     private final String NEW_USER_PASSWORD = "IamOrigin";
 
+    private User user;
+
     @BeforeEach
     void setUp() {
-        userService = spy(new UserService());
-        userController = new UserController(userService);
-
-        User user = User.builder()
+        user = User.builder()
                 .id(USER_ID)
                 .name(USER_NAME)
                 .email(USER_EMAIL)
@@ -52,7 +59,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-            userData = UserData.builder()
+                userData = UserData.builder()
                     .name(USER_NAME)
                     .email(USER_EMAIL)
                     .password(USER_PASSWORD)
