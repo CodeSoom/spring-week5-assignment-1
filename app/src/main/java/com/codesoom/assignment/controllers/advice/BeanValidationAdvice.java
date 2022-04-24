@@ -24,13 +24,10 @@ public class BeanValidationAdvice {
     public Object beanValidationError(MethodArgumentNotValidException exception) {
         BindingResult bindingResult = exception.getBindingResult();
         List<String> errorMessages = new ArrayList<>();
+        List<ObjectError> allErrors = bindingResult.getAllErrors();
 
-        if(bindingResult.hasErrors()) {
-            List<ObjectError> allErrors = bindingResult.getAllErrors();
-
-            for (ObjectError error : allErrors) {
-                errorMessages.add(error.getDefaultMessage());
-            }
+        for (ObjectError error : allErrors) {
+            errorMessages.add(error.getDefaultMessage());
         }
 
         return new ApiErrorResponse(HttpStatus.BAD_REQUEST, errorMessages);
