@@ -7,18 +7,22 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
-
 @Service
 @Transactional
-public class UserServiceImpl implements UserService {
-    private UserRepository userRepository;
+public class UserCommandService implements UserCreator, UserDelete {
+    private final UserRepository userRepository;
 
-    public UserServiceImpl(UserRepository userRepository) {
+    public UserCommandService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
     @Override
     public User createUser(UserData userData) {
         return this.userRepository.save(userData);
+    }
+
+    @Override
+    public void delete(Long id) {
+        this.userRepository.deleteById(id);
     }
 }

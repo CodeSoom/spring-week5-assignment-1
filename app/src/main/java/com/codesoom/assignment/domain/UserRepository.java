@@ -2,11 +2,13 @@ package com.codesoom.assignment.domain;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.dto.UserData;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
 import java.util.Optional;
 
+@Primary
 public interface UserRepository extends CrudRepository<User, Long> {
 
     List<User> findAll();
@@ -20,7 +22,7 @@ public interface UserRepository extends CrudRepository<User, Long> {
     default void deleteById(Long id) {
         Optional<User> user = findById(id);
         if (user.isEmpty()) {
-            throw new UserNotFoundException("삭제할 수 없는 ID[" + id + "] 입니다");
+            throw new UserNotFoundException("ID [" + id + "]를 찾지 못했기 때문에 삭제에 실패했습니다.");
         }
         delete(user.get());
     }

@@ -6,7 +6,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 
 @SpringBootTest
-public class TestUserServiceImpl implements UserService {
+public class UserCommandServiceTestDouble implements UserCreator {
     @Override
     public User createUser(UserData userData) {
         return User.builder()
