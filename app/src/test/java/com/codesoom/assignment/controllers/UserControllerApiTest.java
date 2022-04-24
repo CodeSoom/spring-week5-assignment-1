@@ -21,7 +21,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @Utf8MockMvc
-@DisplayName("User 컨트롤러에서")
+@DisplayName("User 컨트롤러가")
 public class UserControllerApiTest {
     @Autowired MockMvc mockMvc;
     @Autowired UserRepository userRepository;
@@ -29,7 +29,7 @@ public class UserControllerApiTest {
     private final String validUserInput = "{\"name\": \"김갑생\", \"email\": \"gabseng@naver.com\", \"password\": \"gabgabhada123\"}";
 
     @Nested
-    @DisplayName("POST /users 요청을 보낼 때")
+    @DisplayName("POST /users 요청을 받을 때")
     class Describe_post_user {
         private final MockHttpServletRequestBuilder requestBuilder;
 
@@ -69,7 +69,7 @@ public class UserControllerApiTest {
     }
 
     @Nested
-    @DisplayName("GET /users/{id} 요청을 보낼 때")
+    @DisplayName("GET /users/{id} 요청을 받을 때")
     class Describe_get_user {
         @Nested
         @DisplayName("{id} 를 가진 User 가 존재한다면")
