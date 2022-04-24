@@ -1,5 +1,6 @@
 package com.codesoom.assignment.infra;
 
+
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import org.springframework.context.annotation.Primary;
@@ -18,4 +19,8 @@ public interface JpaProductRepository
     Product save(Product product);
 
     void delete(Product product);
+
+    void deleteById(Long id);
+
+    void deleteAll();
 }

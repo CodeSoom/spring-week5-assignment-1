@@ -45,6 +45,7 @@ public class ProductService {
                 productData.getPrice(),
                 productData.getImageUrl()
         );
+        productRepository.save(product);
 
         return product;
     }
