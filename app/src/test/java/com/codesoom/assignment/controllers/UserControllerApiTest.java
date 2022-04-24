@@ -159,6 +159,7 @@ public class UserControllerApiTest {
                 source = User.builder()
                         .name("updated" + originUser.getName())
                         .email("updated" + originUser.getEmail())
+                        .password("gabseng123")
                         .build();
 
                 requestBuilder = patch("/users/" + originUser.getId());
@@ -204,6 +205,7 @@ public class UserControllerApiTest {
 
                 source = User.builder()
                         .name("updated" + originUser.getName())
+                        .password("gabseng123")
                         .email("updated" + originUser.getEmail())
                         .build();
 
