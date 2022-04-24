@@ -78,4 +78,45 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("update() 메서드는")
+    class Context_update_method {
+        @Nested
+        @DisplayName("존재하는 id 를 받았을 때")
+        class Context_valid_id {
+            private final User originUser;
+
+            public Context_valid_id() {
+                userRepository.deleteAll();
+                originUser = userRepository.save(User.builder()
+                        .password("password")
+                        .name("name")
+                        .email("email")
+                        .build());
+            }
+
+            @Nested
+            @DisplayName("변경사항이 포함된 User 객체를 받는다면")
+            class Context_user_to_update {
+                User updateUser = User.builder()
+                        .name("updated" + originUser.getName())
+                        .password("updated" + originUser.getPassword())
+                        .email("updated" + originUser.getEmail())
+                        .build();
+
+                @Test
+                @DisplayName("User 를 업데이트 후 반환한다.")
+                void it_updates_user() {
+                    User resultUser = userService.update(originUser.getId(), updateUser);
+
+                    assertThat(resultUser.getId()).isEqualTo(originUser.getId());
+                    assertThat(resultUser.getEmail()).isEqualTo(updateUser.getEmail());
+                    assertThat(resultUser.getPassword()).isEqualTo(updateUser.getPassword());
+                    assertThat(resultUser.getName()).isEqualTo(updateUser.getName());
+                }
+            }
+
+        }
+    }
 }
