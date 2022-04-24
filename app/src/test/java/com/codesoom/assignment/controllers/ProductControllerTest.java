@@ -196,7 +196,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("고양이 장난감 생성 시, 고양이 장난감의 이름이 없을 때, Bad Request 에러가 난다.")
+    @DisplayName("고양이 장난감 생성 시, 고양이 장난감의 이름이 없을 때, Bad Request 응답을 한다.")
     void createWithoutName() throws Exception {
         mockMvc.perform(
                         post("/products")
@@ -225,7 +225,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("고양이 장난감 생성 시, 고양이 장난감의 가격이 없을 때, Bad Request 에러가 난다.")
+    @DisplayName("고양이 장난감 생성 시, 고양이 장난감의 가격이 null 일 때, Bad Request 에러가 난다.")
     void createWithoutPrice() throws Exception {
         mockMvc.perform(
                         post("/products")

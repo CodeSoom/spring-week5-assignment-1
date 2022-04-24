@@ -28,7 +28,7 @@ public class UserControllerApiTest {
     private final String validUserInput = "{\"name\": \"김갑생\", \"email\": \"gabseng@naver.com\", \"password\": \"gabgabhada123\"}";
 
     @Nested
-    @DisplayName("POST /user 요청은")
+    @DisplayName("POST /user 요청을 보낼 때")
     class Describe_post_user {
         private final MockHttpServletRequestBuilder requestBuilder;
 
