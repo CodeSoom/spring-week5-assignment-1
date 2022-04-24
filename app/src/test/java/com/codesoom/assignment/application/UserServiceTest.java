@@ -30,7 +30,7 @@ class UserServiceTest {
     @DisplayName("create() 메서드는")
     class Context_create_method {
         @Nested
-        @DisplayName("id가 없는 User 객체를 받았을 때")
+        @DisplayName("id가 null인 User 객체를 받았을 때")
         class Context_with_user {
             @Test
             @DisplayName("리포지토리에 저장하고, User 객체를 리턴한다.")
