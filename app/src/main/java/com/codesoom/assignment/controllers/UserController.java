@@ -21,4 +21,9 @@ public class UserController {
         User user = modelMapper.map(userDto, User.class);
         return userService.create(user);
     }
+
+    @GetMapping("/{id}")
+    public User get(@PathVariable Long id) {
+        return userService.get(id);
+    }
 }

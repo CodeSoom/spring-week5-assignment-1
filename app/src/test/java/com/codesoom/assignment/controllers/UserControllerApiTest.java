@@ -71,28 +71,22 @@ public class UserControllerApiTest {
     @Nested
     @DisplayName("GET /user/{id} 요청을 보낼 때")
     class Describe_get_user {
-        private final MockHttpServletRequestBuilder requestBuilder;
-        Long id = 1000L;
-
-        public Describe_get_user() {
-            requestBuilder = get("/users/" + id);
-        }
-
         @Nested
         @DisplayName("{id} 를 가진 User 가 존재한다면")
         class Context_valid_id {
+            private final MockHttpServletRequestBuilder requestBuilder;
             private final ResultActions actions;
-            private final User user = User.builder()
-                    .id(id)
-                    .password("gabseng123")
-                    .name("김갑생")
-                    .email("gabseng@naver.com")
-                    .build();
+            private final User user;
 
             public Context_valid_id() throws Exception {
                 userRepository.deleteAll();
-                userRepository.save(user);
+                user = userRepository.save(User.builder()
+                        .password("gabseng123")
+                        .name("김갑생")
+                        .email("gabseng@naver.com")
+                        .build());
 
+                requestBuilder = get("/user/" + user.getId());
                 actions = mockMvc.perform(requestBuilder);
             }
 
