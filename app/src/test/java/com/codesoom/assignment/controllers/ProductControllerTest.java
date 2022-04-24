@@ -211,7 +211,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("고양이 장난감 생성 시, 고양이 장난감의 메이커가 없을 때, Bad Request 에러가 난다.")
+    @DisplayName("고양이 장난감 생성 시, 고양이 장난감의 메이커가 없을 때, Bad Request 응답을 반환한다.")
     void createWithoutMaker() throws Exception {
         mockMvc.perform(
                         post("/products")
@@ -225,7 +225,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("고양이 장난감 생성 시, 고양이 장난감의 가격이 null 일 때, Bad Request 에러가 난다.")
+    @DisplayName("고양이 장난감 생성 시, 고양이 장난감의 가격이 null 일 때, Bad Request 응답을 반환한다.")
     void createWithoutPrice() throws Exception {
         mockMvc.perform(
                         post("/products")
@@ -239,7 +239,7 @@ class ProductControllerTest {
     }
 
     @Test
-    @DisplayName("고양이 장난감 생성 시, 모든 속성 값이 비어있을 때, Bad Request 에러가 난다.")
+    @DisplayName("고양이 장난감 생성 시, 모든 속성 값이 비어있을 때, Bad Request 응답을 반환한다.")
     void createWithoutAll() throws Exception {
         mockMvc.perform(
                         post("/products")
