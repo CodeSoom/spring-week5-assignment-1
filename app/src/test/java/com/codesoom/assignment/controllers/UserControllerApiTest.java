@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.Utf8MockMvc;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.exceptions.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.modelmapper.ModelMapper;
@@ -13,7 +14,10 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -152,6 +156,45 @@ public class UserControllerApiTest {
                 actions.andExpect(content().string(objectMapper.writeValueAsString(originUser)));
                 assertThat(originUser.getName()).isEqualTo("updated" + originName);
                 assertThat(originUser.getEmail()).isEqualTo("updated" + originEmail);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /users/{id} 요청을 받을 때")
+    class Describe_delete_user {
+        @Nested
+        @DisplayName("id 를 가진 User 가 존재한다면")
+        class Context_valid_id {
+            private final MockHttpServletRequestBuilder requestBuilder;
+            private final ResultActions actions;
+            private final User user;
+
+            public Context_valid_id() throws Exception {
+                userRepository.deleteAll();
+
+                user = userRepository.save(User.builder()
+                        .password("gabseng123")
+                        .name("name")
+                        .email("name")
+                        .build());
+
+                requestBuilder = delete("/users/" + user.getId());
+
+                actions = mockMvc.perform(requestBuilder);
+            }
+
+            @Test
+            @DisplayName("204 No Content 응답을 반환한다.")
+            void it_returns_204_no_content() throws Exception {
+                actions.andExpect(status().isNoContent());
+            }
+
+            @Test
+            @DisplayName("리포지토리에서 user 를 삭제한다.")
+            void it_deletes_user() {
+                assertThatThrownBy(() ->userRepository.findById(user.getId()))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
