@@ -29,12 +29,12 @@ public class UserControllerApiTest {
     private final String validUserInput = "{\"name\": \"김갑생\", \"email\": \"gabseng@naver.com\", \"password\": \"gabgabhada123\"}";
 
     @Nested
-    @DisplayName("POST /user 요청을 보낼 때")
+    @DisplayName("POST /users 요청을 보낼 때")
     class Describe_post_user {
         private final MockHttpServletRequestBuilder requestBuilder;
 
         public Describe_post_user() {
-            requestBuilder = post("/user");
+            requestBuilder = post("/users");
         }
 
         @Nested
@@ -69,7 +69,7 @@ public class UserControllerApiTest {
     }
 
     @Nested
-    @DisplayName("GET /user/{id} 요청을 보낼 때")
+    @DisplayName("GET /users/{id} 요청을 보낼 때")
     class Describe_get_user {
         @Nested
         @DisplayName("{id} 를 가진 User 가 존재한다면")
@@ -86,7 +86,7 @@ public class UserControllerApiTest {
                         .email("gabseng@naver.com")
                         .build());
 
-                requestBuilder = get("/user/" + user.getId());
+                requestBuilder = get("/users/" + user.getId());
                 actions = mockMvc.perform(requestBuilder);
             }
 
