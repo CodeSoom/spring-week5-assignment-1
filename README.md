@@ -15,7 +15,7 @@
 
 - [x] 회원 생성하기 - `POST /users`
 - [x] 회원 1건 조회하기 - `GET /users`
-- [ ] 회원 수정하기 - `PATCH /users/{id}`
+- [x] 회원 수정하기 - `PATCH /users/{id}`
 - [ ] 회원 삭제하기 - `DELETE /users/{id}`
 
 ### 회원 관리 유효성 검사하기
