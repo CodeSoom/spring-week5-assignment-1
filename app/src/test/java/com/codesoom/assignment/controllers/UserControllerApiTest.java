@@ -134,7 +134,9 @@ public class UserControllerApiTest {
                         .build();
 
                 requestBuilder = patch("/users/" + originUser.getId());
-                actions = mockMvc.perform(requestBuilder);
+                actions = mockMvc.perform(requestBuilder
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(source)));
             }
 
             @Test

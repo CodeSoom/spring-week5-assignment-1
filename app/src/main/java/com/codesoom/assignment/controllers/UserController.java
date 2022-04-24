@@ -26,4 +26,10 @@ public class UserController {
     public User get(@PathVariable Long id) {
         return userService.get(id);
     }
+
+    @PatchMapping("/{id}")
+    public User update(@PathVariable Long id, @RequestBody UserDto userDto) {
+        User source = modelMapper.map(userDto, User.class);
+        return userService.update(id, source);
+    }
 }
