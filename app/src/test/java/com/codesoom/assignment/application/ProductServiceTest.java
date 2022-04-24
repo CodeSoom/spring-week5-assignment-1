@@ -86,6 +86,7 @@ class ProductServiceTest {
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
+                .imageUrl("https://pixabay.com/photos/mouse-rodent-cute-mammal-nager-1708379/")
                 .build();
 
         Product product = productService.createProduct(productData);

@@ -8,22 +8,19 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductData {
+public class UserCreateData {
     @NotBlank
     private String name;
 
     @NotBlank
-    private String maker;
+    private String email;
 
-    @NotNull
-    private Integer price;
-
-    private String imageUrl;
+    @NotBlank
+    private String password;
 }
