@@ -2,11 +2,14 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserDto;
+import com.codesoom.assignment.dto.CreateUserDto;
+import com.codesoom.assignment.dto.UpdateUserDto;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/users")
@@ -17,8 +20,8 @@ public class UserController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody UserDto userDto) {
-        User user = modelMapper.map(userDto, User.class);
+    public User create(@Valid @RequestBody CreateUserDto createUserDto) {
+        User user = modelMapper.map(createUserDto, User.class);
         return userService.create(user);
     }
 
@@ -28,8 +31,8 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public User update(@PathVariable Long id, @RequestBody UserDto userDto) {
-        User source = modelMapper.map(userDto, User.class);
+    public User update(@PathVariable Long id, @Valid @RequestBody UpdateUserDto updateUserDto) {
+        User source = modelMapper.map(updateUserDto, User.class);
         return userService.update(id, source);
     }
 

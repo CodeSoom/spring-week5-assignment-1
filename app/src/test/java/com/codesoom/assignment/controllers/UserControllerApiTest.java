@@ -35,6 +35,7 @@ public class UserControllerApiTest {
     @Autowired
     private ModelMapper modelMapper;
     private final String validUserInput = "{\"name\": \"김갑생\", \"email\": \"gabseng@naver.com\", \"password\": \"gabgabhada123\"}";
+    private final String emptyUserInput = "{\"name\": \"\", \"email\": \"\", \"password\": \"\"}";
 
     @Nested
     @DisplayName("POST /users 요청을 받을 때")
@@ -72,6 +73,27 @@ public class UserControllerApiTest {
                 User user = userRepository.findAll().iterator().next();
 
                 actions.andExpect(content().string(objectMapper.writeValueAsString(user)));
+            }
+        }
+
+        @Nested
+        @DisplayName("필수 값이 없는 빈 입력값을 받는다면")
+        class Context_empty_input {
+            private final ResultActions actions;
+
+            public Context_empty_input() throws Exception {
+                userRepository.deleteAll();
+
+                actions = mockMvc.perform(requestBuilder
+                        .content(emptyUserInput)
+                        .contentType(MediaType.APPLICATION_JSON));
+            }
+
+            @Test
+            @DisplayName("400 BAD REQUEST 응답을 반환한다.")
+            void It_returns_400_bad_request_response() throws Exception {
+                actions.andDo(print())
+                        .andExpect(status().isBadRequest());
             }
         }
     }
@@ -158,6 +180,43 @@ public class UserControllerApiTest {
                 actions.andExpect(content().string(objectMapper.writeValueAsString(originUser)));
                 assertThat(originUser.getName()).isEqualTo("updated" + originName);
                 assertThat(originUser.getEmail()).isEqualTo("updated" + originEmail);
+            }
+        }
+
+        @Nested
+        @DisplayName("id 가 존재하지 않는다면")
+        class Context_not_found_id {
+            private final MockHttpServletRequestBuilder requestBuilder;
+            private final ResultActions actions;
+            private final User originUser;
+            private final User source;
+            private final String originName = "김갑생";
+            private final String originEmail = "gabseng@naver.com";
+
+            public Context_not_found_id() throws Exception {
+                userRepository.deleteAll();
+
+                originUser = userRepository.save(User.builder()
+                        .password("gabseng123")
+                        .name(originName)
+                        .email(originEmail)
+                        .build());
+
+                source = User.builder()
+                        .name("updated" + originUser.getName())
+                        .email("updated" + originUser.getEmail())
+                        .build();
+
+                requestBuilder = patch("/users/1" + originUser.getId());
+                actions = mockMvc.perform(requestBuilder
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(source)));
+            }
+
+            @Test
+            @DisplayName("404 Not Found 응답을 반환한다.")
+            void it_returns_404_not_found() throws Exception {
+                actions.andExpect(status().isNotFound());
             }
         }
     }

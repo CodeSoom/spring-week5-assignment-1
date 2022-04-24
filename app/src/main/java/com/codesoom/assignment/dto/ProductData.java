@@ -5,12 +5,13 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Setter
+@Setter(AccessLevel.PROTECTED)
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class ProductData {
+    @Setter(AccessLevel.NONE)
     private Long id;
 
     @NotBlank(message = "{NotBlank.product.name}")

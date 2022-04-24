@@ -6,6 +6,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
 
 @Entity
 // 라이브러리 사용을 위해 Setter 를 무작정 공개하는 것은 좋지 않은 전략이기 때문에 엑세스 레벨을 Private 으로 둔다.
@@ -17,17 +18,10 @@ public class User {
     @GeneratedValue
     @Setter(AccessLevel.NONE)
     Long id;
+    @NotBlank(message = "이름은 공백일 수 없습니다.")
     String name;
+    @NotBlank(message = "이메일은 공백일 수 없습니다.")
     String email;
+    @NotBlank(message = "비밀번호는 공백일 수 없습니다.")
     String password;
-
-    @Override
-    public String toString() {
-        return MoreObjects.toStringHelper(this)
-                .add("id", id)
-                .add("name", name)
-                .add("email", email)
-                .add("password", password)
-                .toString();
-    }
 }
