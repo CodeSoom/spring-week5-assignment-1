@@ -13,6 +13,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -59,9 +60,51 @@ public class UserControllerApiTest {
             @Test
             @DisplayName("리포지토리에 User 를 추가하고, 추가한 User 를 반환한다.")
             void It_returns_user() throws Exception {
-//                assertThat(userRepository.count()).isNotZero();
+                assertThat(userRepository.count()).isNotZero();
                 User user = userRepository.findAll().iterator().next();
 
+                actions.andExpect(content().string(objectMapper.writeValueAsString(user)));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /user/{id} 요청을 보낼 때")
+    class Describe_get_user {
+        private final MockHttpServletRequestBuilder requestBuilder;
+        Long id = 1000L;
+
+        public Describe_get_user() {
+            requestBuilder = get("/users/" + id);
+        }
+
+        @Nested
+        @DisplayName("{id} 를 가진 User 가 존재한다면")
+        class Context_valid_id {
+            private final ResultActions actions;
+            private final User user = User.builder()
+                    .id(id)
+                    .password("gabseng123")
+                    .name("김갑생")
+                    .email("gabseng@naver.com")
+                    .build();
+
+            public Context_valid_id() throws Exception {
+                userRepository.deleteAll();
+                userRepository.save(user);
+
+                actions = mockMvc.perform(requestBuilder);
+            }
+
+            @Test
+            @DisplayName("200 OK 응답을 반환한다.")
+            void It_returns_200_OK() throws Exception {
+                actions.andExpect(status().isOk());
+            }
+
+            @Test
+            @DisplayName("id 를 가진 User 를 반환한다.")
+            void it_returns_user_with_specific_id() throws Exception {
                 actions.andExpect(content().string(objectMapper.writeValueAsString(user)));
             }
         }
