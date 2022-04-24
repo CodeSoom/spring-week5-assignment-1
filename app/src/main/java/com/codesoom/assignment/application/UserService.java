@@ -26,6 +26,10 @@ public class UserService {
     public User update(Long id, User updateUser) {
         User originUser = get(id);
         modelMapper.map(updateUser, originUser);
-        return get(id);
+        return originUser;
+    }
+
+    public void delete(Long id) {
+        userRepository.delete(get(id));
     }
 }

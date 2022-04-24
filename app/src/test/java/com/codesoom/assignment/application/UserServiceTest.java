@@ -11,7 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @SpringBootTest
-@DisplayName("UserService 는")
+@DisplayName("UserService 의")
 class UserServiceTest {
     @Autowired
     UserService userService;
@@ -117,6 +117,34 @@ class UserServiceTest {
                 }
             }
 
+        }
+    }
+
+    @Nested
+    @DisplayName("delete() 메서드는")
+    class Context_delete_method {
+        @Nested
+        @DisplayName("존재하는 id 를 받았을 때")
+        class Context_valid_id {
+            private final User user;
+
+            public Context_valid_id() {
+                userRepository.deleteAll();
+                user = userRepository.save(User.builder()
+                        .password("password")
+                        .name("name")
+                        .email("email")
+                        .build());
+            }
+
+            @Test
+            @DisplayName("user 를 삭제한다.")
+            void it_deletes_user() {
+                long beforeCount = userRepository.count();
+                userService.delete(user.getId());
+                long afterCount = userRepository.count();
+                assertThat(beforeCount).isEqualTo(afterCount + 1);
+            }
         }
     }
 }
