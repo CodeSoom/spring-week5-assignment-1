@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
@@ -13,8 +14,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -26,6 +26,8 @@ public class UserControllerApiTest {
     @Autowired MockMvc mockMvc;
     @Autowired UserRepository userRepository;
     private final ObjectMapper objectMapper = new ObjectMapper();
+    @Autowired
+    private ModelMapper modelMapper;
     private final String validUserInput = "{\"name\": \"김갑생\", \"email\": \"gabseng@naver.com\", \"password\": \"gabgabhada123\"}";
 
     @Nested
@@ -100,6 +102,54 @@ public class UserControllerApiTest {
             @DisplayName("id 를 가진 User 를 반환한다.")
             void it_returns_user_with_specific_id() throws Exception {
                 actions.andExpect(content().string(objectMapper.writeValueAsString(user)));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PATCH /users/{id} 요청을 받을 때")
+    class Describe_patch_user {
+        @Nested
+        @DisplayName("id 를 가진 User 가 존재하고, body 에 수정될 필드 정보가 들어있다면")
+        class Context_valid_id {
+            private final MockHttpServletRequestBuilder requestBuilder;
+            private final ResultActions actions;
+            private final User originUser;
+            private final User source;
+            private final String originName = "김갑생";
+            private final String originEmail = "gabseng@naver.com";
+
+            public Context_valid_id() throws Exception {
+                userRepository.deleteAll();
+
+                originUser = userRepository.save(User.builder()
+                        .password("gabseng123")
+                        .name(originName)
+                        .email(originEmail)
+                        .build());
+
+                source = User.builder()
+                        .name("updated" + originUser.getName())
+                        .email("updated" + originUser.getEmail())
+                        .build();
+
+                requestBuilder = patch("/users/" + originUser.getId());
+                actions = mockMvc.perform(requestBuilder);
+            }
+
+            @Test
+            @DisplayName("200 OK 응답을 반환한다.")
+            void It_returns_200_OK() throws Exception {
+                actions.andExpect(status().isOk());
+            }
+
+            @Test
+            @DisplayName("업데이트된 User 를 반환한다.")
+            void it_returns_user_with_specific_id() throws Exception {
+                modelMapper.map(source, originUser);
+                actions.andExpect(content().string(objectMapper.writeValueAsString(originUser)));
+                assertThat(originUser.getName()).isEqualTo("updated" + originName);
+                assertThat(originUser.getEmail()).isEqualTo("updated" + originEmail);
             }
         }
     }
