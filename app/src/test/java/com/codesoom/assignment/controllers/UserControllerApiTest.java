@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.Utf8MockMvc;
+import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.exceptions.UserNotFoundException;
@@ -29,6 +30,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class UserControllerApiTest {
     @Autowired MockMvc mockMvc;
     @Autowired UserRepository userRepository;
+    @Autowired UserService userService;
     private final ObjectMapper objectMapper = new ObjectMapper();
     @Autowired
     private ModelMapper modelMapper;
@@ -193,7 +195,7 @@ public class UserControllerApiTest {
             @Test
             @DisplayName("리포지토리에서 user 를 삭제한다.")
             void it_deletes_user() {
-                assertThatThrownBy(() ->userRepository.findById(user.getId()))
+                assertThatThrownBy(() -> userService.get(user.getId()))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }

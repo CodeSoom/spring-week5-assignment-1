@@ -32,4 +32,10 @@ public class UserController {
         User source = modelMapper.map(userDto, User.class);
         return userService.update(id, source);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        userService.delete(id);
+    }
 }
