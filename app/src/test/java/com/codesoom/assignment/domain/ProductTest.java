@@ -6,6 +6,18 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
     @Test
+    void toStringTest() {
+        String builderToString = Product.builder()
+                .id(1L)
+                .name("쥐돌이")
+                .maker("냥이월드")
+                .price(5000)
+                .toString();
+
+        assertThat(builderToString).isEqualTo("Product.ProductBuilder(id=1, name=쥐돌이, maker=냥이월드, price=5000, imageUrl=null)");
+    }
+
+    @Test
     void creationWithBuilder() {
         Product product = Product.builder()
                 .id(1L)
