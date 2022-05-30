@@ -17,4 +17,19 @@ public class UserTest {
         assertThat(user.getEmail()).isEqualTo("kim@gmail.com");
         assertThat(user.getPassword()).isEqualTo("1111");
     }
+
+    @Test
+    void update() {
+        User user = User.builder()
+                .name("김철수")
+                .email("kim@gmail.com")
+                .password("1111")
+                .build();
+
+        user.update("김영희", "young@gmail.com", "2222");
+
+        assertThat(user.getName()).isEqualTo("김영희");
+        assertThat(user.getEmail()).isEqualTo("young@gmail.com");
+        assertThat(user.getPassword()).isEqualTo("2222");
+    }
 }
