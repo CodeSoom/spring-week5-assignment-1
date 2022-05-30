@@ -30,8 +30,7 @@ public class UserService {
      * @throws UserNotFoundException Repository 에서 User를 찾지 못했을 때 던지는 예외
      */
     public User updateInfo(Long id, UserUpdateInfoData userUpdateInfoData) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        User user = findUser(id);
 
         user.updateInfo(
                 userUpdateInfoData.getName(),
@@ -39,5 +38,19 @@ public class UserService {
         );
 
         return user;
+    }
+
+
+    /**
+     * @throws UserNotFoundException Repository 에서 User를 찾지 못했을 때 던지는 예외
+     */
+    public void deleteUser(Long id) {
+        User user = findUser(id);
+        userRepository.delete(user);
+    }
+
+    private User findUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
