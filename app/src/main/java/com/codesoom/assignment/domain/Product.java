@@ -7,6 +7,13 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 
+/**
+ * '상품' Root Entity
+ * <p>
+ * All Known Extending Classes:
+ * Toy
+ * </p>
+ */
 @Entity
 @Getter
 @NoArgsConstructor
