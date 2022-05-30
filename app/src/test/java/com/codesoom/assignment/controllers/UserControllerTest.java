@@ -4,6 +4,7 @@ import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserSignupData;
 import com.codesoom.assignment.dto.UserUpdateInfoData;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -156,6 +158,29 @@ class UserControllerTest {
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.name").value(userUpdateInfoData.getName()))
                         .andExpect(jsonPath("$.password").value(userUpdateInfoData.getPassword()));
+            }
+        }
+
+        @Nested
+        @DisplayName("id가 존재하지 않으면")
+        class Context_when_not_existed_id {
+            private final Long invalidId = 100L;
+
+            @BeforeEach
+            void setUp() {
+                given(userService.updateInfo(eq(invalidId), any(UserUpdateInfoData.class)))
+                        .willThrow(new UserNotFoundException(invalidId));
+            }
+
+            @DisplayName("404 status를 응답한다.")
+            @Test
+            void it_responses_404_status() throws Exception {
+                mockMvc.perform(
+                        patch("/users/{id}", invalidId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(toJson(userUpdateInfoData))
+                ).andExpect(status().isNotFound());
+
             }
         }
 
