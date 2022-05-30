@@ -22,9 +22,10 @@ import java.util.List;
 
 
 import static org.hamcrest.core.StringContains.containsString;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -43,6 +44,7 @@ class ToyCrudControllerTest {
 
     private Toy toy;
     private Toy toyWithoutId;
+    private Toy toyUpdating;
     private ToyProducer producer;
     private Won money;
     private ImageDemo demo;
@@ -72,6 +74,12 @@ class ToyCrudControllerTest {
                 .build();
         toyWithoutId = Toy.builder()
                 .name(PRODUCT_NAME)
+                .price(money)
+                .producer(producer)
+                .demo(demo)
+                .build();
+        toyUpdating = Toy.builder()
+                .name(PRODUCT_NAME + "UPDATED")
                 .price(money)
                 .producer(producer)
                 .demo(demo)
@@ -152,6 +160,82 @@ class ToyCrudControllerTest {
                                 .content(toyToJson(toy))
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated());
+
+            }
+        }
+
+        @Nested
+        @DisplayName("patch 메소드는")
+        class Describe_patch {
+            @Nested
+            @DisplayName("만약 존재하는 Toy를 부분 수정한다면")
+            class Context_with_existing_toy {
+                @BeforeEach
+                void setUp() {
+                    Toy toyUpdated = Toy.builder()
+                            .id(TOY_ID)
+                            .name(PRODUCT_NAME + "UPDATED")
+                            .price(money)
+                            .producer(producer)
+                            .demo(demo)
+                            .build();
+
+                    given(service.update(eq(TOY_ID), any(Toy.class))).willReturn(toyUpdated);
+                }
+
+                @Test
+                @DisplayName("HTTP Status Code 200 OK 응답한다")
+                void it_responds_with_200_ok() throws Exception {
+                    mockMvc.perform(patch("/products/" + TOY_ID)
+                                    .content(toyToJson(toyUpdating))
+                                    .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isOk());
+                }
+            }
+
+            @Nested
+            @DisplayName("만약 존재하지 않는 Toy를 부분 수정한다면")
+            class Context_without_existing_toy {
+                @BeforeEach
+                void setUp() {
+                    given(service.update(eq(TOY_ID_NOT_EXISTING), any(Toy.class)))
+                            .willThrow(new ProductNotFoundException(TOY_ID_NOT_EXISTING));
+                }
+
+                @Test
+                @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
+                void it_responds_with_404() throws Exception {
+                    mockMvc.perform(patch("/products/" + TOY_ID_NOT_EXISTING)
+                                    .content(toyToJson(toyUpdating))
+                                    .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isNotFound());
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("delete 메소드는")
+        class Describe_delete {
+            @Nested
+            @DisplayName("만약 존재하는 Toy를 삭제한다면")
+            class Context_with_existing_toy {
+                @Test
+                @DisplayName("HTTP Status Code 204 NO CONTENT 응답한다")
+                void it_responds_with_204() throws Exception {
+                    mockMvc.perform(delete("/products/" + TOY_ID))
+                            .andExpect(status().isNoContent());
+                }
+            }
+
+            @Nested
+            @DisplayName("만약 존재하지 않는 Toy를 삭제한다면")
+            class Context_without_existing_toy {
+                @Test
+                @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
+                void it_responds_with_404() throws Exception {
+                    mockMvc.perform(delete("/products/" + TOY_ID_NOT_EXISTING))
+                            .andExpect(status().isNotFound());
+                }
 
             }
         }
