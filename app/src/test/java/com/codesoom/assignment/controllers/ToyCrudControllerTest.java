@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ToyCrudService;
+import com.codesoom.assignment.controllers.dtos.ToyRequestData;
 import com.codesoom.assignment.domain.ImageDemo;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
@@ -242,6 +243,13 @@ class ToyCrudControllerTest {
     }
 
     private String toyToJson(Toy toy) throws JsonProcessingException {
-        return objectMapper.writeValueAsString(toy);
+        ToyRequestData requestData = ToyRequestData.builder()
+                .name(toy.getName())
+                .price(toy.getPrice().getValue())
+                .maker(toy.getProducer().getName())
+                .url(toy.getDemo().getUrl())
+                .build();
+
+        return objectMapper.writeValueAsString(requestData);
     }
 }
