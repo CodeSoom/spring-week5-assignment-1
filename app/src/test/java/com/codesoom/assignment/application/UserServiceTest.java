@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserUpdateInfoData;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -59,10 +60,11 @@ class UserServiceTest {
     @DisplayName("updateInfo 메소드는")
     class Describe_updateInfo {
 
-        private final UserData userDataForUpdate = UserData.builder()
-                .name("배추김치")
-                .password("1234")
-                .build();
+        private final UserUpdateInfoData userUpdateInfoData =
+                UserUpdateInfoData.builder()
+                        .name("배추김치")
+                        .password("1234")
+                        .build();
 
         @DataJpaTest
         @Nested
@@ -79,7 +81,7 @@ class UserServiceTest {
             @Test
             @DisplayName("변경된 user를 반환한다.")
             void it_returns_updated_user() {
-                User user = userService.updateInfo(id, userDataForUpdate);
+                User user = userService.updateInfo(id, userUpdateInfoData);
 
                 assertThat(user.getName()).isEqualTo("배추김치");
                 assertThat(user.getPassword()).isEqualTo("1234");
@@ -96,7 +98,7 @@ class UserServiceTest {
             @Test
             @DisplayName("UserNotFoundException 예외를 던진다.")
             void it_returns_updated_user() {
-                assertThatThrownBy(() -> userService.updateInfo(INVALID_ID, userDataForUpdate))
+                assertThatThrownBy(() -> userService.updateInfo(INVALID_ID, userUpdateInfoData))
                         .isInstanceOf(UserNotFoundException.class);
             }
         }

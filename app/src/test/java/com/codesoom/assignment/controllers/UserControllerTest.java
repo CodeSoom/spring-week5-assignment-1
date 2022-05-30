@@ -2,8 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.ProductData;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserUpdateInfoData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,7 +17,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -112,6 +115,45 @@ class UserControllerTest {
             }
         }
 
+    }
+
+    @Nested
+    @DisplayName("PATCH /users 요청은")
+    class Describe_update {
+
+        private final UserUpdateInfoData userUpdateInfoData =
+                UserUpdateInfoData.builder()
+                        .name("배추김치")
+                        .password("1234")
+                        .build();
+
+        @BeforeEach
+        void setUp() {
+            given(userService.updateInfo(eq(1L), any(UserUpdateInfoData.class)))
+                    .will(invocation -> {
+                        Long id = invocation.getArgument(0);
+                        UserUpdateInfoData data = invocation.getArgument(1);
+                        return User.builder()
+                                .id(id)
+                                .name(data.getName())
+                                .password(data.getPassword())
+                                .build();
+                    });
+
+        }
+
+        @Test
+        @DisplayName("변경된 user를 응답한다.")
+        void it_responses_updated_user() throws Exception {
+            mockMvc.perform(
+                            patch("/users/{id}", 1L)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(toJson(userUpdateInfoData))
+                    )
+                    .andExpect(status().isOk())
+                    .andExpect(jsonPath("$.name").value(userUpdateInfoData.getName()))
+                    .andExpect(jsonPath("$.password").value(userUpdateInfoData.getPassword()));
+        }
     }
 
     private String toJson(Object value) throws JsonProcessingException {
