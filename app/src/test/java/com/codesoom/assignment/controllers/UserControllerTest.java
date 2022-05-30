@@ -53,20 +53,6 @@ class UserControllerTest {
     @DisplayName("POST /users 요청은")
     class Describe_create {
 
-        @BeforeEach
-        void setUp() {
-            given(userService.signUp(any(UserData.class)))
-                    .will((invocation -> {
-                        UserData userData = invocation.getArgument(0);
-                        return User.builder()
-                                .id(1L)
-                                .name(userData.getName())
-                                .email(userData.getEmail())
-                                .password(userData.getPassword())
-                                .build();
-                    }));
-        }
-
         @Nested
         @DisplayName("유효하지 요청 데이터가 오면")
         class Context_when_invalid_request_data {
@@ -88,19 +74,44 @@ class UserControllerTest {
             }
         }
 
-        @Test
-        @DisplayName("생성된 유저를 응답한다.")
-        void it_responses_created_user() throws Exception {
-            mockMvc.perform(post("/users")
-                            .content(toJson(userData))
-                            .contentType(MediaType.APPLICATION_JSON)
-                    )
-                    .andExpect(status().isCreated())
-                    .andExpect(jsonPath("$.id").exists())
-                    .andExpect(jsonPath("$.name").value(NAME))
-                    .andExpect(jsonPath("$.password").value(PASSWORD))
-                    .andExpect(jsonPath("$.email").value(EMAIl));
+        @Nested
+        @DisplayName("유효한 요청 데이터가 오면")
+        class Context_when_valid_request_data {
+            private final UserData validData = UserData.builder()
+                    .email(EMAIl)
+                    .name(NAME)
+                    .password(PASSWORD)
+                    .build();
+
+            @BeforeEach
+            void setUp() {
+                given(userService.signUp(any(UserData.class)))
+                        .will((invocation -> {
+                            UserData userData = invocation.getArgument(0);
+                            return User.builder()
+                                    .id(1L)
+                                    .name(userData.getName())
+                                    .email(userData.getEmail())
+                                    .password(userData.getPassword())
+                                    .build();
+                        }));
+            }
+
+            @Test
+            @DisplayName("생성된 유저를 응답한다.")
+            void it_responses_created_user() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(toJson(validData))
+                                .contentType(MediaType.APPLICATION_JSON)
+                        )
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.id").exists())
+                        .andExpect(jsonPath("$.name").value(NAME))
+                        .andExpect(jsonPath("$.password").value(PASSWORD))
+                        .andExpect(jsonPath("$.email").value(EMAIl));
+            }
         }
+
     }
 
     private String toJson(Object value) throws JsonProcessingException {
