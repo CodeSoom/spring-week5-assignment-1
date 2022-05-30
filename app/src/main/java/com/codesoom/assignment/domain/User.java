@@ -23,4 +23,8 @@ public class User {
 
     private String password;
 
+    public void updateInfo(String name, String password) {
+        this.name = name;
+        this.password = password;
+    }
 }
