@@ -59,7 +59,7 @@ class UserControllerTest {
     class Describe_create {
 
         @Nested
-        @DisplayName("유효하지 요청 데이터가 오면")
+        @DisplayName("유효하지 않는 요청 데이터가 오면")
         class Context_when_invalid_request_data {
 
             private final UserSignupData invalidData = UserSignupData.builder()
@@ -68,9 +68,9 @@ class UserControllerTest {
                     .password("")
                     .build();
 
-            @DisplayName("404 status를 응답한다.")
+            @DisplayName("400 status를 응답한다.")
             @Test
-            void it_responses_404_status() throws Exception {
+            void it_responses_400_status() throws Exception {
                 mockMvc.perform(post("/users")
                                 .content(toJson(invalidData))
                                 .contentType(MediaType.APPLICATION_JSON)
