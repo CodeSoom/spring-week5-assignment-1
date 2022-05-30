@@ -14,9 +14,13 @@ public class UserTest {
     @Test
     @DisplayName("유저 생성")
     void creation() {
-        User user = new User(EMAIl, NAME, PASSWORD);
+        User user = User.builder()
+                .email(EMAIl)
+                .name(NAME)
+                .password(PASSWORD)
+                .build();
 
-        assertThat(user.getName()).isEqualTo(EMAIl);
+        assertThat(user.getName()).isEqualTo(NAME);
         assertThat(user.getEmail()).isEqualTo(EMAIl);
         assertThat(user.getPassword()).isEqualTo(PASSWORD);
     }
