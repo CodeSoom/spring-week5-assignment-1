@@ -35,9 +35,12 @@ public class ToyCrudService implements ToyCreateService, ToyShowService, ToyUpda
 
     @Override
     public Toy update(Long id, Toy toy) {
-        Toy found = showById(id);
+        if (!repository.existsById(id)) {
+            throw new ProductNotFoundException(id);
+        }
 
         Toy toyUpdating = Toy.builder()
+                .id(id)
                 .name(toy.getName())
                 .price(toy.getPrice())
                 .producer(toy.getProducer())
