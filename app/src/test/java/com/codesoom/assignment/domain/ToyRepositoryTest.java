@@ -10,25 +10,36 @@ import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
-@DisplayName("ProductRepository 클래스")
-class ProductRepositoryTest {
+@DisplayName("ToyRepository")
+class ToyRepositoryTest {
     @Autowired
-    private ProductRepository repository;
+    private ToyRepository repository;
     @Autowired
-    private ProducerRepository producerRepository;
+    private ToyProducerRepository producerRepository;
 
-    private Product product;
-    private Producer producer;
-    private final Long PRODUCT_ID = 2L;
-    private final Long PRODUCER_ID = 2L;
+    private Toy product;
+    private ToyProducer producer;
+    private Won money;
+    private ImageDemo demo;
     private final String PRODUCT_NAME = "Test Product";
     private final String PRODUCER_NAME = "Test Producer";
     private final BigDecimal MONEY_VALUE = new BigDecimal(1000);
+    private final String IMAGE_URL = "https://metacode.biz/@test/avatar.jpg";
 
     @BeforeEach
     void setUp() {
-        producer = new ToyProducer(PRODUCER_ID, PRODUCT_NAME);
-        product = new Toy(TOY_ID, TOY_NAME, producer, MONEY_VALUE);
+        demo = new ImageDemo(IMAGE_URL);
+        money = new Won(MONEY_VALUE);
+
+        producer = ToyProducer.builder()
+                .name(PRODUCER_NAME)
+                .build();
+        product = Toy.builder()
+                .name(PRODUCT_NAME)
+                .price(money)
+                .producer(producer)
+                .demo(demo)
+                .build();
     }
 
     @AfterEach
@@ -40,7 +51,7 @@ class ProductRepositoryTest {
     @Nested
     @DisplayName("findAll 메소드는")
     class Describe_findAll {
-        private List<Product> subject() {
+        private List<Toy> subject() {
             return repository.findAll();
         }
 
@@ -50,7 +61,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("비어 있는 List를 반환한다")
             void it_returns_empty_list() {
-                final List<Product> actual = subject();
+                final List<Toy> actual = subject();
 
                 assertThat(actual).isEmpty();
             }
@@ -68,7 +79,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("비어 있지 않은 List를 반환한다")
             void it_returns_not_empty_list() {
-                final List<Product> actual = subject();
+                final List<Toy> actual = subject();
 
                 assertThat(actual).isNotEmpty();
             }
