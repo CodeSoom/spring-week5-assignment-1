@@ -1,10 +1,10 @@
 package com.codesoom.assignment.controllers.dtos;
 
-import com.codesoom.assignment.domain.ImageDemo;
 import com.codesoom.assignment.domain.Toy;
-import com.codesoom.assignment.domain.ToyProducer;
-import com.codesoom.assignment.domain.Won;
 import lombok.*;
+
+import java.math.BigDecimal;
+
 
 @Getter
 @Builder
@@ -13,17 +13,17 @@ import lombok.*;
 public class ToyResponseData {
     private Long id;
     private String name;
-    private ToyProducer producer;
-    private Won price;
-    private ImageDemo demo;
+    private String maker;
+    private BigDecimal price;
+    private String url;
 
     public ToyResponseData toDto(Toy toy) {
         return ToyResponseData.builder()
                 .id(toy.getId())
                 .name(toy.getName())
-                .price(toy.getPrice())
-                .producer(toy.getProducer())
-                .demo(toy.getDemo())
+                .price(toy.getPrice().getValue())
+                .maker(toy.getProducer().getName())
+                .url(toy.getDemo().getUrl())
                 .build();
     }
 }
