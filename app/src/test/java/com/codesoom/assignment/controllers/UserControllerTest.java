@@ -19,11 +19,9 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.doThrow;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -207,7 +205,43 @@ class UserControllerTest {
 
     }
 
-    
+    @Nested
+    @DisplayName("DELETE /users/{id} 요청은")
+    class Describe_delete {
+
+        @Nested
+        @DisplayName("id가 존재하면")
+        class Context_when_existed_id {
+           private final Long validId = 1L;
+
+            @Test
+            @DisplayName("204 status를 응답한다.")
+            void it_responses_204_status() throws Exception {
+                mockMvc.perform(delete("/users/{id}", validId))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("id가 존재하지 않으면")
+        class Context_when_not_existed_id {
+            private final Long invalidId = 100L;
+
+            @BeforeEach
+            void setUp() {
+                doThrow(new UserNotFoundException(invalidId))
+                        .when(userService).deleteUser(invalidId);
+            }
+
+            @DisplayName("404 status를 응답한다.")
+            @Test
+            void it_responses_404_status() throws Exception {
+                mockMvc.perform(delete("/users/{id}", invalidId))
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
     private String toJson(Object value) throws JsonProcessingException {
         return objectMapper.writeValueAsString(value);
     }
