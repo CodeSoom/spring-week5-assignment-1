@@ -2,6 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.ProductData;
 import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -64,6 +65,27 @@ class UserControllerTest {
                                 .password(userData.getPassword())
                                 .build();
                     }));
+        }
+
+        @Nested
+        @DisplayName("유효하지 요청 데이터가 오면")
+        class Context_when_invalid_request_data {
+
+            private final UserData invalidData = UserData.builder()
+                    .email("")
+                    .name("")
+                    .password("")
+                    .build();
+
+            @DisplayName("404 status를 응답한다.")
+            @Test
+            void it_responses_404_status() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(toJson(invalidData))
+                                .contentType(MediaType.APPLICATION_JSON)
+                        )
+                        .andExpect(status().isBadRequest());
+            }
         }
 
         @Test
