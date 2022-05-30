@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ToyCrudService implements ToyShowService {
+public class ToyCrudService implements ToyCreateService, ToyShowService, ToyUpdateService, ToyDeleteService {
     private final ToyRepository repository;
 
     public ToyCrudService(ToyRepository repository) {
@@ -26,6 +26,29 @@ public class ToyCrudService implements ToyShowService {
         return repository.findById(id).stream()
                 .findFirst()
                 .orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    @Override
+    public Toy create(Toy toy) {
+        return repository.save(toy);
+    }
+
+    @Override
+    public Toy update(Long id, Toy toy) {
+        Toy found = showById(id);
+
+        Toy toyUpdating = Toy.builder()
+                .name(toy.getName())
+                .price(toy.getPrice())
+                .producer(toy.getProducer())
+                .demo(toy.getDemo())
+                .build();
+        return repository.save(toyUpdating);
+    }
+
+    @Override
+    public void deleteBy(Long id) {
+        repository.deleteById(id);
     }
 }
 
