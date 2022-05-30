@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 class UserServiceTest {
@@ -65,7 +67,7 @@ class UserServiceTest {
         @DataJpaTest
         @Nested
         @DisplayName("존재하는 아이디가 주어지면")
-        class Context_existed_id {
+        class Context_with_existed_id {
             private Long id;
 
             @BeforeEach
@@ -83,5 +85,21 @@ class UserServiceTest {
                 assertThat(user.getPassword()).isEqualTo("1234");
             }
         }
+
+        @DataJpaTest
+        @Nested
+        @DisplayName("존재하지 않는 아이디가 주어지면")
+        class Context_with_not_existed_id {
+
+            private final Long INVALID_ID = 100L;
+
+            @Test
+            @DisplayName("UserNotFoundException 예외를 던진다.")
+            void it_returns_updated_user() {
+                assertThatThrownBy(() -> userService.updateInfo(INVALID_ID, userDataForUpdate))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+
     }
 }
