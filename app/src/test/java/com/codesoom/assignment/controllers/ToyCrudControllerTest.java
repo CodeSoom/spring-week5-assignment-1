@@ -6,12 +6,14 @@ import com.codesoom.assignment.domain.ImageDemo;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
 import com.codesoom.assignment.domain.Won;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -22,6 +24,7 @@ import java.util.List;
 import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -39,11 +42,12 @@ class ToyCrudControllerTest {
     private final List<Toy> toys = new LinkedList<>();
 
     private Toy toy;
+    private Toy toyWithoutId;
     private ToyProducer producer;
     private Won money;
     private ImageDemo demo;
     private final Long TOY_ID = 1L;
-    private final Long NOT_EXISTING_TOY_ID = 10L;
+    private final Long TOY_ID_NOT_EXISTING = 10L;
     private final Long TOY_PRODUCER_ID = 1L;
     private final String PRODUCT_NAME = "Test Product";
     private final String PRODUCER_NAME = "Test Producer";
@@ -61,6 +65,12 @@ class ToyCrudControllerTest {
                 .build();
         toy = Toy.builder()
                 .id(TOY_ID)
+                .name(PRODUCT_NAME)
+                .price(money)
+                .producer(producer)
+                .demo(demo)
+                .build();
+        toyWithoutId = Toy.builder()
                 .name(PRODUCT_NAME)
                 .price(money)
                 .producer(producer)
@@ -114,17 +124,40 @@ class ToyCrudControllerTest {
         class Context_without_existing_toy {
             @BeforeEach
             void setUp() {
-                given(service.showById(NOT_EXISTING_TOY_ID))
-                        .willThrow(new ProductNotFoundException(NOT_EXISTING_TOY_ID));
+                given(service.showById(TOY_ID_NOT_EXISTING))
+                        .willThrow(new ProductNotFoundException(TOY_ID_NOT_EXISTING));
             }
 
             @Test
             @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
             void it_responds_with_404() throws Exception {
-                mockMvc.perform(get("/products/" + NOT_EXISTING_TOY_ID))
+                mockMvc.perform(get("/products/" + TOY_ID_NOT_EXISTING))
                         .andExpect(status().isNotFound());
             }
 
         }
+
+        @Nested
+        @DisplayName("create 메소드는")
+        class Describe_create {
+            @BeforeEach
+            void setUp() {
+                given(service.create(toyWithoutId)).willReturn(toy);
+            }
+
+            @Test
+            @DisplayName("HTTP Status Code 201 CREATED 응답한다")
+            void it_responds_with_201() throws Exception {
+                mockMvc.perform(post("/products")
+                                .content(toyToJson(toy))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated());
+
+            }
+        }
+    }
+
+    private String toyToJson(Toy toy) throws JsonProcessingException {
+        return objectMapper.writeValueAsString(toy);
     }
 }
