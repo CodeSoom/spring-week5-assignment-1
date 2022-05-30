@@ -41,8 +41,6 @@ class ToyCrudControllerTest {
     @MockBean
     private ToyCrudService service;
 
-    private final List<Toy> toys = new LinkedList<>();
-
     private Toy toy;
     private Toy toyWithoutId;
     private Toy toyUpdating;
@@ -85,11 +83,6 @@ class ToyCrudControllerTest {
                 .producer(producer)
                 .demo(demo)
                 .build();
-    }
-
-    @AfterEach
-    void clear() {
-        toys.clear();
     }
 
     @Nested
