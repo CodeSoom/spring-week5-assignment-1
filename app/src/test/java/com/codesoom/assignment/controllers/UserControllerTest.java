@@ -37,20 +37,6 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    public static final String EMAIl = "kimchi@joa.com";
-    public static final String NAME = "갓김치";
-    public static final String PASSWORD = "1234567";
-
-    UserSignupData userSignupData;
-
-    @BeforeEach
-    void setUp() {
-        userSignupData = UserSignupData.builder()
-                .email(EMAIl)
-                .name(NAME)
-                .password(PASSWORD)
-                .build();
-    }
 
     @Nested
     @DisplayName("POST /users 요청은")
@@ -80,6 +66,11 @@ class UserControllerTest {
         @Nested
         @DisplayName("유효한 요청 데이터가 오면")
         class Context_when_valid_request_data {
+
+            public static final String EMAIl = "kimchi@joa.com";
+            public static final String NAME = "갓김치";
+            public static final String PASSWORD = "1234567";
+
             private final UserSignupData validData = UserSignupData.builder()
                     .email(EMAIl)
                     .name(NAME)
