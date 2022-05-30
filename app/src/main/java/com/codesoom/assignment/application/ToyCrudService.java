@@ -51,6 +51,10 @@ public class ToyCrudService implements ToyCreateService, ToyShowService, ToyUpda
 
     @Override
     public void deleteBy(Long id) {
+        if (!repository.existsById(id)) {
+            throw new ProductNotFoundException(id);
+        }
+
         repository.deleteById(id);
     }
 }
