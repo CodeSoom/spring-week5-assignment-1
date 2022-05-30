@@ -5,35 +5,24 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public abstract class Product {
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
 
-    private String maker;
+    @ManyToOne
+    @JoinColumn(name = "producer_id")
+    private Producer producer;
 
-    private Integer price;
+    @Embedded
+    private Won price;
 
-    private String imageUrl;
-
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
-    }
 }
