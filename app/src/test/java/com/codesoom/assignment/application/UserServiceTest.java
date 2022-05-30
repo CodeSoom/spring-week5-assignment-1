@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import java.util.NoSuchElementException;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -104,4 +106,49 @@ class UserServiceTest {
         }
 
     }
+
+
+    @Nested
+    @DisplayName("deleteUser 메소드는")
+    class Describe_deleteUser {
+
+        @DataJpaTest
+        @Nested
+        @DisplayName("존재하는 아이디가 주어지면")
+        class Context_with_existed_id {
+            private Long id;
+
+            @BeforeEach
+            void setUp() {
+                User user = userService.signUp(userSignupData);
+                id = user.getId();
+            }
+
+            @Test
+            @DisplayName("user를 삭제한다.")
+            void it_deletes_user() {
+                userService.deleteUser(id);
+
+                assertThatThrownBy(() -> userRepository.findById(id).get())
+                        .isInstanceOf(NoSuchElementException.class);
+            }
+        }
+
+        @DataJpaTest
+        @Nested
+        @DisplayName("존재하지 않는 아이디가 주어지면")
+        class Context_with_not_existed_id {
+
+            private final Long INVALID_ID = 100L;
+
+            @Test
+            @DisplayName("UserNotFoundException 예외를 던진다.")
+            void it_returns_updated_user() {
+                assertThatThrownBy(() -> userService.deleteUser(INVALID_ID))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+
+    }
+
 }
