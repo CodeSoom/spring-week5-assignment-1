@@ -14,6 +14,10 @@ import javax.persistence.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Toy extends Product {
+    @Id
+    @GeneratedValue
+    private Long id;
+
     private String name;
 
     @ManyToOne
@@ -22,6 +26,7 @@ public class Toy extends Product {
 
     @Embedded
     private Won price;
+
     @Embedded
     private ImageDemo demo;
 }
