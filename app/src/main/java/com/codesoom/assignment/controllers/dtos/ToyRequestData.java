@@ -4,10 +4,9 @@ import com.codesoom.assignment.domain.ImageDemo;
 import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.domain.ToyProducer;
 import com.codesoom.assignment.domain.Won;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+
+import java.math.BigDecimal;
 
 @Getter
 @Builder
@@ -15,17 +14,19 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ToyRequestData {
     private String name;
-    private ToyProducer producer;
-    private Won price;
-    private ImageDemo demo;
+    private String maker;
+    private BigDecimal price;
+    private String url;
 
 
     public Toy toEntity() {
         return Toy.builder()
                 .name(name)
-                .price(price)
-                .producer(producer)
-                .demo(demo)
+                .price(new Won(price))
+                .producer(ToyProducer.builder().name(maker).build())
+                .demo(new ImageDemo(url))
                 .build();
     }
+
+
 }
