@@ -127,34 +127,40 @@ class UserControllerTest {
                         .password("1234")
                         .build();
 
-        @BeforeEach
-        void setUp() {
-            given(userService.updateInfo(eq(1L), any(UserUpdateInfoData.class)))
-                    .will(invocation -> {
-                        Long id = invocation.getArgument(0);
-                        UserUpdateInfoData data = invocation.getArgument(1);
-                        return User.builder()
-                                .id(id)
-                                .name(data.getName())
-                                .password(data.getPassword())
-                                .build();
-                    });
+        @Nested
+        @DisplayName("올바른 요청 값들이 오면")
+        class Context_when_valid_values {
+            @BeforeEach
+            void setUp() {
+                given(userService.updateInfo(eq(1L), any(UserUpdateInfoData.class)))
+                        .will(invocation -> {
+                            Long id = invocation.getArgument(0);
+                            UserUpdateInfoData data = invocation.getArgument(1);
+                            return User.builder()
+                                    .id(id)
+                                    .name(data.getName())
+                                    .password(data.getPassword())
+                                    .build();
+                        });
 
+            }
+
+            @Test
+            @DisplayName("변경된 user를 응답한다.")
+            void it_responses_updated_user() throws Exception {
+                mockMvc.perform(
+                                patch("/users/{id}", 1L)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(toJson(userUpdateInfoData))
+                        )
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.name").value(userUpdateInfoData.getName()))
+                        .andExpect(jsonPath("$.password").value(userUpdateInfoData.getPassword()));
+            }
         }
 
-        @Test
-        @DisplayName("변경된 user를 응답한다.")
-        void it_responses_updated_user() throws Exception {
-            mockMvc.perform(
-                            patch("/users/{id}", 1L)
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(toJson(userUpdateInfoData))
-                    )
-                    .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.name").value(userUpdateInfoData.getName()))
-                    .andExpect(jsonPath("$.password").value(userUpdateInfoData.getPassword()));
-        }
     }
+
 
     private String toJson(Object value) throws JsonProcessingException {
         return objectMapper.writeValueAsString(value);
