@@ -41,6 +41,7 @@ class ToyCrudControllerTest {
     private ToyProducer producer;
     private Won money;
     private ImageDemo demo;
+    private final Long TOY_ID = 1L;
     private final String PRODUCT_NAME = "Test Product";
     private final String PRODUCER_NAME = "Test Producer";
     private final BigDecimal MONEY_VALUE = new BigDecimal(1000);
@@ -55,6 +56,7 @@ class ToyCrudControllerTest {
                 .name(PRODUCER_NAME)
                 .build();
         toy = Toy.builder()
+                .id(TOY_ID)
                 .name(PRODUCT_NAME)
                 .price(money)
                 .producer(producer)
@@ -81,6 +83,26 @@ class ToyCrudControllerTest {
             mockMvc.perform(get("/products"))
                     .andExpect(status().isOk())
                     .andExpect(content().string(containsString(PRODUCT_NAME)));
+        }
+    }
+
+    @Nested
+    @DisplayName("detail 메소드는")
+    class Describe_detail {
+        @Nested
+        @DisplayName("만약 존재하는 Toy를 상세조회한다면")
+        class Context_with_existing_toy {
+            @BeforeEach
+            void setUp() {
+                given(service.showById(TOY_ID)).willReturn(toy);
+            }
+
+            @Test
+            @DisplayName("HTTP Status Code 200 OK 응답한다")
+            void it_responds_with_200_ok() throws Exception {
+                mockMvc.perform(get("/products/" + TOY_ID))
+                        .andExpect(status().isOk());
+            }
         }
     }
 }
