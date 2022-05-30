@@ -27,4 +27,10 @@ public class UserController {
                        @Valid @RequestBody UserUpdateInfoData userUpdateInfoData) {
         return userService.updateInfo(id, userUpdateInfoData);
     }
+
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable Long id) {
+        userService.deleteUser(id);
+    }
 }
