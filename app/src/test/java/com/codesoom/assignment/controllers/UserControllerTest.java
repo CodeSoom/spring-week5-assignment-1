@@ -2,7 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserSignupData;
 import com.codesoom.assignment.dto.UserUpdateInfoData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -41,11 +41,11 @@ class UserControllerTest {
     public static final String NAME = "갓김치";
     public static final String PASSWORD = "1234567";
 
-    UserData userData;
+    UserSignupData userSignupData;
 
     @BeforeEach
     void setUp() {
-        userData = UserData.builder()
+        userSignupData = UserSignupData.builder()
                 .email(EMAIl)
                 .name(NAME)
                 .password(PASSWORD)
@@ -60,7 +60,7 @@ class UserControllerTest {
         @DisplayName("유효하지 요청 데이터가 오면")
         class Context_when_invalid_request_data {
 
-            private final UserData invalidData = UserData.builder()
+            private final UserSignupData invalidData = UserSignupData.builder()
                     .email("")
                     .name("")
                     .password("")
@@ -80,7 +80,7 @@ class UserControllerTest {
         @Nested
         @DisplayName("유효한 요청 데이터가 오면")
         class Context_when_valid_request_data {
-            private final UserData validData = UserData.builder()
+            private final UserSignupData validData = UserSignupData.builder()
                     .email(EMAIl)
                     .name(NAME)
                     .password(PASSWORD)
@@ -88,14 +88,14 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                given(userService.signUp(any(UserData.class)))
+                given(userService.signUp(any(UserSignupData.class)))
                         .will((invocation -> {
-                            UserData userData = invocation.getArgument(0);
+                            UserSignupData userSignupData = invocation.getArgument(0);
                             return User.builder()
                                     .id(1L)
-                                    .name(userData.getName())
-                                    .email(userData.getEmail())
-                                    .password(userData.getPassword())
+                                    .name(userSignupData.getName())
+                                    .email(userSignupData.getEmail())
+                                    .password(userSignupData.getPassword())
                                     .build();
                         }));
             }

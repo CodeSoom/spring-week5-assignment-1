@@ -2,7 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserSignupData;
 import com.codesoom.assignment.dto.UserUpdateInfoData;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +23,7 @@ class UserServiceTest {
 
     private UserService userService;
 
-    private UserData userData;
+    private UserSignupData userSignupData;
 
     public static final String EMAIl = "kimchi@joa.com";
     public static final String NAME = "갓김치";
@@ -33,7 +33,7 @@ class UserServiceTest {
     void setUp() {
         userService = new UserService(userRepository);
 
-        userData = UserData.builder()
+        userSignupData = UserSignupData.builder()
                 .email(EMAIl)
                 .name(NAME)
                 .password(PASSWORD)
@@ -47,7 +47,7 @@ class UserServiceTest {
         @Test
         @DisplayName("생성된 user를 반환한다.")
         void it_returns_created_user() {
-            User user = userService.signUp(userData);
+            User user = userService.signUp(userSignupData);
 
             assertThat(user.getId()).isNotNull();
             assertThat(user.getEmail()).isEqualTo(EMAIl);
@@ -74,7 +74,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                User user = userService.signUp(userData);
+                User user = userService.signUp(userSignupData);
                 id = user.getId();
             }
 

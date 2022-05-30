@@ -2,7 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserSignupData;
 import com.codesoom.assignment.dto.UserUpdateInfoData;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -16,11 +16,11 @@ public class UserService {
 
     private final UserRepository userRepository;
 
-    public User signUp(UserData userData) {
+    public User signUp(UserSignupData userSignupData) {
         User user = User.builder()
-                .email(userData.getEmail())
-                .name(userData.getName())
-                .password(userData.getPassword())
+                .email(userSignupData.getEmail())
+                .name(userSignupData.getName())
+                .password(userSignupData.getPassword())
                 .build();
 
         return userRepository.save(user);

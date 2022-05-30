@@ -2,7 +2,7 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserSignupData;
 import com.codesoom.assignment.dto.UserUpdateInfoData;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +18,8 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public User create(@RequestBody @Valid UserData userData) {
-        return userService.signUp(userData);
+    public User create(@RequestBody @Valid UserSignupData userSignupData) {
+        return userService.signUp(userSignupData);
     }
 
     @PatchMapping("/{id}")
