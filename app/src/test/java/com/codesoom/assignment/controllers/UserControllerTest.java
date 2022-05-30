@@ -184,9 +184,30 @@ class UserControllerTest {
             }
         }
 
+        @Nested
+        @DisplayName("유효하지 않는 요청 데이터가 오면")
+        class Context_when_invalid_request_data {
+
+            private final UserUpdateInfoData invalidData =
+                    UserUpdateInfoData.builder()
+                            .name("")
+                            .password("")
+                            .build();
+
+            @DisplayName("400 status를 응답한다.")
+            @Test
+            void it_responses_400_status() throws Exception {
+                mockMvc.perform(patch("/users/{id}", 1L)
+                                .content(toJson(invalidData))
+                                .contentType(MediaType.APPLICATION_JSON)
+                        )
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
     }
 
-
+    
     private String toJson(Object value) throws JsonProcessingException {
         return objectMapper.writeValueAsString(value);
     }
