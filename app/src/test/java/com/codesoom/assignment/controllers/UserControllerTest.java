@@ -118,7 +118,7 @@ class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("PATCH /users 요청은")
+    @DisplayName("PATCH /users/{id} 요청은")
     class Describe_update {
 
         private final UserUpdateInfoData userUpdateInfoData =
