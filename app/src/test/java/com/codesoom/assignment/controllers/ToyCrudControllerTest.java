@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ToyCrudService;
 import com.codesoom.assignment.domain.ImageDemo;
 import com.codesoom.assignment.domain.Toy;
@@ -42,6 +43,8 @@ class ToyCrudControllerTest {
     private Won money;
     private ImageDemo demo;
     private final Long TOY_ID = 1L;
+    private final Long NOT_EXISTING_TOY_ID = 10L;
+    private final Long TOY_PRODUCER_ID = 1L;
     private final String PRODUCT_NAME = "Test Product";
     private final String PRODUCER_NAME = "Test Producer";
     private final BigDecimal MONEY_VALUE = new BigDecimal(1000);
@@ -53,6 +56,7 @@ class ToyCrudControllerTest {
         money = new Won(MONEY_VALUE);
 
         producer = ToyProducer.builder()
+                .id(TOY_PRODUCER_ID)
                 .name(PRODUCER_NAME)
                 .build();
         toy = Toy.builder()
@@ -103,6 +107,24 @@ class ToyCrudControllerTest {
                 mockMvc.perform(get("/products/" + TOY_ID))
                         .andExpect(status().isOk());
             }
+        }
+
+        @Nested
+        @DisplayName("만약 존재하지 않는 Toy를 상세조회한다면")
+        class Context_without_existing_toy {
+            @BeforeEach
+            void setUp() {
+                given(service.showById(NOT_EXISTING_TOY_ID))
+                        .willThrow(new ProductNotFoundException(NOT_EXISTING_TOY_ID));
+            }
+
+            @Test
+            @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
+            void it_responds_with_404() throws Exception {
+                mockMvc.perform(get("/products/" + NOT_EXISTING_TOY_ID))
+                        .andExpect(status().isNotFound());
+            }
+
         }
     }
 }
