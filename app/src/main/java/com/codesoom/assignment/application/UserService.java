@@ -30,5 +30,7 @@ public class UserService {
 		return mapper.map(user, UserDTO.Response.class);
 	}
 
-
+	public void deleteUser(int id) {
+		userRepository.deleteById(id);
+	}
 }
