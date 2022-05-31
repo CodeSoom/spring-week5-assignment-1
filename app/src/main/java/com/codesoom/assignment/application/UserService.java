@@ -41,7 +41,7 @@ public class UserService {
 	}
 
 	public UserDTO.Response updateUsers(int id, UserDTO.UpdateUser source) {
-		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(1));
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id));
 		user.update(source.getName(), source.getEmail(), source.getPassword());
 		return mapper.map(user, UserDTO.Response.class);
 	}

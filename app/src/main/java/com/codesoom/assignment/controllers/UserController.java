@@ -2,6 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,7 +35,7 @@ public class UserController {
 
 	@PatchMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public UserDTO.Response updateUser(@PathVariable("id") int id, @RequestBody UserDTO.UpdateUser updateUser) {
+	public UserDTO.Response updateUser(@PathVariable("id") int id, @Valid @RequestBody  UserDTO.UpdateUser updateUser) {
 		return userService.updateUsers(id, updateUser);
 	}
 

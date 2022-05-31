@@ -11,6 +11,8 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,6 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -43,16 +46,20 @@ class UserControllerWebTest {
 		UserDTO.UpdateUser updateUser = new UserDTO.UpdateUser("update name test", "update email test",
 			"update password test");
 
-		given(userService.getUser(1)).willReturn(response1);
-		given(userService.getUsers()).willReturn(userDTOs);
+		given(userService.getUser(eq(1))).willReturn(response1);
 
+		given(userService.getUser(eq(1000))).willThrow(
+			new UserNotFoundException(1000));
+		willThrow(UserNotFoundException.class).given(userService).deleteUser(eq(1000));
+		given(userService.getUsers()).willReturn(userDTOs);
+		given(userService.updateUsers(eq(1000), any(UserDTO.UpdateUser.class))).willThrow(
+			new UserNotFoundException(1000));
 		given(userService.createUser(any(UserDTO.CreateUser.class)))
 			.will(invocation -> {
 				UserDTO.CreateUser source = invocation.getArgument(0);
 				return new UserDTO.Response(1, source.getName(), source.getEmail(),
 					source.getPassword());
 			});
-
 		given(userService.updateUsers(eq(1), any(UserDTO.UpdateUser.class)))
 			.will(invocation -> {
 				int id = invocation.getArgument(0);
@@ -82,46 +89,142 @@ class UserControllerWebTest {
 		verify(userService).createUser(any(UserDTO.CreateUser.class));
 	}
 
-	@Test
-	void updateUser() throws Exception {
-		String source = objectMapper.writeValueAsString(
-			new UserDTO.UpdateUser("update name test", "update email test", "update password test"));
+	@Nested
+	@DisplayName("PATCH /user/{id} URL 은")
+	class updateUser {
+		@Nested
+		@DisplayName("유효한 id 와 업데이트 유저 정보가 주어지면")
+		class WithValidId {
+			@Test
+			@DisplayName("상태코드 200, 업데이트 된 유저 정보를 응답한다.")
+			void updateUserWithValidId() throws Exception {
+				String source = objectMapper.writeValueAsString(
+					new UserDTO.UpdateUser("update name test", "update email test", "update password test"));
 
-		mockMvc.perform(
-				patch("/users/{id}", 1)
-					.accept(MediaType.APPLICATION_JSON_UTF8)
-					.contentType(MediaType.APPLICATION_JSON)
-					.content(source))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("update email test")));
+				mockMvc.perform(
+						patch("/users/{id}", 1)
+							.accept(MediaType.APPLICATION_JSON_UTF8)
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(source))
+					.andExpect(status().isOk())
+					.andExpect(content().string(containsString("update email test")));
 
-		verify(userService).updateUsers(eq(1), any(UserDTO.UpdateUser.class));
+				verify(userService).updateUsers(eq(1), any(UserDTO.UpdateUser.class));
+			}
+		}
+
+		@Nested
+		@DisplayName("유효하지 않은 id 와 업데이트 유저 정보가 주어지면")
+		class WithInValidId {
+			@Test
+			@DisplayName("상태코드 404 를 응답한다.")
+			void updateUserWithInValidId() throws Exception {
+				String source = objectMapper.writeValueAsString(
+					new UserDTO.UpdateUser("update name test", "update email test", "update password test"));
+
+				mockMvc.perform(
+						patch("/users/{id}", 1000)
+							.accept(MediaType.APPLICATION_JSON_UTF8)
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(source))
+					.andExpect(status().isNotFound());
+
+				verify(userService).updateUsers(eq(1000), any(UserDTO.UpdateUser.class));
+			}
+		}
+
+		@Nested
+		@DisplayName("id 와 유효하지 않은 업데이트 유저 정보가 주어지면")
+		class WithInValidAttribute {
+			@Test
+			@DisplayName("상태코드 400 를 응답한다.")
+			void updateUserWithInValidId() throws Exception {
+				String source = objectMapper.writeValueAsString(
+					new UserDTO.UpdateUser("", "", ""));
+
+				mockMvc.perform(
+						patch("/users/{id}", 1)
+							.accept(MediaType.APPLICATION_JSON_UTF8)
+							.contentType(MediaType.APPLICATION_JSON)
+							.content(source))
+					.andExpect(status().isBadRequest());
+			}
+		}
 	}
 
-	@Test
-	void getUser() throws Exception {
-		mockMvc.perform(get("/users/{id}", 1))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("name test 1")));
+	@Nested
+	@DisplayName("GET /users/{id} URL 은")
+	class GetUserTest {
+		@Nested
+		@DisplayName("유효한 id 가 주어지면")
+		class WithValidId {
+			@Test
+			@DisplayName("상태코드 200 을 응답한다.")
+			void getUserWithValidId() throws Exception {
+				mockMvc.perform(get("/users/{id}", 1))
+					.andExpect(status().isOk())
+					.andExpect(content().string(containsString("name test 1")));
 
-		verify(userService).getUser(1);
+				verify(userService).getUser(1);
+			}
+		}
+
+		@Nested
+		@DisplayName("유효하지 않은 id 가 주어지면")
+		class WithInValidId {
+			@Test
+			@DisplayName("상태코드 404 를 응답한다.")
+			void getUserWithInValidId() throws Exception {
+				mockMvc.perform(get("/users/{id}", 1000))
+					.andExpect(status().isNotFound());
+
+				verify(userService).getUser(1000);
+			}
+		}
+	}
+	@Nested
+	@DisplayName("GET /users URL 은")
+	class GetUsersTest {
+		@Test
+		@DisplayName("상태코드 200 과 유저 목록을 응답한다.")
+		void getUsers() throws Exception {
+			mockMvc.perform(get("/users"))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString("email test 2")))
+				.andExpect(content().string(containsString("email test 1")));
+
+			verify(userService).getUsers();
+		}
 	}
 
-	@Test
-	void getUsers() throws Exception {
-		mockMvc.perform(get("/users"))
-			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("email test 2")))
-			.andExpect(content().string(containsString("email test 1")));
+	@Nested
+	@DisplayName("DELETE /users/{id} URL 은")
+	class DeleteUsersTest {
+		@Nested
+		@DisplayName("유효한 id 가 주어지면")
+		class WithValidId {
+			@Test
+			@DisplayName("상태코드 200 을 응답한다.")
+			void deleteUser() throws Exception {
+				mockMvc.perform(delete("/users/{id}", 1))
+					.andExpect(status().isNoContent());
 
-		verify(userService).getUsers();
+				verify(userService).deleteUser(1);
+			}
+		}
+
+		@Nested
+		@DisplayName("유효하지 않은 id 가 주어지면")
+		class WithInValidId {
+			@Test
+			@DisplayName("상태코드 404 를 응답한다.")
+			void deleteUser() throws Exception {
+				mockMvc.perform(delete("/users/{id}", 1000))
+					.andExpect(status().isNotFound());
+
+				verify(userService).deleteUser(1000);
+			}
+		}
 	}
 
-	@Test
-	void deleteUser() throws Exception {
-		mockMvc.perform(delete("/users/{id}", 1))
-			.andExpect(status().isNoContent());
-
-		verify(userService).deleteUser(1);
-	}
 }
