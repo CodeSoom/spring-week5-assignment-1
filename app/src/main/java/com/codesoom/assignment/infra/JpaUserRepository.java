@@ -15,4 +15,6 @@ public interface JpaUserRepository extends UserRepository, CrudRepository<User, 
     User save(User user);
 
     void delete(User user);
+
+    boolean isExistsEmail(String email);
 }
