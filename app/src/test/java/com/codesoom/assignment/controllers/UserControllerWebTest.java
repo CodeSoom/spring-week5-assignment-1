@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserCreateData;
@@ -46,7 +47,7 @@ class UserControllerWebTest {
     }
 
     @Test
-    void create() throws Exception {
+    void createWithValidAttributes() throws Exception {
         mockMvc.perform(
                 post("/users")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -56,6 +57,16 @@ class UserControllerWebTest {
                 .andExpect(content().string(containsString("caoyu")));
 
         verify(userService).createUser(any(UserCreateData.class));
+    }
+
+    @Test
+    void createWithInvalidAttributes() throws Exception {
+        mockMvc.perform(
+                post("/users")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"\",\"email\":\"\",\"password\":\"\"}")
+        )
+                .andExpect(status().isBadRequest());
     }
 
 }
