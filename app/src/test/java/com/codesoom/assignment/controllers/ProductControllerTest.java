@@ -1,9 +1,15 @@
 package com.codesoom.assignment.controllers;
 
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@WebMvcTest
 @DisplayName("ProductController Web Test")
 class ProductControllerTest {
 
@@ -25,4 +31,28 @@ class ProductControllerTest {
     // 6. DELETE /products/{id}
     //  - id가 유효한 경우 -> No Content
     //  - id가 유효하지 않은 경우 -> 404 Not Found
+
+    MockMvc mockMvc;
+
+    public ProductControllerTest(MockMvc mockMvc) {
+        this.mockMvc = mockMvc;
+    }
+
+    @Nested
+    @DisplayName("GET /products")
+    class list {
+
+        @Nested
+        @DisplayName("장난감 목록이 비어있다면")
+        class when_product_list_is_not_empty {
+
+            @Test
+            @DisplayName("200 ok를 반환한다.")
+            void list() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk());
+            }
+        }
+
+    }
 }
