@@ -28,7 +28,6 @@ public class UserServiceTest {
 				.password(source.getPassword())
 				.build();
 		});
-
 		User user = new User(1,"get name test","get email test","get password test");
 		given(userRepository.findById(1)).willReturn(Optional.of(user));
 	}
@@ -45,5 +44,10 @@ public class UserServiceTest {
 		UserDTO.Response response = userService.getUser(1);
 		verify(userRepository).findById(1);
 		assertThat(response.getEmail()).isEqualTo("get email test");
+	}
+	@Test
+	void deleteUserTest() {
+		userService.deleteUser(1);
+		verify(userRepository).deleteById(1);
 	}
 }
