@@ -25,9 +25,9 @@ class UserServiceTest {
 
     private UserService userService;
 
-    private UserSignupData userSignupData;
+    private User user;
 
-    public static final String EMAIl = "kimchi@joa.com";
+    public static final String EMAIL = "kimchi@joa.com";
     public static final String NAME = "갓김치";
     public static final String PASSWORD = "1234567";
 
@@ -35,9 +35,9 @@ class UserServiceTest {
     void setUp() {
         userService = new UserService(userRepository);
 
-        userSignupData = UserSignupData.builder()
-                .email(EMAIl)
+        user = User.builder()
                 .name(NAME)
+                .email(EMAIL)
                 .password(PASSWORD)
                 .build();
     }
@@ -46,13 +46,19 @@ class UserServiceTest {
     @DisplayName("signup 메소드는")
     class Describe_signup {
 
+        private final UserSignupData userSignupData = UserSignupData.builder()
+                .email(EMAIL)
+                .name(NAME)
+                .password(PASSWORD)
+                .build();
+
         @Test
         @DisplayName("생성된 user를 반환한다.")
         void it_returns_created_user() {
             User user = userService.signUp(userSignupData);
 
             assertThat(user.getId()).isNotNull();
-            assertThat(user.getEmail()).isEqualTo(EMAIl);
+            assertThat(user.getEmail()).isEqualTo(EMAIL);
             assertThat(user.getName()).isEqualTo(NAME);
             assertThat(user.getPassword()).isEqualTo(PASSWORD);
         }
@@ -76,8 +82,8 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                User user = userService.signUp(userSignupData);
-                id = user.getId();
+                User savedUser = userRepository.save(user);
+                id = savedUser.getId();
             }
 
             @Test
@@ -120,8 +126,8 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                User user = userService.signUp(userSignupData);
-                id = user.getId();
+                User savedUser = userRepository.save(user);
+                id = savedUser.getId();
             }
 
             @Test
