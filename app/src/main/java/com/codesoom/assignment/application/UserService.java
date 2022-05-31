@@ -27,7 +27,7 @@ public class UserService {
     }
 
     /**
-     * @throws UserNotFoundException Repository 에서 User를 찾지 못했을 때 던지는 예외
+     * @throws UserNotFoundException 주어진 id로 User를 찾지 못했을 때 던지는 예외
      */
     public User updateInfo(Long id, UserUpdateInfoData userUpdateInfoData) {
         User user = findUser(id);
@@ -42,7 +42,7 @@ public class UserService {
 
 
     /**
-     * @throws UserNotFoundException Repository 에서 User를 찾지 못했을 때 던지는 예외
+     * @throws UserNotFoundException 주어진 id로 User를 찾지 못했을 때 던지는 예외
      */
     public void deleteUser(Long id) {
         User user = findUser(id);
