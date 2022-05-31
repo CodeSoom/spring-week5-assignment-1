@@ -93,7 +93,7 @@ class UserControllerWebTest {
 	void getUser() throws Exception {
 		mockMvc.perform(get("/users/{id}", 1))
 			.andExpect(status().isOk())
-			.andExpect(content().string("name test"));
+			.andExpect(content().string(containsString("name test")));
 
 		verify(userService).getUser(1);
 	}

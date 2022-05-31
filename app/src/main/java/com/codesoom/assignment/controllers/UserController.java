@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -31,5 +32,11 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public UserDTO.Response updateUser(@PathVariable("id") int id, @RequestBody UserDTO.UpdateUser updateUser) {
 		return userService.updateUsers(id, updateUser);
+	}
+
+	@GetMapping("/{id}")
+	@ResponseStatus(HttpStatus.OK)
+	public UserDTO.Response getUser(@PathVariable("id") int id) {
+		return userService.getUser(id);
 	}
 }
