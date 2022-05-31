@@ -14,13 +14,21 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDTO;
 
-public class UserServiceTest {
-	private UserRepository userRepository = mock(UserRepository.class);
+class UserServiceTest {
+	private final UserRepository userRepository = mock(UserRepository.class);
 	private UserService userService;
 
 	@BeforeEach
 	void setUp() {
 		userService = new UserService(userRepository);
+		setUpFixture();
+	}
+
+	void setUpFixture() {
+		User user1 = new User(1, "get name test", "get email test", "get password test");
+		User user2 = new User(2, "get name test 2", "get email test 2", "get password test 2");
+		List<User> users = Arrays.asList(user1, user2);
+
 		given(userRepository.save(any(User.class))).will(invocation -> {
 			User source = invocation.getArgument(0);
 			return User.builder()
@@ -30,11 +38,6 @@ public class UserServiceTest {
 				.password(source.getPassword())
 				.build();
 		});
-		User user1 = new User(1, "get name test", "get email test", "get password test");
-		User user2 = new User(2, "get name test 2", "get email test 2", "get password test 2");
-
-		List<User> users = Arrays.asList(user1, user2);
-
 		given(userRepository.findAll()).willReturn(users);
 		given(userRepository.findById(1)).willReturn(Optional.of(user1));
 	}
@@ -64,7 +67,7 @@ public class UserServiceTest {
 	void getUsersTest() {
 		List<UserDTO.Response> users = userService.getUsers();
 		verify(userRepository).findAll();
-		assertThat(users.size()).isEqualTo(2);
+		assertThat(users).hasSize(2);
 	}
 
 	@Test
