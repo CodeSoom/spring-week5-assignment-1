@@ -6,6 +6,8 @@ import com.codesoom.assignment.dto.UserCreateData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -17,7 +19,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody UserCreateData userCreateData) {
+    public User createUser(@RequestBody @Valid UserCreateData userCreateData) {
         return userService.createUser(userCreateData);
     }
 }
