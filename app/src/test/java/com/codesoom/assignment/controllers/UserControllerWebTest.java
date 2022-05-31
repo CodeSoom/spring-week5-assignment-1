@@ -34,8 +34,8 @@ class UserControllerWebTest {
 
 	@BeforeEach
 	void setUp() {
-		UserDTO.Response response1 = new UserDTO.Response(1, "name test",
-			"email test", "password test");
+		UserDTO.Response response1 = new UserDTO.Response(1, "name test 1",
+			"email test 1", "password test 1");
 		UserDTO.Response response2 = new UserDTO.Response(2, "name test 2",
 			"email test 2", "password test 2");
 		List<UserDTO.Response> userDTOs = Arrays.asList(response1, response2);
@@ -102,7 +102,7 @@ class UserControllerWebTest {
 	void getUser() throws Exception {
 		mockMvc.perform(get("/users/{id}", 1))
 			.andExpect(status().isOk())
-			.andExpect(content().string(containsString("name test")));
+			.andExpect(content().string(containsString("name test 1")));
 
 		verify(userService).getUser(1);
 	}
