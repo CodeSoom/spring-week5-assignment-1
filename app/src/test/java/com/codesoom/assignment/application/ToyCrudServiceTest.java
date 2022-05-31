@@ -221,6 +221,7 @@ class ToyCrudServiceTest {
     class Describe_deleteTask {
         abstract class ContextDeleting {
             void withExistingToy() {
+                given(repository.existsById(TOY_ID)).willReturn(Boolean.TRUE);
                 service.deleteBy(TOY_ID);
             }
 
