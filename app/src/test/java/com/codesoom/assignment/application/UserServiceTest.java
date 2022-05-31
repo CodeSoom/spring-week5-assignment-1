@@ -131,8 +131,8 @@ class UserServiceTest {
             }
 
             @Test
-            @DisplayName("user를 삭제한다.")
-            void it_deletes_user() {
+            @DisplayName("user가 삭제된다.")
+            void it_will_be_deleted_user() {
                 userService.deleteUser(id);
 
                 assertThatThrownBy(() -> userRepository.findById(id).get())

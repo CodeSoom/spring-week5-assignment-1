@@ -38,9 +38,9 @@ class UserControllerTest {
     private UserService userService;
 
 
-    @Nested
-    @DisplayName("POST /users 요청은")
-    class Describe_create {
+        @Nested
+        @DisplayName("POST /users 요청은")
+        class Describe_create {
 
         @Nested
         @DisplayName("유효하지 않는 요청 데이터가 오면")
