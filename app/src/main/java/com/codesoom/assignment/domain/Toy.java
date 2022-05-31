@@ -1,7 +1,6 @@
 package com.codesoom.assignment.domain;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,23 +9,27 @@ import javax.persistence.*;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@DiscriminatorValue("Toy")
 public class Toy extends Product {
-    @Id
-    @GeneratedValue
-    private Long id;
-
-    private String name;
+    @Embedded
+    private ImageDemo demo;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producer_id")
     private ToyProducer producer;
 
-    @Embedded
-    private Won price;
+    @Builder
+    public Toy(Long id, String name, ToyProducer producer, Won price, ImageDemo demo) {
+        super(id, name, price);
+        this.producer = producer;
+        this.demo = demo;
+    }
 
-    @Embedded
-    private ImageDemo demo;
+    @Builder
+    public Toy(String name, ToyProducer producer, Won price, ImageDemo demo) {
+        super(name, price);
+        this.producer = producer;
+        this.demo = demo;
+    }
 }

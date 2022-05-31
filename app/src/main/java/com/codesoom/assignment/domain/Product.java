@@ -17,7 +17,8 @@ import javax.persistence.*;
 @Entity
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn
 public abstract class Product {
     @Id
     @GeneratedValue
@@ -25,11 +26,19 @@ public abstract class Product {
 
     private String name;
 
-    @ManyToOne
-    @JoinColumn(name = "producer_id")
-    private Producer producer;
 
     @Embedded
     private Won price;
+
+    public Product(Long id, String name, Won price) {
+        this.id = id;
+        this.name = name;
+        this.price = price;
+    }
+
+    public Product(String name, Won price) {
+        this.name = name;
+        this.price = price;
+    }
 
 }
