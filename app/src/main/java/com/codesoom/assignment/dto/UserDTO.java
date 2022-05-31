@@ -46,6 +46,7 @@ public class UserDTO {
 		}
 	}
 
+	@Getter
 	public static class UpdateUser {
 		@Mapping("name")
 		private String name;

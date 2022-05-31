@@ -3,6 +3,8 @@ package com.codesoom.assignment.domain;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
+import com.codesoom.assignment.dto.UserDTO;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,4 +24,10 @@ public class User {
 	private String email;
 
 	private String password;
+
+	public void update(String name, String email, String password) {
+		this.name = name;
+		this.email = email;
+		this.password = password;
+	}
 }

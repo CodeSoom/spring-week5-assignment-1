@@ -14,9 +14,8 @@ import com.github.dozermapper.core.Mapper;
 
 @Service
 public class UserService {
-	private UserRepository userRepository;
-	private Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-
+	private final UserRepository userRepository;
+	private final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
 
 	public UserService(UserRepository userRepository) {
 		this.userRepository = userRepository;
@@ -41,5 +40,11 @@ public class UserService {
 		return users.stream().map(user -> mapper.map(user, UserDTO.Response.class))
 			.collect(Collectors.toList());
 
+	}
+
+	public UserDTO.Response updateUsers(int id, UserDTO.UpdateUser source) {
+		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(1));
+		user.update(source.getName(), source.getEmail(), source.getPassword());
+		return mapper.map(user, UserDTO.Response.class);
 	}
 }

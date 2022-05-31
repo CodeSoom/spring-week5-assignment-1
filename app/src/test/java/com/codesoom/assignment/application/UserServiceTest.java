@@ -72,6 +72,6 @@ public class UserServiceTest {
 		UserDTO.UpdateUser source = new UserDTO.UpdateUser("update name test", "update email test",
 			"update password test");
 		UserDTO.Response response = userService.updateUsers(1, source);
-		assertThat(response.getEmail()).isEqualTo(response.getEmail());
+		assertThat(response.getEmail()).isEqualTo("update email test");
 	}
 }
