@@ -8,14 +8,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -23,11 +21,8 @@ class ToyCrudServiceTest {
     private ToyCrudService service;
     private final ToyRepository repository = mock(ToyRepository.class);
 
-    private final List<Toy> toys = new LinkedList<>();
-
     private Toy toy;
     private Toy toyWithoutId;
-    private Toy toyUpdating;
     private ToyProducer producer;
     private Won money;
     private ImageDemo demo;
@@ -52,12 +47,6 @@ class ToyCrudServiceTest {
                 .build();
         toyWithoutId = Toy.builder()
                 .name(PRODUCT_NAME)
-                .price(money)
-                .producer(producer)
-                .demo(demo)
-                .build();
-        toyUpdating = Toy.builder()
-                .name(PRODUCT_NAME + "UPDATED")
                 .price(money)
                 .producer(producer)
                 .demo(demo)
@@ -175,18 +164,19 @@ class ToyCrudServiceTest {
     class Describe_update {
         abstract class ContextUpdating {
             Toy withExistingToy() {
-                Toy toyUpdated = Toy.builder()
-                        .id(TOY_ID)
-                        .name(PRODUCT_NAME + "UPDATED")
-                        .price(money)
-                        .producer(producer)
-                        .demo(demo)
-                        .build();
-
-                service.create(toy);
                 given(repository.existsById(TOY_ID)).willReturn(Boolean.TRUE);
-                given(repository.save(any(Toy.class))).willReturn(eq(toy));
+                given(repository.save(any(Toy.class))).will(invocation -> {
+                    Toy source = invocation.getArgument(0);
+                    return Toy.builder()
+                            .id(TOY_ID)
+                            .name(source.getName())
+                            .producer(source.getProducer())
+                            .price(source.getPrice())
+                            .demo(source.getDemo())
+                            .build();
+                });
                 return service.update(TOY_ID, toyWithoutId);
+
             }
 
             void withoutExistingToy() {
