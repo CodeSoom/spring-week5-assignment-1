@@ -31,11 +31,12 @@ class UserControllerWebTest {
 
 	@BeforeEach
 	void setUp() {
-		UserDTO.Response response = new UserDTO.Response(1, "create name test",
-			"create email test", "create password test");
+		UserDTO.Response response = new UserDTO.Response(1, "name test",
+			"email test", "password test");
 		UserDTO.UpdateUser updateUser = new UserDTO.UpdateUser("update name test", "update email test",
 			"update password test");
 
+		given(userService.getUser(1)).willReturn(response);
 		given(userService.createUser(any(UserDTO.CreateUser.class)))
 			.will(invocation -> {
 				UserDTO.CreateUser source = invocation.getArgument(0);
@@ -86,5 +87,14 @@ class UserControllerWebTest {
 			.andExpect(content().string(containsString("update email test")));
 
 		verify(userService).updateUsers(eq(1), any(UserDTO.UpdateUser.class));
+	}
+
+	@Test
+	void getUser() throws Exception {
+		mockMvc.perform(get("/users/{id}", 1))
+			.andExpect(status().isOk())
+			.andExpect(content().string("name test"));
+
+		verify(userService).getUser(1);
 	}
 }
