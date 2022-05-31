@@ -18,7 +18,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.util.LinkedList;
 import java.util.List;
 
 
@@ -26,6 +25,7 @@ import static org.hamcrest.core.StringContains.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -224,6 +224,12 @@ class ToyCrudControllerTest {
             @Nested
             @DisplayName("만약 존재하지 않는 Toy를 삭제한다면")
             class Context_without_existing_toy {
+                @BeforeEach
+                void setUp() {
+                    willThrow(new ProductNotFoundException(TOY_ID_NOT_EXISTING))
+                            .given(service).deleteBy(TOY_ID_NOT_EXISTING);
+                }
+
                 @Test
                 @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
                 void it_responds_with_404() throws Exception {
