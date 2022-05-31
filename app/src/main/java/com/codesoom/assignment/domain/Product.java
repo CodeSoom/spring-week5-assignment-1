@@ -8,6 +8,8 @@ import lombok.NoArgsConstructor;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 @Entity
 @Getter
@@ -19,12 +21,16 @@ public class Product {
     @GeneratedValue
     private Long id;
 
+    @NotBlank
     private String name;
 
+    @NotBlank
     private String maker;
 
+    @NotNull
     private Integer price;
 
+    @NotBlank
     private String imageUrl;
 
     public void change(String name,
