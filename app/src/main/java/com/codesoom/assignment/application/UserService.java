@@ -22,13 +22,12 @@ public class UserService {
 	}
 
 	public UserDTO.Response createUser(UserDTO.CreateUser source) {
-		User user = userRepository.save(mapper.map(source, User.class));
-		return mapper.map(user, UserDTO.Response.class);
+		return mapper.map(userRepository.save(mapper.map(source, User.class)), UserDTO.Response.class);
 	}
 
 	public UserDTO.Response getUser(int id) {
-		User user = userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(1));
-		return mapper.map(user, UserDTO.Response.class);
+		return mapper.map(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)),
+			UserDTO.Response.class);
 	}
 
 	public void deleteUser(int id) {
@@ -36,8 +35,7 @@ public class UserService {
 	}
 
 	public List<UserDTO.Response> getUsers() {
-		List<User> users = userRepository.findAll();
-		return users.stream().map(user -> mapper.map(user, UserDTO.Response.class))
+		return userRepository.findAll().stream().map(user -> mapper.map(user, UserDTO.Response.class))
 			.collect(Collectors.toList());
 
 	}
