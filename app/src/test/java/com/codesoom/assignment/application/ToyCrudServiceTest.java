@@ -14,6 +14,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
@@ -47,6 +49,18 @@ class ToyCrudServiceTest {
         producer = ToyProducer.builder()
                 .id(TOY_PRODUCER_ID)
                 .name(PRODUCER_NAME)
+                .build();
+        toyWithoutId = Toy.builder()
+                .name(PRODUCT_NAME)
+                .price(money)
+                .producer(producer)
+                .demo(demo)
+                .build();
+        toyUpdating = Toy.builder()
+                .name(PRODUCT_NAME + "UPDATED")
+                .price(money)
+                .producer(producer)
+                .demo(demo)
                 .build();
         toy = Toy.builder()
                 .id(TOY_ID)
@@ -161,8 +175,17 @@ class ToyCrudServiceTest {
     class Describe_update {
         abstract class ContextUpdating {
             Toy withExistingToy() {
-                given(repository.findById(TOY_ID)).willReturn(Optional.of(toy));
-                given(repository.save(toyWithoutId)).willReturn(toy);
+                Toy toyUpdated = Toy.builder()
+                        .id(TOY_ID)
+                        .name(PRODUCT_NAME + "UPDATED")
+                        .price(money)
+                        .producer(producer)
+                        .demo(demo)
+                        .build();
+
+                service.create(toy);
+                given(repository.existsById(TOY_ID)).willReturn(Boolean.TRUE);
+                given(repository.save(any(Toy.class))).willReturn(eq(toy));
                 return service.update(TOY_ID, toyWithoutId);
             }
 
