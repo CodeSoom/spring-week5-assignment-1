@@ -17,7 +17,7 @@ public class ToyResponseData {
     private BigDecimal price;
     private String url;
 
-    public ToyResponseData toDto(Toy toy) {
+    public ToyResponseData dtoFrom(Toy toy) {
         return ToyResponseData.builder()
                 .id(toy.getId())
                 .name(toy.getName())
