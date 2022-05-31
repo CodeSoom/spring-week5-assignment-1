@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -32,11 +33,8 @@ class ProductControllerTest {
     //  - id가 유효한 경우 -> No Content
     //  - id가 유효하지 않은 경우 -> 404 Not Found
 
+    @Autowired
     MockMvc mockMvc;
-
-    public ProductControllerTest(MockMvc mockMvc) {
-        this.mockMvc = mockMvc;
-    }
 
     @Nested
     @DisplayName("GET /products")
@@ -53,6 +51,6 @@ class ProductControllerTest {
                         .andExpect(status().isOk());
             }
         }
-
     }
+
 }
