@@ -7,6 +7,9 @@ import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +34,18 @@ class UserControllerWebTest {
 
 	@BeforeEach
 	void setUp() {
-		UserDTO.Response response = new UserDTO.Response(1, "name test",
+		UserDTO.Response response1 = new UserDTO.Response(1, "name test",
 			"email test", "password test");
+		UserDTO.Response response2 = new UserDTO.Response(2, "name test 2",
+			"email test 2", "password test 2");
+		List<UserDTO.Response> userDTOs = Arrays.asList(response1, response2);
+
 		UserDTO.UpdateUser updateUser = new UserDTO.UpdateUser("update name test", "update email test",
 			"update password test");
 
-		given(userService.getUser(1)).willReturn(response);
+		given(userService.getUser(1)).willReturn(response1);
+		given(userService.getUsers()).willReturn(userDTOs);
+
 		given(userService.createUser(any(UserDTO.CreateUser.class)))
 			.will(invocation -> {
 				UserDTO.CreateUser source = invocation.getArgument(0);
@@ -96,5 +105,15 @@ class UserControllerWebTest {
 			.andExpect(content().string(containsString("name test")));
 
 		verify(userService).getUser(1);
+	}
+
+	@Test
+	void getUsers() throws Exception {
+		mockMvc.perform(get("/users"))
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("email test 2")))
+			.andExpect(content().string(containsString("email test 1")));
+
+		verify(userService).getUsers();
 	}
 }
