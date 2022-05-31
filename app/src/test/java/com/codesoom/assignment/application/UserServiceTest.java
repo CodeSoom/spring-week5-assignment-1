@@ -3,6 +3,8 @@ package com.codesoom.assignment.application;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
+import java.util.Optional;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,6 +28,9 @@ public class UserServiceTest {
 				.password(source.getPassword())
 				.build();
 		});
+
+		User user = new User(1,"get name test","get email test","get password test");
+		given(userRepository.findById(1)).willReturn(Optional.of(user));
 	}
 
 	@Test
@@ -34,5 +39,11 @@ public class UserServiceTest {
 		UserDTO.Response response = userService.createUser(source);
 		verify(userRepository).save(any(User.class));
 		assertThat(response.getEmail()).isEqualTo("email test");
+	}
+	@Test
+	void getUserTest() {
+		UserDTO.Response response = userService.getUser(1);
+		verify(userRepository).findById(1);
+		assertThat(response.getEmail()).isEqualTo("get email test");
 	}
 }

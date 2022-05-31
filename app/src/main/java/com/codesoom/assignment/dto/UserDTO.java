@@ -25,6 +25,7 @@ public class UserDTO {
 			this.password = password;
 		}
 	}
+
 	@Getter
 	@NoArgsConstructor
 	public static class Response{
