@@ -20,7 +20,7 @@ public class Toy extends Product {
 
     private String name;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "producer_id")
     private ToyProducer producer;
 
