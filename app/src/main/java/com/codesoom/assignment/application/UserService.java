@@ -23,7 +23,6 @@ public class UserService {
 
 	public UserDTO.Response createUser(UserDTO.CreateUser source) {
 		User user = userRepository.save(mapper.map(source, User.class));
-		System.out.println(mapper.map(user, UserDTO.Response.class).getEmail());
 		return mapper.map(user, UserDTO.Response.class);
 	}
 

@@ -20,13 +20,11 @@ import com.codesoom.assignment.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(UserController.class)
-public class UserControllerWebTest {
+class UserControllerWebTest {
+	private final ObjectMapper objectMapper = new ObjectMapper();
 
 	@Autowired
 	private MockMvc mockMvc;
-
-	@Autowired
-	private ObjectMapper objectMapper = new ObjectMapper();
 
 	@MockBean
 	private UserService userService;
@@ -35,56 +33,58 @@ public class UserControllerWebTest {
 	void setUp() {
 		UserDTO.Response response = new UserDTO.Response(1, "create name test",
 			"create email test", "create password test");
-		given(userService.createUser(any(UserDTO.CreateUser.class)))
-			.willReturn(response);
-
 		UserDTO.UpdateUser updateUser = new UserDTO.UpdateUser("update name test", "update email test",
 			"update password test");
-		given(userService.updateUsers(eq(1), any(UserDTO.UpdateUser.class)))
+
+		given(userService.createUser(any(UserDTO.CreateUser.class)))
 			.will(invocation -> {
-				UserDTO.UpdateUser source = invocation.getArgument(0);
-				return new UserDTO.Response(1, source.getName(), source.getEmail(), source.getPassword());
+				UserDTO.CreateUser source = invocation.getArgument(0);
+				return new UserDTO.Response(1, source.getName(), source.getEmail(),
+					source.getPassword());
 			});
 
-		//TODO 아래의 코드에서 createUser 의 attribute 가 null 로 뽑히는데 이유가 무엇인지 알아내기.
-
-		// given(userService.createUser(any(UserDTO.CreateUser.class)))
-		// 	.will(invocation -> {
-		// 		System.out.println("==================");
-		// 		UserDTO.CreateUser createUser = invocation.getArgument(0);
-		// 		System.out.println(createUser.getEmail());
-		// 		System.out.println("==================");
-		//
-		// 		UserDTO.CreateUser source = invocation.getArgument(0);
-		// 		UserDTO.Response response = new UserDTO.Response(1, source.getName(), source.getEmail(),
-		// 			source.getPassword());
-		// 		return response;
-		// 	});
+		given(userService.updateUsers(eq(1), any(UserDTO.UpdateUser.class)))
+			.will(invocation -> {
+				int id = invocation.getArgument(0);
+				UserDTO.UpdateUser source = invocation.getArgument(1);
+				return UserDTO.Response.builder()
+					.id(id)
+					.name(source.getName())
+					.email(source.getEmail())
+					.password(source.getPassword())
+					.build();
+			});
 	}
 
 	@Test
 	void createUser() throws Exception {
+		String source = objectMapper.writeValueAsString(new UserDTO.CreateUser("create name test",
+			"create email test", "create password test"));
+
 		mockMvc.perform(
 				post("/users")
 					.accept(MediaType.APPLICATION_JSON)
 					.contentType(MediaType.APPLICATION_JSON)
-					.content(
-						"{\"name\":\"create name test\",\"email\":\"create email test\",\"password\":\"create password test\"}"))
+					.content(source))
 			.andExpect(status().isCreated())
 			.andExpect(content().string(containsString("create email test")));
+
 		verify(userService).createUser(any(UserDTO.CreateUser.class));
 	}
 
 	@Test
 	void updateUser() throws Exception {
+		String source = objectMapper.writeValueAsString(
+			new UserDTO.UpdateUser("update name test", "update email test", "update password test"));
+
 		mockMvc.perform(
-				put("/users")
-					.accept(MediaType.APPLICATION_JSON)
+				patch("/users/{id}", 1)
+					.accept(MediaType.APPLICATION_JSON_UTF8)
 					.contentType(MediaType.APPLICATION_JSON)
-					.content(
-						"{\"name\":\"update name test\",\"email\":\"update email test\",\"password\":\"update password test\"}"))
+					.content(source))
 			.andExpect(status().isOk())
 			.andExpect(content().string(containsString("update email test")));
+
 		verify(userService).updateUsers(eq(1), any(UserDTO.UpdateUser.class));
 	}
 }

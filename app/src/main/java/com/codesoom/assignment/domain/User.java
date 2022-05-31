@@ -1,6 +1,7 @@
 package com.codesoom.assignment.domain;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 import com.codesoom.assignment.dto.UserDTO;
@@ -17,6 +18,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class User {
 	@Id
+	@GeneratedValue
 	private int id;
 
 	private String name;
