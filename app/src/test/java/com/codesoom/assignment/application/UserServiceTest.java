@@ -62,8 +62,16 @@ public class UserServiceTest {
 
 	@Test
 	void getUsersTest() {
-		List<User> users = userService.getUsers();
+		List<UserDTO.Response> users = userService.getUsers();
 		verify(userRepository).findAll();
 		assertThat(users.size()).isEqualTo(2);
+	}
+
+	@Test
+	void updateUserTest() {
+		UserDTO.UpdateUser source = new UserDTO.UpdateUser("update name test", "update email test",
+			"update password test");
+		UserDTO.Response response = userService.updateUsers(1, source);
+		assertThat(response.getEmail()).isEqualTo(response.getEmail());
 	}
 }

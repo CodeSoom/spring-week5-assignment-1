@@ -45,4 +45,19 @@ public class UserDTO {
 			this.password = password;
 		}
 	}
+
+	public static class UpdateUser {
+		@Mapping("name")
+		private String name;
+		@Mapping("email")
+		private String email;
+		@Mapping("password")
+		private String password;
+
+		public UpdateUser(String name, String email, String password) {
+			this.name = name;
+			this.email = email;
+			this.password = password;
+		}
+	}
 }
