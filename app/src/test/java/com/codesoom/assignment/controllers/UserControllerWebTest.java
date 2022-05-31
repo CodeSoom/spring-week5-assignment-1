@@ -116,4 +116,12 @@ class UserControllerWebTest {
 
 		verify(userService).getUsers();
 	}
+
+	@Test
+	void deleteUser() throws Exception {
+		mockMvc.perform(delete("/users/{id}", 1))
+			.andExpect(status().isNoContent());
+
+		verify(userService).deleteUser(1);
+	}
 }
