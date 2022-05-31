@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,5 +47,11 @@ public class UserController {
 	@ResponseStatus(HttpStatus.OK)
 	public List<UserDTO.Response> getUsers() {
 		return userService.getUsers();
+	}
+
+	@DeleteMapping("/{id}")
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void deleteUser(@PathVariable("id") int id) {
+		userService.deleteUser(id);
 	}
 }
