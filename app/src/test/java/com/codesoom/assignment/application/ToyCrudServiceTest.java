@@ -63,40 +63,37 @@ class ToyCrudServiceTest {
     @Nested
     @DisplayName("showAll 메소드는")
     class Describe_showAll {
-        abstract class ContextShowingAll {
-            List<Toy> withExistingToy() {
-                given(repository.findAll()).willReturn(List.of(toy));
-                return service.showAll();
-            }
-
-            List<Toy> withoutExistingToy() {
-                return service.showAll();
-            }
+        private List<Toy> subject() {
+            return service.showAll();
         }
 
         @Nested
         @DisplayName("만약 존재하는 장난감이 없다면")
-        class Context_without_existing_toy extends ContextShowingAll {
+        class Context_without_existing_toy {
+            @BeforeEach
+            void setUp() {
+                given(repository.findAll()).willReturn(List.of());
+            }
+
             @Test
             @DisplayName("빈 리스트를 반환한다")
             void it_returns_empty_list() {
-                final List<Toy> actual = withoutExistingToy();
-
-                assertThat(actual).isInstanceOf(List.class);
-                assertThat(actual).isEmpty();
+                assertThat(subject()).isEmpty();
             }
         }
 
         @Nested
         @DisplayName("만약 존재하는 장난감이 있다면")
-        class Context_with_existing_toy extends ContextShowingAll {
+        class Context_with_existing_toy {
+            @BeforeEach
+            void setUp() {
+                given(repository.findAll()).willReturn(List.of(toy));
+            }
+
             @Test
             @DisplayName("비어 있지 않은 리스트를 반환한다")
-            void it_returns_empty_list() {
-                final List<Toy> actual = withExistingToy();
-
-                assertThat(actual).isInstanceOf(List.class);
-                assertThat(actual).isNotEmpty();
+            void it_returns_not_empty_list() {
+                assertThat(subject()).isNotEmpty();
             }
         }
     }
