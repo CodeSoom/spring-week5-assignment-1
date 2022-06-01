@@ -25,7 +25,6 @@ class ToyCrudServiceTest {
     private Toy toy;
     private Toy toyWithoutId;
     private ToyProducer producer;
-    private ToyProducer producerWithoutId;
     private Won money;
     private ImageDemo demo;
     private final Long TOY_ID = 1L;
@@ -45,9 +44,6 @@ class ToyCrudServiceTest {
 
         producer = ToyProducer.builder()
                 .id(TOY_PRODUCER_ID)
-                .name(PRODUCER_NAME)
-                .build();
-        producerWithoutId = ToyProducer.builder()
                 .name(PRODUCER_NAME)
                 .build();
         toyWithoutId = Toy.builder()
@@ -155,16 +151,8 @@ class ToyCrudServiceTest {
 
         @BeforeEach
         void setUp() {
-            given(producerRepository.save(producerWithoutId)).willReturn(producer);
-            given(repository.save(toyWithoutId)).willReturn(
-                    Toy.builder()
-                            .id(TOY_ID)
-                            .name(PRODUCT_NAME)
-                            .price(money)
-                            .producer(producer)
-                            .demo(demo)
-                            .build()
-            );
+            given(producerRepository.save(any(ToyProducer.class))).willReturn(producer);
+            given(repository.save(any(Toy.class))).willReturn(toy);
         }
 
         @Test
