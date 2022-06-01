@@ -22,4 +22,10 @@ public class UserController {
     public User create(@RequestBody @Valid UserData userData) {
         return userService.create(userData);
     }
+
+    @PatchMapping("{id}")
+    public User update(@PathVariable Long id,
+                       @RequestBody @Valid UserData userData) {
+        return userService.update(id, userData);
+    }
 }
