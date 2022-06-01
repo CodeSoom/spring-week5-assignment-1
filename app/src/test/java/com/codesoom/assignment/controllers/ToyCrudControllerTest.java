@@ -162,7 +162,7 @@ class ToyCrudControllerTest {
                 @DisplayName("HTTP Status Code 201 CREATED 응답한다")
                 void it_responds_with_201() throws Exception {
                     mockMvc.perform(post("/products")
-                                    .content(toyToJson(toy))
+                                    .content(jsonFrom(toy))
                                     .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isCreated());
 
@@ -181,7 +181,7 @@ class ToyCrudControllerTest {
                 @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
                 void it_responds_with_400() throws Exception {
                     mockMvc.perform(post("/products")
-                                    .content(toyToJson(toyWithEmptyName))
+                                    .content(jsonFrom(toyWithEmptyName))
                                     .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isBadRequest());
 
@@ -212,7 +212,7 @@ class ToyCrudControllerTest {
                 @DisplayName("HTTP Status Code 200 OK 응답한다")
                 void it_responds_with_200_ok() throws Exception {
                     mockMvc.perform(patch("/products/" + TOY_ID)
-                                    .content(toyToJson(toyUpdating))
+                                    .content(jsonFrom(toyUpdating))
                                     .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isOk());
                 }
@@ -231,7 +231,7 @@ class ToyCrudControllerTest {
                 @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
                 void it_responds_with_404() throws Exception {
                     mockMvc.perform(patch("/products/" + TOY_ID_NOT_EXISTING)
-                                    .content(toyToJson(toyUpdating))
+                                    .content(jsonFrom(toyUpdating))
                                     .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isNotFound());
                 }
@@ -249,7 +249,7 @@ class ToyCrudControllerTest {
                 @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
                 void it_responds_with_400() throws Exception {
                     mockMvc.perform(patch("/products/" + TOY_ID)
-                                    .content(toyToJson(toyWithEmptyName))
+                                    .content(jsonFrom(toyWithEmptyName))
                                     .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isBadRequest());
 
@@ -291,7 +291,7 @@ class ToyCrudControllerTest {
         }
     }
 
-    private String toyToJson(Toy toy) throws JsonProcessingException {
+    private String jsonFrom(Toy toy) throws JsonProcessingException {
         ToyRequestData requestData = ToyRequestData.builder()
                 .name(toy.getName())
                 .price(toy.getPrice().getValue())
