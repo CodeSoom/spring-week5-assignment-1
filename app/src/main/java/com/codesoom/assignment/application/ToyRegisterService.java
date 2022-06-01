@@ -6,14 +6,9 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ToySearchService implements ProductSearchService {
+public class ToyRegisterService implements ProductRegisterService {
     @Override
-    public List<Product> findProducts() {
-        return null;
-    }
-
-    @Override
-    public Product findProduct(Long id) {
+    public Product register(Product product) {
         return null;
     }
 }
