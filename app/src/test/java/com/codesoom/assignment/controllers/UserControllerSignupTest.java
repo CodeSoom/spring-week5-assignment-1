@@ -1,18 +1,12 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserSignupData;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -27,13 +21,13 @@ public class UserControllerSignupTest extends UserControllerTestContext{
     class Describe_create {
 
         @Nested
-        @DisplayName("이메일 형식이 아닌 요청 값이 오면")
-        class Context_when_invalid_request_data {
+        @DisplayName("요청 값 중 이메일 속성이 이메일 형식이 아니면")
+        class Context_without_email {
 
             private final UserSignupData invalidData = UserSignupData.builder()
                     .email("qwd")
                     .name("김치")
-                    .password("1234")
+                    .password("123456")
                     .build();
 
             @DisplayName("400 status를 응답한다.")

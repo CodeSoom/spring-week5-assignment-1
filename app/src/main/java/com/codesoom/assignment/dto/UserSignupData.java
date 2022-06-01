@@ -2,17 +2,16 @@ package com.codesoom.assignment.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 @Getter
 public class UserSignupData {
 
-    @NotBlank
+    @Email
     private final String email;
 
     @NotBlank
