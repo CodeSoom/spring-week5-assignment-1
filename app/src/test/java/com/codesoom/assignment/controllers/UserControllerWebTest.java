@@ -20,7 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.dto.UserDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;

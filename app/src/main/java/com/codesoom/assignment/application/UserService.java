@@ -5,20 +5,20 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDTO;
-import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 
 @Service
 public class UserService {
 	private final UserRepository userRepository;
-	private final Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+	private final Mapper mapper;
 
-	public UserService(UserRepository userRepository) {
+	public UserService(UserRepository userRepository, Mapper mapper) {
 		this.userRepository = userRepository;
+		this.mapper = mapper;
 	}
 
 	public UserDTO.Response createUser(UserDTO.CreateUser source) {
