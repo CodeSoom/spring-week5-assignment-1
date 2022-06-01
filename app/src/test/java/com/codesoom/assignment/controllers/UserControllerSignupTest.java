@@ -25,7 +25,28 @@ public class UserControllerSignupTest extends UserControllerTestContext{
         class Context_without_email {
 
             private final UserSignupData invalidData = UserSignupData.builder()
-                    .email("qwd")
+                    .email("")
+                    .name("김치")
+                    .password("123456")
+                    .build();
+
+            @DisplayName("400 status를 응답한다.")
+            @Test
+            void it_responses_400_status() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(toJson(invalidData))
+                                .contentType(MediaType.APPLICATION_JSON)
+                        )
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("요청 값 중 이메일 속성이 비어있으면")
+        class Context_when_empty_email {
+
+            private final UserSignupData invalidData = UserSignupData.builder()
+                    .email("")
                     .name("김치")
                     .password("123456")
                     .build();
@@ -46,7 +67,7 @@ public class UserControllerSignupTest extends UserControllerTestContext{
         class Context_when_empty_name {
 
             private final UserSignupData invalidData = UserSignupData.builder()
-                    .email("qwd")
+                    .email("kimchi@joa.com")
                     .name("김치")
                     .password("123456")
                     .build();
