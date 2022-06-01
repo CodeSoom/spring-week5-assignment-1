@@ -20,14 +20,18 @@ public class UserControllerSignupTest extends UserControllerTestContext{
     @DisplayName("POST /users 요청은")
     class Describe_create {
 
+        public static final String VALID_EMAIl = "kimchi@joa.com";
+        public static final String VALID_NAME = "갓김치";
+        public static final String VALID_PASSWORD = "1234567";
+
         @Nested
         @DisplayName("요청 값 중 이메일 속성이 이메일 형식이 아니면")
         class Context_without_email {
 
             private final UserSignupData invalidData = UserSignupData.builder()
-                    .email("")
-                    .name("김치")
-                    .password("123456")
+                    .email("asdasd")
+                    .name(VALID_NAME)
+                    .password(VALID_PASSWORD)
                     .build();
 
             @DisplayName("400 status를 응답한다.")
@@ -47,8 +51,8 @@ public class UserControllerSignupTest extends UserControllerTestContext{
 
             private final UserSignupData invalidData = UserSignupData.builder()
                     .email("")
-                    .name("김치")
-                    .password("123456")
+                    .name(VALID_NAME)
+                    .password(VALID_PASSWORD)
                     .build();
 
             @DisplayName("400 status를 응답한다.")
@@ -67,9 +71,9 @@ public class UserControllerSignupTest extends UserControllerTestContext{
         class Context_when_empty_name {
 
             private final UserSignupData invalidData = UserSignupData.builder()
-                    .email("kimchi@joa.com")
-                    .name("김치")
-                    .password("123456")
+                    .email(VALID_EMAIl)
+                    .name("")
+                    .password(VALID_PASSWORD)
                     .build();
 
             @DisplayName("400 status를 응답한다.")
@@ -87,14 +91,10 @@ public class UserControllerSignupTest extends UserControllerTestContext{
         @DisplayName("유효한 요청 데이터가 오면")
         class Context_when_valid_request_data {
 
-            public static final String EMAIl = "kimchi@joa.com";
-            public static final String NAME = "갓김치";
-            public static final String PASSWORD = "1234567";
-
             private final UserSignupData validData = UserSignupData.builder()
-                    .email(EMAIl)
-                    .name(NAME)
-                    .password(PASSWORD)
+                    .email(VALID_EMAIl)
+                    .name(VALID_NAME)
+                    .password(VALID_PASSWORD)
                     .build();
 
             @BeforeEach
@@ -120,9 +120,9 @@ public class UserControllerSignupTest extends UserControllerTestContext{
                         )
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.id").exists())
-                        .andExpect(jsonPath("$.name").value(NAME))
-                        .andExpect(jsonPath("$.password").value(PASSWORD))
-                        .andExpect(jsonPath("$.email").value(EMAIl));
+                        .andExpect(jsonPath("$.name").value(VALID_NAME))
+                        .andExpect(jsonPath("$.password").value(VALID_PASSWORD))
+                        .andExpect(jsonPath("$.email").value(VALID_EMAIl));
             }
         }
 
