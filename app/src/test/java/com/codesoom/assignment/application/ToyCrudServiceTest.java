@@ -101,11 +101,13 @@ class ToyCrudServiceTest {
     @Nested
     @DisplayName("showById 메소드는")
     class Describe_showById {
-        abstract class ContextShowingBy {
+        abstract class ContextShowingByExisting {
             Toy withExistingToy() {
                 return service.showById(TOY_ID);
             }
+        }
 
+        abstract class ContextShowingByNotExisting {
             void withoutExistingToy() {
                 service.showById(TOY_ID_NOT_EXISTING);
             }
@@ -113,7 +115,7 @@ class ToyCrudServiceTest {
 
         @Nested
         @DisplayName("만약 존재하는 Toy를 조회한다면")
-        class Context_with_existing_toy extends ContextShowingBy {
+        class Context_with_existing_toy extends ContextShowingByExisting {
             @BeforeEach
             void setUp() {
                 given(repository.findById(TOY_ID)).willReturn(Optional.of(toy));
@@ -128,7 +130,7 @@ class ToyCrudServiceTest {
 
         @Nested
         @DisplayName("만약 존재하지 않는 Toy를 조회한다면")
-        class Context_with_not_existing_toy extends ContextShowingBy {
+        class Context_with_not_existing_toy extends ContextShowingByNotExisting {
             @Test
             @DisplayName("예외를 발생시킨다")
             void it_throws_exception() {
@@ -165,11 +167,13 @@ class ToyCrudServiceTest {
     @Nested
     @DisplayName("update 메소드는")
     class Describe_update {
-        abstract class ContextUpdating {
+        abstract class ContextUpdatingExisting {
             Toy withExistingToy() {
                 return service.update(TOY_ID, toyWithoutId);
             }
+        }
 
+        abstract class ContextUpdatingNotExisting {
             void withoutExistingToy() {
                 service.update(TOY_ID_NOT_EXISTING, toyWithoutId);
             }
@@ -177,7 +181,7 @@ class ToyCrudServiceTest {
 
         @Nested
         @DisplayName("만약 존재하는 Toy를 수정한다면")
-        class Context_with_existing_toy extends ContextUpdating {
+        class Context_with_existing_toy extends ContextUpdatingExisting {
             @BeforeEach
             void setUp() {
                 given(repository.existsById(TOY_ID)).willReturn(Boolean.TRUE);
@@ -211,7 +215,7 @@ class ToyCrudServiceTest {
 
         @Nested
         @DisplayName("만약 존재하지 않는 Toy를 수정한다면")
-        class Context_with_not_existing_toy extends ContextUpdating {
+        class Context_with_not_existing_toy extends ContextUpdatingNotExisting {
             @Test
             @DisplayName("예외를 발생시킨다")
             void it_throws_exception() {
@@ -225,20 +229,21 @@ class ToyCrudServiceTest {
     @Nested
     @DisplayName("delete 메소드는")
     class Describe_deleteTask {
-        abstract class ContextDeleting {
+        abstract class ContextDeletingExisting {
             void withExistingToy() {
                 service.deleteBy(TOY_ID);
             }
+        }
 
+        abstract class ContextDeletingNotExisting {
             void withoutExistingToy() {
                 service.deleteBy(TOY_ID_NOT_EXISTING);
             }
-
         }
 
         @Nested
         @DisplayName("만약 존재하는 Toy를 삭제한다면")
-        class Context_with_existing_toy extends ContextDeleting {
+        class Context_with_existing_toy extends ContextDeletingExisting {
             @BeforeEach
             void setUp() {
                 given(repository.existsById(TOY_ID)).willReturn(Boolean.TRUE);
@@ -253,7 +258,7 @@ class ToyCrudServiceTest {
 
         @Nested
         @DisplayName("만약 존재하지 않는 Toy를 삭제한다면")
-        class Context_with_not_existing_toy extends ContextDeleting {
+        class Context_with_not_existing_toy extends ContextDeletingNotExisting {
 
             @Test
             @DisplayName("예외를 발생시킨다")
