@@ -1,7 +1,9 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.BadRequestException;
+import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -38,11 +41,13 @@ class UserControllerTest {
                 .email("kim@gmail.com")
                 .password("1111")
                 .build();
+
         UserData userDataWithInvalidEmail = UserData.builder()
                 .name("김철수")
                 .email("")
                 .password("1111")
                 .build();
+
         UserData userDataWithInvalidPassword = UserData.builder()
                 .name("김철수")
                 .email("kim@gmail.com")
@@ -50,9 +55,9 @@ class UserControllerTest {
                 .build();
 
         given(userService.create(any(UserData.class))).willReturn(user);
-        given(userService.create(any(userDataWithInvalidName))).willThrow(new BadRequestException());
-        given(userService.create(any(userDataWithInvalidEmail))).willThrow(new BadRequestException());
-        given(userService.create(any(userDataWithInvalidPassword))).willThrow(new BadRequestException());
+        given(userService.create(eq(userDataWithInvalidName))).willThrow(new BadRequestException());
+        given(userService.create(eq(userDataWithInvalidEmail))).willThrow(new BadRequestException());
+        given(userService.create(eq(userDataWithInvalidPassword))).willThrow(new BadRequestException());
     }
 
     @Test
