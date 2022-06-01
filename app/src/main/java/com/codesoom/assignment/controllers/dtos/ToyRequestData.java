@@ -6,6 +6,8 @@ import com.codesoom.assignment.domain.ToyProducer;
 import com.codesoom.assignment.domain.Won;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
@@ -13,9 +15,15 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ToyRequestData {
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String maker;
+
+    @NotNull
     private BigDecimal price;
+
     private String url;
 
 
