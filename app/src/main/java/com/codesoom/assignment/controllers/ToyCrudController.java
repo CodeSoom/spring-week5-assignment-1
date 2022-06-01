@@ -8,6 +8,7 @@ import com.codesoom.assignment.domain.Toy;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,7 @@ public class ToyCrudController implements ToyCreateController, ToyDetailControll
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @Override
-    public ToyResponseData create(@RequestBody ToyRequestData requestDto) {
+    public ToyResponseData create(@RequestBody @Valid ToyRequestData requestDto) {
         Toy toy = requestDto.toEntity();
         return new ToyResponseData().dtoFrom(toy);
     }
