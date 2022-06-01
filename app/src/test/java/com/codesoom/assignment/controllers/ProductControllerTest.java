@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.ProductSearchService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -11,16 +12,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.jmx.export.naming.IdentityNamingStrategy;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -59,17 +59,29 @@ class ProductControllerTest {
     private final String MAKER = "(주)애옹이네";
     private final BigDecimal PRICE = BigDecimal.valueOf(100000);
 
+    @BeforeEach
+    void setUp() {
+        Product product = new ProductDto(ID, NAME, MAKER, PRICE);
+
+        setUpSearch(product);
+    }
+
+    void setUpSearch(Product product) {
+        // 전체 조회
+        given(productSearchService.findProducts())
+                .willReturn(List.of(product));
+
+        // 단건 조회
+        given(productSearchService.findProduct(eq(INVALID_ID)))
+                .willThrow(ProductNotFoundException.class);
+
+        given(productSearchService.findProduct(eq(ID)))
+                .willReturn(product);
+    }
+
     @Nested
     @DisplayName("GET /products")
     class list {
-
-        @BeforeEach
-        void setUp() {
-            Product product = new ProductDto(ID, NAME, MAKER, PRICE);
-
-            given(productSearchService.findProducts())
-                    .willReturn(List.of(product));
-        }
 
         @Nested
         @DisplayName("장난감 목록이 비어있다면")
@@ -111,17 +123,6 @@ class ProductControllerTest {
     @DisplayName("GET /products/{id}")
     class detail {
 
-        @BeforeEach
-        void setUp() {
-            Product product = new ProductDto(ID, NAME, MAKER, PRICE);
-
-            given(productSearchService.findProduct(ID))
-                    .willReturn(product);
-
-            given(productSearchService.findProduct(INVALID_ID))
-                    .willThrow(ProductNotFoundException(INVALID_ID));
-        }
-
         @Nested
         @DisplayName("입력한 id가 유효하다면")
         class when_id_is_valid {
@@ -136,7 +137,10 @@ class ProductControllerTest {
             @Test
             @DisplayName("장난감 정보를 반환한다.")
             void detail() throws Exception {
-                mockMvc.perform(get("/products/" + ID))
+                mockMvc.perform(
+                        get("/products/" + ID)
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                        )
                         .andExpect(content().string(containsString(NAME)));
             }
         }
