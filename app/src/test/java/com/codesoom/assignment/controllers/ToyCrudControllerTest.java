@@ -114,8 +114,8 @@ class ToyCrudControllerTest {
     @DisplayName("detail 메소드는")
     class Describe_detail {
         @Nested
-        @DisplayName("만약 존재하는 Toy를 상세조회한다면")
-        class Context_with_existing_toy {
+        @DisplayName("유효한 매개변수를 전달 받는다면")
+        class Context_with_valid_param {
             @BeforeEach
             void setUp() {
                 given(service.showById(TOY_ID)).willReturn(toy);
@@ -130,7 +130,7 @@ class ToyCrudControllerTest {
         }
 
         @Nested
-        @DisplayName("만약 존재하지 않는 Toy를 상세조회한다면")
+        @DisplayName("만약 존재하지 않는 ID를 매개변수로 전달 받는다면")
         class Context_without_existing_toy {
             @BeforeEach
             void setUp() {
@@ -151,7 +151,7 @@ class ToyCrudControllerTest {
         @DisplayName("create 메소드는")
         class Describe_create {
             @Nested
-            @DisplayName("매개변수로 유효한 값을 전달 받는다면")
+            @DisplayName("유효한 매개변수를 전달 받는다면")
             class Context_with_valid_param {
                 @BeforeEach
                 void setUp() {
@@ -168,12 +168,13 @@ class ToyCrudControllerTest {
 
                 }
             }
+
             @Nested
-            @DisplayName("매개변수로 유효하지 않은 값을 전달 받는다면")
-            class Context_with_invalid_param {
+            @DisplayName("유효하지 않은 RequestBody를 전달 받는다면")
+            class Context_with_invalid_request_body {
                 @BeforeEach
                 void setUp() {
-                    given(service.create(toyWithoutId)).willReturn(toy);
+                    given(service.create(toyWithoutId)).willReturn(toyWithEmptyName);
                 }
 
                 @Test
@@ -192,8 +193,8 @@ class ToyCrudControllerTest {
         @DisplayName("patch 메소드는")
         class Describe_patch {
             @Nested
-            @DisplayName("만약 존재하는 Toy를 부분 수정한다면")
-            class Context_with_existing_toy {
+            @DisplayName("유효한 매개변수를 전달 받는다면")
+            class Context_with_valid_param {
                 @BeforeEach
                 void setUp() {
                     Toy toyUpdated = Toy.builder()
@@ -218,7 +219,7 @@ class ToyCrudControllerTest {
             }
 
             @Nested
-            @DisplayName("만약 존재하지 않는 Toy를 부분 수정한다면")
+            @DisplayName("만약 존재하지 않는 ID를 매개변수로 전달 받는다면")
             class Context_without_existing_toy {
                 @BeforeEach
                 void setUp() {
@@ -260,7 +261,7 @@ class ToyCrudControllerTest {
         @DisplayName("delete 메소드는")
         class Describe_delete {
             @Nested
-            @DisplayName("만약 존재하는 Toy를 삭제한다면")
+            @DisplayName("유효한 매개변수를 전달 받는다면")
             class Context_with_existing_toy {
                 @Test
                 @DisplayName("HTTP Status Code 204 NO CONTENT 응답한다")
@@ -271,7 +272,7 @@ class ToyCrudControllerTest {
             }
 
             @Nested
-            @DisplayName("만약 존재하지 않는 Toy를 삭제한다면")
+            @DisplayName("만약 존재하지 않는 ID를 매개변수로 전달 받는다면")
             class Context_without_existing_toy {
                 @BeforeEach
                 void setUp() {
