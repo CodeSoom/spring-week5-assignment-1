@@ -7,11 +7,13 @@ import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Getter
 public class UserSignupData {
 
     @Email
+    @NotEmpty
     private final String email;
 
     @NotBlank
