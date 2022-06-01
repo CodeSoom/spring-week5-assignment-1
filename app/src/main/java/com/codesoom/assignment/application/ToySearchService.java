@@ -9,4 +9,9 @@ public class ToySearchService implements ProductSearchService {
     public List<Product> findProducts() {
         return null;
     }
+
+    @Override
+    public Product findProduct(Long id) {
+        return null;
+    }
 }

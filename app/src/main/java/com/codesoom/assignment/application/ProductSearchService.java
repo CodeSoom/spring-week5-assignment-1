@@ -6,4 +6,6 @@ import java.util.List;
 
 public interface ProductSearchService {
     List<Product> findProducts();
+
+    Product findProduct(Long id);
 }
