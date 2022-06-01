@@ -22,7 +22,7 @@ public class UserControllerSignupTest extends UserControllerTestContext{
 
         public static final String VALID_EMAIl = "kimchi@joa.com";
         public static final String VALID_NAME = "갓김치";
-        public static final String VALID_PASSWORD = "1234567";
+        public static final String VALID_PASSWORD = "dd123#4567";
 
         @Nested
         @DisplayName("요청 값 중 이메일 속성이 이메일 형식이 아니면")
@@ -74,6 +74,27 @@ public class UserControllerSignupTest extends UserControllerTestContext{
                     .email(VALID_EMAIl)
                     .name("")
                     .password(VALID_PASSWORD)
+                    .build();
+
+            @DisplayName("400 status를 응답한다.")
+            @Test
+            void it_responses_400_status() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(toJson(invalidData))
+                                .contentType(MediaType.APPLICATION_JSON)
+                        )
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("요청 값 중 패스워드가 유효하지 않으면")
+        class Context_when_invalid_password {
+
+            private final UserSignupData invalidData = UserSignupData.builder()
+                    .email(VALID_EMAIl)
+                    .name(VALID_NAME)
+                    .password("qwdqwdqwd")
                     .build();
 
             @DisplayName("400 status를 응답한다.")
