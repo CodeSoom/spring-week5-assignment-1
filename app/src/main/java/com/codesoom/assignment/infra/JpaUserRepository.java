@@ -10,6 +10,10 @@ import java.util.Optional;
 @Primary
 public interface JpaUserRepository
         extends UserRepository, CrudRepository<User, Long> {
+
     User save(User user);
+
     Optional<User> findById(Long id);
+
+    void delete(Long id);
 }
