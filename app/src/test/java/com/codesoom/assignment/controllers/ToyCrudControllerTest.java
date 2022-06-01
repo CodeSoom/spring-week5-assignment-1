@@ -235,6 +235,25 @@ class ToyCrudControllerTest {
                             .andExpect(status().isNotFound());
                 }
             }
+
+            @Nested
+            @DisplayName("유효하지 않은 RequestBody를 전달 받는다면")
+            class Context_with_invalid_request_body {
+                @BeforeEach
+                void setUp() {
+                    given(service.update(eq(TOY_ID), any(Toy.class))).willReturn(toyWithEmptyName);
+                }
+
+                @Test
+                @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
+                void it_responds_with_400() throws Exception {
+                    mockMvc.perform(patch("/products/" + TOY_ID)
+                                    .content(toyToJson(toyWithEmptyName))
+                                    .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest());
+
+                }
+            }
         }
 
         @Nested
