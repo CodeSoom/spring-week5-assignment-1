@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.ProductRegisterService;
 import com.codesoom.assignment.application.ProductSearchService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductDto;
@@ -18,9 +19,12 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -53,11 +57,16 @@ class ProductControllerTest {
     @MockBean
     ProductSearchService productSearchService;
 
+    @MockBean
+    ProductRegisterService productRegisterService;
+
     private final Long ID = 1L;
     private final Long INVALID_ID = 1000L;
     private final String NAME = "캣타워";
     private final String MAKER = "(주)애옹이네";
     private final BigDecimal PRICE = BigDecimal.valueOf(100000);
+    private final String CONTENT = "{\"name\" : \"캣 타워\", \"maker\" : \"(주)애옹이네\", \"price\" : 1000}";
+    private final String INVALID_CONTENT = "{\"maker\" : \"(주)애옹이네\", \"price\" : 1000}";
 
     @BeforeEach
     void setUp() {
@@ -69,6 +78,7 @@ class ProductControllerTest {
                 .build();
 
         setUpSearch(product);
+        setUpRegister(product);
     }
 
     void setUpSearch(Product product) {
@@ -81,6 +91,11 @@ class ProductControllerTest {
                 .willThrow(ProductNotFoundException.class);
 
         given(productSearchService.findProduct(eq(ID)))
+                .willReturn(product);
+    }
+
+    void setUpRegister(Product product) {
+        given(productRegisterService.register(any(Product.class)))
                 .willReturn(product);
     }
 
@@ -159,6 +174,58 @@ class ProductControllerTest {
             void detail_404_not_found() throws Exception {
                 mockMvc.perform(get("/products/" + INVALID_ID))
                         .andExpect(status().isNotFound());
+            }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("POST /products")
+    class register {
+
+        @Nested
+        @DisplayName("입력된 이름, 제조사, 가격이 유효하다면")
+        class when_register_with_valid_data {
+
+            @Test
+            @DisplayName("201 Created로 응답한다.")
+            void register_201_ok() throws Exception {
+                mockMvc.perform(
+                                post("/products")
+                                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(CONTENT)
+                        )
+                        .andExpect(status().isCreated());
+            }
+
+            @Test
+            @DisplayName("등록된 장난감 정보를 반환한다.")
+            void register() throws Exception {
+                mockMvc.perform(
+                                post("/products")
+                                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(CONTENT)
+                        )
+                        .andExpect(content().string(containsString(NAME)));
+            }
+        }
+
+        @Nested
+        @DisplayName("입력된 이름, 제조사, 가격이 유효하지 않다면")
+        class when_register_with_invalid_data {
+
+            @Test
+            @DisplayName("400 Bad Request로 응답한다.")
+            void register_400_bad_request() throws Exception {
+                mockMvc.perform(
+                                post("/products")
+                                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(INVALID_CONTENT)
+                        )
+                        .andExpect(status().isBadRequest());
             }
         }
 
