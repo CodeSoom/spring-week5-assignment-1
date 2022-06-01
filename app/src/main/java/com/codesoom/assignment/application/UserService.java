@@ -38,6 +38,14 @@ public class UserService {
         return user;
     }
 
+    public User deleteUser(Long id) {
+        User user = getUser(id);
+
+        userRepository.delete(id);
+
+        return user;
+    }
+
     private User getUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
