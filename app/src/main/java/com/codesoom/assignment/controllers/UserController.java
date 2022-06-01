@@ -35,7 +35,7 @@ public class UserController {
 
 	@PatchMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
-	public UserDTO.Response updateUser(@PathVariable("id") int id, @Valid @RequestBody  UserDTO.UpdateUser updateUser) {
+	public UserDTO.Response updateUser(@PathVariable("id") int id, @Valid @RequestBody UserDTO.UpdateUser updateUser) {
 		return userService.updateUsers(id, updateUser);
 	}
 

@@ -5,10 +5,10 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.codesoom.assignment.exception.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDTO;
+import com.codesoom.assignment.exception.UserNotFoundException;
 import com.github.dozermapper.core.Mapper;
 
 @Service
