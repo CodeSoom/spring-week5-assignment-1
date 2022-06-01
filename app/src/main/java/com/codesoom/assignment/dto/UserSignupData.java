@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.validation.MyPassword;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
@@ -19,7 +20,7 @@ public class UserSignupData {
     @NotBlank
     private final String name;
 
-    @NotBlank
+    @MyPassword
     private final String password;
 
     @Builder
