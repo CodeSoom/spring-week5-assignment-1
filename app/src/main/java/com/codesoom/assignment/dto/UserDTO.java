@@ -19,10 +19,13 @@ public class UserDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class CreateUser {
+		@NotBlank
 		@Mapping("name")
 		private String name;
+		@NotBlank
 		@Mapping("email")
 		private String email;
+		@NotBlank
 		@Mapping("password")
 		private String password;
 	}
