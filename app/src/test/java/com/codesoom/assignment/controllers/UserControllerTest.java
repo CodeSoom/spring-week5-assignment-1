@@ -17,8 +17,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(UserController.class)
@@ -81,6 +81,8 @@ class UserControllerTest {
         });
         given(userService.update(eq(1000L), any(UserData.class))).willThrow(new UserNotFoundException(1000L));
         given(userService.update(eq(1L), eq(newUserDataWithInvalidName))).willThrow(new BadRequestException());
+
+        given(userService.delete(1000L)).willThrow(new UserNotFoundException(1000L));
     }
 
     @Test
@@ -161,5 +163,21 @@ class UserControllerTest {
                                 "\"email\":\"young@gmail.com\"," +
                                 "\"password\":\"1234\"}"))
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void deleteWithExistedUser() throws Exception {
+        mockMvc.perform(delete("/user/1"))
+                .andExpect(status().isNoContent());
+
+        verify(userService).delete(1L);
+    }
+
+    @Test
+    void deleteWithNotExistedUser() throws Exception {
+        mockMvc.perform(delete("/user/1000"))
+                .andExpect(status().isNotFound());
+
+        verify(userService).delete(1000L);
     }
 }
