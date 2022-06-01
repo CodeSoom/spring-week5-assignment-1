@@ -33,8 +33,8 @@ class ProductControllerTest {
     //  - 장난감 목록이 비어있는 경우 -> 200 ok -> 완료
     //  - 장난감 목록이 있는 경우 -> 200 ok -> 완료
     // 2. GET /products/{id}
-    //  - id가 유효한 경우 -> 200 ok
-    //  - id가 유효하지 않은 경우 -> 404 Not Found
+    //  - id가 유효한 경우 -> 200 ok -> 완료
+    //  - id가 유효하지 않은 경우 -> 404 Not Found -> 완료
     // 3. POST /products
     //  - 입력한 정보가 유효한 경우 -> 201 Created
     // 4. PATCH /products/{id}
@@ -61,7 +61,12 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        Product product = new ProductDto(ID, NAME, MAKER, PRICE);
+        Product product = Product.builder()
+                .id(ID)
+                .name(NAME)
+                .maker(MAKER)
+                .price(PRICE)
+                .build();
 
         setUpSearch(product);
     }

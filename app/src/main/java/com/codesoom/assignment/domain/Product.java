@@ -1,15 +1,31 @@
 package com.codesoom.assignment.domain;
 
+import com.github.dozermapper.core.Mapping;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 
-public interface Product {
-    Long id();
+@Getter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Product {
 
-    String name();
+    @Mapping("id")
+    private Long id;
 
-    String maker();
+    @Mapping("name")
+    private String name;
 
-    BigDecimal price();
+    @Mapping("maker")
+    private String maker;
 
-    String imagePath();
+    @Mapping("price")
+    private BigDecimal price;
+
+    @Mapping("imagePath")
+    private String imagePath;
 }
