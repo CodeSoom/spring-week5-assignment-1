@@ -2,6 +2,8 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.dto.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -9,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
@@ -60,7 +63,7 @@ class ProductControllerTest {
 
         @BeforeEach
         void setUp() {
-            Product product = new Product(ID, NAME, MAKER, PRICE);
+            Product product = new ProductDto(ID, NAME, MAKER, PRICE);
 
             given(productService.findProducts())
                     .willReturn(List.of(product));
@@ -79,7 +82,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("장난감 목록이 비어있다면")
+        @DisplayName("장난감 목록이 비어있지 않다면")
         class when_product_list_is_not_empty {
 
             @Test
@@ -90,10 +93,11 @@ class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("200 ok를 반환한다.")
+            @DisplayName("장난감 목록을 반환한다.")
             void list() throws Exception {
                 mockMvc.perform(
                         get("/products")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
                         )
                         .andExpect(content().string(containsString("캣타워")));
             }
