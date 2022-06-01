@@ -104,7 +104,7 @@ class UserControllerWebTest {
     }
 
     @Test
-    void updateWithNotExistedProduct() throws Exception {
+    void updateWithNotExistedUser() throws Exception {
         mockMvc.perform(
                 patch("/users/1000")
                         .contentType(MediaType.APPLICATION_JSON)
