@@ -2,8 +2,11 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.ProductData;
 import com.codesoom.assignment.dto.UserCreateData;
+import com.codesoom.assignment.dto.UserUpdateData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,9 +18,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -44,6 +50,21 @@ class UserControllerWebTest {
                 .build();
 
         given(userService.createUser(any(UserCreateData.class))).willReturn(user);
+
+        given(userService.updateUser(eq(1L), any(UserUpdateData.class)))
+                .will(invocation -> {
+                    Long id = invocation.getArgument(0);
+                    UserUpdateData userUpdateData = invocation.getArgument(1);
+                    return User.builder()
+                            .id(id)
+                            .name(userUpdateData.getName())
+                            .email(userUpdateData.getEmail())
+                            .password(userUpdateData.getPassword())
+                            .build();
+                });
+
+        given(userService.updateUser(eq(1000L), any(UserUpdateData.class)))
+                .willThrow(new UserNotFoundException(1000L));
     }
 
     @Test
@@ -67,6 +88,32 @@ class UserControllerWebTest {
                         .content("{\"name\":\"\",\"email\":\"\",\"password\":\"\"}")
         )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateWithExistedUser() throws Exception {
+        mockMvc.perform(
+                patch("/users/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"caoyu-dev\",\"email\":\"choyumin01@gmail.com\",\"password\":\"!@#$1234\"}")
+                )
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString("caoyu-dev")));
+
+        verify(userService).updateUser(eq(1L), any(UserUpdateData.class));
+    }
+
+    @Test
+    void updateWithNotExistedProduct() throws Exception {
+        mockMvc.perform(
+                patch("/users/1000")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"caoyu-dev\",\"email\":\"choyumin01@gmail.com\",\"password\":\"!@#$1234\"}")
+                )
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+        verify(userService).updateUser(eq(1000L), any(UserUpdateData.class));
     }
 
 }
