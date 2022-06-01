@@ -1,8 +1,7 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.application.ProductSearchService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.domain.Toy;
 import com.codesoom.assignment.dto.ProductDto;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -19,6 +18,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,7 +50,7 @@ class ProductControllerTest {
     MockMvc mockMvc;
 
     @MockBean
-    ProductService productService;
+    ProductSearchService productSearchService;
 
     private final Long ID = 1L;
     private final String NAME = "캣타워";
@@ -65,7 +65,7 @@ class ProductControllerTest {
         void setUp() {
             Product product = new ProductDto(ID, NAME, MAKER, PRICE);
 
-            given(productService.findProducts())
+            given(productSearchService.findProducts())
                     .willReturn(List.of(product));
         }
 
@@ -102,6 +102,6 @@ class ProductControllerTest {
                         .andExpect(content().string(containsString("캣타워")));
             }
         }
-    }
 
+    }
 }

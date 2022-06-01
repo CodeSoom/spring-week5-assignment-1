@@ -4,7 +4,8 @@ import com.codesoom.assignment.domain.Product;
 
 import java.util.List;
 
-public class ProductService {
+public class ToySearchService implements ProductSearchService {
+    @Override
     public List<Product> findProducts() {
         return null;
     }
