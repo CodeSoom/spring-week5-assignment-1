@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.UserData;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,9 +11,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 public class User {
 
     @Id
@@ -32,5 +33,18 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    /**
+     * 사용자를 수정하고 수정한 사용자를 리턴한다.
+     *
+     * @param userData 수정할 사용자 데이터
+     * @return 수정한 사용자
+     */
+    public User changeWith(UserData userData) {
+        this.name = userData.getName();
+        this.password = userData.getPassword();
+
+        return this;
     }
 }

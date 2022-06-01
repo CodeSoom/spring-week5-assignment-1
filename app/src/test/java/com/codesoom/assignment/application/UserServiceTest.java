@@ -169,4 +169,33 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("updateUser")
+    class Describe_updateUser {
+        private UserData updateUserData;
+
+        @BeforeEach
+        void setUp() {
+            updateUserData = UserData.builder()
+                    .name(UPDATE_NAME)
+                    .email(UPDATE_EMAIL)
+                    .password(UPDATE_PASSWORD)
+                    .build();
+        }
+
+        @Nested
+        @DisplayName("저장된 사용자 id가 주어지면")
+        class Context_with_an_stored_user_id {
+
+            @Test
+            @DisplayName("업데이트된 사용자를 리턴한다")
+            void it_returns_updated_user() {
+                User updateUser = userService.updateUser(STORED_ID, updateUserData);
+
+                assertThat(updateUser.getName()).isEqualTo(UPDATE_NAME);
+                assertThat(updateUser.getPassword()).isEqualTo(UPDATE_PASSWORD);
+            }
+        }
+    }
 }
