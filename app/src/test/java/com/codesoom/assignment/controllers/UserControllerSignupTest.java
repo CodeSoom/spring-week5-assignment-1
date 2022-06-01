@@ -42,6 +42,27 @@ public class UserControllerSignupTest extends UserControllerTestContext{
         }
 
         @Nested
+        @DisplayName("요청 값 중 이름 속성이 비어있으면")
+        class Context_when_empty_name {
+
+            private final UserSignupData invalidData = UserSignupData.builder()
+                    .email("qwd")
+                    .name("김치")
+                    .password("123456")
+                    .build();
+
+            @DisplayName("400 status를 응답한다.")
+            @Test
+            void it_responses_400_status() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(toJson(invalidData))
+                                .contentType(MediaType.APPLICATION_JSON)
+                        )
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
         @DisplayName("유효한 요청 데이터가 오면")
         class Context_when_valid_request_data {
 
