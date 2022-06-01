@@ -103,7 +103,6 @@ class ToyCrudServiceTest {
     class Describe_showById {
         abstract class ContextShowingBy {
             Toy withExistingToy() {
-                given(repository.findById(TOY_ID)).willReturn(Optional.of(toy));
                 return service.showById(TOY_ID);
             }
 
@@ -115,6 +114,11 @@ class ToyCrudServiceTest {
         @Nested
         @DisplayName("만약 존재하는 Toy를 조회한다면")
         class Context_with_existing_toy extends ContextShowingBy {
+            @BeforeEach
+            void setUp() {
+                given(repository.findById(TOY_ID)).willReturn(Optional.of(toy));
+            }
+
             @Test
             @DisplayName("매개변수로 전달한 값을 Id로 가지고 있는 Toy를 반환한다")
             void it_returns_toy_having_id_equal_to_param() {
@@ -139,19 +143,21 @@ class ToyCrudServiceTest {
     @DisplayName("create 메소드는")
     class Describe_create {
         private Toy subject() {
-            given(repository.save(toyWithoutId)).willReturn(toy);
             return service.create(toyWithoutId);
+        }
+
+        @BeforeEach
+        void setUp() {
+            given(repository.save(toyWithoutId)).willReturn(toy);
         }
 
         @Test
         @DisplayName("매개변수로 전달한 값이 반영된 Task를 반환한다")
         void it_returns_toy_reflecting_params() {
-            final Toy actual = subject();
-
-            assertThat(actual.getName()).isEqualTo(PRODUCT_NAME);
-            assertThat(actual.getProducer()).isEqualTo(producer);
-            assertThat(actual.getDemo()).isEqualTo(demo);
-            assertThat(actual.getPrice()).isEqualTo(money);
+            assertThat(subject().getName()).isEqualTo(PRODUCT_NAME);
+            assertThat(subject().getProducer()).isEqualTo(producer);
+            assertThat(subject().getDemo()).isEqualTo(demo);
+            assertThat(subject().getPrice()).isEqualTo(money);
         }
     }
 
@@ -161,6 +167,19 @@ class ToyCrudServiceTest {
     class Describe_update {
         abstract class ContextUpdating {
             Toy withExistingToy() {
+                return service.update(TOY_ID, toyWithoutId);
+            }
+
+            void withoutExistingToy() {
+                service.update(TOY_ID_NOT_EXISTING, toyWithoutId);
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 존재하는 Toy를 수정한다면")
+        class Context_with_existing_toy extends ContextUpdating {
+            @BeforeEach
+            void setUp() {
                 given(repository.existsById(TOY_ID)).willReturn(Boolean.TRUE);
                 given(repository.save(any(Toy.class))).will(invocation -> {
                     Toy source = invocation.getArgument(0);
@@ -172,18 +191,8 @@ class ToyCrudServiceTest {
                             .demo(source.getDemo())
                             .build();
                 });
-                return service.update(TOY_ID, toyWithoutId);
-
             }
 
-            void withoutExistingToy() {
-                service.update(TOY_ID_NOT_EXISTING, toyWithoutId);
-            }
-        }
-
-        @Nested
-        @DisplayName("만약 존재하는 Toy를 수정한다면")
-        class Context_with_existing_toy extends ContextUpdating {
             @Test
             @DisplayName("매개변수로 전달한 값을 Id로 가지고 있는 Toy를 반환한다")
             void it_returns_toy_having_id_equal_to_param() {
@@ -218,7 +227,6 @@ class ToyCrudServiceTest {
     class Describe_deleteTask {
         abstract class ContextDeleting {
             void withExistingToy() {
-                given(repository.existsById(TOY_ID)).willReturn(Boolean.TRUE);
                 service.deleteBy(TOY_ID);
             }
 
@@ -231,6 +239,11 @@ class ToyCrudServiceTest {
         @Nested
         @DisplayName("만약 존재하는 Toy를 삭제한다면")
         class Context_with_existing_toy extends ContextDeleting {
+            @BeforeEach
+            void setUp() {
+                given(repository.existsById(TOY_ID)).willReturn(Boolean.TRUE);
+            }
+
             @Test
             @DisplayName("값을 반환하지 않는다")
             void it_returns_nothing() {
