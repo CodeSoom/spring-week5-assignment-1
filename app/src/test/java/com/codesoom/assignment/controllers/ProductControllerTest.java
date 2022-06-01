@@ -1,13 +1,23 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.domain.Product;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.math.BigDecimal;
+import java.util.List;
+
+import static org.hamcrest.Matchers.containsString;
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest
@@ -36,9 +46,37 @@ class ProductControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    @MockBean
+    ProductService productService;
+
+    private final Long ID = 1L;
+    private final String NAME = "캣타워";
+    private final String MAKER = "(주)애옹이네";
+    private final BigDecimal PRICE = BigDecimal.valueOf(100000);
+
     @Nested
     @DisplayName("GET /products")
     class list {
+
+        @BeforeEach
+        void setUp() {
+            Product product = new Product(ID, NAME, MAKER, PRICE);
+
+            given(productService.findProducts())
+                    .willReturn(List.of(product));
+        }
+
+        @Nested
+        @DisplayName("장난감 목록이 비어있다면")
+        class when_product_list_is_empty {
+
+            @Test
+            @DisplayName("200 ok를 반환한다.")
+            void list_200_ok() throws Exception {
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk());
+            }
+        }
 
         @Nested
         @DisplayName("장난감 목록이 비어있다면")
@@ -46,9 +84,18 @@ class ProductControllerTest {
 
             @Test
             @DisplayName("200 ok를 반환한다.")
-            void list() throws Exception {
+            void list_200_ok() throws Exception {
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk());
+            }
+
+            @Test
+            @DisplayName("200 ok를 반환한다.")
+            void list() throws Exception {
+                mockMvc.perform(
+                        get("/products")
+                        )
+                        .andExpect(content().string(containsString("캣타워")));
             }
         }
     }
