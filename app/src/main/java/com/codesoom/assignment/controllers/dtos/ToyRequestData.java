@@ -24,6 +24,7 @@ public class ToyRequestData {
     @NotNull
     private BigDecimal price;
 
+    @NotBlank
     private String url;
 
 

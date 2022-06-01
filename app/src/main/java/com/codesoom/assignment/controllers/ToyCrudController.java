@@ -43,7 +43,7 @@ public class ToyCrudController implements ToyCreateController, ToyDetailControll
     @ResponseStatus(HttpStatus.CREATED)
     @Override
     public ToyResponseData create(@RequestBody @Valid ToyRequestData requestDto) {
-        Toy toy = requestDto.toEntity();
+        Toy toy = service.create(requestDto.toEntity());
         return new ToyResponseData().dtoFrom(toy);
     }
 

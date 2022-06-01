@@ -20,10 +20,12 @@ import static org.mockito.Mockito.mock;
 class ToyCrudServiceTest {
     private ToyCrudService service;
     private final ToyRepository repository = mock(ToyRepository.class);
+    private final ToyProducerRepository producerRepository = mock(ToyProducerRepository.class);
 
     private Toy toy;
     private Toy toyWithoutId;
     private ToyProducer producer;
+    private ToyProducer producerWithoutId;
     private Won money;
     private ImageDemo demo;
     private final Long TOY_ID = 1L;
@@ -37,12 +39,15 @@ class ToyCrudServiceTest {
 
     @BeforeEach
     void setUp() {
-        service = new ToyCrudService(repository);
+        service = new ToyCrudService(repository, producerRepository);
         demo = new ImageDemo(IMAGE_URL);
         money = new Won(MONEY_VALUE);
 
         producer = ToyProducer.builder()
                 .id(TOY_PRODUCER_ID)
+                .name(PRODUCER_NAME)
+                .build();
+        producerWithoutId = ToyProducer.builder()
                 .name(PRODUCER_NAME)
                 .build();
         toyWithoutId = Toy.builder()
@@ -150,7 +155,16 @@ class ToyCrudServiceTest {
 
         @BeforeEach
         void setUp() {
-            given(repository.save(toyWithoutId)).willReturn(toy);
+            given(producerRepository.save(producerWithoutId)).willReturn(producer);
+            given(repository.save(toyWithoutId)).willReturn(
+                    Toy.builder()
+                            .id(TOY_ID)
+                            .name(PRODUCT_NAME)
+                            .price(money)
+                            .producer(producer)
+                            .demo(demo)
+                            .build()
+            );
         }
 
         @Test
