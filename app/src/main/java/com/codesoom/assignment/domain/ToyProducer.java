@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ToyProducer extends Producer {
+public class ToyProducer {
     @Id
     @GeneratedValue
     private Long id;
