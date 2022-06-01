@@ -28,4 +28,10 @@ public class User {
 
     @NotBlank
     private String password;
+
+    public void update(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
