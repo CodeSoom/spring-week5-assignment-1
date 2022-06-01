@@ -42,6 +42,7 @@ class ToyCrudControllerTest {
     private ToyCrudService service;
 
     private Toy toy;
+    private Toy toyWithEmptyName;
     private Toy toyWithoutId;
     private Toy toyUpdating;
     private ToyProducer producer;
@@ -67,6 +68,13 @@ class ToyCrudControllerTest {
         toy = Toy.builder()
                 .id(TOY_ID)
                 .name(PRODUCT_NAME)
+                .price(money)
+                .producer(producer)
+                .demo(demo)
+                .build();
+        toyWithEmptyName = Toy.builder()
+                .id(TOY_ID)
+                .name(" ")
                 .price(money)
                 .producer(producer)
                 .demo(demo)
@@ -142,19 +150,41 @@ class ToyCrudControllerTest {
         @Nested
         @DisplayName("create 메소드는")
         class Describe_create {
-            @BeforeEach
-            void setUp() {
-                given(service.create(toyWithoutId)).willReturn(toy);
+            @Nested
+            @DisplayName("매개변수로 유효한 값을 전달 받는다면")
+            class Context_with_valid_param {
+                @BeforeEach
+                void setUp() {
+                    given(service.create(toyWithoutId)).willReturn(toy);
+                }
+
+                @Test
+                @DisplayName("HTTP Status Code 201 CREATED 응답한다")
+                void it_responds_with_201() throws Exception {
+                    mockMvc.perform(post("/products")
+                                    .content(toyToJson(toy))
+                                    .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isCreated());
+
+                }
             }
+            @Nested
+            @DisplayName("매개변수로 유효하지 않은 값을 전달 받는다면")
+            class Context_with_invalid_param {
+                @BeforeEach
+                void setUp() {
+                    given(service.create(toyWithoutId)).willReturn(toy);
+                }
 
-            @Test
-            @DisplayName("HTTP Status Code 201 CREATED 응답한다")
-            void it_responds_with_201() throws Exception {
-                mockMvc.perform(post("/products")
-                                .content(toyToJson(toy))
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isCreated());
+                @Test
+                @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
+                void it_responds_with_400() throws Exception {
+                    mockMvc.perform(post("/products")
+                                    .content(toyToJson(toyWithEmptyName))
+                                    .contentType(MediaType.APPLICATION_JSON))
+                            .andExpect(status().isBadRequest());
 
+                }
             }
         }
 
