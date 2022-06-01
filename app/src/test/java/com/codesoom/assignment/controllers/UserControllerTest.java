@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.BadRequestException;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
@@ -16,6 +17,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
@@ -54,10 +56,31 @@ class UserControllerTest {
                 .password("")
                 .build();
 
+        UserData newUserDataWithInvalidName = UserData.builder()
+                .name("")
+                .email("young@gmail.com")
+                .password("1234")
+                .build();
+
         given(userService.create(any(UserData.class))).willReturn(user);
         given(userService.create(eq(userDataWithInvalidName))).willThrow(new BadRequestException());
         given(userService.create(eq(userDataWithInvalidEmail))).willThrow(new BadRequestException());
         given(userService.create(eq(userDataWithInvalidPassword))).willThrow(new BadRequestException());
+
+        given(userService.update(eq(1L), any(UserData.class)))
+                .will(invocation -> {
+                    Long id = invocation.getArgument(0);
+                    UserData userData = invocation.getArgument(1);
+
+                    return User.builder()
+                            .id(1L)
+                            .name(userData.getName())
+                            .email(userData.getEmail())
+                            .password(userData.getPassword())
+                            .build();
+        });
+        given(userService.update(eq(1000L), any(UserData.class))).willThrow(new UserNotFoundException(1000L));
+        given(userService.update(eq(1L), eq(newUserDataWithInvalidName))).willThrow(new BadRequestException());
     }
 
     @Test
@@ -102,6 +125,41 @@ class UserControllerTest {
                         .content("{\"name\":\"김철수\"," +
                                 "\"email\":\"kim@gmail.com\"," +
                                 "\"password\":\"\"}"))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void updateWithExistedUser() throws Exception {
+        mockMvc.perform(patch("/user/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"김영희\"," +
+                                "\"email\":\"young@gmail.com\"," +
+                                "\"password\":\"1234\"}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.name").value("김영희"));
+
+        verify(userService).update(eq(1L), any(UserData.class));
+    }
+
+    @Test
+    void updateWithNotExistedUser() throws Exception {
+        mockMvc.perform(patch("/user/1000")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"김영희\"," +
+                                "\"email\":\"young@gmail.com\"," +
+                                "\"password\":\"1234\"}"))
+                .andExpect(status().isNotFound());
+
+        verify(userService).update(eq(1000L), any(UserData.class));
+    }
+
+    @Test
+    void updateWithInvalidAttributes() throws Exception {
+        mockMvc.perform(patch("/user/1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"\"," +
+                                "\"email\":\"young@gmail.com\"," +
+                                "\"password\":\"1234\"}"))
                 .andExpect(status().isBadRequest());
     }
 }
