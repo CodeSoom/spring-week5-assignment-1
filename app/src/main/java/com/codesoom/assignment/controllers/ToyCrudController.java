@@ -28,7 +28,7 @@ public class ToyCrudController implements ToyCreateController, ToyDetailControll
     @Override
     public List<ToyResponseData> list() {
         return service.showAll().stream()
-                .map(toy -> new ToyResponseData().dtoFrom(toy))
+                .map(ToyResponseData::from)
                 .collect(Collectors.toList());
     }
 
@@ -36,7 +36,7 @@ public class ToyCrudController implements ToyCreateController, ToyDetailControll
     @Override
     public ToyResponseData detail(@PathVariable Long id) {
         Toy toy = service.showById(id);
-        return new ToyResponseData().dtoFrom(toy);
+        return ToyResponseData.from(toy);
     }
 
     @PostMapping
@@ -44,14 +44,14 @@ public class ToyCrudController implements ToyCreateController, ToyDetailControll
     @Override
     public ToyResponseData create(@RequestBody @Valid ToyRequestData requestDto) {
         Toy toy = service.create(requestDto.toEntity());
-        return new ToyResponseData().dtoFrom(toy);
+        return ToyResponseData.from(toy);
     }
 
     @PatchMapping("{id}")
     @Override
     public ToyResponseData update(@PathVariable Long id, @RequestBody @Valid ToyRequestData requestDto) {
         Toy toy = service.update(id, requestDto.toEntity());
-        return new ToyResponseData().dtoFrom(toy);
+        return ToyResponseData.from(toy);
     }
 
     @DeleteMapping("{id}")
