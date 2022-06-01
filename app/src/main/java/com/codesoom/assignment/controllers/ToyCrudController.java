@@ -49,7 +49,7 @@ public class ToyCrudController implements ToyCreateController, ToyDetailControll
 
     @PatchMapping("{id}")
     @Override
-    public ToyResponseData update(@PathVariable Long id, @RequestBody ToyRequestData requestDto) {
+    public ToyResponseData update(@PathVariable Long id, @RequestBody @Valid ToyRequestData requestDto) {
         Toy toy = service.update(id, requestDto.toEntity());
         return new ToyResponseData().dtoFrom(toy);
     }
