@@ -20,6 +20,7 @@ public class ProductData {
     @NotNull
     private Integer price;
 
+    @NotBlank
     private String imageUrl;
 
     @Override
