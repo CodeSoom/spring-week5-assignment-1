@@ -3,7 +3,6 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.ProductRegisterService;
 import com.codesoom.assignment.application.ProductSearchService;
 import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductDto;
 import com.codesoom.assignment.exception.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -22,7 +21,6 @@ import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -144,8 +142,8 @@ class ProductControllerTest {
     class detail {
 
         @Nested
-        @DisplayName("입력한 id가 유효하다면")
-        class when_id_is_valid {
+        @DisplayName("입력한 id가 존재한다면")
+        class when_id_is_exist {
 
             @Test
             @DisplayName("200 ok로 응답한다.")
@@ -166,8 +164,8 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("입력한 id가 유효하지 않다면")
-        class when_id_is_invalid {
+        @DisplayName("입력한 id가 존재하지 않는다면")
+        class when_id_is_not_exist {
 
             @Test
             @DisplayName("404 Not Found로 응답한다.")
@@ -184,7 +182,7 @@ class ProductControllerTest {
     class register {
 
         @Nested
-        @DisplayName("입력된 이름, 제조사, 가격이 유효하다면")
+        @DisplayName("이름, 제조사, 가격을 입력하였다면")
         class when_register_with_valid_data {
 
             @Test
@@ -213,7 +211,7 @@ class ProductControllerTest {
         }
 
         @Nested
-        @DisplayName("입력된 이름, 제조사, 가격이 유효하지 않다면")
+        @DisplayName("이름, 제조사, 가격을 입력하지 않았다면")
         class when_register_with_invalid_data {
 
             @Test
