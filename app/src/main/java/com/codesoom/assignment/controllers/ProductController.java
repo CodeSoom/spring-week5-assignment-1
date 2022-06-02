@@ -30,7 +30,7 @@ public class ProductController {
     public List<ProductDto> list() {;
         return productSearchService.findProducts()
                 .stream()
-                .map(product->toDto(product))
+                .map(this::toDto)
                 .collect(Collectors.toList());
     }
 
