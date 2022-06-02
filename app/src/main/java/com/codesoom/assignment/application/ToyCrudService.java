@@ -3,6 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.interfaces.*;
 import com.codesoom.assignment.domain.*;
+import com.codesoom.assignment.domain.entities.Toy;
+import com.codesoom.assignment.domain.entities.ToyProducer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.domain.entities.Toy;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

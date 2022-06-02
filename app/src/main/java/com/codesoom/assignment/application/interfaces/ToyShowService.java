@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application.interfaces;
 
-import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.entities.Toy;
 
 import java.util.List;
 

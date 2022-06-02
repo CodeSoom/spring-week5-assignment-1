@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers.dtos;
 
-import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.entities.Toy;
 import lombok.*;
 
 import java.math.BigDecimal;

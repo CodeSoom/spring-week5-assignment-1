@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application.interfaces;
 
-import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.entities.Toy;
 
 /**
  * 상품의 수정 관련 비지니스 로직을 처리한다

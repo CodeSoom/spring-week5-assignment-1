@@ -1,9 +1,9 @@
 package com.codesoom.assignment.controllers.dtos;
 
-import com.codesoom.assignment.domain.ImageDemo;
-import com.codesoom.assignment.domain.Toy;
-import com.codesoom.assignment.domain.ToyProducer;
-import com.codesoom.assignment.domain.Won;
+import com.codesoom.assignment.domain.vos.ImageDemo;
+import com.codesoom.assignment.domain.entities.Toy;
+import com.codesoom.assignment.domain.entities.ToyProducer;
+import com.codesoom.assignment.domain.vos.Won;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;

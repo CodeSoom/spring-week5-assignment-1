@@ -4,7 +4,7 @@ import com.codesoom.assignment.application.ToyCrudService;
 import com.codesoom.assignment.controllers.dtos.ToyRequestData;
 import com.codesoom.assignment.controllers.dtos.ToyResponseData;
 import com.codesoom.assignment.controllers.interfaces.*;
-import com.codesoom.assignment.domain.Toy;
+import com.codesoom.assignment.domain.entities.Toy;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

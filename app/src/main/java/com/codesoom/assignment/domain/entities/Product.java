@@ -1,7 +1,6 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.domain.entities;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
+import com.codesoom.assignment.domain.vos.Won;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 

@@ -1,5 +1,9 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.domain.entities.Toy;
+import com.codesoom.assignment.domain.entities.ToyProducer;
+import com.codesoom.assignment.domain.vos.ImageDemo;
+import com.codesoom.assignment.domain.vos.Won;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

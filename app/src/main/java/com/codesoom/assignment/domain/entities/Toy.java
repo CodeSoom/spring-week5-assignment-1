@@ -1,6 +1,8 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.domain.entities;
 
 
+import com.codesoom.assignment.domain.vos.ImageDemo;
+import com.codesoom.assignment.domain.vos.Won;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
