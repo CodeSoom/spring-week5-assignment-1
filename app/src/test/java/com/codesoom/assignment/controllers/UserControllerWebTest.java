@@ -101,7 +101,7 @@ class UserControllerWebTest {
 	@DisplayName("PATCH /user/{id} URL 은")
 	class updateUser {
 		@Nested
-		@DisplayName("유효한 id 와 업데이트 유저 정보가 주어지면")
+		@DisplayName("존재하지 않는 id 와 업데이트 유저 정보가 주어지면")
 		class WithValidId {
 			@Test
 			@DisplayName("상태코드 200, 업데이트 된 유저 정보를 응답한다.")
@@ -134,7 +134,7 @@ class UserControllerWebTest {
 		}
 
 		@Nested
-		@DisplayName("유효하지 않은 id 와 업데이트 유저 정보가 주어지면")
+		@DisplayName("존재하지 않는 id 와 업데이트 유저 정보가 주어지면")
 		class WithInValidId {
 			@Test
 			@DisplayName("상태코드 404 를 응답한다.")
@@ -195,7 +195,7 @@ class UserControllerWebTest {
 		}
 
 		@Nested
-		@DisplayName("유효하지 않은 id 가 주어지면")
+		@DisplayName("존재하지 않는 id 가 주어지면")
 		class WithInValidId {
 			@Test
 			@DisplayName("상태코드 404 를 응답한다.")
@@ -244,7 +244,7 @@ class UserControllerWebTest {
 		}
 
 		@Nested
-		@DisplayName("유효하지 않은 id 가 주어지면")
+		@DisplayName("존재하지 않는 id 가 주어지면")
 		class WithInValidId {
 			@Test
 			@DisplayName("상태코드 404 를 응답한다.")
