@@ -15,5 +15,5 @@ public interface JpaUserRepository
 
     Optional<User> findById(Long id);
 
-    void delete(Long id);
+    void delete(User user);
 }
