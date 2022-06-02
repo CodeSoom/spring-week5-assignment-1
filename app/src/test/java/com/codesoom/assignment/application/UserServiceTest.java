@@ -1,6 +1,8 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -88,6 +90,19 @@ class UserServiceTest {
                 .build();
 
         assertThatThrownBy(() -> userService.update(1000L, userData))
+                .isInstanceOf(UserNotFoundException.class);
+    }
+
+    @Test
+    void deleteUserWithExistedId() {
+        userService.delete(1L);
+
+        verify(userRepository).delete(any(User.class));
+    }
+
+    @Test
+    void deleteUserWithNotExistedId() {
+        assertThatThrownBy(() -> userService.delete(1000L))
                 .isInstanceOf(UserNotFoundException.class);
     }
 }
