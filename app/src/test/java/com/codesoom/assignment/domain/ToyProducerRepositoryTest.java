@@ -20,14 +20,10 @@ class ToyProducerRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        repository.deleteAll();
         producer = ToyProducer.builder()
                 .name(PRODUCER_NAME)
                 .build();
-    }
-
-    @AfterEach
-    void clear() {
-        repository.deleteAll();
     }
 
     @Nested

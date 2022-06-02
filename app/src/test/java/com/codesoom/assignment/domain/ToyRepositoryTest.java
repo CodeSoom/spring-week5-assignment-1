@@ -32,6 +32,9 @@ class ToyRepositoryTest {
 
     @BeforeEach
     void setUp() {
+        repository.deleteAll();
+        producerRepository.deleteAll();
+
         demo = new ImageDemo(IMAGE_URL);
         money = new Won(MONEY_VALUE);
 
@@ -44,12 +47,6 @@ class ToyRepositoryTest {
                 .producer(producer)
                 .demo(demo)
                 .build();
-    }
-
-    @AfterEach
-    void clear() {
-        repository.deleteAll();
-        producerRepository.deleteAll();
     }
 
     @Nested
