@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.Utf8WebTest;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
@@ -11,8 +12,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.List;
 
@@ -25,6 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@Utf8WebTest
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
     @Autowired
@@ -35,12 +35,6 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        // 한글 세팅
-        //'APPLICATION_JSON_UTF8' is deprecated
-        this.mockMvc = MockMvcBuilders.standaloneSetup(new ProductController(productService))
-                .addFilters(new CharacterEncodingFilter("UTF-8", true))
-                .build();
-
         Product product = Product.builder()
                 .id(1L)
                 .name("쥐돌이")
