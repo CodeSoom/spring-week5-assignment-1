@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.eq;
 import static org.mockito.BDDMockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.Arrays;
@@ -149,7 +150,7 @@ class UserControllerWebTest {
 							.accept(MediaType.APPLICATION_JSON_UTF8)
 							.contentType(MediaType.APPLICATION_JSON)
 							.content(source))
-					.andExpect(status().isNotFound());
+					.andExpect(status().isNotFound()).andDo(print());
 
 				verify(userService).updateUsers(eq(1000), any(UserDTO.UpdateUser.class));
 			}

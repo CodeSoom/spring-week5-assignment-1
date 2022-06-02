@@ -2,6 +2,7 @@ package com.codesoom.assignment.dto;
 
 import javax.validation.constraints.NotBlank;
 
+import com.codesoom.assignment.global.CustomNotBlank;
 import com.github.dozermapper.core.Mapping;
 
 import lombok.AllArgsConstructor;
@@ -19,13 +20,13 @@ public class UserDTO {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class CreateUser {
-		@NotBlank
+		@CustomNotBlank
 		@Mapping("name")
 		private String name;
-		@NotBlank
+		@CustomNotBlank
 		@Mapping("email")
 		private String email;
-		@NotBlank
+		@CustomNotBlank
 		@Mapping("password")
 		private String password;
 	}
@@ -39,12 +40,12 @@ public class UserDTO {
 		@Mapping("id")
 		private int id;
 		@Mapping("name")
-		@NotBlank
+		@CustomNotBlank
 		private String name;
-		@NotBlank
+		@CustomNotBlank
 		@Mapping("email")
 		private String email;
-		@NotBlank
+		@CustomNotBlank
 		@Mapping("password")
 		private String password;
 	}
@@ -56,14 +57,14 @@ public class UserDTO {
 	@AllArgsConstructor
 	public static class UpdateUser {
 		@Mapping("name")
-		@NotBlank
+		@CustomNotBlank
 		private String name;
 
 		@Mapping("email")
-		@NotBlank
+		@CustomNotBlank
 		private String email;
 
-		@NotBlank
+		@CustomNotBlank
 		@Mapping("password")
 		private String password;
 	}
