@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -40,5 +41,23 @@ public class UserTest {
         assertThat(user.getName()).isNull();
         assertThat(user.getEmail()).isNull();
         assertThat(user.getPassword()).isNull();
+    }
+
+    @Test
+    void testBuilderToString() {
+        String user = User.builder()
+                .id(1L)
+                .name("김철수")
+                .email("kim@gmail.com")
+                .password("1111")
+                .toString();
+
+        assertThat(user)
+                .isEqualTo("User.UserBuilder(" +
+                        "id=1" +
+                        ", name=김철수" +
+                        ", email=kim@gmail.com" +
+                        ", password=1111" +
+                        ')');
     }
 }

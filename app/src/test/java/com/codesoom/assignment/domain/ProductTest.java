@@ -49,4 +49,24 @@ class ProductTest {
         assertThat(product.getPrice()).isNull();
         assertThat(product.getImageUrl()).isNull();
     }
+
+    @Test
+    void testBuilderToString() {
+        String product = Product.builder()
+                .id(1L)
+                .name("쥐돌이")
+                .maker("냥이월드")
+                .price(5000)
+                .imageUrl("http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg")
+                .toString();
+
+        assertThat(product)
+                .isEqualTo("Product.ProductBuilder(" +
+                        "id=1" +
+                        ", name=쥐돌이" +
+                        ", maker=냥이월드" +
+                        ", price=5000" +
+                        ", imageUrl=http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg" +
+                        ')');
+    }
 }
