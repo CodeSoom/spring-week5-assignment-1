@@ -96,21 +96,6 @@ class ProductControllerTest {
     }
 
     @Test
-    void create() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
-
-        verify(productService).createProduct(any(ProductData.class));
-    }
-
-    @Test
     void createWithValidAttributes() throws Exception {
         mockMvc.perform(
                 post("/products")
