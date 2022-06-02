@@ -20,13 +20,10 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @NotBlank
     private String name;
 
-    @NotBlank
     private String email;
 
-    @NotBlank
     private String password;
 
     public void update(String name,
