@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class UserCrudService implements UserShowService, UserCreateService, UserUpdateService {
+public class UserCrudService implements UserShowService, UserCreateService,
+        UserUpdateService, UserDeleteService {
     private final UserRepository repository;
 
     public UserCrudService(UserRepository repository) {
@@ -51,6 +52,15 @@ public class UserCrudService implements UserShowService, UserCreateService, User
                 .password(user.getPassword())
                 .build();
         return repository.save(userUpdating);
+    }
+
+    @Override
+    public void deleteBy(Long id) {
+        if (!repository.existsById(id)) {
+            throw new UserNotFoundException(id);
+        }
+
+        repository.deleteById(id);
     }
 }
 
