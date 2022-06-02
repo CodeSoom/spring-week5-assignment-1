@@ -14,14 +14,12 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
@@ -75,7 +73,7 @@ class ProductControllerTest {
                 get("/products")
         )
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐돌이")));
+                .andExpect(jsonPath("$[0].name").value("쥐돌이"));
     }
 
     @Test
@@ -84,7 +82,7 @@ class ProductControllerTest {
                 get("/products/1")
         )
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐돌이")));
+                .andExpect(jsonPath("$.name").value("쥐돌이"));
     }
 
     @Test
@@ -102,7 +100,7 @@ class ProductControllerTest {
                                 "\"price\":5000}")
         )
                 .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
+                .andExpect(jsonPath("$.name").value("쥐돌이"));
 
         verify(productService).createProduct(any(ProductData.class));
     }
@@ -127,7 +125,7 @@ class ProductControllerTest {
                                 "\"price\":5000}")
         )
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐순이")));
+                .andExpect(jsonPath("$.name").value("쥐순이"));
 
         verify(productService).updateProduct(eq(1L), any(ProductData.class));
     }
