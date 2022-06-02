@@ -1,12 +1,16 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -20,6 +24,15 @@ class UserServiceTest {
     @BeforeEach
     void setUp() {
         userService = new UserService(userRepository);
+
+        User user = User.builder()
+                .id(1L)
+                .name("김철수")
+                .email("kim@gmail.com")
+                .password("1111")
+                .build();
+
+        given(userRepository.findById(1L)).willReturn(Optional.of(user));
 
         given(userRepository.save(any(User.class)))
                 .will(invocation -> {
@@ -50,5 +63,31 @@ class UserServiceTest {
         assertThat(user.getName()).isEqualTo("김철수");
         assertThat(user.getEmail()).isEqualTo("kim@gmail.com");
         assertThat(user.getPassword()).isEqualTo("1111");
+    }
+
+    @Test
+    void updateUserWithExistedId() {
+        UserData userData = UserData.builder()
+                .name("김영희")
+                .email("young@gmail.com")
+                .password("1234")
+                .build();
+
+        User user = userService.update(1L, userData);
+
+        assertThat(user.getId()).isEqualTo(1L);
+        assertThat(user.getName()).isEqualTo("김영희");
+    }
+
+    @Test
+    void updateUserWithNotExistedId() {
+        UserData userData = UserData.builder()
+                .name("김영희")
+                .email("young@gmail.com")
+                .password("1234")
+                .build();
+
+        assertThatThrownBy(() -> userService.update(1000L, userData))
+                .isInstanceOf(UserNotFoundException.class);
     }
 }
