@@ -97,7 +97,8 @@ class ProductControllerTest {
                 post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
+                                "\"price\":5000," +
+                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
         )
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.name").value("쥐돌이"));
@@ -111,7 +112,8 @@ class ProductControllerTest {
                 post("/products")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0}")
+                                "\"price\":0," +
+                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
         )
                 .andExpect(status().isBadRequest());
     }
@@ -122,7 +124,8 @@ class ProductControllerTest {
                 patch("/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
+                                "\"price\":5000," +
+                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
         )
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.name").value("쥐순이"));
@@ -136,7 +139,8 @@ class ProductControllerTest {
                 patch("/products/1000")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
+                                "\"price\":5000," +
+                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
         )
                 .andExpect(status().isNotFound());
 
@@ -149,7 +153,8 @@ class ProductControllerTest {
                 patch("/products/1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0}")
+                                "\"price\":0," +
+                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
         )
                 .andExpect(status().isBadRequest());
     }
