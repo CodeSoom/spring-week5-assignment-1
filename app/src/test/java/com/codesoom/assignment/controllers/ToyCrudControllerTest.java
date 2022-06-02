@@ -3,10 +3,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.application.ToyCrudService;
 import com.codesoom.assignment.controllers.dtos.ToyRequestData;
-import com.codesoom.assignment.domain.vos.ImageDemo;
 import com.codesoom.assignment.domain.entities.Toy;
-import com.codesoom.assignment.domain.entities.ToyProducer;
-import com.codesoom.assignment.domain.vos.Won;
+import com.codesoom.assignment.fixtures.ToyFixture;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
@@ -17,7 +15,6 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -40,57 +37,25 @@ class ToyCrudControllerTest {
     private ObjectMapper objectMapper;
     @MockBean
     private ToyCrudService service;
+    @Autowired
+    private ToyFixture fixture;
 
     private Toy toy;
     private Toy toyWithEmptyName;
     private Toy toyWithoutId;
     private Toy toyUpdating;
-    private ToyProducer producer;
-    private Won money;
-    private ImageDemo demo;
+    private Toy toyUpdated;
     private final Long TOY_ID = 1L;
     private final Long TOY_ID_NOT_EXISTING = 10L;
-    private final Long TOY_PRODUCER_ID = 1L;
     private final String PRODUCT_NAME = "Test Product";
-    private final String PRODUCER_NAME = "Test Producer";
-    private final BigDecimal MONEY_VALUE = new BigDecimal(1000);
-    private final String IMAGE_URL = "https://metacode.biz/@test/avatar.jpg";
 
     @BeforeEach
     void setUp() {
-        demo = new ImageDemo(IMAGE_URL);
-        money = new Won(MONEY_VALUE);
-
-        producer = ToyProducer.builder()
-                .id(TOY_PRODUCER_ID)
-                .name(PRODUCER_NAME)
-                .build();
-        toy = Toy.builder()
-                .id(TOY_ID)
-                .name(PRODUCT_NAME)
-                .price(money)
-                .producer(producer)
-                .demo(demo)
-                .build();
-        toyWithEmptyName = Toy.builder()
-                .id(TOY_ID)
-                .name(" ")
-                .price(money)
-                .producer(producer)
-                .demo(demo)
-                .build();
-        toyWithoutId = Toy.builder()
-                .name(PRODUCT_NAME)
-                .price(money)
-                .producer(producer)
-                .demo(demo)
-                .build();
-        toyUpdating = Toy.builder()
-                .name(PRODUCT_NAME + "UPDATED")
-                .price(money)
-                .producer(producer)
-                .demo(demo)
-                .build();
+        toy = fixture.toy();
+        toyWithEmptyName = fixture.toyWithEmptyName();
+        toyWithoutId = fixture.toyWithoutId();
+        toyUpdating = fixture.toyUpdating();
+        toyUpdated = fixture.toyUpdated();
     }
 
     @Nested
@@ -198,14 +163,6 @@ class ToyCrudControllerTest {
         class Context_with_valid_param {
             @BeforeEach
             void setUp() {
-                Toy toyUpdated = Toy.builder()
-                        .id(TOY_ID)
-                        .name(PRODUCT_NAME + "UPDATED")
-                        .price(money)
-                        .producer(producer)
-                        .demo(demo)
-                        .build();
-
                 given(service.update(eq(TOY_ID), any(Toy.class))).willReturn(toyUpdated);
             }
 
