@@ -155,14 +155,14 @@ class ToyCrudControllerTest {
             class Context_with_valid_param {
                 @BeforeEach
                 void setUp() {
-                    given(service.create(toyWithoutId)).willReturn(toy);
+                    given(service.create(any(Toy.class))).willReturn(toy);
                 }
 
                 @Test
                 @DisplayName("HTTP Status Code 201 CREATED 응답한다")
                 void it_responds_with_201() throws Exception {
                     mockMvc.perform(post("/products")
-                                    .content(jsonFrom(toy))
+                                    .content(jsonFrom(toyWithoutId))
                                     .contentType(MediaType.APPLICATION_JSON))
                             .andExpect(status().isCreated());
 
@@ -174,7 +174,7 @@ class ToyCrudControllerTest {
             class Context_with_invalid_request_body {
                 @BeforeEach
                 void setUp() {
-                    given(service.create(toyWithoutId)).willReturn(toyWithEmptyName);
+                    given(service.create(any(Toy.class))).willReturn(toyWithEmptyName);
                 }
 
                 @Test
