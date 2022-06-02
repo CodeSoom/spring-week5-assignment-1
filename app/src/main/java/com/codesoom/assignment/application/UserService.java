@@ -7,10 +7,12 @@ import com.codesoom.assignment.dto.UserCreateData;
 import com.codesoom.assignment.dto.UserUpdateData;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class UserService {
     private final UserRepository userRepository;
-    private User user;
 
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
@@ -50,5 +52,4 @@ public class UserService {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
     }
-
 }
