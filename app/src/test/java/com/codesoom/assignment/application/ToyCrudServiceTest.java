@@ -6,12 +6,15 @@ import com.codesoom.assignment.domain.entities.Toy;
 import com.codesoom.assignment.domain.entities.ToyProducer;
 import com.codesoom.assignment.domain.vos.ImageDemo;
 import com.codesoom.assignment.domain.vos.Won;
+import com.codesoom.assignment.fixtures.ToyFixture;
+import com.codesoom.assignment.fixtures.ToyProducerFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,7 +25,13 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
 @DisplayName("ToyCrudService")
+@SpringBootTest(classes = {ToyFixture.class, ToyProducerFixture.class})
 class ToyCrudServiceTest {
+    @Autowired
+    private ToyFixture toyFixture;
+    @Autowired
+    private ToyProducerFixture toyProducerFixture;
+
     private ToyCrudService service;
     private final ToyRepository repository = mock(ToyRepository.class);
     private final ToyProducerRepository producerRepository = mock(ToyProducerRepository.class);
@@ -30,40 +39,22 @@ class ToyCrudServiceTest {
     private Toy toy;
     private Toy toyWithoutId;
     private ToyProducer producer;
-    private Won money;
     private ImageDemo demo;
+    private Won price;
     private final Long TOY_ID = 1L;
     private final Long TOY_ID_NOT_EXISTING = 10L;
-    private final Long TOY_PRODUCER_ID = 1L;
     private final String PRODUCT_NAME = "Test Product";
-    private final String PRODUCER_NAME = "Test Producer";
-    private final BigDecimal MONEY_VALUE = new BigDecimal(1000);
-    private final String IMAGE_URL = "https://metacode.biz/@test/avatar.jpg";
 
 
     @BeforeEach
     void setUp() {
         service = new ToyCrudService(repository, producerRepository);
-        demo = new ImageDemo(IMAGE_URL);
-        money = new Won(MONEY_VALUE);
 
-        producer = ToyProducer.builder()
-                .id(TOY_PRODUCER_ID)
-                .name(PRODUCER_NAME)
-                .build();
-        toyWithoutId = Toy.builder()
-                .name(PRODUCT_NAME)
-                .price(money)
-                .producer(producer)
-                .demo(demo)
-                .build();
-        toy = Toy.builder()
-                .id(TOY_ID)
-                .name(PRODUCT_NAME)
-                .price(money)
-                .producer(producer)
-                .demo(demo)
-                .build();
+        producer = toyProducerFixture.toyProducer();
+        toyWithoutId = toyFixture.toyWithoutId();
+        toy = toyFixture.toy();
+        demo = toy.getDemo();
+        price = toy.getPrice();
     }
 
     @Nested
@@ -166,7 +157,7 @@ class ToyCrudServiceTest {
             assertThat(subject().getName()).isEqualTo(PRODUCT_NAME);
             assertThat(subject().getProducer()).isEqualTo(producer);
             assertThat(subject().getDemo()).isEqualTo(demo);
-            assertThat(subject().getPrice()).isEqualTo(money);
+            assertThat(subject().getPrice()).isEqualTo(price);
         }
     }
 
@@ -216,7 +207,7 @@ class ToyCrudServiceTest {
                 assertThat(withExistingToy().getName()).isEqualTo(PRODUCT_NAME);
                 assertThat(withExistingToy().getProducer()).isEqualTo(producer);
                 assertThat(withExistingToy().getDemo()).isEqualTo(demo);
-                assertThat(withExistingToy().getPrice()).isEqualTo(money);
+                assertThat(withExistingToy().getPrice()).isEqualTo(price);
             }
         }
 
