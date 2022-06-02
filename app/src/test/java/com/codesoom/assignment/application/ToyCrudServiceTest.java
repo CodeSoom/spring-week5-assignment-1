@@ -21,6 +21,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 
+@DisplayName("ToyCrudService")
 class ToyCrudServiceTest {
     private ToyCrudService service;
     private final ToyRepository repository = mock(ToyRepository.class);
