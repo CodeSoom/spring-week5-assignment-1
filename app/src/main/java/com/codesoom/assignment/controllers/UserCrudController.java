@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/users")
 @CrossOrigin(origins = "http://localhost:3000")
-public class UserCrudController implements UserListController, UserDetailController, UserCreateController {
+public class UserCrudController implements UserListController, UserDetailController, UserCreateController, UserUpdateController {
     private final UserCrudService service;
 
     public UserCrudController(UserCrudService service) {
@@ -44,6 +44,13 @@ public class UserCrudController implements UserListController, UserDetailControl
     @Override
     public UserResponseData create(@RequestBody @Valid UserRequestData requestData) {
         User user = service.create(requestData.toEntity());
+        return UserResponseData.from(user);
+    }
+
+    @PatchMapping("{id}")
+    @Override
+    public UserResponseData update(@PathVariable Long id, @RequestBody @Valid UserRequestData requestData) {
+        User user = service.update(id, requestData.toEntity());
         return UserResponseData.from(user);
     }
 }
