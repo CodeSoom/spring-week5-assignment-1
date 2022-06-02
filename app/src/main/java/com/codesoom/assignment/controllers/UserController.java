@@ -24,8 +24,7 @@ public class UserController {
         return userService.createUser(userCreateData);
     }
 
-    @RequestMapping(value = "/{id}",
-            method = {RequestMethod.PATCH, RequestMethod.PUT})
+    @PatchMapping("/{id}")
     public User update(
             @PathVariable Long id,
             @RequestBody @Valid UserUpdateData userUpdateData
