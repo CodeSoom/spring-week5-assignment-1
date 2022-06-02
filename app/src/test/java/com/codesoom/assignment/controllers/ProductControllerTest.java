@@ -11,6 +11,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.List;
 
@@ -33,6 +35,12 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
+        // 한글 세팅
+        //'APPLICATION_JSON_UTF8' is deprecated
+        this.mockMvc = MockMvcBuilders.standaloneSetup(new ProductController(productService))
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .build();
+
         Product product = Product.builder()
                 .id(1L)
                 .name("쥐돌이")
@@ -71,50 +79,28 @@ class ProductControllerTest {
 
     @Test
     void list() throws Exception {
-        mockMvc.perform(
-                get("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-        )
+        mockMvc.perform(get("/products"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("쥐돌이")));
     }
 
     @Test
-    void deatilWithExsitedProduct() throws Exception {
-        mockMvc.perform(
-                get("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-        )
+    void detailWithExistedProduct() throws Exception {
+        mockMvc.perform(get("/products/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("쥐돌이")));
     }
 
     @Test
-    void deatilWithNotExsitedProduct() throws Exception {
+    void detailWithNotExistedProduct() throws Exception {
         mockMvc.perform(get("/products/1000"))
                 .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void create() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
-
-        verify(productService).createProduct(any(ProductData.class));
     }
 
     @Test
     void createWithValidAttributes() throws Exception {
         mockMvc.perform(
                 post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
                                 "\"price\":5000}")
@@ -129,7 +115,6 @@ class ProductControllerTest {
     void createWithInvalidAttributes() throws Exception {
         mockMvc.perform(
                 post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"maker\":\"\"," +
                                 "\"price\":0}")
@@ -141,7 +126,6 @@ class ProductControllerTest {
     void updateWithExistedProduct() throws Exception {
         mockMvc.perform(
                 patch("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
                                 "\"price\":5000}")
@@ -169,7 +153,6 @@ class ProductControllerTest {
     void updateWithInvalidAttributes() throws Exception {
         mockMvc.perform(
                 patch("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"maker\":\"\"," +
                                 "\"price\":0}")
