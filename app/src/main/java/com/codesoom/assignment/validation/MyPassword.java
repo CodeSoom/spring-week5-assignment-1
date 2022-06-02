@@ -15,7 +15,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Constraint(validatedBy = { MyPasswordValidator.class })
 public @interface MyPassword {
 
-    String message() default "올바르지 않는 비밀번호 형식입니다.";
+    String message() default "{MyPassword}";
 
     Class<?>[] groups() default { };
 

@@ -8,11 +8,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 public class UserControllerSignupTest extends UserControllerTestContext{
 
@@ -40,8 +41,10 @@ public class UserControllerSignupTest extends UserControllerTestContext{
                 mockMvc.perform(post("/users")
                                 .content(toJson(invalidData))
                                 .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
                         )
-                        .andExpect(status().isBadRequest());
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().string(containsString("올바르지 않은 이메일 형식입니다")));
             }
         }
 
@@ -62,7 +65,8 @@ public class UserControllerSignupTest extends UserControllerTestContext{
                                 .content(toJson(invalidData))
                                 .contentType(MediaType.APPLICATION_JSON)
                         )
-                        .andExpect(status().isBadRequest());
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().string(containsString("빈 값이 오면 안됩니다.")));
             }
         }
 
@@ -83,7 +87,8 @@ public class UserControllerSignupTest extends UserControllerTestContext{
                                 .content(toJson(invalidData))
                                 .contentType(MediaType.APPLICATION_JSON)
                         )
-                        .andExpect(status().isBadRequest());
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().string(containsString("빈 값이 오면 안됩니다.")));
             }
         }
 
@@ -104,7 +109,8 @@ public class UserControllerSignupTest extends UserControllerTestContext{
                                 .content(toJson(invalidData))
                                 .contentType(MediaType.APPLICATION_JSON)
                         )
-                        .andExpect(status().isBadRequest());
+                        .andExpect(status().isBadRequest())
+                        .andExpect(content().string(containsString("는 올바르지 않는 패스워드 형식입니다.")));
             }
         }
 
