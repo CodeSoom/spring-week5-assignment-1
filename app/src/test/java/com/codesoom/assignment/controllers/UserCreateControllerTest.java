@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserCrudService;
 import com.codesoom.assignment.controllers.dtos.UserRequestData;
 import com.codesoom.assignment.domain.entities.User;
+import com.codesoom.assignment.fixtures.UserFixture;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,34 +31,19 @@ class UserCreateControllerTest {
     @Autowired
     private MockMvc mockMvc;
     @Autowired
+    private UserFixture fixture;
+    @Autowired
     private ObjectMapper objectMapper;
 
-    private final Long USER_ID = 1L;
-    private final String USER_NAME = "Test User";
-    private final String USER_EMAIL = "hello@gmail.com";
-    private final String USER_PASSWORD = "yahOo~!@12345";
     private User user;
     private User userWithoutId;
     private User userWithEmptyName;
 
     @BeforeEach
     void setUp() {
-        user = User.builder()
-                .id(USER_ID)
-                .name(USER_NAME)
-                .email(USER_EMAIL)
-                .password(USER_PASSWORD)
-                .build();
-        userWithoutId = User.builder()
-                .name(USER_NAME)
-                .email(USER_EMAIL)
-                .password(USER_PASSWORD)
-                .build();
-        userWithEmptyName = User.builder()
-                .name(" ")
-                .email(USER_EMAIL)
-                .password(USER_PASSWORD)
-                .build();
+        user = fixture.user();
+        userWithoutId = fixture.userWithoutId();
+        userWithEmptyName = fixture.userWithEmptyName();
     }
 
     @Nested
@@ -101,6 +87,7 @@ class UserCreateControllerTest {
             }
         }
     }
+
     private String jsonFrom(User user) throws JsonProcessingException {
         UserRequestData requestData = UserRequestData.builder()
                 .name(user.getName())
