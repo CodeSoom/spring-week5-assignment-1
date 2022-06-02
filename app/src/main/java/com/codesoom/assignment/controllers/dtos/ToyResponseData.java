@@ -12,11 +12,14 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 public class ToyResponseData {
     private Long id;
-    private String name;
-    private String maker;
-    private BigDecimal price;
-    private String url;
 
+    private String name;
+
+    private String maker;
+
+    private BigDecimal price;
+
+    private String url;
 
 
     public static ToyResponseData from(Toy toy) {
