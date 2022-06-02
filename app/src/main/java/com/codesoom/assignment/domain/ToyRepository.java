@@ -51,6 +51,15 @@ public interface ToyRepository extends CrudRepository<Toy, Long> {
     void delete(Toy toy);
 
     /**
+     * id에 해당하는 장난감을 삭제한다
+     * <p>
+     *
+     * @param id 장난감 id
+     * </p>
+     */
+    void deleteById(Long id);
+
+    /**
      * id에 해당하는 장난감의 존재여부를 반환한다
      * <p>
      *

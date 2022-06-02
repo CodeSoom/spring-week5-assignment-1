@@ -51,6 +51,15 @@ public interface UserRepository extends CrudRepository<User, Long> {
     void delete(User user);
 
     /**
+     * id에 해당하는 사용자를 삭제한다
+     * <p>
+     *
+     * @param id 사용자 id
+     * </p>
+     */
+    void deleteById(Long id);
+
+    /**
      * id에 해당하는 사용자 존재여부를 반환한다
      * <p>
      *
