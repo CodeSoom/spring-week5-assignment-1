@@ -12,8 +12,8 @@ import javax.validation.Payload;
 @Target({ElementType.METHOD, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Constraint(validatedBy = {CustomNotBlankValidator.class})
-public @interface CustomNotBlank {
+@Constraint(validatedBy = {PassWordFormValidator.class})
+public @interface PassWordForm {
 	String message() default "custom not blank !!";
 
 	Class<?>[] groups() default {};
