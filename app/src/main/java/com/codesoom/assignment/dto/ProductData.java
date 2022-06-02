@@ -21,4 +21,14 @@ public class ProductData {
     private Integer price;
 
     private String imageUrl;
+
+    @Override
+    public String toString() {
+        return "ProductData{" +
+                "name='" + name + '\'' +
+                ", maker='" + maker + '\'' +
+                ", price=" + price +
+                ", imageUrl='" + imageUrl + '\'' +
+                '}';
+    }
 }

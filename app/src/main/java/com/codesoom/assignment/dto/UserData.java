@@ -18,4 +18,13 @@ public class UserData {
 
     @NotBlank
     private String password;
+
+    @Override
+    public String toString() {
+        return "UserData{" +
+                "name='" + name + '\'' +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                '}';
+    }
 }
