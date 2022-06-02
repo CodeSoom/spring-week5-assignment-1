@@ -32,4 +32,13 @@ public class UserTest {
         assertThat(user.getEmail()).isEqualTo("young@gmail.com");
         assertThat(user.getPassword()).isEqualTo("2222");
     }
+
+    @Test
+    void createWithNoAttributes() {
+        User user = new User();
+
+        assertThat(user.getName()).isNull();
+        assertThat(user.getEmail()).isNull();
+        assertThat(user.getPassword()).isNull();
+    }
 }

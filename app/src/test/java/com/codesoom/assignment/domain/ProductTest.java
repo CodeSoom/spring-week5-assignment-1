@@ -39,4 +39,14 @@ class ProductTest {
         assertThat(product.getImageUrl())
                 .isEqualTo("http://localhost:8080/rat");
     }
+
+    @Test
+    void createWithNoAttributes() {
+        Product product = new Product();
+
+        assertThat(product.getName()).isNull();
+        assertThat(product.getMaker()).isNull();
+        assertThat(product.getPrice()).isNull();
+        assertThat(product.getImageUrl()).isNull();
+    }
 }
