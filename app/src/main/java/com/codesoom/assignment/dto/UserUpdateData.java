@@ -4,7 +4,6 @@ import com.github.dozermapper.core.Mapping;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Setter
 @Getter
@@ -21,6 +20,6 @@ public class UserUpdateData {
     private String email;
 
     @Mapping("password")
-    @NotNull
+    @NotBlank
     private String password;
 }
