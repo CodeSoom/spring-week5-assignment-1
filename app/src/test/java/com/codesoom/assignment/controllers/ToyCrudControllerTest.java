@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.application.exceptions.ProductNotFoundException;
 import com.codesoom.assignment.application.ToyCrudService;
 import com.codesoom.assignment.controllers.dtos.ToyRequestData;
 import com.codesoom.assignment.domain.vos.ImageDemo;
@@ -146,150 +146,151 @@ class ToyCrudControllerTest {
             }
 
         }
+    }
 
+    @Nested
+    @DisplayName("create 메소드는")
+    class Describe_create {
         @Nested
-        @DisplayName("create 메소드는")
-        class Describe_create {
-            @Nested
-            @DisplayName("유효한 매개변수를 전달 받는다면")
-            class Context_with_valid_param {
-                @BeforeEach
-                void setUp() {
-                    given(service.create(any(Toy.class))).willReturn(toy);
-                }
-
-                @Test
-                @DisplayName("HTTP Status Code 201 CREATED 응답한다")
-                void it_responds_with_201() throws Exception {
-                    mockMvc.perform(post("/products")
-                                    .content(jsonFrom(toyWithoutId))
-                                    .contentType(MediaType.APPLICATION_JSON))
-                            .andExpect(status().isCreated());
-
-                }
+        @DisplayName("유효한 매개변수를 전달 받는다면")
+        class Context_with_valid_param {
+            @BeforeEach
+            void setUp() {
+                given(service.create(any(Toy.class))).willReturn(toy);
             }
 
-            @Nested
-            @DisplayName("유효하지 않은 RequestBody를 전달 받는다면")
-            class Context_with_invalid_request_body {
-                @BeforeEach
-                void setUp() {
-                    given(service.create(any(Toy.class))).willReturn(toyWithEmptyName);
-                }
+            @Test
+            @DisplayName("HTTP Status Code 201 CREATED 응답한다")
+            void it_responds_with_201() throws Exception {
+                mockMvc.perform(post("/products")
+                                .content(jsonFrom(toyWithoutId))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated());
 
-                @Test
-                @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
-                void it_responds_with_400() throws Exception {
-                    mockMvc.perform(post("/products")
-                                    .content(jsonFrom(toyWithEmptyName))
-                                    .contentType(MediaType.APPLICATION_JSON))
-                            .andExpect(status().isBadRequest());
-
-                }
             }
         }
 
         @Nested
-        @DisplayName("patch 메소드는")
-        class Describe_patch {
-            @Nested
-            @DisplayName("유효한 매개변수를 전달 받는다면")
-            class Context_with_valid_param {
-                @BeforeEach
-                void setUp() {
-                    Toy toyUpdated = Toy.builder()
-                            .id(TOY_ID)
-                            .name(PRODUCT_NAME + "UPDATED")
-                            .price(money)
-                            .producer(producer)
-                            .demo(demo)
-                            .build();
-
-                    given(service.update(eq(TOY_ID), any(Toy.class))).willReturn(toyUpdated);
-                }
-
-                @Test
-                @DisplayName("HTTP Status Code 200 OK 응답한다")
-                void it_responds_with_200_ok() throws Exception {
-                    mockMvc.perform(patch("/products/" + TOY_ID)
-                                    .content(jsonFrom(toyUpdating))
-                                    .contentType(MediaType.APPLICATION_JSON))
-                            .andExpect(status().isOk());
-                }
+        @DisplayName("유효하지 않은 RequestBody를 전달 받는다면")
+        class Context_with_invalid_request_body {
+            @BeforeEach
+            void setUp() {
+                given(service.create(any(Toy.class))).willReturn(toyWithEmptyName);
             }
 
-            @Nested
-            @DisplayName("만약 존재하지 않는 ID를 매개변수로 전달 받는다면")
-            class Context_without_existing_toy {
-                @BeforeEach
-                void setUp() {
-                    given(service.update(eq(TOY_ID_NOT_EXISTING), any(Toy.class)))
-                            .willThrow(new ProductNotFoundException(TOY_ID_NOT_EXISTING));
-                }
-
-                @Test
-                @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
-                void it_responds_with_404() throws Exception {
-                    mockMvc.perform(patch("/products/" + TOY_ID_NOT_EXISTING)
-                                    .content(jsonFrom(toyUpdating))
-                                    .contentType(MediaType.APPLICATION_JSON))
-                            .andExpect(status().isNotFound());
-                }
-            }
-
-            @Nested
-            @DisplayName("유효하지 않은 RequestBody를 전달 받는다면")
-            class Context_with_invalid_request_body {
-                @BeforeEach
-                void setUp() {
-                    given(service.update(eq(TOY_ID), any(Toy.class))).willReturn(toyWithEmptyName);
-                }
-
-                @Test
-                @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
-                void it_responds_with_400() throws Exception {
-                    mockMvc.perform(patch("/products/" + TOY_ID)
-                                    .content(jsonFrom(toyWithEmptyName))
-                                    .contentType(MediaType.APPLICATION_JSON))
-                            .andExpect(status().isBadRequest());
-
-                }
-            }
-        }
-
-        @Nested
-        @DisplayName("delete 메소드는")
-        class Describe_delete {
-            @Nested
-            @DisplayName("유효한 매개변수를 전달 받는다면")
-            class Context_with_existing_toy {
-                @Test
-                @DisplayName("HTTP Status Code 204 NO CONTENT 응답한다")
-                void it_responds_with_204() throws Exception {
-                    mockMvc.perform(delete("/products/" + TOY_ID))
-                            .andExpect(status().isNoContent());
-                }
-            }
-
-            @Nested
-            @DisplayName("만약 존재하지 않는 ID를 매개변수로 전달 받는다면")
-            class Context_without_existing_toy {
-                @BeforeEach
-                void setUp() {
-                    willThrow(new ProductNotFoundException(TOY_ID_NOT_EXISTING))
-                            .given(service).deleteBy(TOY_ID_NOT_EXISTING);
-                }
-
-                @Test
-                @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
-                void it_responds_with_404() throws Exception {
-                    mockMvc.perform(delete("/products/" + TOY_ID_NOT_EXISTING))
-                            .andExpect(status().isNotFound());
-                }
+            @Test
+            @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
+            void it_responds_with_400() throws Exception {
+                mockMvc.perform(post("/products")
+                                .content(jsonFrom(toyWithEmptyName))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
 
             }
         }
     }
+
+    @Nested
+    @DisplayName("patch 메소드는")
+    class Describe_patch {
+        @Nested
+        @DisplayName("유효한 매개변수를 전달 받는다면")
+        class Context_with_valid_param {
+            @BeforeEach
+            void setUp() {
+                Toy toyUpdated = Toy.builder()
+                        .id(TOY_ID)
+                        .name(PRODUCT_NAME + "UPDATED")
+                        .price(money)
+                        .producer(producer)
+                        .demo(demo)
+                        .build();
+
+                given(service.update(eq(TOY_ID), any(Toy.class))).willReturn(toyUpdated);
+            }
+
+            @Test
+            @DisplayName("HTTP Status Code 200 OK 응답한다")
+            void it_responds_with_200_ok() throws Exception {
+                mockMvc.perform(patch("/products/" + TOY_ID)
+                                .content(jsonFrom(toyUpdating))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk());
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 존재하지 않는 ID를 매개변수로 전달 받는다면")
+        class Context_without_existing_toy {
+            @BeforeEach
+            void setUp() {
+                given(service.update(eq(TOY_ID_NOT_EXISTING), any(Toy.class)))
+                        .willThrow(new ProductNotFoundException(TOY_ID_NOT_EXISTING));
+            }
+
+            @Test
+            @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
+            void it_responds_with_404() throws Exception {
+                mockMvc.perform(patch("/products/" + TOY_ID_NOT_EXISTING)
+                                .content(jsonFrom(toyUpdating))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 RequestBody를 전달 받는다면")
+        class Context_with_invalid_request_body {
+            @BeforeEach
+            void setUp() {
+                given(service.update(eq(TOY_ID), any(Toy.class))).willReturn(toyWithEmptyName);
+            }
+
+            @Test
+            @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
+            void it_responds_with_400() throws Exception {
+                mockMvc.perform(patch("/products/" + TOY_ID)
+                                .content(jsonFrom(toyWithEmptyName))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete 메소드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("유효한 매개변수를 전달 받는다면")
+        class Context_with_existing_toy {
+            @Test
+            @DisplayName("HTTP Status Code 204 NO CONTENT 응답한다")
+            void it_responds_with_204() throws Exception {
+                mockMvc.perform(delete("/products/" + TOY_ID))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("만약 존재하지 않는 ID를 매개변수로 전달 받는다면")
+        class Context_without_existing_toy {
+            @BeforeEach
+            void setUp() {
+                willThrow(new ProductNotFoundException(TOY_ID_NOT_EXISTING))
+                        .given(service).deleteBy(TOY_ID_NOT_EXISTING);
+            }
+
+            @Test
+            @DisplayName("HTTP Status Code 404 NOT FOUND 응답한다")
+            void it_responds_with_404() throws Exception {
+                mockMvc.perform(delete("/products/" + TOY_ID_NOT_EXISTING))
+                        .andExpect(status().isNotFound());
+            }
+
+        }
+    }
+
 
     private String jsonFrom(Toy toy) throws JsonProcessingException {
         ToyRequestData requestData = ToyRequestData.builder()
