@@ -2,12 +2,9 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.ProductData;
 import com.codesoom.assignment.dto.UserCreateData;
 import com.codesoom.assignment.dto.UserUpdateData;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,13 +25,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(UserController.class)
 class UserControllerWebTest {
-    private final ObjectMapper objectMapper = new ObjectMapper();
-
     @Autowired
     private MockMvc mockMvc;
-
-    @Autowired
-    private UserController userController;
 
     @MockBean
     private UserService userService;
