@@ -2,9 +2,9 @@ package com.codesoom.assignment.application;
 
 import java.util.List;
 
-import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
@@ -20,10 +20,12 @@ public class ProductService {
 		this.productRepository = productRepository;
 	}
 
+	@Transactional(readOnly = true)
 	public List<Product> getProducts() {
 		return productRepository.findAll();
 	}
 
+	@Transactional(readOnly = true)
 	public Product getProduct(Long id) {
 		return findProduct(id);
 	}
@@ -58,7 +60,6 @@ public class ProductService {
 
 		return product;
 	}
-
 	private Product findProduct(Long id) {
 		return productRepository.findById(id)
 			.orElseThrow(() -> new ProductNotFoundException(id));
