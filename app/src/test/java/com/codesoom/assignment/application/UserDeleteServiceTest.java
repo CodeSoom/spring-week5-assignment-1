@@ -18,6 +18,10 @@ class UserDeleteServiceTest {
     private final Long USER_ID = 1L;
     private final Long USER_ID_NOT_EXISTING = 10L;
 
+    @BeforeEach
+    void setUp() {
+        service = new UserCrudService(repository);
+    }
 
     @Nested
     @DisplayName("deleteBy 메소드는")
@@ -36,7 +40,7 @@ class UserDeleteServiceTest {
 
         @Nested
         @DisplayName("만약 존재하는 User를 삭제한다면")
-        class Context_with_existing_toy extends ContextDeletingExisting {
+        class Context_with_existing_user extends ContextDeletingExisting {
             @BeforeEach
             void setUp() {
                 given(repository.existsById(USER_ID)).willReturn(Boolean.TRUE);
@@ -51,7 +55,7 @@ class UserDeleteServiceTest {
 
         @Nested
         @DisplayName("만약 존재하지 않는 User를 삭제한다면")
-        class Context_with_not_existing_toy extends ContextDeletingNotExisting {
+        class Context_with_not_existing_user extends ContextDeletingNotExisting {
             @BeforeEach
             void setUp() {
                 given(repository.existsById(USER_ID_NOT_EXISTING)).willReturn(Boolean.FALSE);
