@@ -21,4 +21,20 @@ class UserDataTest {
                         ", password='" + userData.getPassword() + '\'' +
                         '}');
     }
+
+    @Test
+    void testBuilderToString() {
+        String userData = UserData.builder()
+                .name("김철수")
+                .email("kim@gmail.com")
+                .password("1111")
+                .toString();
+
+        assertThat(userData)
+                .isEqualTo("UserData.UserDataBuilder(" +
+                        "name=김철수" +
+                        ", email=kim@gmail.com" +
+                        ", password=1111" +
+                        ')');
+    }
 }
