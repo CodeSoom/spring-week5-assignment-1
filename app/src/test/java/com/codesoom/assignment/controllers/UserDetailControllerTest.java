@@ -69,7 +69,7 @@ class UserDetailControllerTest {
 
         @Nested
         @DisplayName("만약 존재하지 않는 ID를 매개변수로 전달 받는다면")
-        class Context_without_existing_toy {
+        class Context_with_invalid_param {
             @BeforeEach
             void setUp() {
                 given(service.showById(USER_ID_NOT_EXISTING))

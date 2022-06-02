@@ -31,7 +31,7 @@ public class UserCrudController implements UserListController, UserDetailControl
 
     @GetMapping("{id}")
     @Override
-    public UserResponseData detail(Long id) {
+    public UserResponseData detail(@PathVariable Long id) {
         User user = service.showById(id);
         return UserResponseData.from(user);
     }
