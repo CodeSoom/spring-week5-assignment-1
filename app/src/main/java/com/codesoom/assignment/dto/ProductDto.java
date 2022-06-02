@@ -6,6 +6,7 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -31,4 +32,17 @@ public class ProductDto {
 
     @Mapping("imagePath")
     private String imagePath;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductDto that = (ProductDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(maker, that.maker) && Objects.equals(price, that.price) && Objects.equals(imagePath, that.imagePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, maker, price, imagePath);
+    }
 }

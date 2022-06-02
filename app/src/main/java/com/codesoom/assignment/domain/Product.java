@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Getter
 @Builder
@@ -28,4 +29,17 @@ public class Product {
 
     @Mapping("imagePath")
     private String imagePath;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Product product = (Product) o;
+        return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(maker, product.maker) && Objects.equals(price, product.price) && Objects.equals(imagePath, product.imagePath);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, maker, price, imagePath);
+    }
 }
