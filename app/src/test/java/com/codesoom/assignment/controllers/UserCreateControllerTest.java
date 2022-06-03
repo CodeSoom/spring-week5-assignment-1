@@ -38,12 +38,14 @@ class UserCreateControllerTest {
     private User user;
     private User userWithoutId;
     private User userWithEmptyName;
+    private User userWithInvalidPassword;
 
     @BeforeEach
     void setUp() {
         user = fixture.user();
         userWithoutId = fixture.userWithoutId();
         userWithEmptyName = fixture.userWithEmptyName();
+        userWithInvalidPassword = fixture.userWithInvalidPassword();
     }
 
     @Nested
@@ -81,6 +83,24 @@ class UserCreateControllerTest {
             void it_responds_with_400() throws Exception {
                 mockMvc.perform(post("/users")
                                 .content(jsonFrom(userWithEmptyName))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+
+            }
+        }
+        @Nested
+        @DisplayName("유효하지 않은 비밀번호를 전달 받는다면")
+        class Context_with_invalid_password {
+            @BeforeEach
+            void setUp() {
+                given(service.create(any(User.class))).willReturn(userWithInvalidPassword);
+            }
+
+            @Test
+            @DisplayName("HTTP Status Code 400 BAD REQUEST 응답한다")
+            void it_responds_with_400() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(jsonFrom(userWithInvalidPassword))
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
 
