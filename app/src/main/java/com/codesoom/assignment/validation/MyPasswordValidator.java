@@ -13,11 +13,8 @@ import java.util.regex.Pattern;
  */
 public class MyPasswordValidator implements ConstraintValidator<MyPassword, String> {
 
-    private Pattern pattern;
-    @Override
-    public void initialize(MyPassword constraintAnnotation) {
-        pattern = Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,16}$");
-    }
+    private static final Pattern pattern =
+            Pattern.compile("^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,16}$");
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {

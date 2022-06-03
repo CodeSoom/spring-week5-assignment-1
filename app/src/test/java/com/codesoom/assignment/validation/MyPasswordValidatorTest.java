@@ -9,14 +9,9 @@ import static org.mockito.Mockito.mock;
 
 class MyPasswordValidatorTest {
 
-    private static MyPasswordValidator myPasswordValidator;
+    private final MyPasswordValidator myPasswordValidator = new MyPasswordValidator();
     private final ConstraintValidatorContext context = mock(ConstraintValidatorContext.class);
 
-    @BeforeAll
-    static void beforeAll() {
-        myPasswordValidator = new MyPasswordValidator();
-        myPasswordValidator.initialize(null);
-    }
     @Nested
     @DisplayName("isValid 메소드는")
     class Describe_isValid {
