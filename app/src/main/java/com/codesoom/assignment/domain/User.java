@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.UserData;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -38,12 +37,12 @@ public class User {
     /**
      * 사용자를 수정하고 수정한 사용자를 리턴한다.
      *
-     * @param userData 수정할 사용자 데이터
+     * @param source 수정할 사용자
      * @return 수정한 사용자
      */
-    public User changeWith(UserData userData) {
-        this.name = userData.getName();
-        this.password = userData.getPassword();
+    public User changeWith(User source) {
+        this.name = source.name;
+        this.password = source.password;
 
         return this;
     }
