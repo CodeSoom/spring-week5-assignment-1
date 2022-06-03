@@ -40,9 +40,9 @@ public class UserDTO {
 		@Mapping("id")
 		private int id;
 		@Mapping("name")
-		@PassWordForm
+		@NotBlank
 		private String name;
-		@PassWordForm
+		@NotBlank
 		@Mapping("email")
 		private String email;
 		@PassWordForm
@@ -57,11 +57,11 @@ public class UserDTO {
 	@AllArgsConstructor
 	public static class UpdateUser {
 		@Mapping("name")
-		@PassWordForm
+		@NotBlank
 		private String name;
 
 		@Mapping("email")
-		@PassWordForm
+		@NotBlank
 		private String email;
 
 		@PassWordForm

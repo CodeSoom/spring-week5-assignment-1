@@ -3,8 +3,6 @@ package com.codesoom.assignment.domain;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
-
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,11 +18,8 @@ public class User {
 	@GeneratedValue
 	private int id;
 
-	@NotBlank
 	private String name;
-	@NotBlank
 	private String email;
-	@NotBlank
 	private String password;
 
 	public void update(String name, String email, String password) {
