@@ -20,7 +20,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.application.UserServiceImpl;
 import com.codesoom.assignment.dto.UserDTO;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -39,7 +39,7 @@ class UserControllerWebTest {
 	private MockMvc mockMvc;
 
 	@MockBean
-	private UserService userService;
+	private UserServiceImpl userServiceImpl;
 
 	@Nested
 	@DisplayName("POST /users URL 은")
@@ -50,7 +50,7 @@ class UserControllerWebTest {
 			@Test
 			@DisplayName("상태코드 200 과 생성된 유저 정보를 응답한다.")
 			void createUserWithValidAttribute() throws Exception {
-				given(userService.createUser(any(UserDTO.CreateUser.class)))
+				given(userServiceImpl.createUser(any(UserDTO.CreateUser.class)))
 					.will(invocation -> {
 						UserDTO.CreateUser source = invocation.getArgument(0);
 						return new UserDTO.Response(1, source.getName(), source.getEmail(), source.getPassword());
@@ -67,7 +67,7 @@ class UserControllerWebTest {
 					.andExpect(status().isCreated())
 					.andExpect(content().string(containsString("create email test")));
 
-				verify(userService).createUser(any(UserDTO.CreateUser.class));
+				verify(userServiceImpl).createUser(any(UserDTO.CreateUser.class));
 			}
 		}
 
@@ -77,7 +77,7 @@ class UserControllerWebTest {
 			@Test
 			@DisplayName("상태코드 400 을 응답한다.")
 			void createUserWithInValidAttribute() throws Exception {
-				given(userService.createUser(any(UserDTO.CreateUser.class)))
+				given(userServiceImpl.createUser(any(UserDTO.CreateUser.class)))
 					.will(invocation -> {
 						UserDTO.CreateUser source = invocation.getArgument(0);
 						return new UserDTO.Response(1, source.getName(), source.getEmail(),
@@ -106,7 +106,7 @@ class UserControllerWebTest {
 			@Test
 			@DisplayName("상태코드 200, 업데이트 된 유저 정보를 응답한다.")
 			void updateUserWithValidId() throws Exception {
-				given(userService.updateUsers(eq(1), any(UserDTO.UpdateUser.class)))
+				given(userServiceImpl.updateUsers(eq(1), any(UserDTO.UpdateUser.class)))
 					.will(invocation -> {
 						int id = invocation.getArgument(0);
 						UserDTO.UpdateUser source = invocation.getArgument(1);
@@ -129,7 +129,7 @@ class UserControllerWebTest {
 					.andExpect(status().isOk())
 					.andExpect(content().string(containsString("update email test")));
 
-				verify(userService).updateUsers(eq(1), any(UserDTO.UpdateUser.class));
+				verify(userServiceImpl).updateUsers(eq(1), any(UserDTO.UpdateUser.class));
 			}
 		}
 
@@ -139,7 +139,7 @@ class UserControllerWebTest {
 			@Test
 			@DisplayName("상태코드 404 를 응답한다.")
 			void updateUserWithInValidId() throws Exception {
-				given(userService.updateUsers(eq(1000), any(UserDTO.UpdateUser.class))).willThrow(
+				given(userServiceImpl.updateUsers(eq(1000), any(UserDTO.UpdateUser.class))).willThrow(
 					new UserNotFoundException(1000));
 
 				String source = objectMapper.writeValueAsString(
@@ -152,7 +152,7 @@ class UserControllerWebTest {
 							.content(source))
 					.andExpect(status().isNotFound()).andDo(print());
 
-				verify(userService).updateUsers(eq(1000), any(UserDTO.UpdateUser.class));
+				verify(userServiceImpl).updateUsers(eq(1000), any(UserDTO.UpdateUser.class));
 			}
 		}
 
@@ -184,13 +184,13 @@ class UserControllerWebTest {
 			@Test
 			@DisplayName("상태코드 200 을 응답한다.")
 			void getUserWithValidId() throws Exception {
-				given(userService.getUser(eq(1))).willReturn(response1);
+				given(userServiceImpl.getUser(eq(1))).willReturn(response1);
 
 				mockMvc.perform(get("/users/{id}", 1))
 					.andExpect(status().isOk())
 					.andExpect(content().string(containsString("name test 1")));
 
-				verify(userService).getUser(1);
+				verify(userServiceImpl).getUser(1);
 			}
 		}
 
@@ -200,12 +200,12 @@ class UserControllerWebTest {
 			@Test
 			@DisplayName("상태코드 404 를 응답한다.")
 			void getUserWithInValidId() throws Exception {
-				given(userService.getUser(eq(1000))).willThrow(new UserNotFoundException(1000));
+				given(userServiceImpl.getUser(eq(1000))).willThrow(new UserNotFoundException(1000));
 
 				mockMvc.perform(get("/users/{id}", 1000))
 					.andExpect(status().isNotFound());
 
-				verify(userService).getUser(1000);
+				verify(userServiceImpl).getUser(1000);
 			}
 		}
 	}
@@ -216,14 +216,14 @@ class UserControllerWebTest {
 		@Test
 		@DisplayName("상태코드 200 과 유저 목록을 응답한다.")
 		void getUsers() throws Exception {
-			given(userService.getUsers()).willReturn(userDTOs);
+			given(userServiceImpl.getUsers()).willReturn(userDTOs);
 
 			mockMvc.perform(get("/users"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("email test 2")))
 				.andExpect(content().string(containsString("email test 1")));
 
-			verify(userService).getUsers();
+			verify(userServiceImpl).getUsers();
 		}
 	}
 
@@ -239,7 +239,7 @@ class UserControllerWebTest {
 				mockMvc.perform(delete("/users/{id}", 1))
 					.andExpect(status().isNoContent());
 
-				verify(userService).deleteUser(1);
+				verify(userServiceImpl).deleteUser(1);
 			}
 		}
 
@@ -249,12 +249,12 @@ class UserControllerWebTest {
 			@Test
 			@DisplayName("상태코드 404 를 응답한다.")
 			void deleteUser() throws Exception {
-				willThrow(UserNotFoundException.class).given(userService).deleteUser(eq(1000));
+				willThrow(UserNotFoundException.class).given(userServiceImpl).deleteUser(eq(1000));
 
 				mockMvc.perform(delete("/users/{id}", 1000))
 					.andExpect(status().isNotFound());
 
-				verify(userService).deleteUser(1000);
+				verify(userServiceImpl).deleteUser(1000);
 			}
 		}
 	}

@@ -15,45 +15,45 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.application.UserServiceImpl;
 import com.codesoom.assignment.dto.UserDTO;
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-	private final UserService userService;
+	private final UserServiceImpl userServiceImpl;
 
-	public UserController(UserService userService) {
-		this.userService = userService;
+	public UserController(UserServiceImpl userServiceImpl) {
+		this.userServiceImpl = userServiceImpl;
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserDTO.Response createUser(@Valid @RequestBody UserDTO.CreateUser createUser) {
-		return userService.createUser(createUser);
+		return userServiceImpl.createUser(createUser);
 	}
 
 	@PatchMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public UserDTO.Response updateUser(@PathVariable("id") int id, @Valid @RequestBody UserDTO.UpdateUser updateUser) {
-		return userService.updateUsers(id, updateUser);
+		return userServiceImpl.updateUsers(id, updateUser);
 	}
 
 	@GetMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public UserDTO.Response getUser(@PathVariable("id") int id) {
-		return userService.getUser(id);
+		return userServiceImpl.getUser(id);
 	}
 
 	@GetMapping()
 	@ResponseStatus(HttpStatus.OK)
 	public List<UserDTO.Response> getUsers() {
-		return userService.getUsers();
+		return userServiceImpl.getUsers();
 	}
 
 	@DeleteMapping("/{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	public void deleteUser(@PathVariable("id") int id) {
-		userService.deleteUser(id);
+		userServiceImpl.deleteUser(id);
 	}
 }

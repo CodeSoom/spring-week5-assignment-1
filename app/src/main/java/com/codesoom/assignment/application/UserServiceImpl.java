@@ -14,11 +14,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UserService {
+public class UserServiceImpl implements UserServiceInterface{
 	private final UserRepository userRepository;
 	private final Mapper mapper;
 
-	public UserService(UserRepository userRepository, Mapper mapper) {
+	public UserServiceImpl(UserRepository userRepository, Mapper mapper) {
 		this.userRepository = userRepository;
 		this.mapper = mapper;
 	}
