@@ -10,8 +10,10 @@ import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDTO;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.github.dozermapper.core.Mapper;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional
 public class UserService {
 	private final UserRepository userRepository;
 	private final Mapper mapper;
@@ -25,6 +27,7 @@ public class UserService {
 		return mapper.map(userRepository.save(mapper.map(source, User.class)), UserDTO.Response.class);
 	}
 
+	@Transactional(readOnly = true)
 	public UserDTO.Response getUser(int id) {
 		return mapper.map(userRepository.findById(id).orElseThrow(() -> new UserNotFoundException(id)),
 			UserDTO.Response.class);
@@ -34,6 +37,7 @@ public class UserService {
 		userRepository.deleteById(id);
 	}
 
+	@Transactional(readOnly = true)
 	public List<UserDTO.Response> getUsers() {
 		return userRepository.findAll().stream().map(user -> mapper.map(user, UserDTO.Response.class))
 			.collect(Collectors.toList());
