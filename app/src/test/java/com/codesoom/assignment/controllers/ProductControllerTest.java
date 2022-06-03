@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.BadRequestException;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
@@ -36,6 +37,7 @@ class ProductControllerTest {
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
+                .imageUrl("http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg")
                 .build();
 
         given(productService.getProducts()).willReturn(List.of(product));
@@ -57,6 +59,7 @@ class ProductControllerTest {
                             .name(productData.getName())
                             .maker(productData.getMaker())
                             .price(productData.getPrice())
+                            .imageUrl(productData.getImageUrl())
                             .build();
                 });
 
