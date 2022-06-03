@@ -47,7 +47,6 @@ class UserControllerTest {
                 .id(EXISTING_ID)
                 .name("name")
                 .email("email")
-                .password("password")
                 .build();
 
     }
@@ -71,11 +70,9 @@ class UserControllerTest {
                 mockMvc.perform(get("/users/{id}", EXISTING_ID)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON))
-                        .andDo(print())
                         .andExpect(jsonPath("$.id").exists())
                         .andExpect(jsonPath("name").exists())
                         .andExpect(jsonPath("email").exists())
-                        .andExpect(jsonPath("password").doesNotExist())
                         .andExpect(status().isOk());
             }
         }
