@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers.dtos;
 
+import com.codesoom.assignment.controllers.validators.Password;
 import com.codesoom.assignment.domain.entities.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -21,7 +22,7 @@ public class UserRequestData {
     @NotBlank
     private String email;
 
-    @NotBlank
+    @Password
     private String password;
 
 
