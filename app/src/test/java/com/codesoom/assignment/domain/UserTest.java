@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,11 +26,15 @@ public class UserTest {
                 .password("1111")
                 .build();
 
-        user.update("김영희", "young@gmail.com", "2222");
+        user.update(User.builder()
+                .name("김영희")
+                .email("young@gmail.com")
+                .password("1234")
+                .build());
 
         assertThat(user.getName()).isEqualTo("김영희");
         assertThat(user.getEmail()).isEqualTo("young@gmail.com");
-        assertThat(user.getPassword()).isEqualTo("2222");
+        assertThat(user.getPassword()).isEqualTo("1234");
     }
 
     @Test

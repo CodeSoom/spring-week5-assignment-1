@@ -25,11 +25,9 @@ public class User {
 
     private String password;
 
-    public void update(String name,
-                       String email,
-                       String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    public void update(User source) {
+        this.name = source.getName();
+        this.email = source.getEmail();
+        this.password = source.getPassword();
     }
 }
