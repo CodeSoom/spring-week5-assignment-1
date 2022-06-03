@@ -219,4 +219,34 @@ class UserServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("deleteUser")
+    class Describe_deleteUser {
+
+        @Nested
+        @DisplayName("저장된 사용자 id가 주어지면")
+        class Context_with_an_stored_id {
+
+            @Test
+            @DisplayName("사용자를 삭제한다")
+            void it_deletes_user() {
+                userService.deleteUser(STORED_ID);
+
+                verify(userRepository).delete(any(User.class));
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 사용자 id가 주어지면")
+        class Context_with_not_stored_id {
+
+            @Test
+            @DisplayName("UserNotFoundException을 던진다")
+            void it_throws_user_not_found_exception() {
+                assertThrows(UserNotFoundException.class,
+                        () -> userService.deleteUser(NOT_STORED_ID));
+            }
+        }
+    }
 }
