@@ -5,7 +5,6 @@ import com.codesoom.assignment.InvalidEmailException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -15,6 +14,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -26,7 +26,7 @@ class UserServiceTest {
     private UserService userService;
     private UserRepository userRepository = mock(UserRepository.class);
 
-    private final Long STORED_ID = 1L;
+    private Long STORED_ID;
     private final Long NOT_STORED_ID = 100L;
 
     private final String NAME = "name";
@@ -34,8 +34,11 @@ class UserServiceTest {
     private final String PASSWORD = "password12!@";
 
     private final String UPDATE_NAME = "name1";
-    private final String UPDATE_EMAIL = "email1@example.email";
     private final String UPDATE_PASSWORD = "password12!#";
+
+    private final String CREATE_NAME = "name2";
+    private final String CREATE_EMAIL = "email2@example.email";
+    private final String CREATE_PASSWORD = "password13!@";
 
     private final String INVALID_EMAIL = "email";
 
@@ -46,11 +49,16 @@ class UserServiceTest {
         userService = new UserService(userRepository);
 
         user = User.builder()
-                .id(STORED_ID)
+                .id(1L)
                 .name(NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
+
+        STORED_ID = user.getId();
+
+        given(userRepository.findById(STORED_ID))
+                .willReturn(Optional.of(user));
     }
 
     @Nested
@@ -98,28 +106,28 @@ class UserServiceTest {
         @Nested
         @DisplayName("사용자가 주어지면")
         class Context_with_a_user {
-
-            private UserData userData;
+            private User newUser;
 
             @BeforeEach
             void setUp() {
-                userData = UserData.builder()
-                        .name(NAME)
-                        .email(EMAIL)
-                        .password(PASSWORD)
+                 newUser = User.builder()
+                        .name(CREATE_NAME)
+                        .email(CREATE_EMAIL)
+                        .password(CREATE_PASSWORD)
                         .build();
             }
 
             @Test
             @DisplayName("주어진 사용자를 저장하고 사용자를 리턴한다")
             void it_returns_created_user() {
-                given(userRepository.save(any(User.class))).willReturn(user);
+                given(userRepository.save(any(User.class)))
+                        .will(invocation -> invocation.getArgument(0));
 
-                User user = userService.createUser(userData);
+                User user = userService.createUser(newUser);
 
-                assertThat(user.getName()).isEqualTo(userData.getName());
-                assertThat(user.getEmail()).isEqualTo(userData.getEmail());
-                assertThat(user.getPassword()).isEqualTo(userData.getPassword());
+                assertThat(user.getName()).isEqualTo(user.getName());
+                assertThat(user.getEmail()).isEqualTo(user.getEmail());
+                assertThat(user.getPassword()).isEqualTo(user.getPassword());
 
                 verify(userRepository).save(any(User.class));
             }
@@ -128,21 +136,21 @@ class UserServiceTest {
         @Nested
         @DisplayName("유효하지 않은 email을 지닌 사용자가 주어지면")
         class Context_with_invalid_email_user {
-            private UserData invalidUserData;
+            private User invalidUser;
 
             @BeforeEach
             void setUp() {
-                invalidUserData = UserData.builder()
-                        .name(NAME)
+                invalidUser = User.builder()
+                        .name(CREATE_NAME)
                         .email(INVALID_EMAIL)
-                        .password(PASSWORD)
+                        .password(CREATE_PASSWORD)
                         .build();
             }
 
             @Test
             @DisplayName("InvalidEmailException을 던진다")
             void it_throws_invalid_email_exception() {
-                assertThatThrownBy(() -> userService.createUser(invalidUserData))
+                assertThatThrownBy(() -> userService.createUser(invalidUser))
                         .isInstanceOf(InvalidEmailException.class);
             }
         }
@@ -150,7 +158,7 @@ class UserServiceTest {
         @Nested
         @DisplayName("이미 저장된 사용자의 email이 주어지면")
         class Context_with_stored_user {
-            private UserData stored_user_data = UserData.builder()
+            private User storedUser = User.builder()
                     .name(NAME)
                     .email(EMAIL)
                     .password(PASSWORD)
@@ -158,13 +166,13 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                given(userRepository.isExistsEmail(stored_user_data.getEmail())).willReturn(true);
+                given(userRepository.isExistsEmail(storedUser.getEmail())).willReturn(true);
             }
 
             @Test
             @DisplayName("DuplicateUserException을 던진다")
             void it_throws_duplicate_user_exception() {
-                assertThatThrownBy(() -> userService.createUser(stored_user_data))
+                assertThatThrownBy(() -> userService.createUser(storedUser))
                         .isInstanceOf(DuplicateUserException.class);
             }
         }
@@ -173,13 +181,12 @@ class UserServiceTest {
     @Nested
     @DisplayName("updateUser")
     class Describe_updateUser {
-        private UserData updateUserData;
+        private User source;
 
         @BeforeEach
         void setUp() {
-            updateUserData = UserData.builder()
+            source = User.builder()
                     .name(UPDATE_NAME)
-                    .email(UPDATE_EMAIL)
                     .password(UPDATE_PASSWORD)
                     .build();
         }
@@ -191,10 +198,24 @@ class UserServiceTest {
             @Test
             @DisplayName("업데이트된 사용자를 리턴한다")
             void it_returns_updated_user() {
-                User updateUser = userService.updateUser(STORED_ID, updateUserData);
+                User updatedUser = userService.updateUser(STORED_ID, source);
 
-                assertThat(updateUser.getName()).isEqualTo(UPDATE_NAME);
-                assertThat(updateUser.getPassword()).isEqualTo(UPDATE_PASSWORD);
+                assertThat(updatedUser.getName()).isEqualTo(source.getName());
+                assertThat(updatedUser.getPassword()).isEqualTo(source.getPassword());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되지 않은 사용자 id가 주어지면")
+        class Context_with_not_stored_user_id {
+
+            @Test
+            @DisplayName("UserNotFoundException을 던진다")
+            void it_throws_user_not_found_exception() {
+                assertThrows(UserNotFoundException.class,
+                        () -> userService.updateUser(NOT_STORED_ID, source));
+
+                verify(userRepository).findById(NOT_STORED_ID);
             }
         }
     }
