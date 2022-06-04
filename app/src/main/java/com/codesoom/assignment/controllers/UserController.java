@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/users")
 public class UserController {
     private final UserService userService;
