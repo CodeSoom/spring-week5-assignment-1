@@ -5,6 +5,7 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -163,12 +164,9 @@ class ProductControllerTest {
            @DisplayName("status code 201을 응답한다")
            class It_response_status_code_201 {
                ResultActions subject() throws Exception {
-                   ObjectMapper objectMapper = new ObjectMapper();
-                   String jsonProductData = objectMapper.writeValueAsString(productData);
-
                    return mockMvc.perform(post("/products")
                            .contentType(MediaType.APPLICATION_JSON)
-                                   .content(jsonProductData)
+                           .content(toJson(productData))
                    );
                }
 
@@ -204,12 +202,9 @@ class ProductControllerTest {
            @DisplayName("status code 400을 응답한다")
            class It_response_status_code_400 {
                ResultActions subject() throws Exception {
-                   ObjectMapper objectMapper = new ObjectMapper();
-                   String jsonProductData = objectMapper.writeValueAsString(productData);
-
                    return mockMvc.perform(post("/products")
                            .contentType(MediaType.APPLICATION_JSON)
-                           .content(jsonProductData)
+                           .content(toJson(productData))
                    );
                }
 
@@ -257,12 +252,9 @@ class ProductControllerTest {
             @DisplayName("status code 200을 응답한다")
             class It_response_status_code_200{
                 ResultActions subject() throws Exception {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    String jsonProductData = objectMapper.writeValueAsString(productData);
-
                     return mockMvc.perform(patch("/products/{id}", ID)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonProductData)
+                            .content(toJson(productData))
                     );
                 }
 
@@ -286,12 +278,9 @@ class ProductControllerTest {
             @DisplayName("status code 404를 응답한다")
             class It_response_status_code_404 {
                 ResultActions subject() throws Exception {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    String jsonProductData = objectMapper.writeValueAsString(productData);
-
                     return mockMvc.perform(patch("/products/{id}", INVALID_ID)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonProductData)
+                            .content(toJson(productData))
                     );
                 }
 
@@ -321,12 +310,9 @@ class ProductControllerTest {
             @DisplayName("status code 400을 응답한다")
             class It_response_status_code_400 {
                 ResultActions subject() throws Exception {
-                    ObjectMapper objectMapper = new ObjectMapper();
-                    String jsonProductData = objectMapper.writeValueAsString(productData);
-
                     return mockMvc.perform(patch("/products/{id}", ID)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(jsonProductData)
+                            .content(toJson(productData))
                     );
                 }
 
@@ -381,5 +367,11 @@ class ProductControllerTest {
                 }
             }
         }
+    }
+
+    private String toJson(ProductData productData) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        return objectMapper.writeValueAsString(productData);
     }
 }
