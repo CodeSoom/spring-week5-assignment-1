@@ -12,6 +12,10 @@ public class App {
         SpringApplication.run(App.class, args);
     }
 
+    public String getGreeting() {
+        return "Hello, world!";
+    }
+
     @Bean
     public Mapper dozerMapper() {
         return DozerBeanMapperBuilder.buildDefault();
