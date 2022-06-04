@@ -10,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
 
+/**
+ * 회원 정보
+ */
 @Entity
 @Getter
 @Builder
@@ -26,6 +29,13 @@ public class User {
 
     private String password;
 
+    /**
+     * 회원 정보 업데이트
+     *
+     * @param name     회원명
+     * @param email    회원메일
+     * @param password 회원패스워크
+     */
     public void update(String name,
                        String email,
                        String password) {

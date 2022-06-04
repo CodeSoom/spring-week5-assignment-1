@@ -5,6 +5,9 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * User 생성 요청 정보
+ */
 @Setter
 @Getter
 @Builder

@@ -7,6 +7,9 @@ import org.springframework.data.repository.CrudRepository;
 
 import java.util.Optional;
 
+/**
+ * User JPA 데이터 저장 장소
+ */
 @Primary
 public interface JpaUserRepository
         extends UserRepository, CrudRepository<User, Long> {
