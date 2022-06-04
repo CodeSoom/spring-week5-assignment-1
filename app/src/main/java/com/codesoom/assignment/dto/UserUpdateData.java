@@ -3,7 +3,7 @@ package com.codesoom.assignment.dto;
 import com.github.dozermapper.core.Mapping;
 import lombok.*;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotEmpty;
 
 @Setter
 @Getter
@@ -12,14 +12,13 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class UserUpdateData {
     @Mapping("name")
-    @NotBlank
+    @NotEmpty
     private String name;
 
     @Mapping("email")
-    @NotBlank
     private String email;
 
     @Mapping("password")
-    @NotBlank
+    @NotEmpty
     private String password;
 }
