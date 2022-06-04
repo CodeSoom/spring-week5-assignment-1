@@ -17,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -63,31 +62,6 @@ class ProductControllerTest {
                 .price(PRICE)
                 .imageUrl(IMAGE_URL)
                 .build();
-    }
-
-    @BeforeEach
-    void setUp1() {
-//        given(productService.createProduct(any(ProductData.class)))
-//                .willReturn(product);
-//
-//        given(productService.updateProduct(eq(1L), any(ProductData.class)))
-//                .will(invocation -> {
-//                    Long id = invocation.getArgument(0);
-//                    ProductData productData = invocation.getArgument(1);
-//                    return Product.builder()
-//                            .id(id)
-//                            .name(productData.getName())
-//                            .maker(productData.getMaker())
-//                            .price(productData.getPrice())
-//                            .imageUrl(productData.getImageUrl())
-//                            .build();
-//                });
-//
-//        given(productService.updateProduct(eq(1000L), any(ProductData.class)))
-//                .willThrow(new ProductNotFoundException(1000L));
-//
-//        given(productService.deleteProduct(1000L))
-//                .willThrow(new ProductNotFoundException(1000L));
     }
 
     @Nested
@@ -210,74 +184,202 @@ class ProductControllerTest {
                }
            }
        }
+
+       @Nested
+       @DisplayName("유효하지 않은 속성을 가진 product가 주어졌을 경우")
+       class Context_if_product_with_invalid_attributes_given {
+           @BeforeEach
+           void setUp() {
+               productData = ProductData.builder()
+                       .name(INVALID_NAME)
+                       .maker(MAKER)
+                       .price(PRICE)
+                       .imageUrl(IMAGE_URL)
+                       .build();
+
+               given(productService.createProduct(eq(productData))).willThrow(new BadRequestException());
+           }
+
+           @Nested
+           @DisplayName("status code 400을 응답한다")
+           class It_response_status_code_400 {
+               ResultActions subject() throws Exception {
+                   ObjectMapper objectMapper = new ObjectMapper();
+                   String jsonProductData = objectMapper.writeValueAsString(productData);
+
+                   return mockMvc.perform(post("/products")
+                           .contentType(MediaType.APPLICATION_JSON)
+                           .content(jsonProductData)
+                   );
+               }
+
+               @Test
+               void test() throws Exception {
+                   subject().andExpect(status().isBadRequest());
+               }
+           }
+       }
    }
 
-    @Test
-    void createWithInvalidAttributes() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0," +
-                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
-        )
-                .andExpect(status().isBadRequest());
+    @Nested
+    @DisplayName("PATCH /products 요청 시")
+    class Describe_patch_products {
+        @BeforeEach
+        void setUp() {
+            productData = ProductData.builder()
+                    .name(NEW_NAME)
+                    .maker(MAKER)
+                    .price(PRICE)
+                    .imageUrl(IMAGE_URL)
+                    .build();
+        }
+
+        @Nested
+        @DisplayName("유효한 id가 주어졌을 경우")
+        class Context_if_valid_id_given {
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(ID), any(ProductData.class)))
+                        .will(invocation -> {
+                            Long id = invocation.getArgument(0);
+                            ProductData productData = invocation.getArgument(1);
+                            return Product.builder()
+                                    .id(id)
+                                    .name(productData.getName())
+                                    .maker(productData.getMaker())
+                                    .price(productData.getPrice())
+                                    .imageUrl(productData.getImageUrl())
+                                    .build();
+                        });
+            }
+
+            @Nested
+            @DisplayName("status code 200을 응답한다")
+            class It_response_status_code_200{
+                ResultActions subject() throws Exception {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonProductData = objectMapper.writeValueAsString(productData);
+
+                    return mockMvc.perform(patch("/products/{id}", ID)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonProductData)
+                    );
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isOk())
+                            .andExpect(jsonPath("$.name").value(NEW_NAME));
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 id가 주어졌을 경우")
+        class Context_if_invalid_id_given {
+            @BeforeEach
+            void setUp() {
+                given(productService.updateProduct(eq(INVALID_ID), any(ProductData.class))).willThrow(new ProductNotFoundException(INVALID_ID));
+            }
+
+            @Nested
+            @DisplayName("status code 404를 응답한다")
+            class It_response_status_code_404 {
+                ResultActions subject() throws Exception {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonProductData = objectMapper.writeValueAsString(productData);
+
+                    return mockMvc.perform(patch("/products/{id}", INVALID_ID)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonProductData)
+                    );
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isNotFound());
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 속성을 가진 product가 주어졌을 경우")
+        class Context_if_product_with_invalid_attributes_given {
+            @BeforeEach
+            void setUp() {
+                productData = ProductData.builder()
+                        .name(INVALID_NAME)
+                        .maker(MAKER)
+                        .price(PRICE)
+                        .imageUrl(IMAGE_URL)
+                        .build();
+
+                given(productService.updateProduct(eq(ID), eq(productData))).willThrow(new BadRequestException());
+            }
+
+            @Nested
+            @DisplayName("status code 400을 응답한다")
+            class It_response_status_code_400 {
+                ResultActions subject() throws Exception {
+                    ObjectMapper objectMapper = new ObjectMapper();
+                    String jsonProductData = objectMapper.writeValueAsString(productData);
+
+                    return mockMvc.perform(patch("/products/{id}", ID)
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .content(jsonProductData)
+                    );
+                }
+
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isBadRequest());
+                }
+            }
+        }
     }
 
-    @Test
-    void updateWithExistedProduct() throws Exception {
-        mockMvc.perform(
-                patch("/products/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000," +
-                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
-        )
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.name").value("쥐순이"));
+    @Nested
+    @DisplayName("DELETE /products 요청 시")
+    class Describe_delete_products {
+        @Nested
+        @DisplayName("유효한 id가 주어졌을 경우")
+        class Context_if_valid_id_given {
+            @Nested
+            @DisplayName("status code 204를 응답한다")
+            class It_response_status_code_204{
+                ResultActions subject() throws Exception {
+                    return mockMvc.perform(delete("/products/{id}", ID));
+                }
 
-        verify(productService).updateProduct(eq(1L), any(ProductData.class));
-    }
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isNoContent());
 
-    @Test
-    void updateWithNotExistedProduct() throws Exception {
-        mockMvc.perform(
-                patch("/products/1000")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000," +
-                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
-        )
-                .andExpect(status().isNotFound());
+                    verify(productService).deleteProduct(ID);
+                }
+            }
+        }
 
-        verify(productService).updateProduct(eq(1000L), any(ProductData.class));
-    }
+        @Nested
+        @DisplayName("유효하지 않은 id가 주어졌을 경우")
+        class Context_if_invalid_id_given {
+            @BeforeEach
+            void setUp() {
+                given(productService.deleteProduct(INVALID_ID)).willThrow(new ProductNotFoundException(INVALID_ID));
+            }
 
-    @Test
-    void updateWithInvalidAttributes() throws Exception {
-        mockMvc.perform(
-                patch("/products/1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0," +
-                                "\"imageUrl\":\"http://image.kyobobook.co.kr/newimages/giftshop_new/goods/400/1095/hot1602809707085.jpg\"}")
-        )
-                .andExpect(status().isBadRequest());
-    }
+            @Nested
+            @DisplayName("status code 404를 응답한다")
+            class It_response_status_code_404 {
+                ResultActions subject() throws Exception {
+                    return mockMvc.perform(delete("/products/{id}", INVALID_ID));
+                }
 
-    @Test
-    void destroyWithExistedProduct() throws Exception {
-        mockMvc.perform(delete("/products/1"))
-                .andExpect(status().isNoContent());
-
-        verify(productService).deleteProduct(1L);
-    }
-
-    @Test
-    void destroyWithNotExistedProduct() throws Exception {
-        mockMvc.perform(delete("/products/1000"))
-                .andExpect(status().isNotFound());
-
-        verify(productService).deleteProduct(1000L);
+                @Test
+                void test() throws Exception {
+                    subject().andExpect(status().isNotFound());
+                }
+            }
+        }
     }
 }
