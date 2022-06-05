@@ -15,7 +15,7 @@ import org.springframework.context.annotation.PropertySource;
 public class PassWordFormValidator implements ConstraintValidator<PassWordForm, String> {
 	private static Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$");
 
-	@Value("${password}")
+	@Value(value = "${password}")
 	private String PASSWORD_FORM_ERROR;
 
 	@Override

@@ -28,8 +28,8 @@ class UserServiceImplTest {
 	}
 
 	void setUpFixture() {
-		User user1 = new User(1, "get name test", "get email test", "get password test");
-		User user2 = new User(2, "get name test 2", "get email test 2", "get password test 2");
+		User user1 = new User(1, "get name test", "get email test", "get1password@test");
+		User user2 = new User(2, "get name test 2", "get email test 2", "get1password@test2");
 		List<User> users = Arrays.asList(user1, user2);
 
 		given(userRepository.save(any(User.class))).will(invocation -> {
@@ -47,7 +47,7 @@ class UserServiceImplTest {
 
 	@Test
 	void createUserTest() {
-		UserDTO.CreateUser source = new UserDTO.CreateUser("name test", "email test", "password test");
+		UserDTO.CreateUser source = new UserDTO.CreateUser("name test", "email test", "password1@test");
 		UserDTO.Response response = userServiceImpl.createUser(source);
 		verify(userRepository).save(any(User.class));
 		assertThat(response.getEmail()).isEqualTo("email test");
@@ -76,7 +76,7 @@ class UserServiceImplTest {
 	@Test
 	void updateUserTest() {
 		UserDTO.UpdateUser source = new UserDTO.UpdateUser("update name test", "update email test",
-			"update password test");
+			"update1password@test");
 		UserDTO.Response response = userServiceImpl.updateUsers(1, source);
 		assertThat(response.getEmail()).isEqualTo("update email test");
 	}

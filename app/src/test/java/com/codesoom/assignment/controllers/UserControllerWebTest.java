@@ -17,20 +17,22 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import com.codesoom.assignment.application.UserServiceImpl;
 import com.codesoom.assignment.dto.UserDTO;
 import com.codesoom.assignment.exception.UserNotFoundException;
+import com.codesoom.assignment.global.PassWordFormValidator;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @WebMvcTest(UserController.class)
 class UserControllerWebTest {
 	private static final UserDTO.Response response1 = new UserDTO.Response(1, "name test 1",
-		"email test 1", "password test 1");
+		"email test 1", "password1test@1");
 	private static final UserDTO.Response response2 = new UserDTO.Response(2, "name test 2",
-		"email test 2", "password test 2");
+		"email test 2", "password2test@2");
 	private static final List<UserDTO.Response> userDTOs = Arrays.asList(response1, response2);
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
@@ -57,7 +59,7 @@ class UserControllerWebTest {
 					});
 
 				String source = objectMapper.writeValueAsString(new UserDTO.CreateUser("create name test",
-					"create email test", "create password test"));
+					"create email test", "create@password1test"));
 
 				mockMvc.perform(
 						post("/users")
@@ -101,7 +103,7 @@ class UserControllerWebTest {
 	@DisplayName("PATCH /user/{id} URL 은")
 	class updateUser {
 		@Nested
-		@DisplayName("존재하지 않는 id 와 업데이트 유저 정보가 주어지면")
+		@DisplayName("존재하는 id 와 업데이트 유저 정보가 주어지면")
 		class WithValidId {
 			@Test
 			@DisplayName("상태코드 200, 업데이트 된 유저 정보를 응답한다.")
@@ -119,7 +121,7 @@ class UserControllerWebTest {
 					});
 
 				String source = objectMapper.writeValueAsString(
-					new UserDTO.UpdateUser("update name test", "update email test", "update password test"));
+					new UserDTO.UpdateUser("update name test", "update email test", "upde11password@test"));
 
 				mockMvc.perform(
 						patch("/users/{id}", 1)
@@ -143,7 +145,7 @@ class UserControllerWebTest {
 					new UserNotFoundException(1000));
 
 				String source = objectMapper.writeValueAsString(
-					new UserDTO.UpdateUser("update name test", "update email test", "update password test"));
+					new UserDTO.UpdateUser("update name test", "update email test", "upde11pas@sword"));
 
 				mockMvc.perform(
 						patch("/users/{id}", 1000)
