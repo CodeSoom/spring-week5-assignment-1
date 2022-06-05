@@ -76,7 +76,7 @@ class UserControllerTest {
             @DisplayName("status code 201을 응답한다")
             class It_response_status_code_201 {
                 ResultActions subject() throws Exception {
-                    return mockMvc.perform(post("/user")
+                    return mockMvc.perform(post("/users")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(userData))
                     );
@@ -111,7 +111,7 @@ class UserControllerTest {
             @DisplayName("status code 400을 응답한다")
             class It_response_status_code_400 {
                 ResultActions subject() throws Exception {
-                    return mockMvc.perform(post("/user")
+                    return mockMvc.perform(post("/users")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(userData))
                     );
@@ -148,7 +148,7 @@ class UserControllerTest {
                             UserData userData = invocation.getArgument(1);
 
                             return User.builder()
-                                    .id(ID)
+                                    .id(id)
                                     .name(userData.getName())
                                     .email(userData.getEmail())
                                     .password(userData.getPassword())
@@ -160,7 +160,7 @@ class UserControllerTest {
             @DisplayName("status code 200을 응답한다")
             class It_response_status_code_200{
                 ResultActions subject() throws Exception {
-                    return mockMvc.perform(patch("/user/{id}", ID)
+                    return mockMvc.perform(patch("/users/{id}", ID)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(userData))
                     );
@@ -186,7 +186,7 @@ class UserControllerTest {
             @DisplayName("status code 404를 응답한다")
             class It_response_status_code_404 {
                 ResultActions subject() throws Exception {
-                    return mockMvc.perform(patch("/user/{id}", INVALID_ID)
+                    return mockMvc.perform(patch("/users/{id}", INVALID_ID)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(userData))
                     );
@@ -217,7 +217,7 @@ class UserControllerTest {
             @DisplayName("status code 400을 응답한다")
             class It_response_status_code_400 {
                 ResultActions subject() throws Exception {
-                    return mockMvc.perform(patch("/user/{id}", ID)
+                    return mockMvc.perform(patch("/users/{id}", ID)
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(toJson(userData))
                     );
@@ -241,7 +241,7 @@ class UserControllerTest {
             @DisplayName("status code 204를 응답한다")
             class It_response_status_code_204{
                 ResultActions subject() throws Exception {
-                    return mockMvc.perform(delete("/user/{id}", ID));
+                    return mockMvc.perform(delete("/users/{id}", ID));
                 }
 
                 @Test
@@ -265,7 +265,7 @@ class UserControllerTest {
             @DisplayName("status code 404를 응답한다")
             class It_response_status_code_404 {
                 ResultActions subject() throws Exception {
-                    return mockMvc.perform(delete("/user/{id}", INVALID_ID));
+                    return mockMvc.perform(delete("/users/{id}", INVALID_ID));
                 }
 
                 @Test
