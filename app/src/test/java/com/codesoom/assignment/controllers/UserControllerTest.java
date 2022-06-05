@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserCreateRequest;
@@ -17,12 +18,11 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("UserController 클래스")
-@WebMvcTest(UserControllerTest.class)
+@WebMvcTest(UserController.class)
 class UserControllerTest {
 
     @Autowired
@@ -76,6 +76,27 @@ class UserControllerTest {
                         .andExpect(status().isOk());
             }
         }
-    }
 
+        @Nested
+        @DisplayName("저장되지 않은 사용자 id가 주어진다면")
+        class Context_with_not_existing_user_id {
+
+            @BeforeEach
+            void setUp() {
+                given(userService.getUser(NOT_EXISTING_ID))
+                        .willThrow(new UserNotFoundException());
+            }
+
+            @Test
+            @DisplayName("에러메시지와 상태코드 404를 응답한다.")
+            void it_responds_the_error_message_and_status_code_404() throws Exception {
+                mockMvc.perform(get("/users/{id}", NOT_EXISTING_ID)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON))
+                        .andExpect(jsonPath("name").doesNotExist())
+                        .andExpect(jsonPath("message").exists())
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
 }
