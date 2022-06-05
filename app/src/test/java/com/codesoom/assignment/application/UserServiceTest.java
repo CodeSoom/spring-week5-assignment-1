@@ -3,7 +3,8 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserCreateData;
+import com.codesoom.assignment.dto.UserUpdateData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -53,13 +54,13 @@ class UserServiceTest {
 
     @Test
     void createUser() {
-        UserData userData = UserData.builder()
+        UserCreateData userCreateData = UserCreateData.builder()
                 .name("김철수")
                 .email("kim@gmail.com")
                 .password("1111")
                 .build();
 
-        User user = userService.create(userData);
+        User user = userService.create(userCreateData);
 
         verify(userRepository).save(any(User.class));
 
@@ -71,13 +72,13 @@ class UserServiceTest {
 
     @Test
     void updateUserWithExistedId() {
-        UserData userData = UserData.builder()
+        UserUpdateData userUpdateData = UserUpdateData.builder()
                 .name("김영희")
                 .email("young@gmail.com")
                 .password("1234")
                 .build();
 
-        User user = userService.update(1L, userData);
+        User user = userService.update(1L, userUpdateData);
 
         assertThat(user.getId()).isEqualTo(1L);
         assertThat(user.getName()).isEqualTo("김영희");
@@ -85,13 +86,13 @@ class UserServiceTest {
 
     @Test
     void updateUserWithNotExistedId() {
-        UserData userData = UserData.builder()
+        UserUpdateData userUpdateData = UserUpdateData.builder()
                 .name("김영희")
                 .email("young@gmail.com")
                 .password("1234")
                 .build();
 
-        assertThatThrownBy(() -> userService.update(1000L, userData))
+        assertThatThrownBy(() -> userService.update(1000L, userUpdateData))
                 .isInstanceOf(UserNotFoundException.class);
     }
 

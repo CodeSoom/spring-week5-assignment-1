@@ -4,7 +4,8 @@ import com.codesoom.assignment.BadRequestException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserCreateData;
+import com.codesoom.assignment.dto.UserUpdateData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -43,7 +44,8 @@ class UserControllerTest {
     private UserService userService;
 
     private User user;
-    private UserData userData;
+    private UserCreateData userCreateData;
+    private UserUpdateData userUpdateData;
 
     @BeforeEach
     void setUp() {
@@ -54,8 +56,14 @@ class UserControllerTest {
                 .password(PASSWORD)
                 .build();
 
-        userData = UserData.builder()
+        userCreateData = UserCreateData.builder()
                 .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+
+        userUpdateData = UserUpdateData.builder()
+                .name(NEW_NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
@@ -69,7 +77,7 @@ class UserControllerTest {
         class Context_if_user_with_valid_attributes_given {
             @BeforeEach
             void setUp() {
-                given(userService.create(any(UserData.class))).willReturn(user);
+                given(userService.create(any(UserCreateData.class))).willReturn(user);
             }
 
             @Nested
@@ -78,7 +86,7 @@ class UserControllerTest {
                 ResultActions subject() throws Exception {
                     return mockMvc.perform(post("/users")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(userData))
+                            .content(toJson(userCreateData))
                     );
                 }
 
@@ -98,13 +106,13 @@ class UserControllerTest {
         class Context_if_user_with_invalid_attributes_given {
             @BeforeEach
             void setUp() {
-                userData = UserData.builder()
+                userCreateData = UserCreateData.builder()
                         .name(INVALID_NAME)
                         .email(EMAIL)
                         .password(PASSWORD)
                         .build();
 
-                given(userService.create(eq(userData))).willThrow(new BadRequestException());
+                given(userService.create(eq(userCreateData))).willThrow(new BadRequestException());
             }
 
             @Nested
@@ -113,7 +121,7 @@ class UserControllerTest {
                 ResultActions subject() throws Exception {
                     return mockMvc.perform(post("/users")
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(userData))
+                            .content(toJson(userCreateData))
                     );
                 }
 
@@ -128,30 +136,21 @@ class UserControllerTest {
     @Nested
     @DisplayName("PATCH /user 요청 시")
     class Describe_patch_user {
-        @BeforeEach
-        void setUp() {
-            userData = UserData.builder()
-                    .name(NEW_NAME)
-                    .email(EMAIL)
-                    .password(PASSWORD)
-                    .build();
-        }
-
         @Nested
         @DisplayName("유효한 id가 주어졌을 경우")
         class Context_if_valid_id_given {
             @BeforeEach
             void setUp() {
-                given(userService.update(eq(ID), any(UserData.class)))
+                given(userService.update(eq(ID), any(UserUpdateData.class)))
                         .will(invocation -> {
                             Long id = invocation.getArgument(0);
-                            UserData userData = invocation.getArgument(1);
+                            UserUpdateData userUpdateData = invocation.getArgument(1);
 
                             return User.builder()
                                     .id(id)
-                                    .name(userData.getName())
-                                    .email(userData.getEmail())
-                                    .password(userData.getPassword())
+                                    .name(userUpdateData.getName())
+                                    .email(userUpdateData.getEmail())
+                                    .password(userUpdateData.getPassword())
                                     .build();
                         });
             }
@@ -162,7 +161,7 @@ class UserControllerTest {
                 ResultActions subject() throws Exception {
                     return mockMvc.perform(patch("/users/{id}", ID)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(userData))
+                            .content(toJson(userUpdateData))
                     );
                 }
 
@@ -179,7 +178,7 @@ class UserControllerTest {
         class Context_if_invalid_id_given {
             @BeforeEach
             void setUp() {
-                given(userService.update(eq(1000L), any(UserData.class))).willThrow(new UserNotFoundException(1000L));
+                given(userService.update(eq(INVALID_ID), any(UserUpdateData.class))).willThrow(new UserNotFoundException(INVALID_ID));
             }
 
             @Nested
@@ -188,7 +187,7 @@ class UserControllerTest {
                 ResultActions subject() throws Exception {
                     return mockMvc.perform(patch("/users/{id}", INVALID_ID)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(userData))
+                            .content(toJson(userUpdateData))
                     );
                 }
 
@@ -204,13 +203,13 @@ class UserControllerTest {
         class Context_if_user_with_invalid_attributes_given {
             @BeforeEach
             void setUp() {
-                userData = UserData.builder()
+                userUpdateData = UserUpdateData.builder()
                         .name(INVALID_NAME)
                         .email(EMAIL)
                         .password(PASSWORD)
                         .build();
 
-                given(userService.update(eq(ID), eq(userData))).willThrow(new BadRequestException());
+                given(userService.update(eq(ID), eq(userUpdateData))).willThrow(new BadRequestException());
             }
 
             @Nested
@@ -219,7 +218,7 @@ class UserControllerTest {
                 ResultActions subject() throws Exception {
                     return mockMvc.perform(patch("/users/{id}", ID)
                             .contentType(MediaType.APPLICATION_JSON)
-                            .content(toJson(userData))
+                            .content(toJson(userUpdateData))
                     );
                 }
 
@@ -276,9 +275,9 @@ class UserControllerTest {
         }
     }
 
-    private String toJson(UserData userData) throws JsonProcessingException {
+    private String toJson(Object object) throws JsonProcessingException {
         ObjectMapper objectMapper = new ObjectMapper();
 
-        return objectMapper.writeValueAsString(userData);
+        return objectMapper.writeValueAsString(object);
     }
 }

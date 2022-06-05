@@ -4,34 +4,34 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class UserDataTest {
+class UserCreateDataTest {
 
     @Test
     void testToString() {
-        UserData userData = UserData.builder()
+        UserCreateData userCreateData = UserCreateData.builder()
                 .name("김철수")
                 .email("kim@gmail.com")
                 .password("1111")
                 .build();
 
-        assertThat(userData.toString())
-                .isEqualTo("UserData{" +
-                        "name='" + userData.getName() + '\'' +
-                        ", email='" + userData.getEmail() + '\'' +
-                        ", password='" + userData.getPassword() + '\'' +
+        assertThat(userCreateData.toString())
+                .isEqualTo("UserCreateData{" +
+                        "name='" + userCreateData.getName() + '\'' +
+                        ", email='" + userCreateData.getEmail() + '\'' +
+                        ", password='" + userCreateData.getPassword() + '\'' +
                         '}');
     }
 
     @Test
     void testBuilderToString() {
-        String userData = UserData.builder()
+        String userData = UserCreateData.builder()
                 .name("김철수")
                 .email("kim@gmail.com")
                 .password("1111")
                 .toString();
 
         assertThat(userData)
-                .isEqualTo("UserData.UserDataBuilder(" +
+                .isEqualTo("UserCreateData.UserCreateDataBuilder(" +
                         "name=김철수" +
                         ", email=kim@gmail.com" +
                         ", password=1111" +

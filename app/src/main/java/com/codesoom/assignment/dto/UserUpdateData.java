@@ -1,7 +1,10 @@
 package com.codesoom.assignment.dto;
 
 import com.github.dozermapper.core.Mapping;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
 
@@ -9,12 +12,11 @@ import javax.validation.constraints.NotBlank;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserData {
+public class UserUpdateData {
     @NotBlank
     @Mapping("name")
     private String name;
 
-    @NotBlank
     @Mapping("email")
     private String email;
 
@@ -24,7 +26,7 @@ public class UserData {
 
     @Override
     public String toString() {
-        return "UserData{" +
+        return "UserUpdateData{" +
                 "name='" + name + '\'' +
                 ", email='" + email + '\'' +
                 ", password='" + password + '\'' +
