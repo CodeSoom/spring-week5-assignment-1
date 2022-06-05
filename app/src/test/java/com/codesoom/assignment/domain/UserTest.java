@@ -11,7 +11,7 @@ public class UserTest {
     private final Long ID = 1L;
     private final String NAME = "name";
     private final String EMAIL = "email@example.email";
-    private final String PASSWORD = "password12!@";
+    private final String PASSWORD = "1234";
 
     private final String NEW_NAME = "name1";
     private final String NEW_PASSWORD = "password12!#";
