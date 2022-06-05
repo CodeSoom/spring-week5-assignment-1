@@ -23,7 +23,6 @@ public class ProductData {
     @Mapping("price")
     private Integer price;
 
-    @NotBlank
     @Mapping("imageUrl")
     private String imageUrl;
 
