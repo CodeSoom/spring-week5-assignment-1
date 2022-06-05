@@ -1,18 +1,18 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.dto.UserDTO;
-
 import java.util.List;
 
-public interface UserServiceInterface {
+import com.codesoom.assignment.dto.UserDTO;
 
-    UserDTO.Response createUser(UserDTO.CreateUser source);
+public interface UserServiceInterface<T, S, U> {
 
-    UserDTO.Response getUser(int id);
+	T createUser(S source);
 
-    void deleteUser(int id);
+	UserDTO.Response getUser(int id);
 
-    List<UserDTO.Response> getUsers();
+	void deleteUser(int id);
 
-    UserDTO.Response updateUsers(int id, UserDTO.UpdateUser source);
+	List<T> getUsers();
+
+	T updateUsers(int id, U source);
 }

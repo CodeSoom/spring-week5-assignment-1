@@ -4,17 +4,17 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserDTO;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.github.dozermapper.core.Mapper;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserServiceInterface{
+public class UserServiceImpl implements UserServiceInterface<UserDTO.Response, UserDTO.CreateUser, UserDTO.UpdateUser> {
 	private final UserRepository userRepository;
 	private final Mapper mapper;
 

@@ -31,13 +31,13 @@ public class UserController {
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserDTO.Response createUser(@Valid @RequestBody UserDTO.CreateUser createUser) {
-		return userService.createUser(createUser);
+		return (UserDTO.Response)userService.createUser(createUser);
 	}
 
 	@PatchMapping("/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	public UserDTO.Response updateUser(@PathVariable("id") int id, @Valid @RequestBody UserDTO.UpdateUser updateUser) {
-		return userService.updateUsers(id, updateUser);
+		return (UserDTO.Response)userService.updateUsers(id, updateUser);
 	}
 
 	@GetMapping("/{id}")
