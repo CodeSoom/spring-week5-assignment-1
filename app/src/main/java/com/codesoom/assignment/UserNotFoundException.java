@@ -5,7 +5,7 @@ public class UserNotFoundException extends RuntimeException{
         super(message);
     }
 
-    public UserNotFoundException(Long id) {
-        this("사용자를 찾을 수 없습니다.\nid :  " + id);
+    public UserNotFoundException() {
+        this("사용자를 찾을 수 없습니다.");
     }
 }

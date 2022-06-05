@@ -28,7 +28,7 @@ public class UserService {
      * @throws UserNotFoundException {@Code in}에 해당하는 사용자가 저장되어 있지 않은 경우
      */
     public User getUser(Long id) throws UserNotFoundException {
-        return findById(id);
+        return findUser(id);
     }
 
     /**
@@ -75,8 +75,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
-    private User findById(Long id) {
+    private User findUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException("사용자를 찾을 수 없습니다."));
     }
 }
