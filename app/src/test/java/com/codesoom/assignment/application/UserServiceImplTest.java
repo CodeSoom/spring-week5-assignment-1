@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
+import com.codesoom.assignment.dto.UserResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.PropertySource;
@@ -48,14 +49,14 @@ class UserServiceImplTest {
 	@Test
 	void createUserTest() {
 		UserDTO.CreateUser source = new UserDTO.CreateUser("name test", "email test", "password1@test");
-		UserDTO.Response response = userServiceImpl.createUser(source);
+		UserResponse response = userServiceImpl.createUser(source);
 		verify(userRepository).save(any(User.class));
 		assertThat(response.getEmail()).isEqualTo("email test");
 	}
 
 	@Test
 	void getUserTest() {
-		UserDTO.Response response = userServiceImpl.getUser(1);
+		UserResponse response = userServiceImpl.getUser(1);
 		verify(userRepository).findById(1);
 		assertThat(response.getEmail()).isEqualTo("get email test");
 	}
@@ -68,7 +69,7 @@ class UserServiceImplTest {
 
 	@Test
 	void getUsersTest() {
-		List<UserDTO.Response> users = userServiceImpl.getUsers();
+		List<UserResponse> users = userServiceImpl.getUsers();
 		verify(userRepository).findAll();
 		assertThat(users).hasSize(2);
 	}
@@ -77,7 +78,7 @@ class UserServiceImplTest {
 	void updateUserTest() {
 		UserDTO.UpdateUser source = new UserDTO.UpdateUser("update name test", "update email test",
 			"update1password@test");
-		UserDTO.Response response = userServiceImpl.updateUsers(1, source);
+		UserResponse response = userServiceImpl.updateUsers(1, source);
 		assertThat(response.getEmail()).isEqualTo("update email test");
 	}
 }

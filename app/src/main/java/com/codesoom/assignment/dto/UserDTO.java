@@ -36,25 +36,6 @@ public class UserDTO {
 	@Setter
 	@NoArgsConstructor
 	@AllArgsConstructor
-	public static class Response{
-		@Mapping("id")
-		private int id;
-		@Mapping("name")
-		@NotBlank
-		private String name;
-		@NotBlank
-		@Mapping("email")
-		private String email;
-		@PassWordForm
-		@Mapping("password")
-		private String password;
-	}
-
-	@Getter
-	@Builder
-	@Setter
-	@NoArgsConstructor
-	@AllArgsConstructor
 	public static class UpdateUser {
 		@Mapping("name")
 		@NotBlank
