@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.github.dozermapper.core.Mapping;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,7 +9,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.validation.constraints.NotBlank;
 
 @Entity
 @Getter
@@ -26,7 +24,6 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @Password(pattern = "^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$")
     private String password;
 
     @Builder
