@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Documented
 @Constraint(validatedBy = {PassWordFormValidator.class})
 public @interface PassWordForm {
-    String message() default "${ValidationMessage.properties.password}";
+    String message() default "custom not blank !!";
 
     Class<?>[] groups() default {};
 
