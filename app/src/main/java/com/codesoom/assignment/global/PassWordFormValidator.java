@@ -9,13 +9,13 @@ import javax.validation.ConstraintValidatorContext;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-@Component
-@PropertySource(value = "classpath:validation_messages.yml", encoding = "UTF-8")
+// @Component
+// @PropertySource(value = "classpath:ValidationMessage.properties", encoding = "UTF-8")
 public class PassWordFormValidator implements ConstraintValidator<PassWordForm, String> {
     private static final Pattern PASSWORD_PATTERN = Pattern.compile("^(?=.*[a-zA-Z])(?=.*\\d)(?=.*\\W).{8,20}$");
 
-    @Value(value = "${password}")
-    private String PASSWORD_FORM_ERROR;
+    // @Value(value = "${password}")
+    // private String PASSWORD_FORM_ERROR;
 
     @Override
     public void initialize(PassWordForm constraintAnnotation) {
@@ -24,12 +24,12 @@ public class PassWordFormValidator implements ConstraintValidator<PassWordForm, 
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
-        context.disableDefaultConstraintViolation();
+        // context.disableDefaultConstraintViolation();
         Matcher passMatcher1 = PASSWORD_PATTERN.matcher(value);
         int inValidCount = 0;
         if (!passMatcher1.find()) {
-            context.buildConstraintViolationWithTemplate(PASSWORD_FORM_ERROR)
-                    .addConstraintViolation();
+            // context.buildConstraintViolationWithTemplate(PASSWORD_FORM_ERROR)
+            //         .addConstraintViolation();
             inValidCount += 1;
         }
         return inValidCount == 0;
