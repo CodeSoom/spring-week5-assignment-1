@@ -4,7 +4,7 @@ import java.util.List;
 
 import com.codesoom.assignment.dto.UserDTO;
 
-public interface UserServiceInterface<T, S, U> {
+public interface UserServiceInterface {
 
 	T createUser(S source);
 

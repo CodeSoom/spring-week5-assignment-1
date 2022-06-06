@@ -14,7 +14,7 @@ import com.github.dozermapper.core.Mapper;
 
 @Service
 @Transactional
-public class UserServiceImpl implements UserServiceInterface<UserDTO.Response, UserDTO.CreateUser, UserDTO.UpdateUser> {
+public class UserServiceImpl implements UserServiceInterface {
 	private final UserRepository userRepository;
 	private final Mapper mapper;
 

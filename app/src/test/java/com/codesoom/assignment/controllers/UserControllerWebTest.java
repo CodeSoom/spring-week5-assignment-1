@@ -11,13 +11,14 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.Arrays;
 import java.util.List;
 
+import org.apache.commons.lang3.reflect.FieldUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
@@ -36,12 +37,20 @@ class UserControllerWebTest {
 	private static final List<UserDTO.Response> userDTOs = Arrays.asList(response1, response2);
 
 	private final ObjectMapper objectMapper = new ObjectMapper();
+	@MockBean
+	private PassWordFormValidator passWordFormValidator;
+
+	// @BeforeEach
+	// void setup() throws IllegalAccessException {
+	// 	FieldUtils.writeField(passWordFormValidator, "PASSWORD_FORM_ERROR", "비밀번호", true);
+	// }
 
 	@Autowired
 	private MockMvc mockMvc;
 
 	@MockBean
 	private UserServiceImpl userServiceImpl;
+
 
 	@Nested
 	@DisplayName("POST /users URL 은")
