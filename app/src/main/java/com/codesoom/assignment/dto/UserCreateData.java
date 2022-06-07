@@ -4,31 +4,25 @@ import com.github.dozermapper.core.Mapping;
 import lombok.*;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 /**
- * Product 응답
+ * User 생성 요청 정보
  */
 @Setter
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductData {
-    private Long id;
-
+public class UserCreateData {
     @Mapping("name")
     @NotBlank
     private String name;
 
-    @Mapping("maker")
+    @Mapping("email")
     @NotBlank
-    private String maker;
+    private String email;
 
-    @Mapping("price")
-    @NotNull
-    private Integer price;
-
-    @Mapping("imageUrl")
-    private String imageUrl;
+    @Mapping("password")
+    @NotBlank
+    private String password;
 }
