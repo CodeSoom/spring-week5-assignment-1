@@ -1,7 +1,7 @@
-package com.codesoom.assignment.dto;
+package com.codesoom.assignment.controllers.dtos;
 
 public class ErrorResponse {
-    private String message;
+    private final String message;
 
     public ErrorResponse(String message) {
         this.message = message;
