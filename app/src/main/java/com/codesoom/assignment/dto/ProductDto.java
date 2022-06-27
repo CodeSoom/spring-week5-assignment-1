@@ -1,30 +1,33 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.dto;
 
 import com.github.dozermapper.core.Mapping;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.Objects;
 
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class ProductDto {
 
     @Mapping("id")
     private Long id;
 
     @Mapping("name")
+    @NotBlank
     private String name;
 
     @Mapping("maker")
+    @NotBlank
     private String maker;
 
     @Mapping("price")
+    @NotNull
     private BigDecimal price;
 
     @Mapping("imagePath")
@@ -34,8 +37,8 @@ public class Product {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Product product = (Product) o;
-        return Objects.equals(id, product.id) && Objects.equals(name, product.name) && Objects.equals(maker, product.maker) && Objects.equals(price, product.price) && Objects.equals(imagePath, product.imagePath);
+        ProductDto that = (ProductDto) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(maker, that.maker) && Objects.equals(price, that.price) && Objects.equals(imagePath, that.imagePath);
     }
 
     @Override
