@@ -2,14 +2,17 @@ package com.codesoom.assignment;
 
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.assertj.core.api.Assertions.assertThat;
 
 class AppTest {
     @Test
+    void main() {
+        App.main(new String[] {});
+    }
+
+    @Test
     void appHasAGreeting() {
-        App classUnderTest = new App();
-        assertNotNull(classUnderTest.getGreeting(), "app should have a greeting");
-        assertEquals(classUnderTest.getGreeting(), "Hello, world!");
+        App app = new App();
+        assertThat(app.getGreeting()).isEqualTo("Hello, world!");
     }
 }

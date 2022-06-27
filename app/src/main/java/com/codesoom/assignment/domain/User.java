@@ -14,23 +14,20 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+public class User {
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
 
-    private String maker;
+    private String email;
 
-    private Integer price;
+    private String password;
 
-    private String imageUrl;
-
-    public void change(Product source) {
+    public void update(User source) {
         this.name = source.getName();
-        this.maker = source.getMaker();
-        this.price = source.getPrice();
-        this.imageUrl = source.getImageUrl();
+        this.email = source.getEmail();
+        this.password = source.getPassword();
     }
 }
