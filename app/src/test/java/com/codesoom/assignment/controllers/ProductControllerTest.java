@@ -5,6 +5,9 @@ import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -24,6 +27,8 @@ import java.util.List;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
@@ -98,5 +103,25 @@ class ProductControllerTest {
                 .content(mapper.writeValueAsString(object)));
     }
 
+    @Nested
+    @DisplayName("GET /tasks API는")
+    class Describe_GET_tasks {
+        // 검사할 인자가 없음
+    }
 
+    @Nested
+    @DisplayName("GET /tasks/{id} API는")
+    class Describe_GET_tasks_id {
+        @Nested
+        @DisplayName("Path variable로 숫자값이 전달되지 않으면")
+        class Context_id_not_number {
+
+            @Test
+            @DisplayName("MethodArgumentTypeMismatchException 예외를 발생시킨다")
+            void it_throws_exception() throws Exception {
+                performGet("/tasks/abc")
+                        .andExpect(status().isBadRequest());
+            }
+        }
+    }
 }
