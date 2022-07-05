@@ -1,11 +1,13 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.domain.User;
 import org.springframework.stereotype.Service;
 
 @Service
 public class UserService {
 
-    public void register(String name, String email, String password) {
+    public User register(String name, String email, String password) {
 
+        return null;
     }
 }
