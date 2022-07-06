@@ -13,7 +13,7 @@ public class UserDeleteService {
         this.userRepository = userRepository;
     }
 
-    public void delete(Long id) throws NotFoundException {
+    public void execute(Long id) throws NotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found with id " + id));
 

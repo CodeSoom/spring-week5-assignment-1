@@ -32,16 +32,16 @@ public class UserController {
 
     @PostMapping
     public User register(@RequestBody User user) {
-        return this.userRegisterService.register(user.getName(), user.getEmail(), user.getPassword());
+        return this.userRegisterService.execute(user.getName(), user.getEmail(), user.getPassword());
     }
 
     @PutMapping("/{id}")
     public User update(@RequestBody User user, @PathVariable Long id) throws NotFoundException {
-        return this.userUpdateService.update(id, user.getName(), user.getEmail(), user.getPassword());
+        return this.userUpdateService.execute(id, user.getName(), user.getEmail(), user.getPassword());
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) throws NotFoundException {
-        this.userDeleteService.delete(id);
+        this.userDeleteService.execute(id);
     }
 }

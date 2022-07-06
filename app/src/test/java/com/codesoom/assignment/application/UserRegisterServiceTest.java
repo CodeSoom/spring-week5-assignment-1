@@ -27,7 +27,7 @@ public class UserRegisterServiceTest {
             @Test
             @DisplayName("새로운 유저를 생성한다.")
             void it_creates_new_user() {
-                User user = service.register("쥐돌이", "mouse@gmail.com", "1234");
+                User user = service.execute("쥐돌이", "mouse@gmail.com", "1234");
 
                 assertThat(user).isNotNull();
                 assertThat(user.getName()).isEqualTo("쥐돌이");

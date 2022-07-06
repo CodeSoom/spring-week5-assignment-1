@@ -12,7 +12,7 @@ public class UserRegisterService {
         this.userRepository = userRepository;
     }
 
-    public User register(String name, String email, String password) {
+    public User execute(String name, String email, String password) {
         return userRepository.save(new User(name, email, password));
     }
 }

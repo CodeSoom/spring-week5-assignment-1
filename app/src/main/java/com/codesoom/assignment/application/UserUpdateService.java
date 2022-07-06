@@ -13,7 +13,7 @@ public class UserUpdateService {
         this.userRepository = userRepository;
     }
 
-    public User update(Long id, String name, String email, String password) throws NotFoundException {
+    public User execute(Long id, String name, String email, String password) throws NotFoundException {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found with id " + id));
 
