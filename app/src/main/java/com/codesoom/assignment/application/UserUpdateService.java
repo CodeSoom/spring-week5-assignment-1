@@ -17,10 +17,14 @@ public class UserUpdateService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundException("User not found with id " + id));
 
+//        방법 1 - repository에서 받아온 user object를 id만 남기고 나머지를 setter로 수정하는 방법
         user.setName(name);
         user.setEmail(email);
         user.setPassword(password);
-
         return userRepository.save(user);
+
+//        방법 2 - 새로운 user object를 생성하여  repository에 저장하는 방법
+//        User updatedUser = new User(user.getId(), name, email, password);
+//        return userRepository.save(updatedUser);
     }
 }
