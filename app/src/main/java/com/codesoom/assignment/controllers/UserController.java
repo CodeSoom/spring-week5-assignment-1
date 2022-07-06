@@ -4,8 +4,6 @@ import com.codesoom.assignment.application.UserDeleteService;
 import com.codesoom.assignment.application.UserRegisterService;
 import com.codesoom.assignment.application.UserUpdateService;
 import com.codesoom.assignment.domain.User;
-import javassist.NotFoundException;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,12 +37,12 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
-    public User update(@RequestBody @Valid User user, @PathVariable @Valid Long id) throws NotFoundException {
+    public User update(@RequestBody @Valid User user, @PathVariable @Valid Long id) {
         return this.userUpdateService.execute(id, user.getName(), user.getEmail(), user.getPassword());
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable @Valid Long id) throws NotFoundException {
+    public void delete(@PathVariable @Valid Long id) {
         this.userDeleteService.execute(id);
     }
 }
