@@ -10,15 +10,15 @@ import org.springframework.boot.test.context.SpringBootTest;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
-@DisplayName("UserService 클래스")
+@DisplayName("UserRegisterService 클래스")
 public class UserRegisterServiceTest {
     @Autowired
-    private UserRegisterService service;
+    private UserRegisterService registerService;
 
 
     @Nested
-    @DisplayName("register 메소드는 ")
-    class Describe_register {
+    @DisplayName("execute 메소드는 ")
+    class Describe_execute {
 
         @Nested
         @DisplayName("이름, 이메일, 비밀번호를 인자로 받아 ")
@@ -27,7 +27,7 @@ public class UserRegisterServiceTest {
             @Test
             @DisplayName("새로운 유저를 생성한다.")
             void it_creates_new_user() {
-                User user = service.execute("쥐돌이", "mouse@gmail.com", "1234");
+                User user = registerService.execute("쥐돌이", "mouse@gmail.com", "1234");
 
                 assertThat(user).isNotNull();
                 assertThat(user.getName()).isEqualTo("쥐돌이");
