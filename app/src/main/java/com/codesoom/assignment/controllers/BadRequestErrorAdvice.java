@@ -18,6 +18,6 @@ public class BadRequestErrorAdvice {
             MethodArgumentNotValidException.class, // When req body has problems
     })
     public ErrorResponse handleProductBadRequest() {
-        return new ErrorResponse("Something wrong in your request");
+        return new ErrorResponse("Check your request body and path variables");
     }
 }
