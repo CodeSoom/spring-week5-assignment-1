@@ -32,7 +32,7 @@ public class ProductController {
      * 단일 상품을 조회하고 리턴한다.
      * @param id 상품의 id
      * @return 찾은 상품
-     * @throws ProductNotFoundException id의 상품을 찾을 수 없는 경우
+     * @throws ProductNotFoundException 상품을 찾을 수 없는 경우
      */
     @GetMapping("{id}")
     public Product detail(@PathVariable Long id) {
@@ -40,9 +40,9 @@ public class ProductController {
     }
 
     /**
-     * 상품을 생성하고 리턴한다.
+     * 상품을 생성 리턴한다.
      * @param productData 상품 데이터
-     * @return 생성된 상품 (Q: 생성된이 적절할까요 생성한이 적절할까요?)
+     * @return 상품
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
