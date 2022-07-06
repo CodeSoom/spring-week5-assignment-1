@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
@@ -35,12 +36,24 @@ public class UserRegisterServiceTest {
                 assertThat(user.getPassword()).isEqualTo("1234");
             }
         }
-//        @Nested
-//        @DisplayName("이름, 이메일, 비밀번호를 인자로 받아 ")
-//        class Context_duplicate_email {
-//
-//            @BeforeEach
-//            void setUp() {
-//                service.register("쥐돌이", "
+
+        @Nested
+        @DisplayName("필드의 일부가 null이면")
+        class Context_null {
+            @Test
+            @DisplayName("NullPointerException 예외를 던진다.")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> registerService.execute(null, "mouse@gmail.com", "1234"))
+                        .isInstanceOf(NullPointerException.class);
+
+                assertThatThrownBy(() -> registerService.execute("쥐돌이" , null, "1234"))
+                        .isInstanceOf(NullPointerException.class);
+
+
+                assertThatThrownBy(() -> registerService.execute("쥐돌이", "mouse@gmail.com", null))
+                        .isInstanceOf(NullPointerException.class);
+
+            }
+        }
     }
 }
