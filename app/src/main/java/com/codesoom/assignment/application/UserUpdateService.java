@@ -13,6 +13,15 @@ public class UserUpdateService {
         this.userRepository = userRepository;
     }
 
+    /**
+     * 사용자를 찾아 정보를 수정합니다.
+     * @param id 찾을 사용자의 아이디
+     * @param name 사용자의 새로운 이름
+     * @param email 사용자의 새로운 이메일
+     * @param password 사용자의 새로운 비밀번호
+     * @return 정보가 수정된 사용자
+     * @throws ProductNotFoundException 사용자를 찾지 못한 경우
+     */
     public User execute(Long id, String name, String email, String password) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
