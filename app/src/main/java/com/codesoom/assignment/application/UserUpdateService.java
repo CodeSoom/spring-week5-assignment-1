@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.infra.JpaUserRepository;
 import org.springframework.stereotype.Service;
@@ -20,11 +20,11 @@ public class UserUpdateService {
      * @param email 사용자의 새로운 이메일
      * @param password 사용자의 새로운 비밀번호
      * @return 정보가 수정된 사용자
-     * @throws ProductNotFoundException 사용자를 찾지 못한 경우
+     * @throws UserNotFoundException 사용자를 찾지 못한 경우
      */
     public User execute(Long id, String name, String email, String password) {
         User user = userRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(id));
 
 //        방법 1 - repository에서 받아온 user object를 id만 남기고 나머지를 setter로 수정하는 방법
         user.setName(name);
