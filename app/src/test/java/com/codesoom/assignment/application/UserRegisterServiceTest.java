@@ -1,8 +1,6 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.infra.JpaUserRepository;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,9 +11,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @DisplayName("UserService 클래스")
-public class UserServiceTest {
+public class UserRegisterServiceTest {
     @Autowired
-    private UserService service;
+    private UserRegisterService service;
 
 
     @Nested
@@ -37,5 +35,12 @@ public class UserServiceTest {
                 assertThat(user.getPassword()).isEqualTo("1234");
             }
         }
+//        @Nested
+//        @DisplayName("이름, 이메일, 비밀번호를 인자로 받아 ")
+//        class Context_duplicate_email {
+//
+//            @BeforeEach
+//            void setUp() {
+//                service.register("쥐돌이", "
     }
 }

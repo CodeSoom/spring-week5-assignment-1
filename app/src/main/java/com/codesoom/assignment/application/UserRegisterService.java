@@ -5,10 +5,10 @@ import com.codesoom.assignment.infra.JpaUserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserService {
+public class UserRegisterService {
     private final JpaUserRepository userRepository;
 
-    public UserService(JpaUserRepository userRepository) {
+    public UserRegisterService(JpaUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
