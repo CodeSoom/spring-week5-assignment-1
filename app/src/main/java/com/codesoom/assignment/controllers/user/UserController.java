@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controllers.user;
 
-import com.codesoom.assignment.services.user.UserDeleteService;
-import com.codesoom.assignment.services.user.UserRegisterService;
-import com.codesoom.assignment.services.user.UserUpdateService;
+import com.codesoom.assignment.services.user.UserDeleter;
+import com.codesoom.assignment.services.user.UserRegisterer;
+import com.codesoom.assignment.services.user.UserUpdater;
 import com.codesoom.assignment.services.user.domain.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -17,32 +17,32 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/users")
 public class UserController {
-    private final UserRegisterService userRegisterService;
-    private final UserUpdateService userUpdateService;
-    private final UserDeleteService userDeleteService;
+    private final UserRegisterer userRegisterer;
+    private final UserUpdater userUpdater;
+    private final UserDeleter userDeleter;
 
     public UserController(
-            UserRegisterService userRegisterService,
-            UserUpdateService userUpdateService,
-            UserDeleteService userDeleteService
+            UserRegisterer userRegisterer,
+            UserUpdater userUpdater,
+            UserDeleter userDeleter
     ) {
-        this.userRegisterService = userRegisterService;
-        this.userUpdateService = userUpdateService;
-        this.userDeleteService = userDeleteService;
+        this.userRegisterer = userRegisterer;
+        this.userUpdater = userUpdater;
+        this.userDeleter = userDeleter;
     }
 
     @PostMapping
     public User register(@RequestBody @Valid User user) {
-        return this.userRegisterService.execute(user.getName(), user.getEmail(), user.getPassword());
+        return this.userRegisterer.execute(user.getName(), user.getEmail(), user.getPassword());
     }
 
     @PutMapping("/{id}")
     public User update(@RequestBody @Valid User user, @PathVariable @Valid Long id) {
-        return this.userUpdateService.execute(id, user.getName(), user.getEmail(), user.getPassword());
+        return this.userUpdater.execute(id, user.getName(), user.getEmail(), user.getPassword());
     }
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable @Valid Long id) {
-        this.userDeleteService.execute(id);
+        this.userDeleter.execute(id);
     }
 }

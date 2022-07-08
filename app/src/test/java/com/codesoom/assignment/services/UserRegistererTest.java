@@ -1,7 +1,7 @@
 package com.codesoom.assignment.services;
 
 import com.codesoom.assignment.services.user.domain.User;
-import com.codesoom.assignment.services.user.UserRegisterService;
+import com.codesoom.assignment.services.user.UserRegisterer;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -13,9 +13,9 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @SpringBootTest
 @DisplayName("UserRegisterService 클래스")
-public class UserRegisterServiceTest {
+public class UserRegistererTest {
     @Autowired
-    private UserRegisterService registerService;
+    private UserRegisterer registerService;
 
 
     @Nested

@@ -6,10 +6,10 @@ import com.codesoom.assignment.services.user.infra.JpaUserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserDeleteService {
+public class UserDeleter {
     private final JpaUserRepository userRepository;
 
-    public UserDeleteService(JpaUserRepository userRepository) {
+    public UserDeleter(JpaUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 

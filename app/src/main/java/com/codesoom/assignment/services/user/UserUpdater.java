@@ -6,10 +6,10 @@ import com.codesoom.assignment.services.user.infra.JpaUserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserUpdateService {
+public class UserUpdater implements UpdateService {
     private final JpaUserRepository userRepository;
 
-    public UserUpdateService(JpaUserRepository userRepository) {
+    public UserUpdater(JpaUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
