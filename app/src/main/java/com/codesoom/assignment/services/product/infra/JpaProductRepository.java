@@ -1,4 +1,4 @@
-package com.codesoom.assignment.infra;
+package com.codesoom.assignment.services.product.infra;
 
 import com.codesoom.assignment.services.product.domain.Product;
 import com.codesoom.assignment.services.product.domain.ProductRepository;
