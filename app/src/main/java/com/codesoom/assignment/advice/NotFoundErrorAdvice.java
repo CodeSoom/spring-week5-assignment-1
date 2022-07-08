@@ -1,6 +1,6 @@
 package com.codesoom.assignment.advice;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.services.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.advice.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
