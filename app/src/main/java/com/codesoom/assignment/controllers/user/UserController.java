@@ -2,7 +2,7 @@ package com.codesoom.assignment.controllers.user;
 
 import com.codesoom.assignment.services.user.UserDeleter;
 import com.codesoom.assignment.services.user.UserRegisterer;
-import com.codesoom.assignment.services.user.UserUpdater;
+import com.codesoom.assignment.services.user.UserUpdaterWithSetter;
 import com.codesoom.assignment.services.user.domain.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,16 +18,16 @@ import javax.validation.Valid;
 @RequestMapping("/users")
 public class UserController {
     private final UserRegisterer userRegisterer;
-    private final UserUpdater userUpdater;
+    private final UserUpdaterWithSetter userUpdaterWithSetter;
     private final UserDeleter userDeleter;
 
     public UserController(
             UserRegisterer userRegisterer,
-            UserUpdater userUpdater,
+            UserUpdaterWithSetter userUpdaterWithSetter,
             UserDeleter userDeleter
     ) {
         this.userRegisterer = userRegisterer;
-        this.userUpdater = userUpdater;
+        this.userUpdaterWithSetter = userUpdaterWithSetter;
         this.userDeleter = userDeleter;
     }
 
@@ -38,7 +38,7 @@ public class UserController {
 
     @PutMapping("/{id}")
     public User update(@RequestBody @Valid User user, @PathVariable @Valid Long id) {
-        return this.userUpdater.execute(id, user.getName(), user.getEmail(), user.getPassword());
+        return this.userUpdaterWithSetter.execute(id, user.getName(), user.getEmail(), user.getPassword());
     }
 
     @DeleteMapping("/{id}")

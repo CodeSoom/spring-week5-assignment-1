@@ -1,15 +1,15 @@
 package com.codesoom.assignment.services.user;
 
-import com.codesoom.assignment.services.user.exception.UserNotFoundException;
 import com.codesoom.assignment.services.user.domain.User;
+import com.codesoom.assignment.services.user.exception.UserNotFoundException;
 import com.codesoom.assignment.services.user.infra.JpaUserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UserUpdater implements UpdateService {
+public class UserUpdaterWithConstructor implements UpdateService {
     private final JpaUserRepository userRepository;
 
-    public UserUpdater(JpaUserRepository userRepository) {
+    public UserUpdaterWithConstructor(JpaUserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
@@ -26,14 +26,8 @@ public class UserUpdater implements UpdateService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-//        방법 1 - repository에서 받아온 user object를 id만 남기고 나머지를 setter로 수정하는 방법
-        user.setName(name);
-        user.setEmail(email);
-        user.setPassword(password);
-        return userRepository.save(user);
-
-//        방법 2 - 새로운 user object를 생성하여  repository에 저장하는 방법
-//        User updatedUser = new User(user.getId(), name, email, password);
-//        return userRepository.save(updatedUser);
+        // Constructor를 이용해 새로운 객체를 생성. 예측되는 side effect는 없음.
+        User updatedUser = new User(user.getId(), name, email, password);
+        return userRepository.save(updatedUser);
     }
 }
