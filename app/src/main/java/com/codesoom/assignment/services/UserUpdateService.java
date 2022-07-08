@@ -1,4 +1,4 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.services;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;

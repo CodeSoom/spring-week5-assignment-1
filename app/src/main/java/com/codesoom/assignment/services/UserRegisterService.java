@@ -1,4 +1,4 @@
-package com.codesoom.assignment.application;
+package com.codesoom.assignment.services;
 
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.infra.JpaUserRepository;

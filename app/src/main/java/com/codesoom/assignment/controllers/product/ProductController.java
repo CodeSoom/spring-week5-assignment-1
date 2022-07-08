@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers.product;
 
-import com.codesoom.assignment.application.ProductService;
+import com.codesoom.assignment.services.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
 import org.springframework.http.HttpStatus;
