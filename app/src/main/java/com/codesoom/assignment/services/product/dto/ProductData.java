@@ -1,4 +1,4 @@
-package com.codesoom.assignment.dto;
+package com.codesoom.assignment.services.product.dto;
 
 import lombok.*;
 

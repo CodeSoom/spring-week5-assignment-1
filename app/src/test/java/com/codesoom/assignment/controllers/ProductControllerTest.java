@@ -4,7 +4,7 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.services.product.ProductService;
 import com.codesoom.assignment.controllers.product.ProductController;
 import com.codesoom.assignment.services.product.domain.Product;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.services.product.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
