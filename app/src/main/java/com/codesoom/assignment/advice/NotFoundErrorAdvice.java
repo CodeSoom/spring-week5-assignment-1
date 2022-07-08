@@ -2,7 +2,7 @@ package com.codesoom.assignment.advice;
 
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.dto.ErrorResponse;
+import com.codesoom.assignment.advice.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
