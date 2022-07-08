@@ -1,4 +1,4 @@
-package com.codesoom.assignment.controllers;
+package com.codesoom.assignment.controllers.user;
 
 import com.codesoom.assignment.application.UserDeleteService;
 import com.codesoom.assignment.application.UserRegisterService;
