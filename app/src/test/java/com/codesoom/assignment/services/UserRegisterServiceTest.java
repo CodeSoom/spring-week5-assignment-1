@@ -1,6 +1,6 @@
 package com.codesoom.assignment.services;
 
-import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.services.user.domain.User;
 import com.codesoom.assignment.services.user.UserRegisterService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
