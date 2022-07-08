@@ -1,7 +1,7 @@
 package com.codesoom.assignment.services.user;
 
 import com.codesoom.assignment.services.user.domain.User;
-import com.codesoom.assignment.infra.JpaUserRepository;
+import com.codesoom.assignment.services.user.infra.JpaUserRepository;
 import org.springframework.stereotype.Service;
 
 @Service
