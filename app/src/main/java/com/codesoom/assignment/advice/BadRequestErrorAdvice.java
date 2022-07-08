@@ -1,4 +1,4 @@
-package com.codesoom.assignment.controllers;
+package com.codesoom.assignment.advice;
 
 import com.codesoom.assignment.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
