@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controllers.user;
 
-import com.codesoom.assignment.services.UserDeleteService;
-import com.codesoom.assignment.services.UserRegisterService;
-import com.codesoom.assignment.services.UserUpdateService;
+import com.codesoom.assignment.services.user.UserDeleteService;
+import com.codesoom.assignment.services.user.UserRegisterService;
+import com.codesoom.assignment.services.user.UserUpdateService;
 import com.codesoom.assignment.domain.User;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;

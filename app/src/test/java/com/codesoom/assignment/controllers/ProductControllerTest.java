@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.services.ProductService;
+import com.codesoom.assignment.services.product.ProductService;
 import com.codesoom.assignment.controllers.product.ProductController;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
