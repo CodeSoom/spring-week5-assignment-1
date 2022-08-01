@@ -1,195 +1,55 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductData;
-import org.junit.jupiter.api.BeforeEach;
+import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.infra.JpaProductRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
+import java.util.HashMap;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
-@WebMvcTest(ProductController.class)
-class ProductControllerTest {
+@SpringBootTest
+@AutoConfigureMockMvc
+@DisplayName("ProductController 클래스의")
+public class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private ProductService productService;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @BeforeEach
-    void setUp() {
-        Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
+    @Nested
+    @DisplayName("/products 요청은")
+    class Describe_create {
+        @Nested
+        @DisplayName("상품 정보가 주어지면")
+        class Context_with_productData {
+            @Test
+            @DisplayName("상품을 리턴한다")
+            void It_returns_product() throws Exception {
+                HashMap<String, Object> input = new HashMap<>();
+                input.put("name", "고영희");
+                input.put("maker", "코드숨");
+                input.put("price", 2200000);
+                input.put("imageUrl", "www.picture.com");
 
-        given(productService.getProducts()).willReturn(List.of(product));
-
-        given(productService.getProduct(1L)).willReturn(product);
-
-        given(productService.getProduct(1000L))
-                .willThrow(new ProductNotFoundException(1000L));
-
-        given(productService.createProduct(any(ProductData.class)))
-                .willReturn(product);
-
-        given(productService.updateProduct(eq(1L), any(ProductData.class)))
-                .will(invocation -> {
-                    Long id = invocation.getArgument(0);
-                    ProductData productData = invocation.getArgument(1);
-                    return Product.builder()
-                            .id(id)
-                            .name(productData.getName())
-                            .maker(productData.getMaker())
-                            .price(productData.getPrice())
-                            .build();
-                });
-
-        given(productService.updateProduct(eq(1000L), any(ProductData.class)))
-                .willThrow(new ProductNotFoundException(1000L));
-
-        given(productService.deleteProduct(1000L))
-                .willThrow(new ProductNotFoundException(1000L));
-    }
-
-    @Test
-    void list() throws Exception {
-        mockMvc.perform(
-                get("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐돌이")));
-    }
-
-    @Test
-    void deatilWithExsitedProduct() throws Exception {
-        mockMvc.perform(
-                get("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐돌이")));
-    }
-
-    @Test
-    void deatilWithNotExsitedProduct() throws Exception {
-        mockMvc.perform(get("/products/1000"))
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void create() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
-
-        verify(productService).createProduct(any(ProductData.class));
-    }
-
-    @Test
-    void createWithValidAttributes() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
-
-        verify(productService).createProduct(any(ProductData.class));
-    }
-
-    @Test
-    void createWithInvalidAttributes() throws Exception {
-        mockMvc.perform(
-                post("/products")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0}")
-        )
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void updateWithExistedProduct() throws Exception {
-        mockMvc.perform(
-                patch("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐순이")));
-
-        verify(productService).updateProduct(eq(1L), any(ProductData.class));
-    }
-
-    @Test
-    void updateWithNotExistedProduct() throws Exception {
-        mockMvc.perform(
-                patch("/products/1000")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":5000}")
-        )
-                .andExpect(status().isNotFound());
-
-        verify(productService).updateProduct(eq(1000L), any(ProductData.class));
-    }
-
-    @Test
-    void updateWithInvalidAttributes() throws Exception {
-        mockMvc.perform(
-                patch("/products/1")
-                        .accept(MediaType.APPLICATION_JSON_UTF8)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0}")
-        )
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void destroyWithExistedProduct() throws Exception {
-        mockMvc.perform(delete("/products/1"))
-                .andExpect(status().isNoContent());
-
-        verify(productService).deleteProduct(1L);
-    }
-
-    @Test
-    void destroyWithNotExistedProduct() throws Exception {
-        mockMvc.perform(delete("/products/1000"))
-                .andExpect(status().isNotFound());
-
-        verify(productService).deleteProduct(1000L);
+                mockMvc.perform(post("/products")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(input)))
+                        .andExpect(jsonPath("$.name").value("고영희"))
+                        .andExpect(jsonPath("$.maker").value("코드숨"))
+                        .andExpect(jsonPath("$.price").value(2200000))
+                        .andExpect(jsonPath("$.imageUrl").value("www.picture.com"));
+            }
+        }
     }
 }
