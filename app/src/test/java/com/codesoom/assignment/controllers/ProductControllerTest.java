@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -70,36 +71,34 @@ public class ProductControllerTest {
         @Nested
         @DisplayName("상품 정보의 이름이 주어지지 않았다면")
         class Context_without_Name_Maker_Price {
-            @Test
-            @DisplayName("예외 메시지를 응답한다")
-            void It_returns_errorResponse() throws Exception {
-                HashMap<String, Object> inValidInput = new HashMap<>();
+            Map<String, Object> prepare() {
+                Map<String, Object> inValidInput = new HashMap<>();
                 inValidInput.put("name", "");
                 inValidInput.put("maker", NORMAL_MAKER);
                 inValidInput.put("price", NORMAL_PRICE);
                 inValidInput.put("imageUrl", NORMAL_URL);
 
+                return inValidInput;
+            }
+
+            void expect(Map<String, Object> inValidInput ) throws Exception {
                 create(inValidInput)
-                        .andDo(print())
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.[0].fieldName", Is.is("name")))
                         .andExpect(jsonPath("$.[0].message", Is.is("이름은 필수값입니다.")));
+            }
+
+            @Test
+            @DisplayName("예외 메시지를 응답한다")
+            void It_returns_errorResponse() throws Exception {
+                Map<String, Object> inValidInput = prepare();
+                expect(inValidInput);
 
                 inValidInput.put("name", " ");
-
-                create(inValidInput)
-                        .andDo(print())
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.[0].fieldName", Is.is("name")))
-                        .andExpect(jsonPath("$.[0].message", Is.is("이름은 필수값입니다.")));
+                expect(inValidInput);
 
                 inValidInput.put("name", null);
-
-                create(inValidInput)
-                        .andDo(print())
-                        .andExpect(status().isBadRequest())
-                        .andExpect(jsonPath("$.[0].fieldName", Is.is("name")))
-                        .andExpect(jsonPath("$.[0].message", Is.is("이름은 필수값입니다.")));
+                expect(inValidInput);
             }
         }
     }
