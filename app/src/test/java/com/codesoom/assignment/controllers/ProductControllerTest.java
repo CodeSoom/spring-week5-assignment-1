@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.core.Is;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -12,31 +13,36 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 @DisplayName("ProductController 클래스의")
 public class ProductControllerTest {
-    public static final String GIVEN_NAME = "고영희";
-    public static final String GIVEN_MAKER = "코드숨";
-    public static final int GIVEN_PRICE = 2200000;
-    public static final String GIVEN_URL = "www.picture.com";
+    public static final String NORMAL_NAME = "고영희";
+    public static final String NORMAL_MAKER = "코드숨";
+    public static final int NORMAL_PRICE = 2200000;
+    public static final String NORMAL_URL = "www.picture.com";
 
     @Autowired
     private MockMvc mockMvc;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private ResultActions create() throws Exception {
+    private Map<String, Object> normalInput() {
         HashMap<String, Object> input = new HashMap<>();
-        input.put("name", GIVEN_NAME);
-        input.put("maker", GIVEN_MAKER);
-        input.put("price", GIVEN_PRICE);
-        input.put("imageUrl", GIVEN_URL);
+        input.put("name", NORMAL_NAME);
+        input.put("maker", NORMAL_MAKER);
+        input.put("price", NORMAL_PRICE);
+        input.put("imageUrl", NORMAL_URL);
+        return input;
+    }
 
+    private ResultActions create(Map<String, Object> input) throws Exception {
         return mockMvc.perform(post("/products")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(input)));
@@ -51,10 +57,30 @@ public class ProductControllerTest {
             @Test
             @DisplayName("상품을 리턴한다")
             void It_returns_product() throws Exception {
-                create().andExpect(jsonPath("$.name").value(GIVEN_NAME))
-                        .andExpect(jsonPath("$.maker").value(GIVEN_MAKER))
-                        .andExpect(jsonPath("$.price").value(GIVEN_PRICE))
-                        .andExpect(jsonPath("$.imageUrl").value(GIVEN_URL));
+                create(normalInput())
+                        .andExpect(jsonPath("$.name").value(NORMAL_NAME))
+                        .andExpect(jsonPath("$.maker").value(NORMAL_MAKER))
+                        .andExpect(jsonPath("$.price").value(NORMAL_PRICE))
+                        .andExpect(jsonPath("$.imageUrl").value(NORMAL_URL))
+                        .andExpect(status().isCreated());
+            }
+        }
+
+        @Nested
+        @DisplayName("상품 정보의 이름이 주어지지 않았다면")
+        class Context_without_Name_Maker_Price {
+            @Test
+            @DisplayName("예외 메시지를 응답한다")
+            void It_returns_errorResponse() throws Exception {
+                HashMap<String, Object> unValidInput = new HashMap<>();
+                unValidInput.put("name", " ");
+                unValidInput.put("maker", NORMAL_MAKER);
+                unValidInput.put("price", NORMAL_PRICE);
+                unValidInput.put("imageUrl", NORMAL_URL);
+
+                create(unValidInput)
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.message", Is.is("이름은 필수값입니다.")));
             }
         }
     }

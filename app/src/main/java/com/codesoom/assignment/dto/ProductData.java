@@ -1,26 +1,28 @@
 package com.codesoom.assignment.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Setter
 @Getter
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
 public class ProductData {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "이름은 필수값입니다.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "이름은 필수값입니다.")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "가격은 필수값입니다.")
     private Integer price;
 
     private String imageUrl;
+
+    public ProductData() {}
 }
