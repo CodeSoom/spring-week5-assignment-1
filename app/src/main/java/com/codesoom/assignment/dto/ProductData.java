@@ -20,7 +20,7 @@ public class ProductData {
     private String name;
 
     @NotBlank(message = "메이커는 필수값입니다.")
-    @Max(value = 10, message = "메이커 길이가 범위를 벗어납니다.")
+    @Size(max = 10, message = "메이커 길이가 범위를 벗어납니다.")
     private String maker;
 
     @NotNull(message = "가격은 필수값입니다.")

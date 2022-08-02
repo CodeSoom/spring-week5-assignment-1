@@ -83,4 +83,15 @@ class ProductDataTest {
         assertEquals(1, constraintViolations.size());
         assertEquals("메이커 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
     }
+
+    @Test
+    @DisplayName("가격은 필수값이다.")
+    void priceIsMandatory() {
+        productData = new ProductData(NORMAL_NAME, NORMAL_MAKER, null, NORMAL_URL);
+
+        constraintViolations = validator.validate(productData);
+
+        assertEquals(1, constraintViolations.size());
+        assertEquals("가격은 필수값입니다.", constraintViolations.iterator().next().getMessage());
+    }
 }
