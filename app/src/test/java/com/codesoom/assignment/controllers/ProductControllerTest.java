@@ -95,7 +95,7 @@ public class ProductControllerTest {
             }
 
             @ParameterizedTest
-            @ValueSource(strings = {"", " "})
+            @ValueSource(strings = {"", " ", "\t", "\n", "  "})
             @NullSource
             @DisplayName("예외 메시지를 응답한다")
             void It_returns_errorResponse(String input) throws Exception {
@@ -157,7 +157,7 @@ public class ProductControllerTest {
             }
 
             @ParameterizedTest
-            @ValueSource(strings = {"", " "})
+            @ValueSource(strings = {"", " ", "\t", "\n", "  "})
             @NullSource
             @DisplayName("에외 메시지를 응답한다")
             void It_returns_exceptionResponse(String input) throws Exception {

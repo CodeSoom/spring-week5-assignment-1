@@ -61,7 +61,7 @@ class ProductDataTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", " "})
+    @ValueSource(strings = {"", " ", "\t", "\n", "  "})
     @NullSource
     @DisplayName("메이커는 빈 값을 가질 수 없다.")
     void makerCannotBeEmpty(String input) {
