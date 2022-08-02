@@ -26,12 +26,30 @@ class ProductDataTest {
 
     @Test
     @DisplayName("이름은 빈 값을 가질 수 없다.")
-    void name_with_notBlank() {
+    void nameCannotHaveEmptyValue() {
         ProductData productData = new ProductData(null, "코드숨", 2200000, "picture.com");
 
         Set<ConstraintViolation<ProductData>> constraintViolations = validator.validate(productData);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("이름은 필수값입니다.", constraintViolations.iterator().next().getMessage());
+    }
+
+    @Test
+    @DisplayName("이름은 길이의 범위를 벗어날 수 없다.")
+    void nameCannotBeOutOfRange() {
+        ProductData productData = new ProductData("원", "코드숨", 2200000, "picture.com");
+
+        Set<ConstraintViolation<ProductData>> constraintViolations = validator.validate(productData);
+
+        assertEquals(1, constraintViolations.size());
+        assertEquals("이름의 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
+
+        productData = new ProductData("길이가 범위를 넘는 값을 가진 이름임ㅇ", "코드숨", 2200000, "picture.com");
+
+        constraintViolations = validator.validate(productData);
+
+        assertEquals(1, constraintViolations.size());
+        assertEquals("이름의 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
     }
 }
