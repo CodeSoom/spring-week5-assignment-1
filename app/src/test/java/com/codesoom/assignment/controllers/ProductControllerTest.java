@@ -5,6 +5,9 @@ import org.hamcrest.core.Is;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -73,9 +76,10 @@ public class ProductControllerTest {
         @Nested
         @DisplayName("상품 정보의 이름이 주어지지 않았다면")
         class Context_without_Name_Maker_Price extends Normal {
-            Map<String, Object> prepare() {
+            Map<String, Object> prepare(String input) {
                 Map<String, Object> inValidInput = new HashMap<>();
-                inValidInput.put("name", "");
+
+                inValidInput.put("name", input);
                 inValidInput.put("maker", MAKER);
                 inValidInput.put("price", PRICE);
                 inValidInput.put("imageUrl", URL);
@@ -87,19 +91,16 @@ public class ProductControllerTest {
                 create(inValidInput)
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.[0].fieldName", Is.is("name")))
-                        .andExpect(jsonPath("$.[0].message", Is.is("이름은 필수값입니다.")));
+                        .andExpect(jsonPath("$.[0].message").isString());
             }
 
-            @Test
+            @ParameterizedTest
+            @ValueSource(strings = {"", " "})
+            @NullSource
             @DisplayName("예외 메시지를 응답한다")
-            void It_returns_errorResponse() throws Exception {
-                Map<String, Object> inValidInput = prepare();
-                expect(inValidInput);
+            void It_returns_errorResponse(String input) throws Exception {
+                Map<String, Object> inValidInput = prepare(input);
 
-                inValidInput.put("name", " ");
-                expect(inValidInput);
-
-                inValidInput.put("name", null);
                 expect(inValidInput);
             }
         }
@@ -107,10 +108,10 @@ public class ProductControllerTest {
         @Nested
         @DisplayName("상품 이름이 길이 제한을 만족하지 않는다면")
         class Context_with_invalidName extends Normal{
-            Map<String, Object> prepare() {
+            Map<String, Object> prepare(String input) {
                 Map<String, Object> inValidInput = new HashMap<>();
 
-                inValidInput.put("name", "원");
+                inValidInput.put("name", input);
                 inValidInput.put("maker", MAKER);
                 inValidInput.put("price", PRICE);
                 inValidInput.put("imageUrl", URL);
@@ -120,9 +121,18 @@ public class ProductControllerTest {
 
             private void expect(Map<String, Object> input) throws Exception {
                 create(input)
-                        .andExpect(jsonPath("$.[0].fieldName", Is.is("이름의 길이가 범위를 벗어납니다.")))
+                        .andExpect(jsonPath("$.[0].fieldName", Is.is("name")))
                         .andExpect(jsonPath("$.[0].message", Is.is("이름의 길이가 범위를 벗어납니다.")))
                         .andExpect(status().isBadRequest());
+            }
+
+            @ParameterizedTest
+            @ValueSource(strings = {"얍", "길이가 범위를 넘는 값을 가진 이름임ㅇ"})
+            @DisplayName("예외 메시지를 응답한다")
+            void It_returns_exceptionResponse(String input) throws Exception {
+                Map<String, Object> inValidInput = prepare(input);
+
+                expect(inValidInput);
             }
         }
     }
