@@ -16,7 +16,7 @@ class UserTest {
 
         assertThat(user.getName()).isEqualTo("메이커회사1");
         assertThat(user.getEmail()).isEqualTo("maker1@gmail.com");
-        assertThat(user.getPassword()).isEqualTo("maker1");
+        assertThat(user.getPassword()).isEqualTo("maker11");
     }
-    
+
 }
