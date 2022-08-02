@@ -94,4 +94,23 @@ class ProductDataTest {
         assertEquals(1, constraintViolations.size());
         assertEquals("가격은 필수값입니다.", constraintViolations.iterator().next().getMessage());
     }
+
+    @Test
+    @DisplayName("가격은 음수이거나 타입의 환계를 초과할 수 없다.")
+    void priceCannotBeNegativeOrExceedTypeLimit() {
+        productData = new ProductData(NORMAL_NAME, NORMAL_MAKER, -100, NORMAL_URL);
+
+
+        constraintViolations = validator.validate(productData);
+
+        assertEquals(1, constraintViolations.size());
+        assertEquals("가격은 음수일 수 없습니다.", constraintViolations.iterator().next().getMessage());
+
+        productData = new ProductData(NORMAL_NAME, NORMAL_MAKER, 10000001, NORMAL_URL);
+
+        constraintViolations = validator.validate(productData);
+
+        assertEquals(1, constraintViolations.size());
+        assertEquals("가격의 한계치를 벗어났습니다.", constraintViolations.iterator().next().getMessage());
+    }
 }

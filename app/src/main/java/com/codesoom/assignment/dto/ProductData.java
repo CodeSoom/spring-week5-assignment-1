@@ -24,6 +24,8 @@ public class ProductData {
     private String maker;
 
     @NotNull(message = "가격은 필수값입니다.")
+    @Min(value = 0, message = "가격은 음수일 수 없습니다.")
+    @Max(value = 10000000, message = "가격의 한계치를 벗어났습니다.")
     private Integer price;
 
     private String imageUrl;
