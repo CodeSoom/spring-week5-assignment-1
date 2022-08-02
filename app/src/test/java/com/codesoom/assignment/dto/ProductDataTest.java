@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.Product;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -112,5 +113,12 @@ class ProductDataTest {
 
         assertEquals(1, constraintViolations.size());
         assertEquals("가격의 한계치를 벗어났습니다.", constraintViolations.iterator().next().getMessage());
+    }
+
+    @Test
+    @DisplayName("상품 정보를 상품으로 변경할 수 있다.")
+    void productDataCanConvertProduct() {
+        assertEquals(new Product(NORMAL_NAME, NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL),
+                new ProductData(NORMAL_NAME, NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL).toProduct());
     }
 }

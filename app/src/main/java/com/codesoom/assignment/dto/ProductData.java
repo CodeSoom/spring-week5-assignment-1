@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.Product;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,4 +32,13 @@ public class ProductData {
     private String imageUrl;
 
     public ProductData() {}
+
+    public Product toProduct() {
+        return Product.builder()
+                .name(this.name)
+                .maker(this.maker)
+                .price(this.price)
+                .imageUrl(this.imageUrl)
+                .build();
+    }
 }

@@ -16,6 +16,10 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("ProductService 인터페이스의")
 public class ProductServiceTest {
+    public static final String NAME = "먼지털이";
+    public static final String MAKER = "코드숨";
+    public static final int PRICE = 2200000;
+    public static final String URL = "picture.com";
 
     private ProductService productService;
     private ProductRepository productRepository;
@@ -32,13 +36,12 @@ public class ProductServiceTest {
         @Nested
         @DisplayName("상품 정보가 주어지면")
         class Context_with_product {
-            Product product = new Product("먼지털이", "코드숨", 2200000, "picture.com");
-            ProductData productData = new ProductData("먼지털이", "코드숨", 2200000, "picture.com");
-            Product expect = new Product(1L, "먼지털이", "코드숨", 2200000, "picture.com");
+            ProductData productData = new ProductData(NAME, MAKER, PRICE, URL);
+            Product expect = new Product(1L, NAME, MAKER, PRICE, URL);
 
             @BeforeEach
             void prepare() {
-                given(productRepository.save(product))
+                given(productRepository.save(productData.toProduct()))
                         .willReturn(expect);
             }
 
