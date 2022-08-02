@@ -83,7 +83,7 @@ public class ProductControllerTest {
                 return inValidInput;
             }
 
-            void expect(Map<String, Object> inValidInput ) throws Exception {
+            void expect(Map<String, Object> inValidInput) throws Exception {
                 create(inValidInput)
                         .andExpect(status().isBadRequest())
                         .andExpect(jsonPath("$.[0].fieldName", Is.is("name")))
@@ -101,6 +101,28 @@ public class ProductControllerTest {
 
                 inValidInput.put("name", null);
                 expect(inValidInput);
+            }
+        }
+
+        @Nested
+        @DisplayName("상품 이름이 길이 제한을 만족하지 않는다면")
+        class Context_with_invalidName extends Normal{
+            Map<String, Object> prepare() {
+                Map<String, Object> inValidInput = new HashMap<>();
+
+                inValidInput.put("name", "원");
+                inValidInput.put("maker", MAKER);
+                inValidInput.put("price", PRICE);
+                inValidInput.put("imageUrl", URL);
+
+                return inValidInput;
+            }
+
+            private void expect(Map<String, Object> input) throws Exception {
+                create(input)
+                        .andExpect(jsonPath("$.[0].fieldName", Is.is("이름의 길이가 범위를 벗어납니다.")))
+                        .andExpect(jsonPath("$.[0].message", Is.is("이름의 길이가 범위를 벗어납니다.")))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
