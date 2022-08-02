@@ -107,7 +107,7 @@ public class ProductControllerTest {
 
         @Nested
         @DisplayName("상품 이름이 길이 제한을 만족하지 않는다면")
-        class Context_with_invalidName extends Normal{
+        class Context_with_invalidName extends Normal {
             Map<String, Object> prepare(String input) {
                 Map<String, Object> inValidInput = new HashMap<>();
 
@@ -132,6 +132,155 @@ public class ProductControllerTest {
             void It_returns_exceptionResponse(String input) throws Exception {
                 Map<String, Object> inValidInput = prepare(input);
 
+                expect(inValidInput);
+            }
+        }
+
+        @Nested
+        @DisplayName("상품 정보에 메이커 값이 없으면")
+        class Context_without_maker extends Normal {
+            Map<String, Object> prepare(String input) {
+                Map<String, Object> inValidInput = new HashMap<>();
+
+                inValidInput.put("name", NAME);
+                inValidInput.put("maker", input);
+                inValidInput.put("price", PRICE);
+
+                return inValidInput;
+            }
+
+            void expect(Map<String, Object> input) throws Exception {
+                create(input)
+                        .andExpect(jsonPath("$.[0].fieldName", Is.is("maker")))
+                        .andExpect(jsonPath("$.[0].message", Is.is("메이커는 필수값입니다.")))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @ParameterizedTest
+            @ValueSource(strings = {"", " "})
+            @NullSource
+            @DisplayName("에외 메시지를 응답한다")
+            void It_returns_exceptionResponse(String input) throws Exception {
+                Map<String, Object> inValidInput = prepare(input);
+
+                expect(inValidInput);
+            }
+        }
+
+        @Nested
+        @DisplayName("상품 메이커명의 길이가 범위를 벗어난다면")
+        class Context_outOfRangeMaker extends Normal {
+            Map<String, Object> prepare(String input) {
+                Map<String, Object> inValidInput = new HashMap<>();
+
+                inValidInput.put("name", NAME);
+                inValidInput.put("maker", input);
+                inValidInput.put("price", PRICE);
+
+                return inValidInput;
+            }
+
+            private void expect(Map<String, Object> input) throws Exception {
+                create(input)
+                        .andExpect(jsonPath("$.[0].fieldName", Is.is("maker")))
+                        .andExpect(jsonPath("$.[0].message", Is.is("메이커 길이가 범위를 벗어납니다.")))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("예외 메시지를 응답합니다")
+            void It_returns_errorResponse() throws Exception {
+                Map<String, Object> inValidInput = prepare("이름의 범위가 벗어남");
+
+                expect(inValidInput);
+            }
+        }
+
+        @Nested
+        @DisplayName("상품 가격이 주어지지 않는다면")
+        class Context_without_price extends Normal {
+            Map<String, Object> prepare(Integer input) {
+                Map<String, Object> inValidInput = new HashMap<>();
+
+                inValidInput.put("name", NAME);
+                inValidInput.put("maker", MAKER);
+                inValidInput.put("price", input);
+
+                return inValidInput;
+            }
+
+            private void expect(Map<String, Object> input) throws Exception {
+                create(input)
+                        .andExpect(jsonPath("$.[0].fieldName", Is.is("price")))
+                        .andExpect(jsonPath("$.[0].message", Is.is("가격은 필수값입니다.")))
+                        .andExpect(status().isBadRequest());
+            }
+            @ParameterizedTest
+            @NullSource
+            @DisplayName("예외 메시지를 응답합니다")
+            void It_returns_errorResponse(Integer input) throws Exception {
+                Map<String, Object> inValidInput = prepare(input);
+
+                expect(inValidInput);
+            }
+        }
+
+        @Nested
+        @DisplayName("상품 가격이 음수로 주어지면")
+        class Context_with_negative extends Normal {
+            Map<String, Object> prepare() {
+                Map<String, Object> inValidInput = new HashMap<>();
+
+                inValidInput.put("name", NAME);
+                inValidInput.put("maker", MAKER);
+                inValidInput.put("price", Integer.MIN_VALUE);
+
+                return inValidInput;
+            }
+
+            private void expect(Map<String, Object> input) throws Exception {
+                create(input)
+                        .andExpect(jsonPath("$.[0].fieldName", Is.is("price")))
+                        .andExpect(jsonPath("$.[0].message", Is.is("가격은 음수일 수 없습니다.")))
+                        .andExpect(status().isBadRequest());
+            }
+            @Test
+            @DisplayName("예외 메시지를 응답합니다")
+            void It_returns_errorResponse() throws Exception {
+                Map<String, Object> inValidInput = prepare();
+                expect(inValidInput);
+
+                inValidInput.put("price", -1);
+                expect(inValidInput);
+            }
+        }
+
+        @Nested
+        @DisplayName("상품 가격이 한도를 초과하면")
+        class Context_with_priceExceedLimit extends Normal {
+            Map<String, Object> prepare() {
+                Map<String, Object> inValidInput = new HashMap<>();
+
+                inValidInput.put("name", NAME);
+                inValidInput.put("maker", MAKER);
+                inValidInput.put("price", Integer.MAX_VALUE);
+
+                return inValidInput;
+            }
+
+            private void expect(Map<String, Object> input) throws Exception {
+                create(input)
+                        .andExpect(jsonPath("$.[0].fieldName", Is.is("price")))
+                        .andExpect(jsonPath("$.[0].message", Is.is("가격의 한계치를 벗어났습니다.")))
+                        .andExpect(status().isBadRequest());
+            }
+            @Test
+            @DisplayName("예외 메시지를 응답합니다")
+            void It_returns_errorResponse() throws Exception {
+                Map<String, Object> inValidInput = prepare();
+                expect(inValidInput);
+
+                inValidInput.put("price", 10000001);
                 expect(inValidInput);
             }
         }
