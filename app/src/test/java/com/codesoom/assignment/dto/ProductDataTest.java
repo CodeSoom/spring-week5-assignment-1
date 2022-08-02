@@ -3,6 +3,9 @@ package com.codesoom.assignment.dto;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
@@ -14,8 +17,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("ProductDate 클래스의")
 class ProductDataTest {
-
-    public static final String NORMAL_NAME = "코드숨";
+    public static final String NORMAL_NAME = "장난감";
+    public static final String NORMAL_MAKER = "코드숨";
     public static final int NORMAL_PRICE = 2200000;
     public static final String NORMAL_URL = "picture.com";
     private static Validator validator;
@@ -31,7 +34,7 @@ class ProductDataTest {
     @Test
     @DisplayName("이름은 빈 값을 가질 수 없다.")
     void nameCannotHaveEmptyValue() {
-        productData = new ProductData(null, NORMAL_NAME, NORMAL_PRICE, NORMAL_URL);
+        productData = new ProductData(null, NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL);
 
         constraintViolations = validator.validate(productData);
 
@@ -42,18 +45,42 @@ class ProductDataTest {
     @Test
     @DisplayName("이름은 길이의 범위를 벗어날 수 없다.")
     void nameCannotBeOutOfRange() {
-        productData = new ProductData("원", NORMAL_NAME, NORMAL_PRICE, NORMAL_URL);
+        productData = new ProductData("원", NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL);
 
         constraintViolations = validator.validate(productData);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("이름의 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
 
-        productData = new ProductData("길이가 범위를 넘는 값을 가진 이름임ㅇ", NORMAL_NAME, NORMAL_PRICE, NORMAL_URL);
+        productData = new ProductData("길이가 범위를 넘는 값을 가진 이름임ㅇ", NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL);
 
         constraintViolations = validator.validate(productData);
 
         assertEquals(1, constraintViolations.size());
         assertEquals("이름의 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " "})
+    @NullSource
+    @DisplayName("메이커는 빈 값을 가질 수 없다.")
+    void makerCannotBeEmpty(String input) {
+        productData = new ProductData(NORMAL_NAME, input, NORMAL_PRICE, NORMAL_URL);
+
+        constraintViolations = validator.validate(productData);
+
+        assertEquals(1, constraintViolations.size());
+        assertEquals("메이커는 필수값입니다.", constraintViolations.iterator().next().getMessage());
+    }
+
+    @Test
+    @DisplayName("메이커는 길이의 범위를 벗어날 수 없다.")
+    void makerCannotBeOutOfRange() {
+        productData = new ProductData(NORMAL_NAME, "길이의 범위를 벗어남", NORMAL_PRICE, NORMAL_URL);
+
+        constraintViolations = validator.validate(productData);
+
+        assertEquals(1, constraintViolations.size());
+        assertEquals("메이커 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
     }
 }

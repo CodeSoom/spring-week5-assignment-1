@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ public class ProductData {
     private String name;
 
     @NotBlank(message = "메이커는 필수값입니다.")
+    @Max(value = 10, message = "메이커 길이가 범위를 벗어납니다.")
     private String maker;
 
     @NotNull(message = "가격은 필수값입니다.")
