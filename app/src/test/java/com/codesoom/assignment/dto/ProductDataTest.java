@@ -52,7 +52,7 @@ class ProductDataTest {
         assertEquals(1, constraintViolations.size());
         assertEquals("이름의 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
 
-        productData = new ProductData("길이가 범위를 넘는 값을 가진 이름임ㅇ", NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL);
+        productData = new ProductData("길이가 범위를 넘은 값을 가진 이름입니다.", NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL);
 
         constraintViolations = validator.validate(productData);
 
