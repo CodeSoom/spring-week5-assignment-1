@@ -15,7 +15,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@DisplayName("ProductDate 클래스의")
+@DisplayName("ProductData 클래스의")
 class ProductDataTest {
     public static final String NORMAL_NAME = "장난감";
     public static final String NORMAL_MAKER = "코드숨";
@@ -96,7 +96,7 @@ class ProductDataTest {
     }
 
     @Test
-    @DisplayName("가격은 음수이거나 타입의 환계를 초과할 수 없다.")
+    @DisplayName("가격은 음수이거나 타입의 한계를 초과할 수 없다.")
     void priceCannotBeNegativeOrExceedTypeLimit() {
         productData = new ProductData(NORMAL_NAME, NORMAL_MAKER, -100, NORMAL_URL);
 
