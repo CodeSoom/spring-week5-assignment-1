@@ -62,5 +62,27 @@ class UserControllerTest {
                         .andExpect(content().json(expectedContent));
             }
         }
+
+        @Nested
+        @DisplayName("유효하지 않은 회원 정보를 전달하면")
+        class Context_withInvalidUserData {
+            private MockHttpServletRequestBuilder request;
+
+            @BeforeEach
+            void prepare() throws JsonProcessingException {
+                final String content = testUserDataFactory.createInvalidUserJson();
+
+                request = post("/users")
+                        .content(content)
+                        .contentType(MediaType.APPLICATION_JSON);
+            }
+
+            @Test
+            @DisplayName("Bad Request status를 반환한다")
+            void it_returnsCratedStatusAndUserData() throws Exception {
+                mockMvc.perform(request)
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 }

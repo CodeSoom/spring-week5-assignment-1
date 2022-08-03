@@ -15,12 +15,24 @@ public class TestUserDataFactory {
         return objectMapper.writeValueAsString(createValidUserData(id));
     }
 
+    public String createInvalidUserJson() throws JsonProcessingException {
+        return objectMapper.writeValueAsString(createInvalidUserData());
+    }
+
     public UserData createValidUserData() {
         return validUserDataBuilder().build();
     }
 
     public UserData createValidUserData(Long id) {
         return validUserDataBuilder().id(id)
+                .build();
+    }
+
+    public UserData createInvalidUserData() {
+        return UserData.builder()
+                .name("")
+                .email("")
+                .password("")
                 .build();
     }
 
