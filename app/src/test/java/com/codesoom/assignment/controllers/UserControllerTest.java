@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.TestUserDataFactory;
 import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +19,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("UserController 클래스")
 class UserControllerTest {
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final TestUserDataFactory testUserDataFactory = new TestUserDataFactory();
     private MockMvc mockMvc;
 
     @BeforeEach
@@ -39,8 +40,7 @@ class UserControllerTest {
 
             @BeforeEach
             void prepare() throws JsonProcessingException {
-                final UserData userData = TestUserDataFactory.createValidUserData();
-                final String content = objectMapper.writeValueAsString(userData);
+                final String content = testUserDataFactory.createValidUserJson();
 
                 request = post("/users")
                         .content(content)
@@ -50,8 +50,7 @@ class UserControllerTest {
             @Test
             @DisplayName("Created status, 생성된 회원 정보를 반환한다")
             void it_returnsCratedStatusAndUserData() throws Exception {
-                final UserData expectedUserData = TestUserDataFactory.createValidUserData(1L);
-                final String expectedContent = objectMapper.writeValueAsString(expectedUserData);
+                final String expectedContent = testUserDataFactory.createValidUserJson(1L);
 
                 mockMvc.perform(request)
                         .andExpect(status().isCreated())

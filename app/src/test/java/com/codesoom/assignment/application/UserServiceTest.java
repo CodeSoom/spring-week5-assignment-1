@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.TestUserDataFactory;
 import com.codesoom.assignment.dto.UserData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -10,6 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("UserServiec 클래스")
 class UserServiceTest {
+    private final TestUserDataFactory testUserDataFactory = new TestUserDataFactory();
     private UserService service;
 
     @BeforeEach
@@ -22,24 +24,20 @@ class UserServiceTest {
     class Describe_createUser {
         @DisplayName("유효한 회원 정보를 전달하면")
         class Context_withValidUserData {
-            private final UserData validUserData = UserData.builder()
-                    .name("name")
-                    .email("email")
-                    .password("password")
-                    .build();
+            private UserData validUserData;
+
+            @BeforeEach
+            void prepare() {
+                validUserData = testUserDataFactory.createValidUserData();
+            }
 
             @Test
             @DisplayName("생성된 회원 정보를 반환한다")
             void it_returnsCratedUserData() throws Exception {
                 final UserData result = service.createUser(validUserData);
+                final UserData expect = testUserDataFactory.createValidUserData(1L);
 
-                final UserData expectUserData = UserData.builder()
-                        .id(1L)
-                        .name(validUserData.getName())
-                        .email(validUserData.getEmail())
-                        .password(validUserData.getPassword())
-                        .build();
-                assertThat(result).isEqualTo(expectUserData);
+                assertThat(result).isEqualTo(expect);
             }
         }
     }

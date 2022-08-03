@@ -20,7 +20,7 @@ import static org.mockito.Mockito.verify;
 class ProductServiceTest {
     private ProductService productService;
 
-    private ProductRepository productRepository = mock(ProductRepository.class);
+    private final ProductRepository productRepository = mock(ProductRepository.class);
 
     @BeforeEach
     void setUp() {
