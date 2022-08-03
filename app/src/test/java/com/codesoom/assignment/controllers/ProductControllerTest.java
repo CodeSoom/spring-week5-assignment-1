@@ -19,6 +19,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -320,6 +321,18 @@ public class ProductControllerTest {
                         .andExpect(jsonPath("$.maker").value(createdToy.get("maker")))
                         .andExpect(jsonPath("$.price", Is.is(createdToy.get("price"))))
                         .andExpect(jsonPath("$.imageUrl", Is.is(createdToy.get("imageUrl"))));
+            }
+        }
+
+        @Nested
+        @DisplayName("식별자를 가진 상품이 없다면")
+        class Context_without_product {
+            @Test
+            @DisplayName("예외 메시지와 상태코드 404를 응답한다")
+            void It_returns_exceptionMessageAndNotFound() throws Exception {
+                mockMvc.perform(get("/products/" + -1L))
+                        .andExpect(status().isNotFound())
+                        .andExpect(jsonPath("$.message").isString());
             }
         }
     }
