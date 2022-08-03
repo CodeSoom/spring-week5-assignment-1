@@ -93,4 +93,26 @@ public class ProductRepositoryTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("deleteAll 메서드는")
+    class Describe_deleteAll {
+        @Nested
+        @DisplayName("상품들이 있으면")
+        class Context_with_products {
+            void prepare() {
+                productRepository.save(getInputProduct());
+                productRepository.save(getInputProduct());
+                productRepository.save(getInputProduct());
+            }
+
+            @Test
+            @DisplayName("상품들을 전부 제거한다")
+            void It_remove_allProducts() {
+                productRepository.deleteAll();
+
+                assertThat(productRepository.findAll()).isEmpty();
+            }
+        }
+    }
 }

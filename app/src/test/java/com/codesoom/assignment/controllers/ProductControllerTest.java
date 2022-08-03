@@ -35,7 +35,15 @@ public class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     private final ObjectMapper objectMapper = new ObjectMapper();
+
+    @BeforeEach
+    void setUp() {
+        productRepository.deleteAll();
+    }
 
     private ResultActions create(Map<String, Object> input) throws Exception {
         return mockMvc.perform(post("/products")
@@ -310,14 +318,17 @@ public class ProductControllerTest {
         @Nested
         @DisplayName("식별자를 가진 상품이 있다면")
         class Context_with_product extends Normal {
-            Map<String, Object> createdToy = createToyAndConvert(input());
+            Map<String, Object> createdToy;
 
-            Context_with_product() throws Exception {
+            void prepare() throws Exception {
+                createdToy = createToyAndConvert(input());
             }
 
             @Test
             @DisplayName("상품과 상태코드 200을 응답한다")
             void It_returns_productAndOk() throws Exception {
+                prepare();
+
                 mockMvc.perform(get("/products/" + createdToy.get("id")))
                         .andExpect(status().isOk())
                         .andDo(print())

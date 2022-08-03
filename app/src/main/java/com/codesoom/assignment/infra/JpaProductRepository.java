@@ -18,4 +18,6 @@ public interface JpaProductRepository
     Product save(Product product);
 
     void delete(Product product);
+
+    void deleteAll();
 }
