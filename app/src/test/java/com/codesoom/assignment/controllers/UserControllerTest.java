@@ -1,7 +1,10 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.TestUserDataFactory;
+import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.infra.InMemoryUserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -24,7 +27,9 @@ class UserControllerTest {
 
     @BeforeEach
     void setup() {
-        final UserController controller = new UserController();
+        final UserRepository repository = new InMemoryUserRepository();
+        final UserService service = new UserService(repository);
+        final UserController controller = new UserController(service);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
                 .build();

@@ -3,13 +3,14 @@ package com.codesoom.assignment.infra;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
 
 public class InMemoryUserRepository implements UserRepository {
-    private final List<User> users = Collections.synchronizedList(List.of());
+    private final List<User> users = Collections.synchronizedList(new ArrayList<>());
     private final AtomicLong newId = new AtomicLong(0L);
 
     @Override

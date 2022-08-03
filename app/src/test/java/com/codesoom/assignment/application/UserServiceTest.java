@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.TestUserDataFactory;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.infra.InMemoryUserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,12 +17,13 @@ class UserServiceTest {
 
     @BeforeEach
     void setup() {
-        service = new UserService();
+        service = new UserService(new InMemoryUserRepository());
     }
 
     @Nested
     @DisplayName("createUser 메소드는")
     class Describe_createUser {
+        @Nested
         @DisplayName("유효한 회원 정보를 전달하면")
         class Context_withValidUserData {
             private UserData validUserData;
@@ -38,6 +40,7 @@ class UserServiceTest {
                 final UserData expect = testUserDataFactory.createValidUserData(1L);
 
                 assertThat(result).isEqualTo(expect);
+                assertThat(result.getId()).isEqualTo(1L);
             }
         }
     }
