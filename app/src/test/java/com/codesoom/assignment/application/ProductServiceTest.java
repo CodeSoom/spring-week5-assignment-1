@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -23,6 +25,7 @@ public class ProductServiceTest {
     public static final int PRICE = 2200000;
     public static final String URL = "picture.com";
     public static final Long BASIC_ID = 1L;
+    public static final long NOT_EXIST_ID = -1L;
 
     private ProductService productService;
     private ProductRepository productRepository;
@@ -81,6 +84,23 @@ public class ProductServiceTest {
                         .isEqualTo(createdProduct());
 
                 verify(productRepository).findById(BASIC_ID);
+            }
+        }
+
+        @Nested
+        @DisplayName("상품이 없다면")
+        class Context_without_product {
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(NOT_EXIST_ID))
+                        .willReturn(Optional.empty());
+            }
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void It_throws_exception() {
+                assertThatThrownBy(() -> productService.findById(NOT_EXIST_ID))
+                        .isInstanceOf(ProductNotFoundException.class);
             }
         }
     }
