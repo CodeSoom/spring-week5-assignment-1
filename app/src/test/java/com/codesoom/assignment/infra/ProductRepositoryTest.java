@@ -109,8 +109,10 @@ public class ProductRepositoryTest {
             @Test
             @DisplayName("상품들을 전부 제거한다")
             void It_remove_allProducts() {
-                productRepository.deleteAll();
+                prepare();
+                assertThat(productRepository.findAll()).hasSize(3);
 
+                productRepository.deleteAll();
                 assertThat(productRepository.findAll()).isEmpty();
             }
         }
