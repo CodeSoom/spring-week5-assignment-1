@@ -41,6 +41,6 @@ public class ProductController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public Collection<Product> getAll() {
-        return Arrays.asList(new Product(), new Product(), new Product());
+        return productService.findAll();
     }
 }

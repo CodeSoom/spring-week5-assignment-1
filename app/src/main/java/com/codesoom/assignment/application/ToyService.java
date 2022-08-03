@@ -6,6 +6,9 @@ import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
+import java.util.Collection;
+
 @Service
 public class ToyService implements ProductService {
 
@@ -24,5 +27,10 @@ public class ToyService implements ProductService {
     public Product findById(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(id));
+    }
+
+    @Override
+    public Collection<Product> findAll() {
+        return productRepository.findAll();
     }
 }

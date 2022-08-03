@@ -70,4 +70,27 @@ public class ProductRepositoryTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("findAll 메서드는")
+    class Describe_findAll {
+        @Nested
+        @DisplayName("상품 목록이 있다면")
+        class Context_with_productList {
+            void prepare() {
+                productRepository.save(getInputProduct());
+                productRepository.save(getInputProduct());
+                productRepository.save(getInputProduct());
+            }
+
+            @Test
+            @DisplayName("상품 목록을 리턴한다")
+            void It_returns_productList() {
+                prepare();
+
+                assertThat(productRepository.findAll())
+                        .hasSize(3);
+            }
+        }
+    }
 }

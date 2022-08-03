@@ -9,6 +9,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -101,6 +105,31 @@ public class ProductServiceTest {
             void It_throws_exception() {
                 assertThatThrownBy(() -> productService.findById(NOT_EXIST_ID))
                         .isInstanceOf(ProductNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findAll 메서드는")
+    class Describe_findAll {
+        @Nested
+        @DisplayName("상품 목록이 주어지면")
+        class Context_with_productList {
+            List<Product> productList = Arrays.asList(createdProduct(),
+                                            createdProduct(),
+                                            createdProduct());
+
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findAll())
+                        .willReturn(productList);
+            }
+
+            @Test
+            @DisplayName("상품 목록을 리턴한다")
+            void It_returns_productList() {
+                assertThat(productService.findAll())
+                        .isEqualTo(productList);
             }
         }
     }
