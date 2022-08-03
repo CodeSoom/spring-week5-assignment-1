@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DisplayName("UserServiec 클래스")
+@DisplayName("UserService 클래스")
 class UserServiceTest {
     private final TestUserDataFactory testUserDataFactory = new TestUserDataFactory();
     private UserService service;
