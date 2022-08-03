@@ -18,4 +18,9 @@ public class ToyService implements ProductService {
     public Product create(ProductData productData) {
         return productRepository.save(productData.toProduct());
     }
+
+    @Override
+    public Product findById(Long id) {
+        return productRepository.findById(id).get();
+    }
 }

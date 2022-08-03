@@ -5,4 +5,6 @@ import com.codesoom.assignment.dto.ProductData;
 
 public interface ProductService {
     Product create(ProductData productData);
+
+    Product findById(Long id);
 }
