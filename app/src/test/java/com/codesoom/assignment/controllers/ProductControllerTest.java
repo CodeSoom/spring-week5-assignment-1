@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.hamcrest.core.Is;
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +19,9 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -37,9 +40,18 @@ public class ProductControllerTest {
                 .content(objectMapper.writeValueAsString(input)));
     }
 
-    abstract class Normal {
-        public static final String NAME = "고영희";
-        public static final String MAKER = "코드숨";
+    private Map<String, Object> createToyAndConvert(Map<String, Object> input) throws Exception {
+        return objectMapper.readValue(
+                create(input).andReturn()
+                        .getResponse()
+                        .getContentAsString(),
+                new TypeReference<>() {
+                });
+    }
+
+    abstract static class Normal {
+        public static final String NAME = "toyName";
+        public static final String MAKER = "codesoom";
         public static final int PRICE = 2200000;
         public static final String URL = "www.picture.com";
 
@@ -282,6 +294,32 @@ public class ProductControllerTest {
 
                 inValidInput.put("price", 10000001);
                 expect(inValidInput);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("/products/{id} 요청은")
+    class Describe_getDetail {
+        @Nested
+        @DisplayName("식별자를 가진 상품이 있다면")
+        class Context_with_product extends Normal {
+            Map<String, Object> createdToy = createToyAndConvert(input());
+
+            Context_with_product() throws Exception {
+            }
+
+            @Test
+            @DisplayName("상품과 상태코드 200을 응답한다")
+            void It_returns_productAndOk() throws Exception {
+                mockMvc.perform(get("/products/" + createdToy.get("id")))
+                        .andExpect(status().isOk())
+                        .andDo(print())
+                        .andExpect(jsonPath("$.id", Is.is(createdToy.get("id"))))
+                        .andExpect(jsonPath("$.name").value(createdToy.get("name")))
+                        .andExpect(jsonPath("$.maker").value(createdToy.get("maker")))
+                        .andExpect(jsonPath("$.price", Is.is(createdToy.get("price"))))
+                        .andExpect(jsonPath("$.imageUrl", Is.is(createdToy.get("imageUrl"))));
             }
         }
     }

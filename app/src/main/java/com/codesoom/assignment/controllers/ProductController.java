@@ -4,6 +4,8 @@ import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,5 +28,11 @@ public class ProductController {
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody @Valid ProductData productData) {
         return productService.create(productData);
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public Product getDetail(@PathVariable("id") Long id) {
+        return productService.findById(id);
     }
 }

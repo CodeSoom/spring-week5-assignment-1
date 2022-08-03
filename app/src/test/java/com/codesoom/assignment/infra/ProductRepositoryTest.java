@@ -19,16 +19,24 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductRepository productRepository;
 
+    private Product getInputProduct() {
+        return new Product("캣타워", "코드숨", 12000, "url");
+    }
+
+    private Product getExpectProduct(Long id) {
+        return new Product(id, "캣타워", "코드숨", 12000, "url");
+    }
+
     @Nested
     @DisplayName("save 메서드는")
     class Describe_save {
         @Nested
         @DisplayName("상품이 주어지면")
         class Context_with_product {
-            Product givenProduct = new Product("캣타워", "코드숨", 12000, "url");
+            Product givenProduct = getInputProduct();
 
             Product expectProduct(Long id) {
-                return new Product(id, "캣타워", "코드숨", 12000, "url");
+                return getExpectProduct(id);
             }
 
             @Test
@@ -38,6 +46,27 @@ public class ProductRepositoryTest {
 
                 assertThat(resultProduct)
                         .isEqualTo(expectProduct(resultProduct.getId()));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findById 메서드는")
+    class Describe_findById {
+        @Nested
+        @DisplayName("상품이 주어지면")
+        class Context_with_product {
+            Product createProduct() {
+                return productRepository.save(getInputProduct());
+            }
+
+            @Test
+            @DisplayName("상품을 리턴한다")
+            void It_returns_product() {
+                Product createdProduct = createProduct();
+
+                assertThat(getExpectProduct(createdProduct.getId()))
+                        .isEqualTo(createdProduct);
             }
         }
     }
