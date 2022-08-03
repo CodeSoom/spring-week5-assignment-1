@@ -142,7 +142,7 @@ public class ProductControllerTest {
             }
 
             @ParameterizedTest
-            @ValueSource(strings = {"얍", "길이가 범위를 넘는 값을 가진 이름임ㅇ"})
+            @ValueSource(strings = {"얍", "길이가 범위를 넘는 값을 가진 이름입니다."})
             @DisplayName("예외 메시지를 응답한다")
             void It_returns_exceptionResponse(String input) throws Exception {
                 Map<String, Object> inValidInput = prepare(input);

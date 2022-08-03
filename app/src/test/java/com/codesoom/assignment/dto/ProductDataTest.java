@@ -14,6 +14,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("ProductData 클래스의")
@@ -39,8 +40,7 @@ class ProductDataTest {
 
         constraintViolations = validator.validate(productData);
 
-        assertEquals(1, constraintViolations.size());
-        assertEquals("이름은 필수값입니다.", constraintViolations.iterator().next().getMessage());
+        assertThat(constraintViolations).isNotEmpty();
     }
 
     @Test
