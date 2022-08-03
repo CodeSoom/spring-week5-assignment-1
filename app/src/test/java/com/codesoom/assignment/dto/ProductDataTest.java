@@ -50,15 +50,13 @@ class ProductDataTest {
 
         constraintViolations = validator.validate(productData);
 
-        assertEquals(1, constraintViolations.size());
-        assertEquals("이름의 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
+        assertThat(constraintViolations).isNotEmpty();
 
         productData = new ProductData("길이가 범위를 넘은 값을 가진 이름입니다.", NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL);
 
         constraintViolations = validator.validate(productData);
 
-        assertEquals(1, constraintViolations.size());
-        assertEquals("이름의 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
+        assertThat(constraintViolations).isNotEmpty();
     }
 
     @ParameterizedTest
@@ -70,8 +68,7 @@ class ProductDataTest {
 
         constraintViolations = validator.validate(productData);
 
-        assertEquals(1, constraintViolations.size());
-        assertEquals("메이커는 필수값입니다.", constraintViolations.iterator().next().getMessage());
+        assertThat(constraintViolations).isNotEmpty();
     }
 
     @Test
@@ -81,8 +78,7 @@ class ProductDataTest {
 
         constraintViolations = validator.validate(productData);
 
-        assertEquals(1, constraintViolations.size());
-        assertEquals("메이커 길이가 범위를 벗어납니다.", constraintViolations.iterator().next().getMessage());
+        assertThat(constraintViolations).isNotEmpty();
     }
 
     @Test
@@ -92,8 +88,7 @@ class ProductDataTest {
 
         constraintViolations = validator.validate(productData);
 
-        assertEquals(1, constraintViolations.size());
-        assertEquals("가격은 필수값입니다.", constraintViolations.iterator().next().getMessage());
+        assertThat(constraintViolations).isNotEmpty();
     }
 
     @Test
@@ -104,8 +99,7 @@ class ProductDataTest {
 
         constraintViolations = validator.validate(productData);
 
-        assertEquals(1, constraintViolations.size());
-        assertEquals("가격은 음수일 수 없습니다.", constraintViolations.iterator().next().getMessage());
+        assertThat(constraintViolations).isNotEmpty();
 
         productData = new ProductData(NORMAL_NAME, NORMAL_MAKER, 10000001, NORMAL_URL);
 
