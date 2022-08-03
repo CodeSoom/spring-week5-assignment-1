@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.TestUserDataBuilder;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.infra.InMemoryUserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import org.junit.jupiter.api.BeforeEach;
@@ -94,11 +95,17 @@ class UserControllerTest {
         @DisplayName("존재하는 회원 Id와 유효한 회원 정보를 전달하면")
         class Context_withValidUserData {
             private MockHttpServletRequestBuilder request;
+            private TestUserDataBuilder updateDataFactory = new TestUserDataBuilder(
+                    UserData.builder()
+                            .name("name2")
+                            .password("password2")
+                            .email("email2")
+            );
 
             @BeforeEach
             void prepare() throws JsonProcessingException {
-                controller.createUser(validUserDataFactory.buildData());
-                final String content = validUserDataFactory.buildJson();
+                controller.create(validUserDataFactory.buildData());
+                final String content = updateDataFactory.buildJson();
 
                 request = patch("/users/1")
                         .content(content)
@@ -108,7 +115,7 @@ class UserControllerTest {
             @Test
             @DisplayName("Ok status, 업데이트된 회원 정보를 반환한다")
             void it_returnsCratedStatusAndUserData() throws Exception {
-                final String expectedContent = validUserDataFactory.id(1L).buildJson();
+                final String expectedContent = updateDataFactory.id(1L).buildJson();
 
                 mockMvc.perform(request)
                         .andExpect(status().isOk())
