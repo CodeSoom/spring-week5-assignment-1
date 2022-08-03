@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -69,7 +70,7 @@ public class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("/products 요청은")
+    @DisplayName("POST /products 요청은")
     class Describe_create {
         @Nested
         @DisplayName("상품 정보가 주어지면")
@@ -228,6 +229,7 @@ public class ProductControllerTest {
                         .andExpect(jsonPath("$.[0].message", Is.is("가격은 필수값입니다.")))
                         .andExpect(status().isBadRequest());
             }
+
             @ParameterizedTest
             @NullSource
             @DisplayName("예외 메시지를 응답합니다")
@@ -257,6 +259,7 @@ public class ProductControllerTest {
                         .andExpect(jsonPath("$.[0].message", Is.is("가격은 음수일 수 없습니다.")))
                         .andExpect(status().isBadRequest());
             }
+
             @Test
             @DisplayName("예외 메시지를 응답합니다")
             void It_returns_errorResponse() throws Exception {
@@ -287,6 +290,7 @@ public class ProductControllerTest {
                         .andExpect(jsonPath("$.[0].message", Is.is("가격의 한계치를 벗어났습니다.")))
                         .andExpect(status().isBadRequest());
             }
+
             @Test
             @DisplayName("예외 메시지를 응답합니다")
             void It_returns_errorResponse() throws Exception {
@@ -300,7 +304,7 @@ public class ProductControllerTest {
     }
 
     @Nested
-    @DisplayName("/products/{id} 요청은")
+    @DisplayName("GET /products/{id} 요청은")
     class Describe_getDetail {
         @Nested
         @DisplayName("식별자를 가진 상품이 있다면")
@@ -333,6 +337,30 @@ public class ProductControllerTest {
                 mockMvc.perform(get("/products/" + -1L))
                         .andExpect(status().isNotFound())
                         .andExpect(jsonPath("$.message").isString());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("GET /products 요청은")
+    class Describe_getAll {
+        @Nested
+        @DisplayName("상품 목록이 있으면")
+        class Context_with_productList extends Normal {
+            void prepare() throws Exception {
+                create(input());
+                create(input());
+                create(input());
+            }
+
+            @Test
+            @DisplayName("상품 목록과 상태코드 200을 응답한다")
+            void It_returns_productListAndOk() throws Exception {
+                prepare();
+
+                mockMvc.perform(get("/products"))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$", hasSize(3)));
             }
         }
     }

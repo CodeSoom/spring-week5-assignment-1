@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
+import java.util.Arrays;
+import java.util.Collection;
 
 @RestController
 @RequestMapping("/products")
@@ -34,5 +36,11 @@ public class ProductController {
     @ResponseStatus(HttpStatus.OK)
     public Product getDetail(@PathVariable("id") Long id) {
         return productService.findById(id);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Product> getAll() {
+        return Arrays.asList(new Product(), new Product(), new Product());
     }
 }
