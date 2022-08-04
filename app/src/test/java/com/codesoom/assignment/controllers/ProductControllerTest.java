@@ -203,7 +203,7 @@ public class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("예외 메시지를 응답합니다")
+            @DisplayName("예외 메시지를 응답한다")
             void It_returns_errorResponse() throws Exception {
                 Map<String, Object> inValidInput = prepare("이름의 범위가 벗어남");
 
@@ -231,7 +231,7 @@ public class ProductControllerTest {
 
             @ParameterizedTest
             @NullSource
-            @DisplayName("예외 메시지를 응답합니다")
+            @DisplayName("예외 메시지를 응답한다")
             void It_returns_errorResponse(Integer input) throws Exception {
                 Map<String, Object> inValidInput = prepare(input);
 
@@ -258,7 +258,7 @@ public class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("예외 메시지를 응답합니다")
+            @DisplayName("예외 메시지를 응답한다")
             void It_returns_errorResponse() throws Exception {
                 Map<String, Object> inValidInput = prepare();
                 expect(inValidInput);
@@ -287,7 +287,7 @@ public class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("예외 메시지를 응답합니다")
+            @DisplayName("예외 메시지를 응답한다")
             void It_returns_errorResponse() throws Exception {
                 Map<String, Object> inValidInput = prepare();
                 expect(inValidInput);
@@ -354,9 +354,9 @@ public class ProductControllerTest {
             }
 
             void prepare() throws Exception {
-                create(invalidStatusInput()).andDo(print());
+                create(invalidStatusInput());
                 create(normalInput());
-                create(normalInput()).andDo(print());
+                create(normalInput());
             }
 
             @Test
