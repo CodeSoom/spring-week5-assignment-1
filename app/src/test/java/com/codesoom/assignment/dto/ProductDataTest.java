@@ -1,6 +1,7 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.Status;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -23,6 +24,7 @@ class ProductDataTest {
     public static final String NORMAL_MAKER = "코드숨";
     public static final int NORMAL_PRICE = 2200000;
     public static final String NORMAL_URL = "picture.com";
+    public static final String SALE = "SALE";
     private static Validator validator;
     private ProductData productData;
     private Set<ConstraintViolation<ProductData>> constraintViolations;
@@ -101,7 +103,7 @@ class ProductDataTest {
 
         assertThat(constraintViolations).isNotEmpty();
 
-        productData = new ProductData(NORMAL_NAME, NORMAL_MAKER, 10000001, NORMAL_URL);
+        productData = new ProductData(NORMAL_NAME, NORMAL_MAKER, 10000001, NORMAL_URL, SALE);
 
         constraintViolations = validator.validate(productData);
 
@@ -110,9 +112,24 @@ class ProductDataTest {
     }
 
     @Test
+    @DisplayName("상태값은 필수 값이다.")
+    void statusIsMandatory() {
+        productData = ProductData.builder()
+                .name(NORMAL_NAME)
+                .maker(NORMAL_MAKER)
+                .price(NORMAL_PRICE)
+                .status(null)
+                .build();
+
+        constraintViolations = validator.validate(productData);
+
+        assertThat(constraintViolations).isNotEmpty();
+    }
+
+    @Test
     @DisplayName("상품 정보를 상품으로 변경할 수 있다.")
     void productDataCanConvertProduct() {
-        assertEquals(new Product(NORMAL_NAME, NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL),
-                new ProductData(NORMAL_NAME, NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL).toProduct());
+        assertEquals(new Product(null, NORMAL_NAME, NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL, Status.SALE),
+                new ProductData(NORMAL_NAME, NORMAL_MAKER, NORMAL_PRICE, NORMAL_URL, SALE).toProduct());
     }
 }

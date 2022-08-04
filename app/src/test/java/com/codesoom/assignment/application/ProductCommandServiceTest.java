@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.domain.Status;
 import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -21,6 +22,7 @@ public class ProductCommandServiceTest {
     public static final int PRICE = 2200000;
     public static final String URL = "picture.com";
     public static final Long BASIC_ID = 1L;
+    public static final String SALE = "SALE";
 
     private ProductCommandService commandService;
     private ProductRepository productRepository;
@@ -32,7 +34,7 @@ public class ProductCommandServiceTest {
     }
 
     private Product createdProduct() {
-        return new Product(BASIC_ID, NAME, MAKER, PRICE, URL);
+        return new Product(BASIC_ID, NAME, MAKER, PRICE, URL, Status.SALE);
     }
 
     @Nested
@@ -41,7 +43,7 @@ public class ProductCommandServiceTest {
         @Nested
         @DisplayName("상품 정보가 주어지면")
         class Context_with_product {
-            ProductData productData = new ProductData(NAME, MAKER, PRICE, URL);
+            ProductData productData = new ProductData(NAME, MAKER, PRICE, URL, SALE);
             Product expect = createdProduct();
 
             @BeforeEach

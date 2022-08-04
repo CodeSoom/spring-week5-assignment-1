@@ -65,14 +65,16 @@ public class ProductControllerTest {
         public static final String MAKER = "codesoom";
         public static final int PRICE = 2200000;
         public static final String URL = "www.picture.com";
+        public static final String SALE = "SALE";
 
-        Map<String, Object> input() {
+        Map<String, Object> normalInput() {
             HashMap<String, Object> input = new HashMap<>();
 
             input.put("name", NAME);
             input.put("maker", MAKER);
             input.put("price", PRICE);
             input.put("imageUrl", URL);
+            input.put("status", SALE);
 
             return input;
         }
@@ -87,7 +89,7 @@ public class ProductControllerTest {
             @Test
             @DisplayName("상품을 리턴한다")
             void It_returns_product() throws Exception {
-                create(input())
+                create(normalInput())
                         .andExpect(jsonPath("$.name").value(NAME))
                         .andExpect(jsonPath("$.maker").value(MAKER))
                         .andExpect(jsonPath("$.price").value(PRICE))
@@ -100,12 +102,9 @@ public class ProductControllerTest {
         @DisplayName("상품 정보의 이름이 주어지지 않았다면")
         class Context_without_Name_Maker_Price extends Normal {
             Map<String, Object> prepare(String input) {
-                Map<String, Object> inValidInput = new HashMap<>();
+                Map<String, Object> inValidInput = normalInput();
 
                 inValidInput.put("name", input);
-                inValidInput.put("maker", MAKER);
-                inValidInput.put("price", PRICE);
-                inValidInput.put("imageUrl", URL);
 
                 return inValidInput;
             }
@@ -132,12 +131,9 @@ public class ProductControllerTest {
         @DisplayName("상품 이름이 길이 제한을 만족하지 않는다면")
         class Context_with_invalidName extends Normal {
             Map<String, Object> prepare(String input) {
-                Map<String, Object> inValidInput = new HashMap<>();
+                Map<String, Object> inValidInput = normalInput();
 
                 inValidInput.put("name", input);
-                inValidInput.put("maker", MAKER);
-                inValidInput.put("price", PRICE);
-                inValidInput.put("imageUrl", URL);
 
                 return inValidInput;
             }
@@ -163,11 +159,9 @@ public class ProductControllerTest {
         @DisplayName("상품 정보에 메이커 값이 없으면")
         class Context_without_maker extends Normal {
             Map<String, Object> prepare(String input) {
-                Map<String, Object> inValidInput = new HashMap<>();
+                Map<String, Object> inValidInput = normalInput();
 
-                inValidInput.put("name", NAME);
                 inValidInput.put("maker", input);
-                inValidInput.put("price", PRICE);
 
                 return inValidInput;
             }
@@ -194,11 +188,9 @@ public class ProductControllerTest {
         @DisplayName("상품 메이커명의 길이가 범위를 벗어난다면")
         class Context_outOfRangeMaker extends Normal {
             Map<String, Object> prepare(String input) {
-                Map<String, Object> inValidInput = new HashMap<>();
+                Map<String, Object> inValidInput = normalInput();
 
-                inValidInput.put("name", NAME);
                 inValidInput.put("maker", input);
-                inValidInput.put("price", PRICE);
 
                 return inValidInput;
             }
@@ -223,10 +215,8 @@ public class ProductControllerTest {
         @DisplayName("상품 가격이 주어지지 않는다면")
         class Context_without_price extends Normal {
             Map<String, Object> prepare(Integer input) {
-                Map<String, Object> inValidInput = new HashMap<>();
+                Map<String, Object> inValidInput = normalInput();
 
-                inValidInput.put("name", NAME);
-                inValidInput.put("maker", MAKER);
                 inValidInput.put("price", input);
 
                 return inValidInput;
@@ -253,10 +243,8 @@ public class ProductControllerTest {
         @DisplayName("상품 가격이 음수로 주어지면")
         class Context_with_negative extends Normal {
             Map<String, Object> prepare() {
-                Map<String, Object> inValidInput = new HashMap<>();
+                Map<String, Object> inValidInput = normalInput();
 
-                inValidInput.put("name", NAME);
-                inValidInput.put("maker", MAKER);
                 inValidInput.put("price", Integer.MIN_VALUE);
 
                 return inValidInput;
@@ -284,10 +272,8 @@ public class ProductControllerTest {
         @DisplayName("상품 가격이 한도를 초과하면")
         class Context_with_priceExceedLimit extends Normal {
             Map<String, Object> prepare() {
-                Map<String, Object> inValidInput = new HashMap<>();
+                Map<String, Object> inValidInput = normalInput();
 
-                inValidInput.put("name", NAME);
-                inValidInput.put("maker", MAKER);
                 inValidInput.put("price", Integer.MAX_VALUE);
 
                 return inValidInput;
@@ -321,7 +307,7 @@ public class ProductControllerTest {
             Map<String, Object> createdToy;
 
             void prepare() throws Exception {
-                createdToy = createToyAndConvert(input());
+                createdToy = createToyAndConvert(normalInput());
             }
 
             @Test
@@ -359,20 +345,29 @@ public class ProductControllerTest {
         @Nested
         @DisplayName("상품 목록이 있으면")
         class Context_with_productList extends Normal {
+            Map<String, Object> invalidStatusInput() {
+                Map<String, Object> input = normalInput();
+
+                input.put("status", null);
+
+                return input;
+            }
+
             void prepare() throws Exception {
-                create(input());
-                create(input());
-                create(input());
+                create(invalidStatusInput()).andDo(print());
+                create(normalInput());
+                create(normalInput()).andDo(print());
             }
 
             @Test
-            @DisplayName("상품 목록과 상태코드 200을 응답한다")
+            @DisplayName("판매 중인 상품 목록과 상태코드 200을 응답한다")
             void It_returns_productListAndOk() throws Exception {
                 prepare();
 
                 mockMvc.perform(get("/products"))
                         .andExpect(status().isOk())
-                        .andExpect(jsonPath("$", hasSize(3)));
+                        .andDo(print())
+                        .andExpect(jsonPath("$", hasSize(2)));
             }
         }
     }

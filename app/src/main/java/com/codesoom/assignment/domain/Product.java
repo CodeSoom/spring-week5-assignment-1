@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.util.Objects;
@@ -24,6 +26,7 @@ public class Product {
 
     private String imageUrl;
 
+    @Enumerated(EnumType.STRING)
     private Status status;
 
     public Product() {}

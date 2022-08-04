@@ -1,6 +1,7 @@
 package com.codesoom.assignment.dto;
 
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.domain.Status;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -31,7 +32,17 @@ public class ProductData {
 
     private String imageUrl;
 
+    @NotBlank(message = "상태는 필수값입니다.")
+    private String status;
+
     public ProductData() {}
+
+    public ProductData(String name, String maker, Integer price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     public Product toProduct() {
         return Product.builder()
@@ -39,6 +50,7 @@ public class ProductData {
                 .maker(this.maker)
                 .price(this.price)
                 .imageUrl(this.imageUrl)
+                .status(Status.valueOf(this.status))
                 .build();
     }
 }
