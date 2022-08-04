@@ -14,24 +14,24 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
-@DisplayName("ProductService 인터페이스의")
-public class ProductServiceTest {
+@DisplayName("ProductCommand 인터페이스의")
+public class ProductCommandServiceTest {
     public static final String NAME = "먼지털이";
     public static final String MAKER = "코드숨";
     public static final int PRICE = 2200000;
     public static final String URL = "picture.com";
     public static final Long BASIC_ID = 1L;
 
-    private ProductService productService;
+    private ProductCommandService commandService;
     private ProductRepository productRepository;
 
     @BeforeEach
     void setUp() {
         productRepository = mock(ProductRepository.class);
-        productService = new ToyService(productRepository);
+        commandService = new ToyCommandService(productRepository);
     }
 
-    Product createdProduct() {
+    private Product createdProduct() {
         return new Product(BASIC_ID, NAME, MAKER, PRICE, URL);
     }
 
@@ -53,7 +53,7 @@ public class ProductServiceTest {
             @Test
             @DisplayName("상품을 리턴한다")
             void It_returns_product() {
-                assertThat(productService.create(productData)).isEqualTo(expect);
+                assertThat(commandService.create(productData)).isEqualTo(expect);
 
                 verify(productRepository).save(any(Product.class));
             }

@@ -5,10 +5,9 @@ import com.codesoom.assignment.dto.ProductData;
 
 import java.util.Collection;
 
-public interface ProductService {
+/**
+ * 상품에 변형을 주는 기능을 제공합니다.
+ */
+public interface ProductCommandService {
     Product create(ProductData productData);
-
-    Product findById(Long id);
-
-    Collection<Product> findAll();
 }
