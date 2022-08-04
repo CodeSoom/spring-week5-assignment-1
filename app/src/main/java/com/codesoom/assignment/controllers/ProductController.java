@@ -45,4 +45,10 @@ public class ProductController {
     public Collection<Product> getAll() {
         return queryService.findAll();
     }
+
+    @GetMapping("/sold-out")
+    @ResponseStatus(HttpStatus.OK)
+    public Collection<Product> getAllSoldOut() {
+        return queryService.findAllSoldOut();
+    }
 }

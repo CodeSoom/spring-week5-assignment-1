@@ -393,4 +393,34 @@ public class ProductControllerTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("GET /products/sold-out 요청은")
+    class Describe_getAllSoldOut {
+        @Nested
+        @DisplayName("상품 목록이 주어지면")
+        class Context_with_productList extends Normal {
+            Map<String, Object> makeInput(String status) {
+                Map<String, Object> normalInput = normalInput();
+                normalInput.put("status", status);
+                return normalInput;
+            }
+
+            void prepare() throws Exception {
+                create(makeInput("SOLD_OUT"));
+                create(makeInput("SOLD_OUT"));
+                create(makeInput("SALE"));
+            }
+
+            @Test
+            @DisplayName("품절된 상품 목록과 상태코드 200을 응답한다")
+            void It_returns_soldOutProductList() throws Exception {
+                prepare();
+
+                mockMvc.perform(get("/products/sold-out"))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$", hasSize(2)));
+            }
+        }
+    }
 }
