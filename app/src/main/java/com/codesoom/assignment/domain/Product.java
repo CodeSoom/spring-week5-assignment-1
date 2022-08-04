@@ -24,6 +24,8 @@ public class Product {
 
     private String imageUrl;
 
+    private Status status;
+
     public Product() {}
 
     public Product(String name, String maker, Integer price, String imageUrl) {
@@ -39,6 +41,15 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public Product(Long id, String name, String maker, Integer price, String imageUrl, Status status) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+        this.status = status;
     }
 
     @Override
@@ -57,11 +68,12 @@ public class Product {
                 Objects.equals(name, product.name) &&
                 Objects.equals(maker, product.maker) &&
                 Objects.equals(price, product.price) &&
-                Objects.equals(imageUrl, product.imageUrl);
+                Objects.equals(imageUrl, product.imageUrl) &&
+                status == product.status;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, maker, price, imageUrl);
+        return Objects.hash(id, name, maker, price, imageUrl, status);
     }
 }
