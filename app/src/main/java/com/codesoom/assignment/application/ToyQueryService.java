@@ -6,7 +6,9 @@ import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.domain.Status;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -29,6 +31,14 @@ public class ToyQueryService implements ProductQueryService {
         return productRepository.findAll()
                 .stream()
                 .filter(p -> Status.SALE.equals(p.getStatus()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public Collection<Product> findAllSoldOut() {
+        return productRepository.findAll()
+                .stream()
+                .filter(p -> Status.SOLD_OUT.equals(p.getStatus()))
                 .collect(Collectors.toList());
     }
 }

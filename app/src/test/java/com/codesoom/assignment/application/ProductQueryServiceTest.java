@@ -15,6 +15,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
@@ -26,6 +27,8 @@ public class ProductQueryServiceTest {
     public static final String MAKER = "메이커명";
     public static final Integer PRICE = 3000;
     public static final String URL = "image.url";
+    public static final Status SALE = Status.SALE;
+    public static final Status SOLD_OUT = Status.SOLD_OUT;
     public static final Long NOT_EXIST_ID = -1L;
 
     private ProductQueryService queryService;
@@ -113,6 +116,36 @@ public class ProductQueryServiceTest {
             void It_returns_productList() {
                 assertThat(queryService.findAll().size())
                         .isEqualTo(2);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("findAllSoldOut 메서드는")
+    class Describe_findAllSoldOut {
+        @Nested
+        @DisplayName("상품 목록이 주어지면")
+        class Context_with_productList {
+            Product soldOutProduct = Product.builder()
+                    .name(NAME)
+                    .maker(MAKER)
+                    .price(PRICE)
+                    .status(Status.SOLD_OUT)
+                    .build();
+
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findAll())
+                        .willReturn(Arrays.asList(createdProduct(), createdProduct(), soldOutProduct));
+            }
+
+            @Test
+            @DisplayName("품절된 상품을 리턴한다")
+            void It_returns_soldOutProduct() {
+                assertThat(queryService.findAllSoldOut())
+                        .hasSize(1);
+
+                verify(productRepository).findAll();
             }
         }
     }

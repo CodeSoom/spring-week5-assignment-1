@@ -21,7 +21,14 @@ public interface ProductQueryService {
     /**
      * 판매중인 상품 목록을 리턴합니다.
      *
-     * @return 상품 목록
+     * @return 판매중인 상품 목록
      */
     Collection<Product> findAll();
+
+    /**
+     * 품절된 상품 목록을 리턴합니다.
+     *
+     * @return 품절된 상품 목록
+     */
+    Collection<Product> findAllSoldOut();
 }

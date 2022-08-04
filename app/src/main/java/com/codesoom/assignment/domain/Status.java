@@ -1,5 +1,5 @@
 package com.codesoom.assignment.domain;
 
 public enum Status {
-    SALE
+    SALE, SOLD_OUT
 }
