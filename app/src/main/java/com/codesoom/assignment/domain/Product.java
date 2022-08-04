@@ -55,10 +55,6 @@ public class Product {
         this.status = status;
     }
 
-    public boolean isSale() {
-        return Status.isSale(status);
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) {

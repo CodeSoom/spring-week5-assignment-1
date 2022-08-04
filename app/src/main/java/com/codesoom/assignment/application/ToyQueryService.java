@@ -28,7 +28,7 @@ public class ToyQueryService implements ProductQueryService {
     public Collection<Product> findAll() {
         return productRepository.findAll()
                 .stream()
-                .filter(Product::isSale)
+                .filter(p -> Status.SALE.equals(p.getStatus()))
                 .collect(Collectors.toList());
     }
 }
