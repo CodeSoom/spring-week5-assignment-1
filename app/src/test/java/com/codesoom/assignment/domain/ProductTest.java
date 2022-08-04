@@ -3,8 +3,6 @@ package com.codesoom.assignment.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import javax.naming.Name;
-
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DisplayName("Product 클래스의")

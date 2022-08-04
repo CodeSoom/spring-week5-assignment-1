@@ -3,9 +3,11 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.domain.Status;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 @Service
 public class ToyQueryService implements ProductQueryService {
@@ -24,6 +26,9 @@ public class ToyQueryService implements ProductQueryService {
 
     @Override
     public Collection<Product> findAll() {
-        return productRepository.findAll();
+        return productRepository.findAll()
+                .stream()
+                .filter(Product::isSale)
+                .collect(Collectors.toList());
     }
 }

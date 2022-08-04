@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.domain.Status;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -86,9 +87,20 @@ public class ProductQueryServiceTest {
         @Nested
         @DisplayName("상품 목록이 주어지면")
         class Context_with_productList {
-            List<Product> productList = Arrays.asList(createdProduct(),
-                    createdProduct(),
-                    createdProduct());
+            Product saleProduct = Product.builder()
+                    .name(NAME)
+                    .maker(MAKER)
+                    .price(PRICE)
+                    .status(Status.SALE)
+                    .build();
+
+            Product notSaleProduct = Product.builder()
+                    .name(NAME)
+                    .maker(MAKER)
+                    .price(PRICE)
+                    .build();
+
+            List<Product> productList = Arrays.asList(saleProduct, saleProduct, notSaleProduct);
 
             @BeforeEach
             void prepare() {
@@ -97,10 +109,10 @@ public class ProductQueryServiceTest {
             }
 
             @Test
-            @DisplayName("상품 목록을 리턴한다")
+            @DisplayName("판매중인 상품의 목록을 리턴한다")
             void It_returns_productList() {
-                assertThat(queryService.findAll())
-                        .isEqualTo(productList);
+                assertThat(queryService.findAll().size())
+                        .isEqualTo(2);
             }
         }
     }

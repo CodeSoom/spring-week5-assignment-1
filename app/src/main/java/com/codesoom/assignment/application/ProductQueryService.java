@@ -19,7 +19,7 @@ public interface ProductQueryService {
     Product findById(Long id);
 
     /**
-     * 상품 목록을 리턴합니다.
+     * 판매중인 상품 목록을 리턴합니다.
      *
      * @return 상품 목록
      */

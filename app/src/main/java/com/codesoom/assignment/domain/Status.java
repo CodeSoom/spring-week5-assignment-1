@@ -1,5 +1,9 @@
 package com.codesoom.assignment.domain;
 
 public enum Status {
-    SALE
+    SALE;
+
+    public static boolean isSale(Status status) {
+        return SALE.equals(status);
+    }
 }
