@@ -9,6 +9,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -27,15 +28,29 @@ public class ProductQueryServiceTest {
     public static final String MAKER = "메이커명";
     public static final Integer PRICE = 3000;
     public static final String URL = "image.url";
-    public static final Status SALE = Status.SALE;
-    public static final Status SOLD_OUT = Status.SOLD_OUT;
     public static final Long NOT_EXIST_ID = -1L;
 
     private ProductQueryService queryService;
     private ProductRepository productRepository;
 
-    private Product createdProduct() {
+    private Product createProduct() {
         return new Product(BASIC_ID, NAME, MAKER, PRICE, URL);
+    }
+
+    private Product createProduct(Status status) {
+        return new Product(BASIC_ID, NAME, MAKER, PRICE, URL, status);
+    }
+
+    private List<Product> createProductList() {
+        List<Product> productList = new ArrayList<>();
+
+        productList.add(createProduct(Status.SALE));
+        productList.add(createProduct(Status.SALE));
+        productList.add(createProduct(Status.SOLD_OUT));
+        productList.add(createProduct(Status.SOLD_OUT));
+        productList.add(createProduct(Status.SOLD_OUT));
+
+        return productList;
     }
 
     @BeforeEach
@@ -53,14 +68,14 @@ public class ProductQueryServiceTest {
             @BeforeEach
             void prepare() {
                 given(productRepository.findById(BASIC_ID))
-                        .willReturn(Optional.of(createdProduct()));
+                        .willReturn(Optional.of(createProduct()));
             }
 
             @Test
             @DisplayName("상품을 리턴한다")
             void It_returns_product() {
                 assertThat(queryService.findById(BASIC_ID))
-                        .isEqualTo(createdProduct());
+                        .isEqualTo(createProduct());
 
                 verify(productRepository).findById(BASIC_ID);
             }
@@ -90,32 +105,19 @@ public class ProductQueryServiceTest {
         @Nested
         @DisplayName("상품 목록이 주어지면")
         class Context_with_productList {
-            Product saleProduct = Product.builder()
-                    .name(NAME)
-                    .maker(MAKER)
-                    .price(PRICE)
-                    .status(Status.SALE)
-                    .build();
-
-            Product notSaleProduct = Product.builder()
-                    .name(NAME)
-                    .maker(MAKER)
-                    .price(PRICE)
-                    .build();
-
-            List<Product> productList = Arrays.asList(saleProduct, saleProduct, notSaleProduct);
-
             @BeforeEach
             void prepare() {
                 given(productRepository.findAll())
-                        .willReturn(productList);
+                        .willReturn(createProductList());
             }
 
             @Test
             @DisplayName("판매중인 상품의 목록을 리턴한다")
             void It_returns_productList() {
-                assertThat(queryService.findAll().size())
-                        .isEqualTo(2);
+                assertThat(queryService.findAll())
+                        .hasSize(2);
+
+                verify(productRepository).findAll();
             }
         }
     }
@@ -126,24 +128,17 @@ public class ProductQueryServiceTest {
         @Nested
         @DisplayName("상품 목록이 주어지면")
         class Context_with_productList {
-            Product soldOutProduct = Product.builder()
-                    .name(NAME)
-                    .maker(MAKER)
-                    .price(PRICE)
-                    .status(Status.SOLD_OUT)
-                    .build();
-
             @BeforeEach
             void prepare() {
                 given(productRepository.findAll())
-                        .willReturn(Arrays.asList(createdProduct(), createdProduct(), soldOutProduct));
+                        .willReturn(createProductList());
             }
 
             @Test
             @DisplayName("품절된 상품을 리턴한다")
             void It_returns_soldOutProduct() {
                 assertThat(queryService.findAllSoldOut())
-                        .hasSize(1);
+                        .hasSize(3);
 
                 verify(productRepository).findAll();
             }
