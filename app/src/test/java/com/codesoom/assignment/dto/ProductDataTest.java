@@ -111,14 +111,16 @@ class ProductDataTest {
         assertEquals("가격의 한계치를 벗어났습니다.", constraintViolations.iterator().next().getMessage());
     }
 
-    @Test
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "\t", "\n", "  "})
+    @NullSource
     @DisplayName("상태값은 필수 값이다.")
-    void statusIsMandatory() {
+    void statusIsMandatory(String input) {
         productData = ProductData.builder()
                 .name(NORMAL_NAME)
                 .maker(NORMAL_MAKER)
                 .price(NORMAL_PRICE)
-                .status(null)
+                .status(input)
                 .build();
 
         constraintViolations = validator.validate(productData);

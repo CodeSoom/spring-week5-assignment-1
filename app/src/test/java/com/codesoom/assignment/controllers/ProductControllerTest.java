@@ -296,6 +296,28 @@ public class ProductControllerTest {
                 expect(inValidInput);
             }
         }
+
+        @Nested
+        @DisplayName("상태가 비어있으면")
+        class Context_without_status extends Normal {
+            Map<String, Object> prepare(String input) {
+                Map<String, Object> normalInput = normalInput();
+                normalInput.put("status", input);
+                return normalInput;
+            }
+
+            @ParameterizedTest
+            @ValueSource(strings = {"", " ", "  ", "\t", "\n"})
+            @NullSource
+            @DisplayName("예외 메시지를 응답한다")
+            void It_returns_errorResponse(String input) throws Exception {
+                create(prepare(input))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.[0].fieldName", Is.is("status")))
+                        .andExpect(jsonPath("$.[0].message").isString());
+
+            }
+        }
     }
 
     @Nested
