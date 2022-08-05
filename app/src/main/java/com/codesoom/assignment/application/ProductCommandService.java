@@ -32,4 +32,13 @@ public interface ProductCommandService {
      * @param list 상품 목록
      */
     void deleteAllByList(ListToDelete list);
+
+    /**
+     * 상품을 찾아 변경하고 리턴한다
+     *
+     * @param id 식별자
+     * @param data 변경할 정보
+     * @return 상품
+     */
+    Product update(Long id, ProductData data);
 }

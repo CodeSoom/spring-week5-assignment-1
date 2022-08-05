@@ -55,6 +55,15 @@ public class Product {
         this.status = status;
     }
 
+    public Product change(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
+        this.status = product.getStatus();
+        return this;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {

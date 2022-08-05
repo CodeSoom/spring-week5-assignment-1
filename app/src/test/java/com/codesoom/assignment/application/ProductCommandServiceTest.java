@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -67,6 +68,47 @@ public class ProductCommandServiceTest {
                 assertThat(commandService.create(productData)).isEqualTo(expect);
 
                 verify(productRepository).save(any(Product.class));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("update 메서드는")
+    class Describe_update {
+        @Nested
+        @DisplayName("변경할 상품 정보가 주어지면")
+        class Context_with_productData {
+            ProductData dataToChange = ProductData.builder()
+                    .name("변경할 이름")
+                    .maker("변경할 메이커")
+                    .price(9999)
+                    .imageUrl("변경할 사진주소")
+                    .status("SOLD_OUT")
+                    .build();
+
+            Product expectProduct = Product.builder()
+                    .id(BASIC_ID)
+                    .name("변경할 이름")
+                    .maker("변경할 메이커")
+                    .price(9999)
+                    .imageUrl("변경할 사진주소")
+                    .status(Status.SOLD_OUT)
+                    .build();
+
+            void prepare() {
+                given(productRepository.findById(BASIC_ID))
+                        .willReturn(Optional.of(createdProduct()));
+            }
+
+            @Test
+            @DisplayName("상품을 변경하고 리턴한다")
+            void It_returns_product() {
+                prepare();
+
+                assertThat(commandService.update(BASIC_ID, dataToChange))
+                        .isEqualTo(expectProduct);
+
+                verify(productRepository).findById(BASIC_ID);
             }
         }
     }
