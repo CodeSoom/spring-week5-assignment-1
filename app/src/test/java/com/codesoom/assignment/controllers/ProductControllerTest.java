@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.hamcrest.Matchers.hasSize;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -420,6 +421,29 @@ public class ProductControllerTest {
                 mockMvc.perform(get("/products/sold-out"))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(2)));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /products/{id} 요청은")
+    class Describe_delete {
+        @Nested
+        @DisplayName("상품이 있다면")
+        class Context_with_product extends Normal {
+            Map<String, Object> createdProduct;
+
+            @BeforeEach
+            void prepare() throws Exception {
+                createdProduct = createToyAndConvert(normalInput());
+            }
+
+            @Test
+            @DisplayName("상품을 찾아 삭제하고 상태코드 204를 응답한다")
+            void It_returns_noContentAndDelete() throws Exception {
+                mockMvc.perform(delete("/products/" + createdProduct.get("id")))
+                        .andExpect(status().isNoContent())
+                        .andExpect(jsonPath("$").doesNotExist());
             }
         }
     }
