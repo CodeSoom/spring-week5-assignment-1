@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.ProductCommandService;
 import com.codesoom.assignment.application.ProductQueryService;
 import com.codesoom.assignment.domain.Product;
+import com.codesoom.assignment.dto.ListToDelete;
 import com.codesoom.assignment.dto.ProductData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -57,5 +58,11 @@ public class ProductController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable("id") Long id) {
         commandService.deleteById(id);
+    }
+
+    @DeleteMapping("/list")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteProducts(@RequestBody @Valid ListToDelete listToDelete) {
+
     }
 }

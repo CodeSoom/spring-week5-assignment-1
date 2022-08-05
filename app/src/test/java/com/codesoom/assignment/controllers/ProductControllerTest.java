@@ -18,9 +18,12 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -447,6 +450,40 @@ public class ProductControllerTest {
 
                 mockMvc.perform(get("/products/" + createdProduct.get("id")))
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /products/list 요청은")
+    class Describe_deleteProducts {
+        @Nested
+        @DisplayName("제거할 상품 목록이 주어지면")
+        class Context_with_idList extends Normal {
+            Map<String, List<Object>> idInput() throws Exception {
+                List<Object> ids = new ArrayList<>();
+                ids.add(createToyAndConvert(normalInput()).get("id"));
+                ids.add(createToyAndConvert(normalInput()).get("id"));
+                ids.add(createToyAndConvert(normalInput()).get("id"));
+                create(normalInput());
+                create(normalInput());
+
+                Map<String, List<Object>> idMaps = new HashMap<>();
+                idMaps.put("idList", ids);
+
+                return idMaps;
+            }
+
+            @Test
+            @DisplayName("상품들을 찾아 삭제한다")
+            void It_remove_products() throws Exception {
+                mockMvc.perform(delete("/products/list")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(idInput())))
+                        .andExpect(status().isNoContent())
+                        .andExpect(jsonPath("$").doesNotExist());
+
+                assertThat(productRepository.findAll()).hasSize(2);
             }
         }
     }
