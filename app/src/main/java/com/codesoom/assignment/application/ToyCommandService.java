@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.dto.ListToDelete;
 import com.codesoom.assignment.dto.ProductData;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,5 +25,11 @@ public class ToyCommandService implements ProductCommandService {
     @Override
     public void deleteById(Long id) {
         productRepository.deleteById(id);
+    }
+
+    @Override
+    public void deleteAllByList(ListToDelete list) {
+        list.getIdList()
+                .forEach(this::deleteById);
     }
 }

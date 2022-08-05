@@ -3,11 +3,15 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.domain.Status;
+import com.codesoom.assignment.dto.ListToDelete;
 import com.codesoom.assignment.dto.ProductData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -85,6 +89,32 @@ public class ProductCommandServiceTest {
                 commandService.deleteById(BASIC_ID);
 
                 verify(productRepository).deleteById(BASIC_ID);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteByList 메서드는")
+    class Describe_deleteByList {
+        @Nested
+        @DisplayName("삭제할 상품 목록이 주어지면")
+        class Context_with_listToDelete {
+            @BeforeEach
+            void prepare() {
+                for (int i = 0; i < 5; i++) {
+                    given(productRepository.save(givenProductData().toProduct()))
+                            .willReturn(createdProduct());
+                }
+            }
+
+            ListToDelete givenList() {
+                return new ListToDelete(Arrays.asList(1L, 2L, 3L, 4L));
+            }
+
+            @Test
+            @DisplayName("상품들을 제거한다")
+            void It_remove_products() {
+                commandService.deleteAllByList(givenList());
             }
         }
     }

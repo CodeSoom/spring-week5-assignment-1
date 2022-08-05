@@ -63,6 +63,6 @@ public class ProductController {
     @DeleteMapping("/list")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteProducts(@RequestBody @Valid ListToDelete listToDelete) {
-
+        commandService.deleteAllByList(listToDelete);
     }
 }
