@@ -59,14 +59,7 @@ public class ProductController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public Product update(@PathVariable("id") Long id, @RequestBody @Valid ProductData productData) {
-        return Product.builder()
-                .id(id)
-                .name("변경된 이름")
-                .maker("변경된 메이커")
-                .price(9999)
-                .imageUrl("codesoom.com")
-                .status(Status.SOLD_OUT)
-                .build();
+        return commandService.update(id, productData);
     }
 
     @DeleteMapping("/{id}")
