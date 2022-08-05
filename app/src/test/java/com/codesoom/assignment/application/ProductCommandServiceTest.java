@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.willDoNothing;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.verify;
 
@@ -31,6 +32,10 @@ public class ProductCommandServiceTest {
     void setUp() {
         productRepository = mock(ProductRepository.class);
         commandService = new ToyCommandService(productRepository);
+    }
+
+    private ProductData givenProductData() {
+        return new ProductData(NAME, MAKER, PRICE, URL, SALE);
     }
 
     private Product createdProduct() {
@@ -58,6 +63,28 @@ public class ProductCommandServiceTest {
                 assertThat(commandService.create(productData)).isEqualTo(expect);
 
                 verify(productRepository).save(any(Product.class));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("delete 메서드는")
+    class Describe_delete {
+        @Nested
+        @DisplayName("찾는 상품이 있다면")
+        class Context_with_product {
+            @BeforeEach
+            void prepare() {
+                given(productRepository.save(givenProductData().toProduct()))
+                        .willReturn(createdProduct());
+            }
+
+            @Test
+            @DisplayName("상품을 삭제한다")
+            void It_remove_product() {
+                commandService.deleteById(BASIC_ID);
+
+                verify(productRepository).deleteById(BASIC_ID);
             }
         }
     }

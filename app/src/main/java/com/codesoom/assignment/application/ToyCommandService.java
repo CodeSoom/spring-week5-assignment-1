@@ -20,4 +20,9 @@ public class ToyCommandService implements ProductCommandService {
     public Product create(ProductData productData) {
         return productRepository.save(productData.toProduct());
     }
+
+    @Override
+    public void deleteById(Long id) {
+        productRepository.deleteById(id);
+    }
 }

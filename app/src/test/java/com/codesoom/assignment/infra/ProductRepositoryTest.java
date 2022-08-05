@@ -11,6 +11,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @DisplayName("ProductRepository 인터페이스의")
@@ -114,6 +115,30 @@ public class ProductRepositoryTest {
 
                 productRepository.deleteAll();
                 assertThat(productRepository.findAll()).isEmpty();
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteById 메서드는")
+    class Describe_deleteById {
+        @Nested
+        @DisplayName("찾는 상품이 있다면")
+        class Context_with_product {
+            Long findId;
+            @BeforeEach
+            void prepare() {
+                findId = productRepository.save(getInputProduct()).getId();
+            }
+
+            @Test
+            @DisplayName("상품을 삭제한다")
+            void It_remove_product() {
+                assertTrue(productRepository.findById(findId).isPresent());
+
+                productRepository.deleteById(findId);
+
+                assertTrue(productRepository.findById(findId).isEmpty());
             }
         }
     }

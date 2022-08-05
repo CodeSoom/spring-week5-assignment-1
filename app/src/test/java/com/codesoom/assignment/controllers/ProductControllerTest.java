@@ -444,6 +444,9 @@ public class ProductControllerTest {
                 mockMvc.perform(delete("/products/" + createdProduct.get("id")))
                         .andExpect(status().isNoContent())
                         .andExpect(jsonPath("$").doesNotExist());
+
+                mockMvc.perform(get("/products/" + createdProduct.get("id")))
+                        .andExpect(status().isNotFound());
             }
         }
     }
