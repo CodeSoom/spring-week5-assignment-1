@@ -28,6 +28,7 @@ import static org.hamcrest.Matchers.hasSize;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -424,6 +425,41 @@ public class ProductControllerTest {
                 mockMvc.perform(get("/products/sold-out"))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$", hasSize(2)));
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("PUT /products/{id}")
+    class Describe_update {
+        @Nested
+        @DisplayName("변경할 상품 정보가 주어지면")
+        class Context_with_productData extends Normal {
+            Map<String, Object> createProduct() throws Exception {
+                return createToyAndConvert(normalInput());
+            }
+
+            Map<String, Object> dataToChange = Map.of(
+                    "name", "변경된 이름",
+                    "maker", "변경된 메이커",
+                    "price", 9999,
+                    "imageUrl", "codesoom.com",
+                    "status", "SOLD_OUT"
+            );
+
+            @Test
+            @DisplayName("변경된 상품과 상태코드 200을 응답한다")
+            void It_returns_changedProduct() throws Exception {
+                Object findId = createProduct().get("id");
+
+                mockMvc.perform(put("/products/" + findId)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(dataToChange)))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.id", Is.is(findId)))
+                        .andExpect(jsonPath("$.name", Is.is("변경된 이름")))
+                        .andExpect(jsonPath("$.price", Is.is(9999)))
+                        .andExpect(jsonPath("$.status", Is.is("SOLD_OUT")));
             }
         }
     }
