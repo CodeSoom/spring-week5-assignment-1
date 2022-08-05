@@ -10,11 +10,11 @@ import java.util.Collection;
  */
 public interface ProductQueryService {
     /**
-     * 식별자를 가진 상품을 리턴한다.
+     * 상품을 찾아 리턴한다.
      *
      * @param id 식별자
      * @return 상품
-     * @throws ProductNotFoundException 식별자를 가진 상품이 없으면 예외를 던진다
+     * @throws ProductNotFoundException 상품을 찾지 못한 경우
      */
     Product findById(Long id);
 
