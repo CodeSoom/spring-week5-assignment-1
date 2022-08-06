@@ -17,11 +17,12 @@ public interface ProductCommandService {
     Product create(ProductData productData);
 
     /**
-     * 상품을 찾아 제거한다.
+     * 상품을 찾아 제거하고 삭제했으면 1 못했으면 0을 리턴한다.
      *
      * @param id 식별자
+     * @return 삭제했으면 1 못했으면 0 리턴
      */
-    void deleteById(Long id);
+    int deleteById(Long id);
 
     /**
      * 상품들을 찾아 제거한다.

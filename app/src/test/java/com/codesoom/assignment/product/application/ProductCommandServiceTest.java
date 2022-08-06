@@ -121,16 +121,34 @@ public class ProductCommandServiceTest {
         class Context_with_product {
             @BeforeEach
             void prepare() {
-                given(productRepository.save(givenProductData().toProduct()))
-                        .willReturn(createdProduct());
+                given(productRepository.findById(BASIC_ID))
+                        .willReturn(Optional.of(createdProduct()));
             }
 
             @Test
-            @DisplayName("상품을 삭제한다")
-            void It_remove_product() {
-                commandService.deleteById(BASIC_ID);
+            @DisplayName("상품을 삭제하고 1을 리턴한다")
+            void It_return_count() {
+                int count = commandService.deleteById(BASIC_ID);
+                assertThat(count).isEqualTo(1);
 
-                verify(productRepository).deleteById(BASIC_ID);
+                verify(productRepository).delete(createdProduct());
+            }
+        }
+
+        @Nested
+        @DisplayName("찾는 상품이 없다면")
+        class Context_without_product {
+            @BeforeEach
+            void prepare() {
+                given(productRepository.findById(BASIC_ID))
+                        .willReturn(Optional.empty());
+            }
+
+            @Test
+            @DisplayName("0을 리턴한다")
+            void It_returns_zero() {
+                int count = commandService.deleteById(BASIC_ID);
+                assertThat(count).isEqualTo(0);
             }
         }
     }

@@ -8,6 +8,8 @@ import com.codesoom.assignment.product.dto.ProductData;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 public class ToyCommandService implements ProductCommandService {
@@ -30,8 +32,15 @@ public class ToyCommandService implements ProductCommandService {
     }
 
     @Override
-    public void deleteById(Long id) {
-        productRepository.deleteById(id);
+    public int deleteById(Long id) {
+        Optional<Product> storedProduct = productRepository.findById(id);
+
+        if (storedProduct.isPresent()) {
+            productRepository.delete(storedProduct.get());
+            return 1;
+        }
+
+        return 0;
     }
 
     @Override
