@@ -161,9 +161,9 @@ public class ProductCommandServiceTest {
         class Context_with_listToDelete {
             @BeforeEach
             void prepare() {
-                for (int i = 0; i < 5; i++) {
-                    given(productRepository.save(givenProductData().toProduct()))
-                            .willReturn(createdProduct());
+                for (long i = 0; i < 5; i++) {
+                    given(productRepository.findById(i))
+                            .willReturn(Optional.of(createdProduct()));
                 }
             }
 
@@ -174,7 +174,8 @@ public class ProductCommandServiceTest {
             @Test
             @DisplayName("상품들을 제거한다")
             void It_remove_products() {
-                commandService.deleteAllByList(givenList());
+                assertThat(commandService.deleteAllByList(givenList()))
+                        .isEqualTo(4);
             }
         }
     }

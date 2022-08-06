@@ -44,8 +44,13 @@ public class ToyCommandService implements ProductCommandService {
     }
 
     @Override
-    public void deleteAllByList(ListToDelete list) {
-        list.getIdList()
-                .forEach(this::deleteById);
+    public int deleteAllByList(ListToDelete list) {
+        int sum = 0;
+
+        for (Long id : list.getIdList()) {
+            sum += deleteById(id);
+        }
+
+        return sum;
     }
 }

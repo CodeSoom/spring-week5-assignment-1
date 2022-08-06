@@ -71,8 +71,6 @@ public class ProductController {
     @DeleteMapping("/list")
     @ResponseStatus(HttpStatus.OK)
     public int deleteProducts(@RequestBody @Valid ListToDelete listToDelete) {
-//        return commandService.deleteAllByList(listToDelete);
-        // Todo 컨트롤러 여러개 삭제 구현
-        return 3;
+        return commandService.deleteAllByList(listToDelete);
     }
 }

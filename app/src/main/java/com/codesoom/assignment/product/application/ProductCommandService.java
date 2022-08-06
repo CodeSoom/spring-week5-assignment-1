@@ -28,8 +28,9 @@ public interface ProductCommandService {
      * 상품들을 찾아 제거한다.
      *
      * @param list 상품 목록
+     * @return 삭제한 상품 개수
      */
-    void deleteAllByList(ListToDelete list);
+    int deleteAllByList(ListToDelete list);
 
     /**
      * 상품을 찾아 변경하고 리턴한다
