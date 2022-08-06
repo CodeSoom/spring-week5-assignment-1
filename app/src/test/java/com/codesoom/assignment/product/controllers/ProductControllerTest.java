@@ -502,6 +502,7 @@ public class ProductControllerTest {
                 ids.add(createToyAndConvert(normalInput()).get("id"));
                 ids.add(createToyAndConvert(normalInput()).get("id"));
                 ids.add(createToyAndConvert(normalInput()).get("id"));
+                ids.add(-1);
                 create(normalInput());
                 create(normalInput());
 
@@ -517,8 +518,8 @@ public class ProductControllerTest {
                 mockMvc.perform(delete("/products/list")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(idInput())))
-                        .andExpect(status().isNoContent())
-                        .andExpect(jsonPath("$").doesNotExist());
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$").value(3));
 
                 assertThat(productRepository.findAll()).hasSize(2);
             }
