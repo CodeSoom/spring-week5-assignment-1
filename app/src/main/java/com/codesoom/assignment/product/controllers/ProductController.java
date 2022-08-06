@@ -63,9 +63,9 @@ public class ProductController {
     }
 
     @DeleteMapping("/{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable("id") Long id) {
-        commandService.deleteById(id);
+    @ResponseStatus(HttpStatus.OK)
+    public int delete(@PathVariable("id") Long id) {
+        return commandService.deleteById(id);
     }
 
     @DeleteMapping("/list")
