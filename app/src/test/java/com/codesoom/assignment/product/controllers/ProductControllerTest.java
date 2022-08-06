@@ -478,11 +478,12 @@ public class ProductControllerTest {
             }
 
             @Test
-            @DisplayName("상품을 찾아 삭제하고 상태코드 204를 응답한다")
+            @DisplayName("상품을 찾아 삭제하고 삭제한 개수와 상태코드 200를 응답한다")
             void It_returns_noContentAndDelete() throws Exception {
                 mockMvc.perform(delete("/products/" + createdProduct.get("id")))
-                        .andExpect(status().isNoContent())
-                        .andExpect(jsonPath("$").doesNotExist());
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$").isNotEmpty())
+                        .andExpect(jsonPath("$").value(1));
 
                 mockMvc.perform(get("/products/" + createdProduct.get("id")))
                         .andExpect(status().isNotFound());
