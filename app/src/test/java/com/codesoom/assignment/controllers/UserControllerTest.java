@@ -1,11 +1,12 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.TestUserDataBuilder;
+import com.codesoom.assignment.TestUserBuilder;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.infra.InMemoryUserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -22,15 +23,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @DisplayName("UserController 클래스")
 class UserControllerTest {
-    private final TestUserDataBuilder validUserDataFactory = TestUserDataBuilder.valid();
-    private final TestUserDataBuilder invalidUserDataFactory = TestUserDataBuilder.invalid();
+    private final TestUserBuilder validUserDataFactory = TestUserBuilder.presetAllFields();
+    private final TestUserBuilder invalidUserDataFactory = TestUserBuilder.presetNoFields();
     private MockMvc mockMvc;
     private UserController controller;
 
     @BeforeEach
     void setup() {
         final UserRepository repository = new InMemoryUserRepository();
-        final UserService service = new UserService(repository);
+        final UserService service = new UserService(repository, DozerBeanMapperBuilder.buildDefault());
         controller = new UserController(service);
         mockMvc = MockMvcBuilders
                 .standaloneSetup(controller)
@@ -95,12 +96,10 @@ class UserControllerTest {
         @DisplayName("존재하는 회원 Id와 유효한 회원 정보를 전달하면")
         class Context_withValidUserData {
             private MockHttpServletRequestBuilder request;
-            private TestUserDataBuilder updateDataFactory = new TestUserDataBuilder(
-                    UserData.builder()
-                            .name("name2")
-                            .password("password2")
-                            .email("email2")
-            );
+            private TestUserBuilder updateDataFactory = new TestUserBuilder()
+                    .name("name2")
+                    .password("password2")
+                    .email("email2");
 
             @BeforeEach
             void prepare() throws JsonProcessingException {
