@@ -31,8 +31,8 @@ public class InMemoryUserRepository implements UserRepository {
 
     @Override
     public void delete(User user) {
-        users.removeIf(element -> {
-            return element.getId().equals(user.getId());
+        users.removeIf(it -> {
+            return it.getId().equals(user.getId());
         });
     }
 }
