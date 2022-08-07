@@ -111,4 +111,42 @@ class UserServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("deleteUser 메소드는")
+    class Describe_deleteUser {
+        @Nested
+        @DisplayName("존재하는 회원 Id를 전달하면")
+        class Context_withExistingUserId {
+            @BeforeEach
+            void prepare() {
+                repository.save(allFieldsUserBuilder.buildUser());
+            }
+
+            @Test
+            @DisplayName("회원 정보를 삭제한다")
+            void it_deleteUser() throws Exception {
+                service.deleteUserById(1L);
+
+                assertThat(repository.findById(1L)).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 Id로 요청하면")
+        class Context_withNotExistingUserId {
+            @BeforeEach
+            void prepare() {
+                repository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("회원을 찾을 수 없다는 예외 던진다")
+            void it_returnsUpdatedUser() throws Exception {
+                assertThrows(UserNotFoundException.class, () -> {
+                    service.deleteUserById(1L);
+                });
+            }
+        }
+    }
+
 }

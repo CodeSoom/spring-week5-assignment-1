@@ -8,8 +8,6 @@ import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
 @Service
 public class UserService {
     private final UserRepository repository;
@@ -26,10 +24,20 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserData toUserData) {
-        User user = repository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        User user = findUser(id);
         User toUser = mapper.map(toUserData, User.class);
         user.change(toUser);
         return user;
+    }
+
+    public void deleteUserById(Long id) {
+        User user = findUser(id);
+
+        repository.delete(user);
+    }
+
+    private User findUser(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
