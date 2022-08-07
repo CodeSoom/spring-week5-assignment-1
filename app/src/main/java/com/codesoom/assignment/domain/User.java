@@ -25,4 +25,10 @@ public class User {
     private String name;
     private String email;
     private String password;
+
+    public void change(User toUser) {
+        this.name = toUser.getName();
+        this.email = toUser.getEmail();
+        this.password = toUser.getPassword();
+    }
 }

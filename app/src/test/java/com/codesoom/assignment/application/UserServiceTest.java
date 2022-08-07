@@ -1,7 +1,9 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.TestUserBuilder;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.infra.InMemoryUserRepository;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
@@ -11,43 +13,102 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("UserService 클래스")
 class UserServiceTest {
-    private final TestUserBuilder allFieldsUserFactory = new TestUserBuilder()
-            .name("name")
-            .password("password")
-            .email("email");
-
+    private TestUserBuilder allFieldsUserBuilder;
+    private UserRepository repository;
     private UserService service;
 
     @BeforeEach
     void setup() {
-        service = new UserService(new InMemoryUserRepository(), DozerBeanMapperBuilder.buildDefault());
+        allFieldsUserBuilder = new TestUserBuilder()
+                .name("name")
+                .password("password")
+                .email("email");
+        repository = new InMemoryUserRepository();
+        service = new UserService(repository, DozerBeanMapperBuilder.buildDefault());
     }
 
     @Nested
     @DisplayName("createUser 메소드는")
     class Describe_createUser {
         @Nested
-        @DisplayName("유효한 회원 정보를 전달하면")
+        @DisplayName("모든 필드가 공백이 아닌 회원 정보를 전달하면")
         class Context_withValidUserData {
             private UserData allFieldsUserData;
 
             @BeforeEach
             void prepare() {
-                allFieldsUserData = allFieldsUserFactory.buildData();
+                allFieldsUserData = allFieldsUserBuilder.buildData();
             }
 
             @Test
             @DisplayName("생성된 회원 정보를 반환한다")
             void it_returnsCratedUser() throws Exception {
                 final User result = service.createUser(allFieldsUserData);
-                final User expect = allFieldsUserFactory.id(1L).buildUser();
+                final User expect = allFieldsUserBuilder.id(1L).buildUser();
 
                 assertThat(result).isEqualTo(expect);
                 assertThat(result.getId()).isEqualTo(1L);
             }
         }
     }
+
+    @Nested
+    @DisplayName("updateUser 메소드는")
+    class Describe_updateUser {
+        @Nested
+        @DisplayName("존재하는 회원 Id와 모든 필드가 공백이 아닌 회원 정보를 전달하면")
+        class Context_withValidUserData {
+            private TestUserBuilder updateUserBuilder;
+            private UserData updateUserData;
+
+            @BeforeEach
+            void prepare() {
+                repository.save(allFieldsUserBuilder.buildUser());
+                updateUserBuilder = allFieldsUserBuilder
+                        .name("name2")
+                        .email("email2")
+                        .password("password2");
+                updateUserData = updateUserBuilder.buildData();
+            }
+
+            @Test
+            @DisplayName("업데이트된 회원 정보를 반환한다")
+            void it_returnsUpdatedUser() throws Exception {
+                final User result = service.updateUser(1L, updateUserData);
+                final User expect = updateUserBuilder.id(1L).buildUser();
+
+                assertThat(result).isEqualTo(expect);
+                assertThat(result.getId()).isEqualTo(1L);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 Id와 모든 필드가 공백이 아닌 회원 정보를 전달하면")
+        class Context_withNotExistUserId {
+            private UserData updateUserData;
+
+            @BeforeEach
+            void prepare() {
+                repository.deleteAll();
+                updateUserData = allFieldsUserBuilder
+                        .name("name2")
+                        .email("email2")
+                        .password("password2")
+                        .buildData();
+            }
+
+            @Test
+            @DisplayName("회원을 찾을 수 없다는 에러를 던진다")
+            void it_returnsUpdatedUser() throws Exception {
+                assertThrows(ProductNotFoundException.class, () -> {
+                    service.updateUser(1L, updateUserData);
+                });
+            }
+        }
+    }
+
 }

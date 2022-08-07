@@ -35,4 +35,9 @@ public class InMemoryUserRepository implements UserRepository {
             return it.getId().equals(user.getId());
         });
     }
+
+    @Override
+    public void deleteAll() {
+        users.clear();
+    }
 }

@@ -25,4 +25,9 @@ public interface UserRepository {
      * @param user 삭제할 회원
      */
     void delete(User user);
+
+    /**
+     * 모든 회원을 삭제합니다
+     */
+    void deleteAll();
 }
