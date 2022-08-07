@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,9 +22,11 @@ import javax.validation.Valid;
 @CrossOrigin
 public class UserController {
     private final UserService service;
+    private final Mapper mapper;
 
-    public UserController(UserService service) {
+    public UserController(UserService service, Mapper mapper) {
         this.service = service;
+        this.mapper = mapper;
     }
 
     @PostMapping
@@ -31,12 +34,7 @@ public class UserController {
     public UserData create(@RequestBody @Valid UserData userData) {
         User createdUser = service.createUser(userData);
 
-        return UserData.builder()
-                .id(createdUser.getId())
-                .name(createdUser.getName())
-                .password(createdUser.getPassword())
-                .email(createdUser.getEmail())
-                .build();
+        return mapper.map(createdUser, UserData.class);
     }
 
     @PatchMapping("{id}")
@@ -45,12 +43,8 @@ public class UserController {
             @PathVariable Long id,
             @RequestBody @Valid UserData userData
     ) {
-        // TODO: Service 연동
-        return UserData.builder()
-                .id(id)
-                .name(userData.getName())
-                .email(userData.getEmail())
-                .password(userData.getPassword())
-                .build();
+        User updatedUser = service.updateUser(id, userData);
+
+        return mapper.map(updatedUser, UserData.class);
     }
 }
