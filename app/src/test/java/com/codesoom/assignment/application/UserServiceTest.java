@@ -1,7 +1,7 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.TestUserBuilder;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -104,7 +104,7 @@ class UserServiceTest {
             @Test
             @DisplayName("회원을 찾을 수 없다는 에러를 던진다")
             void it_returnsUpdatedUser() throws Exception {
-                assertThrows(ProductNotFoundException.class, () -> {
+                assertThrows(UserNotFoundException.class, () -> {
                     service.updateUser(1L, updateUserData);
                 });
             }

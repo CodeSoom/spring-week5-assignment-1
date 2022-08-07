@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
@@ -25,9 +26,9 @@ public class UserService {
     }
 
     public User updateUser(Long id, UserData toUserData) {
-        User toUser = mapper.map(toUserData, User.class);
         User user = repository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(id));
+        User toUser = mapper.map(toUserData, User.class);
         user.change(toUser);
         return user;
     }
