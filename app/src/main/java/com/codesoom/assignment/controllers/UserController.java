@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -28,7 +29,14 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserData create(@RequestBody @Valid UserData userData) {
-        return service.createUser(userData);
+        User createdUser = service.createUser(userData);
+
+        return UserData.builder()
+                .id(createdUser.getId())
+                .name(createdUser.getName())
+                .password(createdUser.getPassword())
+                .email(createdUser.getEmail())
+                .build();
     }
 
     @PatchMapping("{id}")
