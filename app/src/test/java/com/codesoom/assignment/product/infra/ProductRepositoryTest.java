@@ -2,14 +2,18 @@ package com.codesoom.assignment.product.infra;
 
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.product.domain.ProductRepository;
+import com.codesoom.assignment.product.dto.ProductNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -126,6 +130,7 @@ public class ProductRepositoryTest {
         @DisplayName("찾는 상품이 있다면")
         class Context_with_product {
             Long findId;
+
             @BeforeEach
             void prepare() {
                 findId = productRepository.save(getInputProduct()).getId();
@@ -140,6 +145,31 @@ public class ProductRepositoryTest {
 
                 assertTrue(productRepository.findById(findId).isEmpty());
             }
+        }
+
+        @Nested
+        @DisplayName("찾는 상품이 없으면")
+        class Context_without_product {
+            @Test
+            @DisplayName("EmptyResultDataAccessException 을 던진다")
+            void It_throws_exception() {
+                assertThatThrownBy(() -> productRepository.deleteById(-1L))
+                        .isInstanceOf(RuntimeException.class)
+                        .isExactlyInstanceOf(EmptyResultDataAccessException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("null 이 주어지면")
+        class Context_with_null {
+            @Test
+            @DisplayName("InvalidDataAccessApiUsageException 을 던진다")
+            void It_throws_exception() {
+                assertThatThrownBy(() -> productRepository.deleteById(null))
+                        .isInstanceOf(RuntimeException.class)
+                        .isExactlyInstanceOf(InvalidDataAccessApiUsageException.class);
+            }
+
         }
     }
 }
