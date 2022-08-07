@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.TestUserBuilder;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.infra.InMemoryUserRepository;
@@ -16,6 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -173,6 +177,42 @@ class UserControllerTest {
             @DisplayName("Not found status를 반환한다")
             void it_returnsCratedStatusAndUserData() throws Exception {
                 mockMvc.perform(request)
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("DELETE /users/{id} 요청은")
+    class Describe_deleteUser {
+        @Nested
+        @DisplayName("존재하는 회원 Id로 전달하면")
+        class Context_withExistingUserId {
+            @BeforeEach
+            void prepare() {
+                repository.save(allFieldsUserBuilder.buildUser());
+            }
+
+            @Test
+            @DisplayName("No content status를 반환한다")
+            void it_returnsNoContent() throws Exception {
+                mockMvc.perform(delete("/users/1"))
+                        .andExpect(status().isNoContent());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 회원 Id로 요청하면")
+        class Context_withNotExistingUserId {
+            @BeforeEach
+            void prepare() {
+                repository.deleteAll();
+            }
+
+            @Test
+            @DisplayName("Not found status를 반환한다")
+            void it_returnsNotFound() throws Exception {
+                mockMvc.perform(delete("/users/1"))
                         .andExpect(status().isNotFound());
             }
         }

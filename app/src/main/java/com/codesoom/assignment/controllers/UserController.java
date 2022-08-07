@@ -6,6 +6,7 @@ import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -46,5 +47,11 @@ public class UserController {
         User updatedUser = service.updateUser(id, userData);
 
         return mapper.map(updatedUser, UserData.class);
+    }
+
+    @DeleteMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        service.deleteUserById(id);
     }
 }
