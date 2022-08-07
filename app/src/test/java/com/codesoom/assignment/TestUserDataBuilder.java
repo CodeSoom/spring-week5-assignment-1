@@ -23,17 +23,17 @@ public class TestUserDataBuilder {
         );
     }
 
+    public TestUserDataBuilder id(Long id) {
+        this.baseBuilder = baseBuilder.id(id);
+        return this;
+    }
+
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     private UserData.UserDataBuilder baseBuilder;
 
     public TestUserDataBuilder(UserData.UserDataBuilder baseBuilder) {
         this.baseBuilder = baseBuilder;
-    }
-
-    public TestUserDataBuilder id(Long id) {
-        this.baseBuilder = baseBuilder.id(id);
-        return this;
     }
 
     public String buildJson() throws JsonProcessingException {
