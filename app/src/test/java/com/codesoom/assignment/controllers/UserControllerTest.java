@@ -7,9 +7,10 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import static com.codesoom.assignment.UserTestData.newUser;
+import static com.codesoom.assignment.UserTestData.newUsers;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -17,12 +18,10 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("UserController 테스트")
 class UserControllerTest {
+    private static final Long SIZE = 3L;
 
     private UserService service;
     private UserController controller;
-
-    private final String TEST = "TEST";
-    private final Long SIZE = 3L;
 
     @BeforeEach
     void setUp() {
@@ -30,17 +29,6 @@ class UserControllerTest {
         controller = new UserController(service);
     }
 
-    List<User> newUsers(Long size){
-        List<User> users = new ArrayList<>();
-        for(long i = 0 ; i < size ; i++){
-            users.add(newUser(i));
-        }
-        return users;
-    }
-
-    User newUser(Long number){
-        return new User(number , TEST + number , TEST + number , TEST + number);
-    }
 
     @Nested
     @DisplayName("findAll 메서드는")
@@ -80,12 +68,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                user = User.builder()
-                        .id(1L)
-                        .name(TEST)
-                        .email(TEST)
-                        .password(TEST)
-                        .build();
+                user = newUser(1L);
                 given(service.save(user)).willReturn(user);
             }
 
@@ -144,12 +127,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                user = User.builder()
-                        .id(1L)
-                        .name(TEST)
-                        .email(TEST)
-                        .password(TEST)
-                        .build();
+                user = newUser(1L);
                 given(service.delete(id)).willReturn(user);
             }
 
