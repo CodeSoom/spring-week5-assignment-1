@@ -30,13 +30,17 @@ class ProductTest {
                 .price(5000)
                 .build();
 
-        product.change("쥐순이", "코드숨", 10000,
-                "http://localhost:8080/rat");
+        Product updateProduct = Product.builder()
+                        .name("쥐순이")
+                        .maker("코드숨")
+                        .price(10000)
+                        .imageUrl("http://localhost:8080/rat")
+                        .build();
 
-        assertThat(product.getName()).isEqualTo("쥐순이");
-        assertThat(product.getMaker()).isEqualTo("코드숨");
-        assertThat(product.getPrice()).isEqualTo(10000);
-        assertThat(product.getImageUrl())
-                .isEqualTo("http://localhost:8080/rat");
+        product.change(updateProduct);
+        assertThat(product.getName()).isEqualTo(updateProduct.getName());
+        assertThat(product.getMaker()).isEqualTo(updateProduct.getMaker());
+        assertThat(product.getPrice()).isEqualTo(updateProduct.getPrice());
+        assertThat(product.getImageUrl()).isEqualTo(updateProduct.getImageUrl());
     }
 }
