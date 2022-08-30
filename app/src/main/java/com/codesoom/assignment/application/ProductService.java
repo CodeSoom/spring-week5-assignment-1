@@ -23,7 +23,6 @@ public class ProductService {
 
     /**
      * 모든 상품들을 반환한다
-     * @return List<Product>
      */
     public List<Product> getProducts() {
         return productRepository.findAll();
