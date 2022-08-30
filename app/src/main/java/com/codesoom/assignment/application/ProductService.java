@@ -29,11 +29,11 @@ public class ProductService {
     }
 
     /**
-     * 식별자에 해당하는 상품을 반환한다
-     * 식별자에 해당하는 상품이 없다면 상품을 찾을 수 없다는 예외를 던진다
-     * @param id
-     * @return Product
-     * @throws ProductNotFoundException
+     * 상품을 찾아 반환한다.
+     *
+     * @param id 찾으려는 상품의 식별자
+     * @return Product 찾은 상품
+     * @throws ProductNotFoundException 식별자에 해당하는 상품이 없는 경우
      */
     public Product getProduct(Long id) {
         return findProduct(id);
