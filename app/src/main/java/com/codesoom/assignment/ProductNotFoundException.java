@@ -1,7 +1,7 @@
 package com.codesoom.assignment;
 
-public class ProductNotFoundException extends RuntimeException {
-    public ProductNotFoundException(Long id) {
+public class ResourceNotFoundException extends RuntimeException {
+    public ResourceNotFoundException(Long id) {
         super("Product not found: " + id);
     }
 }
