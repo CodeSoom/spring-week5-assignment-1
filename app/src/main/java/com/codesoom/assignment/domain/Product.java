@@ -13,7 +13,6 @@ import javax.persistence.Id;
 @Getter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue
@@ -32,5 +31,13 @@ public class Product {
         this.maker = p.getMaker();
         this.price = p.getPrice();
         this.imageUrl = p.getImageUrl();
+    }
+
+    private Product(Long id, String name, String maker, Integer price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
     }
 }
