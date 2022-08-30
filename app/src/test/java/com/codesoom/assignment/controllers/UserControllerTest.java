@@ -2,33 +2,49 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.List;
 
-import static com.codesoom.assignment.UserTestData.newUser;
-import static com.codesoom.assignment.UserTestData.newUsers;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.verify;
+import static com.codesoom.assignment.UserTestData.TEST_SIZE;
+import static com.codesoom.assignment.UserTestData.addNewUsers;
+import static com.codesoom.assignment.UserTestData.repositoryClear;
+import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureMockMvc
 @DisplayName("UserController 테스트")
 class UserControllerTest {
-    private static final Long SIZE = 3L;
 
-    private UserService service;
+    private MockMvc mvc;
+    @Autowired
     private UserController controller;
+    @Autowired
+    private UserService service;
+    @Autowired
+    private ObjectMapper mapper;
 
     @BeforeEach
     void setUp() {
-        service = mock(UserService.class);
-        controller = new UserController(service);
+        mvc = MockMvcBuilders
+                .standaloneSetup(controller)
+                .setControllerAdvice(new NotFoundErrorAdvice())
+                .build();
     }
-
 
     @Nested
     @DisplayName("findAll 메서드는")
@@ -42,16 +58,22 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                users = newUsers(SIZE);
-                given(service.findAll()).willReturn(users);
+                users = addNewUsers(service , TEST_SIZE);
+            }
+
+            @AfterEach
+            void tearDown() {
+                repositoryClear(service);
             }
 
             @Test
             @DisplayName("모든 사용자를 반환한다")
-            void It_ReturnUsers(){
-                assertThat(controller.findAll()).hasSize(Math.toIntExact(SIZE));
-
-                verify(service).findAll();
+            void It_ReturnUsers() throws Exception {
+                String content = mapper.writeValueAsString(users);
+                System.out.println(content);
+                mvc.perform(get("/user"))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(equalTo(content)));
             }
         }
     }
@@ -68,16 +90,12 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                user = newUser(1L);
-                given(service.save(user)).willReturn(user);
             }
 
             @Test
             @DisplayName("저장 후 저장한 정보를 반환한다")
             void It_Save(){
-                assertThat(controller.create(user)).isEqualTo(user);
 
-                verify(service).save(user);
             }
         }
     }
@@ -101,15 +119,11 @@ class UserControllerTest {
                                 .email("UPDATE")
                                 .password("UPDATE")
                                 .build();
-                given(service.update(id , updateUser)).willReturn(updateUser);
             }
 
             @Test
             @DisplayName("수정 후 수정된 정보를 반환한다")
             void It_UpdateUser(){
-                assertThat(controller.update(id , updateUser)).isEqualTo(updateUser);
-
-                verify(service).update(id , updateUser);
             }
         }
     }
@@ -127,16 +141,11 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                user = newUser(1L);
-                given(service.delete(id)).willReturn(user);
             }
 
             @Test
             @DisplayName("삭제 후 삭제한 정보를 반환한다")
             void It_Delete(){
-                assertThat(controller.delete(id)).isEqualTo(user);
-
-                verify(service).delete(id);
             }
         }
     }
