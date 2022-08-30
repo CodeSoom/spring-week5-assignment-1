@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.ResourceNotFoundException;
+import com.codesoom.assignment.ResourceNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
@@ -80,7 +81,7 @@ class ProductServiceTest {
     @Test
     void getProductWithNotExsitedId() {
         assertThatThrownBy(() -> productService.getProduct(1000L))
-                .isInstanceOf(ProductNotFoundException.class);
+                .isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
@@ -123,7 +124,7 @@ class ProductServiceTest {
                 .build();
 
         assertThatThrownBy(() -> productService.updateProduct(1000L, productData))
-                .isInstanceOf(ProductNotFoundException.class);
+                .isInstanceOf(ResourceNotFoundException.class);
     }
 
     @Test
@@ -136,6 +137,6 @@ class ProductServiceTest {
     @Test
     void deleteProductWithNotExistedId() {
         assertThatThrownBy(() -> productService.deleteProduct(1000L))
-                .isInstanceOf(ProductNotFoundException.class);
+                .isInstanceOf(ResourceNotFoundException.class);
     }
 }

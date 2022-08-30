@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.ResourceNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
@@ -33,7 +33,7 @@ public class ProductService {
      *
      * @param id 찾으려는 상품의 식별자
      * @return 식별자에 해당하는 상품
-     * @throws ProductNotFoundException 식별자에 해당하는 상품이 없는 경우
+     * @throws ResourceNotFoundException 식별자에 해당하는 상품이 없는 경우
      */
     public Product getProduct(Long id) {
         return findProduct(id);
@@ -56,7 +56,7 @@ public class ProductService {
      * @param id 수정하려는 상품의 식별자
      * @param productData 수정할 정보 상품의 DTO
      * @return 수정 후 저장된 상품
-     * @throws ProductNotFoundException 식별자에 해당하는 상품이 없는 경우
+     * @throws ResourceNotFoundException 식별자에 해당하는 상품이 없는 경우
      */
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
@@ -69,7 +69,7 @@ public class ProductService {
      *
      * @param id 삭제하려는 상품의 식별자
      * @return 식별자에 해당하는 상품
-     * @throws ProductNotFoundException 식별자에 해당하는 상품이 없는 경우
+     * @throws ResourceNotFoundException 식별자에 해당하는 상품이 없는 경우
      */
     public Product deleteProduct(Long id) {
         Product product = findProduct(id);
@@ -81,6 +81,6 @@ public class ProductService {
 
     private Product findProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 }
