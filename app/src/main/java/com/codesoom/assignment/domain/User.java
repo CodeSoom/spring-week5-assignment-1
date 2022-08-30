@@ -1,10 +1,8 @@
 package com.codesoom.assignment.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -18,6 +16,7 @@ import javax.persistence.Id;
 @Builder
 @NoArgsConstructor
 @ToString
+@EqualsAndHashCode
 public class User {
 
     @Id
@@ -37,5 +36,12 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User update(User u) {
+        this.name = u.name;
+        this.email = u.email;
+        this.password = u.password;
+        return this;
     }
 }
