@@ -17,7 +17,6 @@ import javax.persistence.Id;
 @Getter
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
 public class User {
 
@@ -26,7 +25,17 @@ public class User {
     private Long id;
 
     private String name;
+
     private String email;
+
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
+
+    // @Builder를 위한 private 생성자
+    private User(Long id, String name, String email, String password) {
+        this.id = id;
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
 }
