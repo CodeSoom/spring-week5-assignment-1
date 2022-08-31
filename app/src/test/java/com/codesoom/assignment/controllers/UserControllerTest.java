@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.application.UserCommandService;
+import com.codesoom.assignment.application.UserQueryService;
 import com.codesoom.assignment.domain.User;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -13,13 +14,13 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.List;
 
 import static com.codesoom.assignment.UserTestData.TEST_SIZE;
 import static com.codesoom.assignment.UserTestData.addNewUsers;
 import static com.codesoom.assignment.UserTestData.repositoryClear;
+import static org.assertj.core.api.Assertions.fail;
 import static org.hamcrest.Matchers.equalTo;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -34,7 +35,9 @@ class UserControllerTest {
     @Autowired
     private UserController controller;
     @Autowired
-    private UserService service;
+    private UserCommandService command;
+    @Autowired
+    private UserQueryService query;
     @Autowired
     private ObjectMapper mapper;
 
@@ -58,12 +61,12 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                users = addNewUsers(service , TEST_SIZE);
+                users = addNewUsers(command , TEST_SIZE);
             }
 
             @AfterEach
             void tearDown() {
-                repositoryClear(service);
+                repositoryClear(query , command);
             }
 
             @Test
@@ -95,7 +98,7 @@ class UserControllerTest {
             @Test
             @DisplayName("저장 후 저장한 정보를 반환한다")
             void It_Save(){
-
+                fail("미구현된 테스트입니다.");
             }
         }
     }
@@ -124,6 +127,7 @@ class UserControllerTest {
             @Test
             @DisplayName("수정 후 수정된 정보를 반환한다")
             void It_UpdateUser(){
+                fail("미구현된 테스트입니다.");
             }
         }
     }

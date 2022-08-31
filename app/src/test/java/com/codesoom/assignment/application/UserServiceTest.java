@@ -22,13 +22,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("UserService 테스트")
 class UserServiceTest {
 
-    private UserService service;
+    private UserQueryService query;
+    private UserCommandService command;
     @Autowired
     private UserRepository repository;
 
     @BeforeEach
     void setUp() {
-        service = new UserService(repository);
+        query = new UserQueryService(repository);
+        command = new UserCommandService(repository);
     }
 
     @Nested
@@ -39,18 +41,18 @@ class UserServiceTest {
 
         @BeforeEach
         void setUp() {
-            users = addNewUsers(service , TEST_SIZE);
+            users = addNewUsers(command , TEST_SIZE);
         }
 
         @AfterEach
         void tearDown() {
-            repositoryClear(service);
+            repositoryClear(query , command);
         }
 
         @Test
         @DisplayName("모든 사용자를 반환한다")
         void It_ReturnUsers() {
-            List<User> findUsers = service.findAll();
+            List<User> findUsers = query.findAll();
             assertThat(findUsers).hasSize((int) TEST_SIZE);
             for(int i = 0 ; i < users.size() ; i++){
                 User user = users.get(i);
@@ -69,18 +71,18 @@ class UserServiceTest {
 
         @BeforeEach
         void setUp() {
-            user = addNewUser(service , id);
+            user = addNewUser(command , id);
         }
 
         @AfterEach
         void tearDown() {
-            repositoryClear(service);
+            repositoryClear(query , command);
         }
 
         @Test
         @DisplayName("저장 후 반환한다")
         void It_ReturnUser(){
-            assertThat(service.save(user)).isEqualTo(user);
+            assertThat(command.save(user)).isEqualTo(user);
         }
     }
 
@@ -98,7 +100,7 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                user = addNewUser(service , id);
+                user = addNewUser(command , id);
                 updateUser = User.builder()
                                 .id(user.getId())
                                 .name("Update Name")
@@ -109,13 +111,13 @@ class UserServiceTest {
 
             @AfterEach
             void tearDown() {
-                repositoryClear(service);
+                repositoryClear(query , command);
             }
 
             @Test
             @DisplayName("해당 자원을 수정한다")
             void It_Update(){
-                assertThat(service.update(user.getId() , updateUser)).isEqualTo(updateUser);
+                assertThat(command.update(user , updateUser)).isEqualTo(updateUser);
             }
         }
     }
@@ -133,21 +135,21 @@ class UserServiceTest {
 
             @BeforeEach
             void setUp() {
-                user = addNewUser(service , id);
+                user = addNewUser(command , id);
                 System.out.println(user);
             }
 
             @AfterEach
             void tearDown() {
-                repositoryClear(service);
+                repositoryClear(query , command);
             }
 
             @Test
             @DisplayName("해당 자원을 삭제한다")
             void It_DeleteResource(){
-                int oldUserSize = service.findAll().size();
-                service.delete(user.getId());
-                int nowUserSize = service.findAll().size();
+                int oldUserSize = query.findAll().size();
+                command.delete(user);
+                int nowUserSize = query.findAll().size();
                 assertThat(nowUserSize).isEqualTo(oldUserSize - 1);
             }
         }
