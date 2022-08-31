@@ -40,7 +40,7 @@ public class ProductService {
     }
 
     /**
-     * 상품의 DTO를 받아 매퍼를 통해 엔티티로 변환 후 저장한다.
+     * 상품을 저장한다.
      *
      * @param productData 저장할 상품의 DTO
      * @return 저장한 상품
@@ -51,7 +51,7 @@ public class ProductService {
     }
 
     /**
-     * 식별자에 해당하는 상품을 전달받은 DTO의 정보로 수정 후 수정된 상품을 반환한다.
+     * 식별자에 해당하는 상품을 전달받은 정보로 수정 후 수정된 상품을 반환한다.
      *
      * @param id 수정하려는 상품의 식별자
      * @param productData 수정할 정보 상품의 DTO
@@ -79,6 +79,13 @@ public class ProductService {
         return product;
     }
 
+    /**
+     * 식별자에 해당하는 상품을 조회한다
+     *
+     * @param id 조회할 상품의 식별자
+     * @return 식별자에 해당하는 상품
+     * @throws ResourceNotFoundException 식별자에 해당하는 상품이 없는 경우
+     */
     private Product findProduct(Long id) {
         return productRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException(id));
