@@ -146,6 +146,7 @@ class UserControllerTest {
             @Test
             @DisplayName("삭제 후 삭제한 정보를 반환한다")
             void It_Delete(){
+                fail("미구현된 테스트입니다.");
             }
         }
     }
