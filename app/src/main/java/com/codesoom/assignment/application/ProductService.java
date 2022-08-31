@@ -51,7 +51,7 @@ public class ProductService {
     }
 
     /**
-     * 식별자에 해당하는 상품을 전달받은 정보로 수정 후 수정된 상품을 반환한다.
+     * 식별자에 해당하는 상품을 수정한다.
      *
      * @param id 수정하려는 상품의 식별자
      * @param productData 수정할 정보 상품의 DTO
