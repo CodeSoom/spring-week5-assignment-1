@@ -11,7 +11,6 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 public class Product {
     @Id
@@ -33,6 +32,7 @@ public class Product {
         this.imageUrl = p.getImageUrl();
     }
 
+    @Builder
     private Product(Long id, String name, String maker, Integer price, String imageUrl) {
         this.id = id;
         this.name = name;

@@ -13,7 +13,6 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode
@@ -30,7 +29,7 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
-    // @Builder를 위한 private 생성자
+    @Builder
     private User(Long id, String name, String email, String password) {
         this.id = id;
         this.name = name;
