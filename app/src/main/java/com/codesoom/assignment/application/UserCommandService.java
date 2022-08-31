@@ -9,39 +9,25 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class UserService {
+@Transactional
+public class UserCommandService {
 
     private UserRepository repository;
 
-    public UserService(UserRepository repository) {
+    public UserCommandService(UserRepository repository) {
         this.repository = repository;
     }
 
-    @Transactional(readOnly = true)
-    public List<User> findAll(){
-        return repository.findAll();
-    }
-
-    @Transactional
     public User save(User user){
         return repository.save(user);
     }
 
-    @Transactional
-    public User update(Long id , User user){
-        User beforeUser = findUser(id);
+    public User update(User beforeUser , User user){
         return beforeUser.update(user);
     }
 
-    @Transactional
-    public User delete(Long id){
-        User user = findUser(id);
+    public User delete(User user){
         repository.delete(user);
         return user;
-    }
-
-    private User findUser(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException(id));
     }
 }
