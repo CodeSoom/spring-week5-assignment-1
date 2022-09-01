@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 상품을 조회,생성,삭제한다.
+ * 상품을 조회, 생성, 삭제한다.
  */
 @RestController
 @RequestMapping("/products")
