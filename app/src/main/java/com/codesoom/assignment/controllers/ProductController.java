@@ -12,7 +12,7 @@ import javax.validation.Valid;
 import java.util.List;
 
 /**
- * 상품을 조회 , 생성 , 삭제한다.
+ * 상품을 조회,생성,삭제한다.
  */
 @RestController
 @RequestMapping("/products")
@@ -49,7 +49,6 @@ public class ProductController {
      * @param productData 저장할 정보
      * @return 생성된 상품
      * @throws MethodArgumentNotValidException 필수 정보가 비어있는 경우
-     * @see com.codesoom.assignment.dto.ProductData
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -65,7 +64,6 @@ public class ProductController {
      * @return 수정된 상품
      * @throws MethodArgumentNotValidException 필수 정보가 비어있는 경우
      * @throws ResourceNotFoundException 식별자에 해당하는 상품이 없는 경우
-     * @see com.codesoom.assignment.dto.ProductData
      */
     @PatchMapping("{id}")
     public Product update(
