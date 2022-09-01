@@ -3,6 +3,7 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserCommandService;
 import com.codesoom.assignment.application.UserQueryService;
 import com.codesoom.assignment.domain.User;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -12,17 +13,24 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
 import static com.codesoom.assignment.UserTestData.TEST_SIZE;
+import static com.codesoom.assignment.UserTestData.addNewUser;
 import static com.codesoom.assignment.UserTestData.addNewUsers;
 import static com.codesoom.assignment.UserTestData.repositoryClear;
-import static org.assertj.core.api.Assertions.fail;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.equalTo;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -50,7 +58,7 @@ class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("findAll 메서드는")
+    @DisplayName("findAll()")
     class Describe_FindAll{
 
         @Nested
@@ -70,11 +78,11 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("모든 사용자를 반환한다")
+            @DisplayName("모든 사용자를 반환한다.")
             void It_ReturnUsers() throws Exception {
                 String content = mapper.writeValueAsString(users);
                 System.out.println(content);
-                mvc.perform(get("/user"))
+                mvc.perform(get("/user").accept(MediaType.APPLICATION_JSON_UTF8))
                         .andExpect(status().isOk())
                         .andExpect(content().string(equalTo(content)));
             }
@@ -82,75 +90,152 @@ class UserControllerTest {
     }
 
     @Nested
-    @DisplayName("create 메서드는")
+    @DisplayName("create()")
     class Describe_Create{
 
         @Nested
-        @DisplayName("필수 입력 항목이 다 존재한다면")
-        class Context_PassValidation{
+        @DisplayName("필수 입력 검증을 통과하지 못 한다면")
+        class Context_NotPassValidation{
 
             private User user;
+            private String content;
 
             @BeforeEach
-            void setUp() {
+            void setUp() throws JsonProcessingException {
+                user = User.builder().build();
+                content = mapper.writeValueAsString(user);
             }
 
             @Test
-            @DisplayName("저장 후 저장한 정보를 반환한다")
-            void It_Save(){
-                fail("미구현된 테스트입니다.");
+            @DisplayName("잘못된 요청이라는 예외를 던진다.")
+            void It_ThrowsException() throws Exception {
+                mvc.perform(post("/user")
+                                .content(content)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("필수 입력 검증을 통과한다면")
+        class Context_PassValidation{
+
+            private User user;
+            private final String content = "{\"name\":\"new name\",\"email\":\"new email\",\"password\":\"new password\"}";
+
+            @AfterEach
+            void tearDown() {
+                repositoryClear(query , command);
+            }
+
+            @Test
+            @DisplayName("저장 후 저장한 정보와 상태 201을 반환한다.")
+            void It_Save() throws Exception {
+                user = mapper.readValue(content , User.class);
+
+                MvcResult mvcResult = mvc.perform(post("/user")
+                                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                                .characterEncoding("UTF-8")
+                                .content(content))
+                        .andDo(print())
+                        .andExpect(status().isCreated())
+                        .andReturn();
+
+                User returnUser = mapper.readValue(mvcResult.getResponse().getContentAsString() , User.class);
+                assertThat(returnUser.getEmail()).isEqualTo(user.getEmail());
+                assertThat(returnUser.getName()).isEqualTo(user.getName());
             }
         }
     }
 
     @Nested
-    @DisplayName("update 메서드는")
+    @DisplayName("update()")
     class Describe_Update{
 
         @Nested
         @DisplayName("{id}에 해당하는 자원이 있고 , 수정할 정보가 비어있지 않다면")
         class Context_ExistedIdAndNotEmptyBody{
 
-            private final Long id = 1L;
+            private Long id = 1L;
+            private User oldUser;
+            private String updateContent;
             private User updateUser;
 
             @BeforeEach
-            void setUp() {
-                updateUser = User.builder()
-                                .id(id)
-                                .name("UPDATE")
-                                .email("UPDATE")
-                                .password("UPDATE")
-                                .build();
+            void setUp() throws JsonProcessingException {
+                oldUser = addNewUser(command , id);
+                updateContent = "{\"name\":\"new name\",\"email\":\"new email\",\"password\":\"new password\"}";
+                updateUser = mapper.readValue(updateContent , User.class);
+            }
+
+            @AfterEach
+            void tearDown() {
+                repositoryClear(query , command);
             }
 
             @Test
-            @DisplayName("수정 후 수정된 정보를 반환한다")
-            void It_UpdateUser(){
-                fail("미구현된 테스트입니다.");
+            @DisplayName("수정 후 수정된 정보를 반환한다.")
+            void It_UpdateUser() throws Exception {
+                MvcResult mvcResult = mvc.perform(patch("/user/" + oldUser.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(updateContent))
+                        .andExpect(status().isOk())
+                        .andReturn();
+                User returnUser = mapper.readValue(mvcResult.getResponse().getContentAsString() , User.class);
+                assertThat(returnUser.getName()).isEqualTo(updateUser.getName());
+                assertThat(returnUser.getEmail()).isEqualTo(updateUser.getEmail());
+            }
+        }
+
+        @Nested
+        @DisplayName("{id}에 해당하는 사용자가 존재하지 않는다면")
+        class Context_NotExistedId{
+
+            private Long id = 1L;
+            private String updateContent;
+
+            @BeforeEach
+            void setUp() {
+                repositoryClear(query , command);
+                updateContent = "{\"name\":\"new name\",\"email\":\"new email\",\"password\":\"new password\"}";
+            }
+
+            @Test
+            @DisplayName("자원이 존재하지 않는다는 예외를 던진다.")
+            void It_ThrowException() throws Exception {
+                mvc.perform(patch("/user/" + id)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(updateContent))
+                        .andExpect(status().isNotFound());
             }
         }
     }
 
     @Nested
-    @DisplayName("delete 메서드는")
+    @DisplayName("delete()")
     class Describe_Delete{
 
         @Nested
-        @DisplayName("{id}에 해당하는 자원이 존재한다면")
+        @DisplayName("{id}에 해당하는 사용자가 존재한다면")
         class Context_ExistedId{
 
-            private final Long id = 1L;
             private User user;
 
             @BeforeEach
             void setUp() {
+                user = addNewUser(command ,1L);
+            }
+
+            @AfterEach
+            void tearDown() {
+                repositoryClear(query , command);
             }
 
             @Test
-            @DisplayName("삭제 후 삭제한 정보를 반환한다")
-            void It_Delete(){
-                fail("미구현된 테스트입니다.");
+            @DisplayName("삭제한다.")
+            void It_Delete() throws Exception {
+                mvc.perform(delete("/user/" + user.getId()))
+                        .andExpect(status().isNoContent());
             }
         }
     }
