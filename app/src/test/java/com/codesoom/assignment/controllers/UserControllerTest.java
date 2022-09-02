@@ -82,7 +82,7 @@ class UserControllerTest {
             void It_ReturnUsers() throws Exception {
                 String content = mapper.writeValueAsString(users);
                 System.out.println(content);
-                mvc.perform(get("/user").accept(MediaType.APPLICATION_JSON_UTF8))
+                mvc.perform(get("/users").accept(MediaType.APPLICATION_JSON_UTF8))
                         .andExpect(status().isOk())
                         .andExpect(content().string(equalTo(content)));
             }
@@ -109,7 +109,7 @@ class UserControllerTest {
             @Test
             @DisplayName("잘못된 요청이라는 예외를 던진다.")
             void It_ThrowsException() throws Exception {
-                mvc.perform(post("/user")
+                mvc.perform(post("/users")
                                 .content(content)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
@@ -133,7 +133,7 @@ class UserControllerTest {
             void It_Save() throws Exception {
                 user = mapper.readValue(content , User.class);
 
-                MvcResult mvcResult = mvc.perform(post("/user")
+                MvcResult mvcResult = mvc.perform(post("/users")
                                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                                 .characterEncoding("UTF-8")
                                 .content(content))
@@ -176,7 +176,7 @@ class UserControllerTest {
             @Test
             @DisplayName("수정 후 수정된 정보를 반환한다.")
             void It_UpdateUser() throws Exception {
-                MvcResult mvcResult = mvc.perform(patch("/user/" + oldUser.getId())
+                MvcResult mvcResult = mvc.perform(patch("/users/" + oldUser.getId())
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(updateContent))
                         .andExpect(status().isOk())
@@ -203,7 +203,7 @@ class UserControllerTest {
             @Test
             @DisplayName("자원이 존재하지 않는다는 예외를 던진다.")
             void It_ThrowException() throws Exception {
-                mvc.perform(patch("/user/" + id)
+                mvc.perform(patch("/users/" + id)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(updateContent))
                         .andExpect(status().isNotFound());
@@ -234,7 +234,7 @@ class UserControllerTest {
             @Test
             @DisplayName("삭제를 수행하고, 삭제했음을 의미하는 응답을 돌려준다.")
             void It_Delete() throws Exception {
-                mvc.perform(delete("/user/" + user.getId()))
+                mvc.perform(delete("/users/" + user.getId()))
                         .andExpect(status().isNoContent());
             }
         }
