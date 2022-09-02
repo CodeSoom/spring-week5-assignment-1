@@ -49,7 +49,7 @@ public class UserController {
     /**
      * 사용자의 정보를 저장한다.
      *
-     * @param user 등록할 사용자의 정보
+     * @param userCreateDTO 등록할 사용자의 정보
      * @throws MethodArgumentNotValidException 필수 정보가 비어있는 경우
      * @return 저장된 사용자의 정보
      */
@@ -63,7 +63,7 @@ public class UserController {
      * 사용자의 정보를 수정한다.
      *
      * @param id 수정할 사용자의 식별자
-     * @param user 수정할 정보
+     * @param userUpdateDTO 수정할 정보
      * @throws ResourceNotFoundException 식별자에 해당하는 사용자가 없는 경우
      * @throws MethodArgumentNotValidException 필수 정보가 비어있는 경우
      * @return 수정된 사용자의 정보
