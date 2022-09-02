@@ -232,7 +232,7 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("삭제한다.")
+            @DisplayName("삭제를 수행하고, 삭제했음을 의미하는 응답을 돌려준다.")
             void It_Delete() throws Exception {
                 mvc.perform(delete("/user/" + user.getId()))
                         .andExpect(status().isNoContent());
