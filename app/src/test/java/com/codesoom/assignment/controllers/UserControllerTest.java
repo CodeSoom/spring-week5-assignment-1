@@ -94,23 +94,63 @@ class UserControllerTest {
     class Describe_Create{
 
         @Nested
-        @DisplayName("필수 입력 검증을 통과하지 못 한다면")
-        class Context_NotPassValidation{
+        @DisplayName("사용자의 이름이 null이거나 공백이라면")
+        class Context_NameIsNullOrBlank{
 
-            private User user;
-            private String content;
-
-            @BeforeEach
-            void setUp() throws JsonProcessingException {
-                user = User.builder().build();
-                content = mapper.writeValueAsString(user);
-            }
+            private String nameNullContent = "{\"email\":\"new email\",\"password\":\"new password\"}";
+            private String nameBlnakContent = "{\"name\":\"\",\"email\":\"new email\",\"password\":\"new password\"}";
 
             @Test
             @DisplayName("잘못된 요청이라는 예외를 던진다.")
             void It_ThrowsException() throws Exception {
                 mvc.perform(post("/users")
-                                .content(content)
+                                .content(nameNullContent)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+                mvc.perform(post("/users")
+                                .content(nameBlnakContent)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("사용자의 이메일이 null이거나 공백이라면")
+        class Context_EmailIsNullOrBlank{
+
+            private String emailNullContent = "{\"name\":\"new name\",\"password\":\"new password\"}";
+            private String emailBlnakContent = "{\"name\":\"new name\",\"email\":\"\",\"password\":\"new password\"}";
+
+            @Test
+            @DisplayName("잘못된 요청이라는 예외를 던진다.")
+            void It_ThrowsException() throws Exception {
+                mvc.perform(post("/users")
+                                .content(emailNullContent)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+                mvc.perform(post("/users")
+                                .content(emailBlnakContent)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("사용자의 비밀번호가 null이거나 공백이라면")
+        class Context_PasswordIsNullOrBlank{
+
+            private String passwordNullContent = "{\"name\":\"new name\",\"email\":\"new email\"}";
+            private String passwordBlnakContent = "{\"name\":\"new name\",\"email\":\"new email\",\"password\":\"\"}";
+
+            @Test
+            @DisplayName("잘못된 요청이라는 예외를 던진다.")
+            void It_ThrowsException() throws Exception {
+                mvc.perform(post("/users")
+                                .content(passwordNullContent)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+                mvc.perform(post("/users")
+                                .content(passwordBlnakContent)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
             }
@@ -129,7 +169,7 @@ class UserControllerTest {
             }
 
             @Test
-            @DisplayName("저장 후 저장한 정보와 상태 201을 반환한다.")
+            @DisplayName("저장된 정보와 자원이 생성되었다는 응답을 반환한다.")
             void It_Save() throws Exception {
                 user = mapper.readValue(content , User.class);
 
