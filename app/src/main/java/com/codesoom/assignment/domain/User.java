@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.util.StringUtils;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -41,13 +42,13 @@ public class User {
     }
 
     public User update(User u) {
-        if(u.name != null && !"".equals(u.name)){
+        if(StringUtils.hasText(u.name)){
             this.name = u.name;
         }
-        if(u.email != null && !"".equals(u.email)){
+        if(StringUtils.hasText(u.email)){
             this.email = u.email;
         }
-        if(u.password != null && !"".equals(u.password)){
+        if(StringUtils.hasText(u.password)){
             this.password = u.password;
         }
         return this;
