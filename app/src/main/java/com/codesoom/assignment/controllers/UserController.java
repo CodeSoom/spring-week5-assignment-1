@@ -4,6 +4,8 @@ import com.codesoom.assignment.ResourceNotFoundException;
 import com.codesoom.assignment.application.UserCommandService;
 import com.codesoom.assignment.application.UserQueryService;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserCreateDTO;
+import com.codesoom.assignment.dto.UserUpdateDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -53,8 +55,8 @@ public class UserController {
      */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid User user){
-        return command.save(user);
+    public User create(@RequestBody @Valid UserCreateDTO userCreateDTO){
+        return command.save(userCreateDTO.toEntity());
     }
 
     /**
@@ -67,8 +69,8 @@ public class UserController {
      * @return 수정된 사용자의 정보
      */
     @PatchMapping("{id}")
-    public User update(@PathVariable Long id , @RequestBody User user){
-        return command.update(query.findUser(id) , user);
+    public User update(@PathVariable Long id , @RequestBody @Valid UserUpdateDTO userUpdateDTO){
+        return command.update(query.findUser(id) , userUpdateDTO.toEntity());
     }
 
     /**

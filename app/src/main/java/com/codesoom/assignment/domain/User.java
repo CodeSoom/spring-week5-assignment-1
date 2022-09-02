@@ -12,6 +12,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -24,13 +25,10 @@ public class User {
     @GeneratedValue
     private Long id;
 
-    @NotEmpty
     private String name;
 
-    @NotEmpty
     private String email;
 
-    @NotEmpty
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
 
@@ -43,9 +41,15 @@ public class User {
     }
 
     public User update(User u) {
-        this.name = u.name;
-        this.email = u.email;
-        this.password = u.password;
+        if(u.name != null && !"".equals(u.name)){
+            this.name = u.name;
+        }
+        if(u.email != null && !"".equals(u.email)){
+            this.email = u.email;
+        }
+        if(u.password != null && !"".equals(u.password)){
+            this.password = u.password;
+        }
         return this;
     }
 }
