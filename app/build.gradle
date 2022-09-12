@@ -64,6 +64,10 @@ dependencies {
     // Spring Developer Tools
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
+    // DozerMapper
+    // DTO와 Domain을 매핑해주는 역할
+    implementation 'com.github.dozermapper:dozer-core:6.4.0'
+
     // Spring Boot Test
     testImplementation('org.springframework.boot:spring-boot-starter-test') {
         exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
