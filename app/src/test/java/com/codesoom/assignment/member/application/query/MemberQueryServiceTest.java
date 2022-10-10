@@ -19,6 +19,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @DisplayName("MemberQueryService 클래스")
 class MemberQueryServiceTest {
+
     @DataJpaTest
     class JpaTest {
         @Autowired
