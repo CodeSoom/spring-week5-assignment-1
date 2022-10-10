@@ -1,5 +1,6 @@
 package com.codesoom.assignment.member.domain;
 
+import com.codesoom.assignment.member.common.MemberFactory;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -56,6 +57,32 @@ class MemberTest {
 
             }
 
+        }
+    }
+
+    @Nested
+    @DisplayName("modifyMemberInfo 메소드는")
+    class Describe_modifyMemberInfo {
+        @Nested
+        @DisplayName("회원정보가 주어지면")
+        class Context_with_modified_member_info {
+            private final Member givenMember = MemberFactory.createProduct(1L);
+            @Test
+            @DisplayName("수정된 정보를 반영한다")
+            void it_reflects_modified_info() {
+                Member modifiedMember = Member.builder()
+                        .id(1L)
+                        .name("홍길동")
+                        .password("test1234")
+                        .email("test@gmail.com")
+                        .build();
+
+                givenMember.modifyMemberInfo(modifiedMember);
+
+                assertThat(givenMember.getName()).isEqualTo(modifiedMember.getName());
+                assertThat(givenMember.getPassword()).isEqualTo(modifiedMember.getPassword());
+                assertThat(givenMember.getEmail()).isEqualTo(modifiedMember.getEmail());
+            }
         }
     }
 

@@ -39,4 +39,12 @@ public class Member {
         this.password = password;
         this.email = email;
     }
+
+    public void modifyMemberInfo(Member member) {
+        this.name = member.getName();
+        this.password = member.getPassword();
+        this.email = member.getEmail();
+    }
+
+
 }
