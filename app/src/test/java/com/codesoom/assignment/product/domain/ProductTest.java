@@ -1,6 +1,5 @@
 package com.codesoom.assignment.product.domain;
 
-import com.codesoom.assignment.product.common.exception.InvalidParamException;
 import com.codesoom.assignment.product.domain.Product;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -24,7 +23,7 @@ class ProductTest {
                         .maker("삼성")
                         .price(10000L)
                         .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build()).isInstanceOf(InvalidParamException.class);
+                        .build()).isInstanceOf(IllegalArgumentException.class);
             }
         }
         @Nested
@@ -38,7 +37,7 @@ class ProductTest {
                         .maker(null)
                         .price(10000L)
                         .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build()).isInstanceOf(InvalidParamException.class);
+                        .build()).isInstanceOf(IllegalArgumentException.class);
             }
         }
         @Nested
@@ -52,7 +51,7 @@ class ProductTest {
                         .maker("삼성")
                         .price(null)
                         .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build()).isInstanceOf(InvalidParamException.class);
+                        .build()).isInstanceOf(IllegalArgumentException.class);
             }
         }
 

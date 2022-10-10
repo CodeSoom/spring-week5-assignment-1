@@ -1,6 +1,5 @@
 package com.codesoom.assignment.product.domain;
 
-import com.codesoom.assignment.product.common.exception.InvalidParamException;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -43,9 +42,9 @@ public class Product {
             Long price,
             String imageUrl
     ) {
-        if (StringUtils.isEmpty(name)) throw new InvalidParamException("이름이 비어있습니다.");
-        if (StringUtils.isEmpty(maker)) throw new InvalidParamException("제조사가 비어있습니다.");
-        if (price == null) throw new InvalidParamException("가격이 비어있습니다.");
+        if (StringUtils.isEmpty(name)) throw new IllegalArgumentException("이름이 비어있습니다.");
+        if (StringUtils.isEmpty(maker)) throw new IllegalArgumentException("제조사가 비어있습니다.");
+        if (price == null) throw new IllegalArgumentException("가격이 비어있습니다.");
 
         this.id = id;
         this.name = name;

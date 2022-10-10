@@ -2,7 +2,6 @@ package com.codesoom.assignment.product.controller;
 
 import com.codesoom.assignment.product.application.command.ProductCommandService;
 import com.codesoom.assignment.product.common.ProductFactory;
-import com.codesoom.assignment.product.common.exception.InvalidParamException;
 import com.codesoom.assignment.product.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.controller.ProductDto.RequestParam;
 import com.codesoom.assignment.product.application.ProductCommand.Register;
@@ -104,7 +103,7 @@ class ProductCommandControllerTest {
                 givenRequest.setPrice(null);
                 givenRequest.setImageUrl(null);
 
-                given(productService.createProduct(any(Register.class))).willThrow(new InvalidParamException());
+                given(productService.createProduct(any(Register.class))).willThrow(new IllegalArgumentException());
             }
 
             @Test
