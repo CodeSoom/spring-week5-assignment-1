@@ -24,7 +24,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
 
     @Transactional
     @Override
-    public MemberInfo updateMember(MemberCommand.UpdateReq command) {
+    public MemberInfo updateMember(MemberCommand.UpdateRequest command) {
         Member source = command.toEntity();
         Member findMember = getFindMember(source.getId());
 

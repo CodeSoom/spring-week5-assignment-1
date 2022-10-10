@@ -7,7 +7,7 @@ public interface MemberCommandService {
 
     MemberInfo createMember(MemberCommand.Register command);
 
-    MemberInfo updateMember(MemberCommand.UpdateReq command);
+    MemberInfo updateMember(MemberCommand.UpdateRequest command);
 
     void deleteMember(Long id);
 
