@@ -5,5 +5,5 @@ import com.codesoom.assignment.product.application.ProductCommand;
 public interface ProductDtoMapper {
     ProductCommand.Register of(ProductDto.RequestParam request);
 
-    ProductCommand.UpdateReq of(Long id, ProductDto.RequestParam requestParam);
+    ProductCommand.UpdateRequest of(Long id, ProductDto.RequestParam requestParam);
 }

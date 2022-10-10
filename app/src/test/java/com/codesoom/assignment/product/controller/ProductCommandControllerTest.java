@@ -5,7 +5,7 @@ import com.codesoom.assignment.product.common.ProductFactory;
 import com.codesoom.assignment.product.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.controller.ProductDto.RequestParam;
 import com.codesoom.assignment.product.application.ProductCommand.Register;
-import com.codesoom.assignment.product.application.ProductCommand.UpdateReq;
+import com.codesoom.assignment.product.application.ProductCommand.UpdateRequest;
 import com.codesoom.assignment.product.application.ProductInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -138,7 +138,7 @@ class ProductCommandControllerTest {
 
             @BeforeEach
             void prepare() {
-                given(productService.updateProduct(any(UpdateReq.class))).willReturn(modifiedProduct);
+                given(productService.updateProduct(any(UpdateRequest.class))).willReturn(modifiedProduct);
             }
 
             @Test
@@ -161,7 +161,7 @@ class ProductCommandControllerTest {
 
             @BeforeEach
             void prepare() {
-                given(productService.updateProduct(any(UpdateReq.class))).willThrow(new ProductNotFoundException(PRODUCT_ID));
+                given(productService.updateProduct(any(UpdateRequest.class))).willThrow(new ProductNotFoundException(PRODUCT_ID));
             }
 
             @Test

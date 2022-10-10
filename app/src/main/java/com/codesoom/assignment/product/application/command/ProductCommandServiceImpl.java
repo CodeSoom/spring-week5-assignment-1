@@ -36,7 +36,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
      */
     @Transactional
     @Override
-    public ProductInfo updateProduct(ProductCommand.UpdateReq command) {
+    public ProductInfo updateProduct(ProductCommand.UpdateRequest command) {
         Product product = command.toEntity();
         Product findProduct = productRepository.findById(product.getId())
                 .orElseThrow(() -> new ProductNotFoundException(product.getId()));

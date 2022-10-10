@@ -41,7 +41,7 @@ public class ProductCommandController {
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public ProductInfo updateProduct(@PathVariable Long id, @RequestBody ProductDto.RequestParam request) {
-        final ProductCommand.UpdateReq command = productDtoMapper.of(id, request);
+        final ProductCommand.UpdateRequest command = productDtoMapper.of(id, request);
         return productService.updateProduct(command);
     }
 

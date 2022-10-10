@@ -63,9 +63,9 @@ class ProductDtoMapperTest {
             void it_returns_register() {
                 final Long id = 1L;
 
-                final ProductCommand.UpdateReq actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
+                final ProductCommand.UpdateRequest actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
 
-                assertThat(actual).isInstanceOf(ProductCommand.UpdateReq.class);
+                assertThat(actual).isInstanceOf(ProductCommand.UpdateRequest.class);
             }
         }
 
@@ -78,7 +78,7 @@ class ProductDtoMapperTest {
                 final Long id = null;
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.UpdateReq actual = productDtoMapper.of(id, request);
+                final ProductCommand.UpdateRequest actual = productDtoMapper.of(id, request);
 
                 assertThat(actual).isNull();
             }
@@ -92,7 +92,7 @@ class ProductDtoMapperTest {
             void it_returns_null() {
                 final Long id = null;
 
-                final ProductCommand.UpdateReq actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
+                final ProductCommand.UpdateRequest actual = productDtoMapper.of(id, ProductFactory.createRequestParam());
 
                 assertThat(actual).isNull();
             }
@@ -107,7 +107,7 @@ class ProductDtoMapperTest {
                 final Long id = 1L;
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.UpdateReq actual = productDtoMapper.of(id, request);
+                final ProductCommand.UpdateRequest actual = productDtoMapper.of(id, request);
 
                 assertThat(actual).isNull();
             }

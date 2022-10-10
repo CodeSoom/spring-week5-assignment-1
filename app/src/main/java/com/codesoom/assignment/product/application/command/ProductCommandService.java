@@ -17,7 +17,7 @@ public interface ProductCommandService {
      * @param command 수정할 상품정보
      * @return 수정된 상품
      */
-    ProductInfo updateProduct(ProductCommand.UpdateReq command);
+    ProductInfo updateProduct(ProductCommand.UpdateRequest command);
 
     /**
      * 상품ID에 해당하는 상품을 검색하고 해당 상품을 삭제한다.

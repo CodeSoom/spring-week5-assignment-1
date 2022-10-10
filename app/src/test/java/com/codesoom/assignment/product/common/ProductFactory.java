@@ -53,8 +53,8 @@ public class ProductFactory {
                 .build();
     }
 
-    public static ProductCommand.UpdateReq of(Long id, Product product) {
-        return ProductCommand.UpdateReq.builder()
+    public static ProductCommand.UpdateRequest of(Long id, Product product) {
+        return ProductCommand.UpdateRequest.builder()
                 .id(id)
                 .name(product.getName())
                 .maker(product.getMaker())

@@ -76,10 +76,10 @@ class ProductCommandServiceTest {
             @DisplayName("상품을 수정하고 수정된 상품을 리턴한다")
             void it_returns_modified_product() {
 
-                final ProductCommand.UpdateReq.UpdateReqBuilder updateReqBuilder = ProductCommand.UpdateReq.builder();
+                final ProductCommand.UpdateRequest.UpdateRequestBuilder updateReqBuilder = ProductCommand.UpdateRequest.builder();
                 System.out.println(updateReqBuilder.toString()); // jacoco테스트에서 UpdateReqBuilder toString가 계속 0%로 나와서 추가...
 
-                final ProductCommand.UpdateReq command = updateReqBuilder
+                final ProductCommand.UpdateRequest command = updateReqBuilder
                         .id(givenProduct.getId())
                         .name("수정_" + givenProduct.getName())
                         .maker("수정_" + givenProduct.getMaker())
@@ -102,7 +102,7 @@ class ProductCommandServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                final ProductCommand.UpdateReq command = ProductFactory.of(PRODUCT_ID, givenProduct);
+                final ProductCommand.UpdateRequest command = ProductFactory.of(PRODUCT_ID, givenProduct);
 
                 assertThatThrownBy(() -> getProductService().updateProduct(command)).isInstanceOf(ProductNotFoundException.class);
             }

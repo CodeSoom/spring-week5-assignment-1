@@ -19,12 +19,12 @@ public class ProductDtoMapperImpl implements ProductDtoMapper {
                 .build();
     }
 
-    public ProductCommand.UpdateReq of(Long id, RequestParam requestParam) {
+    public ProductCommand.UpdateRequest of(Long id, RequestParam requestParam) {
         if (id == null || requestParam == null) {
             return null;
         }
 
-        return ProductCommand.UpdateReq.builder()
+        return ProductCommand.UpdateRequest.builder()
                 .id(id)
                 .name(requestParam.getName())
                 .maker(requestParam.getMaker())

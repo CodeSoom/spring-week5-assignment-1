@@ -36,7 +36,7 @@ public class ProductCommand {
     @Getter
     @Builder
     @ToString
-    public static class UpdateReq {
+    public static class UpdateRequest {
         private final Long id;
 
         private final String name;
