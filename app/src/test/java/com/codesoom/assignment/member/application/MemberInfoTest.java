@@ -7,8 +7,6 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @DisplayName("MemberInfo 클래스")
 class MemberInfoTest {
 
@@ -18,7 +16,7 @@ class MemberInfoTest {
         @Nested
         @DisplayName("Member 엔티티가 주어지면")
         class Context_with_member_entity {
-            private final Member givenMember = MemberFactory.createProduct(1L);
+            private final Member givenMember = MemberFactory.createMember(1L);
 
             @Test
             @DisplayName("MemberInfo 객체로 변환한다")

@@ -1,14 +1,12 @@
 package com.codesoom.assignment.member.domain;
 
 import com.codesoom.assignment.member.common.MemberFactory;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Member 클래스")
 class MemberTest {
@@ -66,7 +64,7 @@ class MemberTest {
         @Nested
         @DisplayName("회원정보가 주어지면")
         class Context_with_modified_member_info {
-            private final Member givenMember = MemberFactory.createProduct(1L);
+            private final Member givenMember = MemberFactory.createMember(1L);
             @Test
             @DisplayName("수정된 정보를 반영한다")
             void it_reflects_modified_info() {

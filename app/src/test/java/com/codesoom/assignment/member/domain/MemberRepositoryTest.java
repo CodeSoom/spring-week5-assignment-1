@@ -38,8 +38,8 @@ class MemberRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                givenMembers.add(getMemberRepository().save(MemberFactory.createProduct(1L)));
-                givenMembers.add(getMemberRepository().save(MemberFactory.createProduct(2L)));
+                givenMembers.add(getMemberRepository().save(MemberFactory.createMember(1L)));
+                givenMembers.add(getMemberRepository().save(MemberFactory.createMember(2L)));
             }
 
             @Test
@@ -62,7 +62,7 @@ class MemberRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                givenMember = getMemberRepository().save(MemberFactory.createProduct());
+                givenMember = getMemberRepository().save(MemberFactory.createMember());
             }
 
             @Test
@@ -84,7 +84,7 @@ class MemberRepositoryTest {
         @Nested
         @DisplayName("새로운 회원정보가 주어지면")
         class Context_with_new_member_info extends JpaTest {
-            private final Member givenMember = MemberFactory.createProduct();
+            private final Member givenMember = MemberFactory.createMember();
 
             @Test
             @DisplayName("등록하고 리턴한다")
@@ -110,7 +110,7 @@ class MemberRepositoryTest {
 
             @BeforeEach
             void prepare() {
-                givenMember = getMemberRepository().save(MemberFactory.createProduct());
+                givenMember = getMemberRepository().save(MemberFactory.createMember());
             }
 
             @Test

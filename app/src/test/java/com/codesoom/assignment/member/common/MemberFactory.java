@@ -12,7 +12,7 @@ public class MemberFactory {
 
     private static final Random random = new Random();
 
-    public static Member createProduct(Long id) {
+    public static Member createMember(Long id) {
         Member.MemberBuilder member = Member.builder();
 
         System.out.println(member.toString());
@@ -25,7 +25,7 @@ public class MemberFactory {
         return member.build();
     }
 
-    public static Member createProduct() {
+    public static Member createMember() {
         return Member.builder()
                 .name(getRandomName())
                 .password(UUID.randomUUID().toString())
