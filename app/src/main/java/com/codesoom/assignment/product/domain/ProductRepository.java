@@ -31,5 +31,4 @@ public interface ProductRepository {
      */
     void delete(Product product);
 
-    void deleteAll();
 }

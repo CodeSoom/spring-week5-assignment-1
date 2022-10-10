@@ -17,6 +17,15 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @DisplayName("ProductRepository 클래스")
 class ProductRepositoryTest {
+    @DataJpaTest
+    class JpaTest {
+        @Autowired
+        ProductRepository productRepository;
+
+        public ProductRepository getProductRepository() {
+            return productRepository;
+        }
+    }
 
     @Nested
     @DisplayName("findAll 메소드는")
@@ -137,16 +146,6 @@ class ProductRepositoryTest {
                 assertThat(beforeProduct).isEmpty();
                 assertThat(afterProduct).isEmpty();
             }
-        }
-    }
-
-    @DataJpaTest
-    class JpaTest {
-        @Autowired
-        ProductRepository productRepository;
-
-        public ProductRepository getProductRepository() {
-            return productRepository;
         }
     }
 }
