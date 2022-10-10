@@ -2,7 +2,6 @@ package com.codesoom.assignment.member.application;
 
 import com.codesoom.assignment.member.domain.Member;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.ToString;
 
 @Getter
