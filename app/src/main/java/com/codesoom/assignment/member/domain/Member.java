@@ -16,7 +16,6 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @ToString(of = {"id", "name", "password", "email"})
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "members")
 public class Member {
     @Id
@@ -26,6 +25,9 @@ public class Member {
     private String name;
     private String password;
     private String email;
+
+    protected Member() {
+    }
 
     @Builder
     public Member(Long id, String name, String password, String email) {
