@@ -17,7 +17,6 @@ import javax.persistence.Table;
 @Entity
 @Getter
 @ToString(of = {"id", "name", "maker", "price", "imageUrl"})
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "products")
 public class Product {
 
@@ -33,6 +32,9 @@ public class Product {
     private Long price;
 
     private String imageUrl;
+
+    protected Product() {
+    }
 
     @Builder
     public Product(
