@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controller.member;
 
+import com.codesoom.assignment.domain.member.Member;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -43,4 +44,23 @@ public class MemberDto {
 
     }
 
+    @lombok.Generated
+    @Getter
+    @ToString
+    public static class MemberInfo {
+        private final Long id;
+
+        private final String name;
+
+        private final String password;
+
+        private final String email;
+
+        public MemberInfo(Member member) {
+            this.id = member.getId();
+            this.name = member.getName();
+            this.password = member.getPassword();
+            this.email = member.getEmail();
+        }
+    }
 }

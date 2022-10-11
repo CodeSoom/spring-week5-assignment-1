@@ -2,7 +2,6 @@ package com.codesoom.assignment.controller.member;
 
 import com.codesoom.assignment.application.member.MemberCommand;
 import com.codesoom.assignment.application.member.MemberCommandService;
-import com.codesoom.assignment.application.member.MemberInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -31,16 +30,16 @@ public class MemberController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberInfo registerMember(@RequestBody @Valid MemberDto.RequestParam request) {
+    public MemberDto.MemberInfo registerMember(@RequestBody @Valid MemberDto.RequestParam request) {
         final MemberCommand.Register command = MemberFactory.of(request);
-        return new MemberInfo(memberService.createMember(command));
+        return new MemberDto.MemberInfo(memberService.createMember(command));
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MemberInfo updateMember(@PathVariable Long id, @RequestBody @Valid MemberDto.UpdateParam request) {
+    public MemberDto.MemberInfo updateMember(@PathVariable Long id, @RequestBody @Valid MemberDto.UpdateParam request) {
         final MemberCommand.UpdateRequest command = MemberFactory.of(id, request);
-        return new MemberInfo(memberService.updateMember(command));
+        return new MemberDto.MemberInfo(memberService.updateMember(command));
     }
 
     @DeleteMapping("{id}")

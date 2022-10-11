@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application.member;
 
 import com.codesoom.assignment.common.MemberSampleFactory;
+import com.codesoom.assignment.controller.member.MemberDto;
 import com.codesoom.assignment.domain.member.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -21,7 +22,7 @@ class MemberInfoTest {
             @Test
             @DisplayName("MemberInfo 객체로 변환한다")
             void it_converts_memberinfo_object() {
-                Assertions.assertThat(new MemberInfo(givenMember)).isInstanceOf(MemberInfo.class);
+                Assertions.assertThat(new MemberDto.MemberInfo(givenMember)).isInstanceOf(MemberDto.MemberInfo.class);
             }
         }
     }
