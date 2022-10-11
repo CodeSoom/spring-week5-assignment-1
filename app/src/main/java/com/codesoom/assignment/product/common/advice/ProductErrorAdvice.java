@@ -1,5 +1,6 @@
 package com.codesoom.assignment.product.common.advice;
 
+import com.codesoom.assignment.member.common.exception.InvalidParamException;
 import com.codesoom.assignment.product.common.ErrorResponse;
 import com.codesoom.assignment.product.common.exception.ProductNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -26,8 +27,9 @@ public class ProductErrorAdvice {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public void handleBadRequest() {
+    @ExceptionHandler(InvalidParamException.class)
+    public ErrorResponse handleBadRequest(InvalidParamException e) {
+        return new ErrorResponse(e.getMessage());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

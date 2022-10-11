@@ -1,5 +1,9 @@
 package com.codesoom.assignment.product.controller;
 
+import com.codesoom.assignment.member.application.MemberCommand;
+import com.codesoom.assignment.member.common.MemberFactory;
+import com.codesoom.assignment.member.common.exception.InvalidParamException;
+import com.codesoom.assignment.product.application.ProductCommand;
 import com.codesoom.assignment.product.application.ProductCommand.Register;
 import com.codesoom.assignment.product.application.ProductCommand.UpdateRequest;
 import com.codesoom.assignment.product.application.ProductInfo;
@@ -155,6 +159,24 @@ class ProductCommandControllerTest {
             @DisplayName("BAD_REQUEST(400)와 에러메시지를 리턴한다")
             void it_returns_400_and_error_message() throws Exception {
                 ResultActions resultActions = subject(givenRequest);
+
+                resultActions.andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayName("InvalidParamException이 발생하면")
+        class Context_with_illegal_argument_exception {
+            @BeforeEach
+            void prepare() {
+                given(productService.createProduct(any(ProductCommand.Register.class)))
+                        .willThrow(new InvalidParamException("입력값이 비어있습니다."));
+            }
+            @Test
+            @DisplayName("BAD_REQUEST(400)과 에러 메시지를 리턴한다")
+            void it_returns_400_and_error_message() throws Exception {
+                ResultActions resultActions = subject(ProductFactory.createRequestParam());
 
                 resultActions.andExpect(status().isBadRequest())
                         .andDo(print());

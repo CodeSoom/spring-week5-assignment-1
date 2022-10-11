@@ -5,6 +5,7 @@ import com.codesoom.assignment.member.application.MemberCommand.UpdateRequest;
 import com.codesoom.assignment.member.application.MemberInfo;
 import com.codesoom.assignment.member.application.command.MemberCommandService;
 import com.codesoom.assignment.member.common.MemberFactory;
+import com.codesoom.assignment.member.common.exception.InvalidParamException;
 import com.codesoom.assignment.member.common.exception.MemberNotFoundException;
 import com.codesoom.assignment.member.controller.MemberDto;
 import com.codesoom.assignment.member.controller.MemberDto.RequestParam;
@@ -173,12 +174,12 @@ class MemberCommandControllerTest {
         }
 
         @Nested
-        @DisplayName("IllegalArgumentException이 발생하면")
+        @DisplayName("InvalidParamException이 발생하면")
         class Context_with_illegal_argument_exception {
             @BeforeEach
             void prepare() {
                 given(memberService.createMember(any(MemberCommand.Register.class)))
-                        .willThrow(new IllegalArgumentException("입력값이 비어있습니다."));
+                        .willThrow(new InvalidParamException("입력값이 비어있습니다."));
             }
             @Test
             @DisplayName("BAD_REQUEST(400)과 에러 메시지를 리턴한다")

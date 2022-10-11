@@ -1,5 +1,6 @@
 package com.codesoom.assignment.member.domain;
 
+import com.codesoom.assignment.member.common.exception.InvalidParamException;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -31,10 +32,10 @@ public class Member {
     @Builder
     public Member(Long id, String name, String password, String email) {
         if (StringUtils.isEmpty(name)){
-            throw new IllegalArgumentException("이름이 비어있습니다.");
+            throw new InvalidParamException("이름이 비어있습니다.");
         }
         if (StringUtils.isEmpty(password)) {
-            throw new IllegalArgumentException("비밀번호가 비어있습니다.");
+            throw new InvalidParamException("비밀번호가 비어있습니다.");
         }
 
         this.id = id;

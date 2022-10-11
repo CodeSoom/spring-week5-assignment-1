@@ -1,6 +1,7 @@
 package com.codesoom.assignment.member.domain;
 
 import com.codesoom.assignment.member.common.MemberFactory;
+import com.codesoom.assignment.member.common.exception.InvalidParamException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,7 +39,7 @@ class MemberTest {
         }
 
         @Nested
-        @DisplayName("이름, 비밀번호, 이메일에 빈 값이 주어지면")
+        @DisplayName("이름, 비밀번호에 빈 값이 주어지면")
         class Context_with_empty_parameters {
             @Test
             @DisplayName("예외를 던진다")
@@ -51,7 +52,7 @@ class MemberTest {
                             .password("")
                             .email("")
                             .build();
-                }).isInstanceOf(IllegalArgumentException.class);
+                }).isInstanceOf(InvalidParamException.class);
 
             }
 

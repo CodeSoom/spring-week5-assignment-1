@@ -1,5 +1,6 @@
 package com.codesoom.assignment.member.common.advice;
 
+import com.codesoom.assignment.member.common.exception.InvalidParamException;
 import com.codesoom.assignment.member.common.exception.MemberNotFoundException;
 import com.codesoom.assignment.product.common.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,8 @@ public class MemberErrorAdvice {
 
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ErrorResponse handleBadRequest(IllegalArgumentException e) {
+    @ExceptionHandler(InvalidParamException.class)
+    public ErrorResponse handleBadRequest(InvalidParamException e) {
         return new ErrorResponse(e.getMessage());
     }
 
