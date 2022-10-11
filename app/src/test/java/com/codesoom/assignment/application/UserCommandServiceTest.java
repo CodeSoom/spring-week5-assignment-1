@@ -107,8 +107,8 @@ class UserCommandServiceTest {
             }
 
             @Test
-            @DisplayName("User 를 수정하고 리턴한다")
-            void it_returns_updated_user() {
+            @DisplayName("사용자가 존재하지 않다는 예외를 던진다")
+            void it_throws_exception() {
                 assertThatThrownBy(
                         () -> userCommandService.updateUser(INVALID_USER_ID, requestUser)
                 ).isExactlyInstanceOf(UserNotFoundException.class);
@@ -140,11 +140,23 @@ class UserCommandServiceTest {
             }
 
             @Test
-            @DisplayName("user 를 삭제하고 리턴한다")
-            void it_returns_deleted_user() {
+            @DisplayName("user 를 삭제하고 user id 를 리턴한다")
+            void it_returns_deleted_user_id() {
                 Long deletedUserId = userCommandService.deleteUser(deleteId);
 
                 assertThat(userRepository.findById(deletedUserId)).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어있지 않은 user 의 id가 주어지면 ")
+        class Context_with_non_existence_user_id {
+            @Test
+            @DisplayName("사용자가 존재하지 않다는 예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(
+                        () -> userCommandService.deleteUser(INVALID_USER_ID)
+                ).isExactlyInstanceOf(UserNotFoundException.class);
             }
         }
     }
