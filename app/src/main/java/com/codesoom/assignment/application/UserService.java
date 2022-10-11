@@ -24,6 +24,7 @@ public interface UserService {
     /**
      * 회원을 삭제합니다.
      * @param id 삭제할 회원 아이디
+     * @return 삭제된 회원
      */
-    void delete(Long id);
+    User delete(Long id);
 }
