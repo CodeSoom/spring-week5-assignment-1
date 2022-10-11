@@ -2,6 +2,7 @@ package com.codesoom.assignment.member.application.query;
 
 import com.codesoom.assignment.member.application.MemberInfo;
 import com.codesoom.assignment.member.common.MemberFactory;
+import com.codesoom.assignment.member.common.exception.MemberNotFoundException;
 import com.codesoom.assignment.member.domain.Member;
 import com.codesoom.assignment.member.domain.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("MemberQueryService 클래스")
@@ -52,7 +54,7 @@ class MemberQueryServiceTest {
         @Test
         @DisplayName("등록된 모든 회원정보를 리턴한다")
         void it_returns_all_member_info() {
-            List<MemberInfo> actualMember = getMemberService().getMembers();
+            final List<MemberInfo> actualMember = getMemberService().getMembers();
 
             assertThat(actualMember).hasSize(givenMember.size());
         }
@@ -74,12 +76,22 @@ class MemberQueryServiceTest {
             @Test
             @DisplayName("회원정보를 리턴한다")
             void it_returns_member() {
-                MemberInfo actualMember = getMemberService().getMember(givenMember.getId());
+                final MemberInfo actualMember = getMemberService().getMember(givenMember.getId());
 
                 assertThat(actualMember.getId()).isEqualTo(givenMember.getId());
                 assertThat(actualMember.getName()).isEqualTo(givenMember.getName());
                 assertThat(actualMember.getPassword()).isEqualTo(givenMember.getPassword());
                 assertThat(actualMember.getEmail()).isEqualTo(givenMember.getEmail());
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지않은 ID가 주어지면")
+        class Context_with_invalid_id extends JpaTest {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> getMemberService().getMember(9999L)).isInstanceOf(MemberNotFoundException.class);
             }
         }
     }

@@ -18,13 +18,15 @@ class MemberCommandTest {
         @Test
         @DisplayName("커맨드 객체를 회원 엔티티로 변환한다.")
         void it_converts_member_entity() {
-            Register command = Register.builder()
-                    .name("홍길동")
-                    .password("test1234")
-                    .email("test@gmail.com")
-                    .build();
+            Register.RegisterBuilder registerBuilder = Register.builder();
 
-            Assertions.assertThat(command.toEntity()).isInstanceOf(Member.class);
+            System.out.println(registerBuilder.toString());
+
+            registerBuilder.name("홍길동")
+                    .password("test1234")
+                    .email("test@gmail.com");
+
+            Assertions.assertThat(registerBuilder.build().toEntity()).isInstanceOf(Member.class);
         }
     }
 
@@ -34,14 +36,16 @@ class MemberCommandTest {
         @Test
         @DisplayName("커맨드 객체를 회원 엔티티로 변환한다.")
         void it_converts_member_entity() {
-            UpdateRequest command = UpdateRequest.builder()
-                    .id(1L)
+            UpdateRequest.UpdateRequestBuilder builder = UpdateRequest.builder();
+
+            System.out.println(builder.toString());
+
+            builder.id(1L)
                     .name("홍길동")
                     .password("test1234")
-                    .email("test@gmail.com")
-                    .build();
+                    .email("test@gmail.com");
 
-            Assertions.assertThat(command.toEntity()).isInstanceOf(Member.class);
+            Assertions.assertThat(builder.build().toEntity()).isInstanceOf(Member.class);
         }
     }
 

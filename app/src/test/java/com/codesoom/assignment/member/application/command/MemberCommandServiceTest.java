@@ -4,6 +4,9 @@ import com.codesoom.assignment.member.application.MemberCommand;
 import com.codesoom.assignment.member.application.MemberCommand.Register;
 import com.codesoom.assignment.member.application.MemberInfo;
 import com.codesoom.assignment.member.common.MemberFactory;
+import com.codesoom.assignment.member.common.exception.MemberNotFoundException;
+import com.codesoom.assignment.member.controller.MemberDtoMapper;
+import com.codesoom.assignment.member.controller.MemberDtoMapperImpl;
 import com.codesoom.assignment.member.domain.Member;
 import com.codesoom.assignment.member.domain.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DataJpaTest
 @DisplayName("MemberCommandService 클래스")
@@ -79,18 +83,32 @@ class MemberCommandServiceTest {
             @Test
             @DisplayName("회원정보를 수정하고 리턴한다")
             void it_returns_modified_member() {
-                MemberCommand.UpdateRequest command = MemberCommand.UpdateRequest.builder()
+                final MemberCommand.UpdateRequest command = MemberCommand.UpdateRequest.builder()
                         .id(savedMember.getId())
                         .name("임꺽정")
                         .password("test1111")
                         .email("test@gmail.com").build();
 
-                MemberInfo updatedMember = getMemberService().updateMember(command);
+                final MemberInfo updatedMember = getMemberService().updateMember(command);
 
                 assertThat(updatedMember.getId()).isEqualTo(command.getId());
                 assertThat(updatedMember.getName()).isEqualTo(command.getName());
                 assertThat(updatedMember.getPassword()).isEqualTo(command.getPassword());
                 assertThat(updatedMember.getEmail()).isEqualTo(command.getEmail());
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지않은 ID가 주어지면")
+        class Context_with_invalid_id extends JpaTest {
+            private final Long MEMBER_ID = 9999L;
+            private final MemberDtoMapper mapper = new MemberDtoMapperImpl();
+            private final MemberCommand.UpdateRequest command = mapper.of(MEMBER_ID, MemberFactory.createUpdateParam());
+
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> getMemberService().updateMember(command)).isInstanceOf(MemberNotFoundException.class);
             }
         }
     }
@@ -110,16 +128,26 @@ class MemberCommandServiceTest {
             @Test
             @DisplayName("회원정보를 삭제한다")
             void it_deletes_member() {
-                int beforeCnt = getMemberRepository().findAll().size();
+                final int beforeCnt = getMemberRepository().findAll().size();
 
                 getMemberService().deleteMember(savedMember.getId());
 
-                int afterCnt = getMemberRepository().findAll().size();
+                final int afterCnt = getMemberRepository().findAll().size();
 
-                Optional<Member> findMember = getMemberRepository().findById(savedMember.getId());
+                final Optional<Member> findMember = getMemberRepository().findById(savedMember.getId());
 
                 assertThat(afterCnt).isEqualTo(beforeCnt - 1);
                 assertThat(findMember).isEmpty();
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지않은 ID가 주어지면")
+        class Context_with_invalid_id extends JpaTest {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(() -> getMemberService().deleteMember(9999L)).isInstanceOf(MemberNotFoundException.class);
             }
         }
     }

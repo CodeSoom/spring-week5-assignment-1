@@ -1,9 +1,7 @@
 package com.codesoom.assignment.member.domain;
 
-import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.util.StringUtils;
 
@@ -13,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+@lombok.Generated
 @Entity
 @Getter
 @ToString(of = {"id", "name", "password", "email"})

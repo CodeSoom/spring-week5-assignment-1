@@ -27,8 +27,7 @@ public class ProductErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(IllegalArgumentException.class)
-    public ErrorResponse handleBadRequest(IllegalArgumentException e) {
-        return new ErrorResponse(e.getMessage());
+    public void handleBadRequest() {
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
