@@ -1,5 +1,7 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserRequest;
 import org.junit.jupiter.api.AfterEach;
@@ -11,9 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SpringBootTest
 class UserCommandServiceTest {
+    private static final long INVALID_USER_ID = 0L;
+
     @Autowired
     UserCommandService userCommandService;
 
@@ -85,6 +90,27 @@ class UserCommandServiceTest {
 
                 assertThat(updatedUser.getEmail()).isEqualTo(requestUser.getEmail());
                 assertThat(updatedUser.getPassword()).isEqualTo(requestUser.getPassword());
+            }
+        }
+        @Nested
+        @DisplayName("요청하는 User 가 존재하지 않는 경우")
+        class Context_with_non_existence_user {
+            private UserRequest requestUser;
+
+            @BeforeEach
+            void setUp() {
+                requestUser = UserRequest.builder()
+                        .email("after@after.com")
+                        .password("after")
+                        .build();
+            }
+
+            @Test
+            @DisplayName("User 를 수정하고 리턴한다")
+            void it_returns_updated_user() {
+                assertThatThrownBy(
+                        () -> userCommandService.updateUser(INVALID_USER_ID, requestUser)
+                ).isExactlyInstanceOf(UserNotFoundException.class);
             }
         }
     }
