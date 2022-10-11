@@ -25,9 +25,22 @@ public class User {
     private String password;
 
     @Builder
-    public User(String email, String name, String password) {
-        this.email = email;
+    public User(String name, String email, String password) {
         this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+    /**
+     * 회원 정보를 수정합니다.
+     *
+     * @param name 수정할 이름
+     * @param email 수정할 이메일
+     * @param password 수정할 비밀번호
+     */
+    public void update(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
         this.password = password;
     }
 }
