@@ -22,4 +22,3 @@ public interface ProductCommandService {
      */
     void deleteProduct(Long id);
 }
-

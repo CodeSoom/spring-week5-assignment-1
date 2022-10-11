@@ -51,6 +51,4 @@ public class Member {
             this.email = member.getEmail();
         }
     }
-
-
 }

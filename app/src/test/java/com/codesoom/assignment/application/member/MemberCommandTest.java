@@ -48,5 +48,4 @@ class MemberCommandTest {
             Assertions.assertThat(builder.build().toEntity()).isInstanceOf(Member.class);
         }
     }
-
 }

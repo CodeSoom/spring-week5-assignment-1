@@ -19,4 +19,3 @@ public interface ProductQueryService {
      */
     ProductInfo getProduct(Long id);
 }
-
