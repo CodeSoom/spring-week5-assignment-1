@@ -1,6 +1,6 @@
 package com.codesoom.assignment;
 
-import com.codesoom.assignment.product.controller.HomeController;
+import com.codesoom.assignment.controller.HomeController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
