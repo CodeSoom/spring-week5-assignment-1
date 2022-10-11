@@ -31,16 +31,16 @@ public class MemberController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Object registerMember(@RequestBody @Valid MemberDto.RequestParam request) {
+    public MemberInfo registerMember(@RequestBody @Valid MemberDto.RequestParam request) {
         final MemberCommand.Register command = MemberFactory.of(request);
-        return memberService.createMember(command);
+        return new MemberInfo(memberService.createMember(command));
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public MemberInfo updateMember(@PathVariable Long id, @RequestBody @Valid MemberDto.UpdateParam request) {
         final MemberCommand.UpdateRequest command = MemberFactory.of(id, request);
-        return memberService.updateMember(command);
+        return new MemberInfo(memberService.updateMember(command));
     }
 
     @DeleteMapping("{id}")
