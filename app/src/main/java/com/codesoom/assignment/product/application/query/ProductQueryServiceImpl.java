@@ -34,7 +34,7 @@ public class ProductQueryServiceImpl implements ProductQueryService {
      * 상품ID에 해당하는 상품을 리턴한다.
      * @param id 상품 ID
      * @return 검색된 상품
-     * @throws ProductNotFoundException 상품이 없을 경우 발생하는 예외
+     * @throws ProductNotFoundException 상품이 없을 경우
      */
     @Override
     public ProductInfo getProduct(Long id) {

@@ -1,7 +1,7 @@
 package com.codesoom.assignment.product.common.exception;
 
 /**
- * 상품 ID에 해당하는 상품정보를 찾을수 없을때 발생하는 예외
+ * 상품정보를 찾을수 없을때 던집니다.
  */
 public class ProductNotFoundException extends RuntimeException {
 

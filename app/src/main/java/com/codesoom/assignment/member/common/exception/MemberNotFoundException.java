@@ -1,7 +1,7 @@
 package com.codesoom.assignment.member.common.exception;
 
 /**
- * 회원 ID에 해당하는 회원정보를 찾을수 없을때 발생하는 예외
+ * 회원정보를 찾을수 없을때 던집니다.
  */
 public class MemberNotFoundException extends RuntimeException {
 

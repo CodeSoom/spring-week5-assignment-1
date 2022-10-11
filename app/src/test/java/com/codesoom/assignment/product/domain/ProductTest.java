@@ -13,7 +13,7 @@ class ProductTest {
     @DisplayName("빌더는")
     class Describe_builder {
         @Nested
-        @DisplayName("이름이 입력되지 않으면")
+        @DisplayName("이름이 Null 이면")
         class Context_with_empty_name {
             @Test
             @DisplayName("예외를 던진다")

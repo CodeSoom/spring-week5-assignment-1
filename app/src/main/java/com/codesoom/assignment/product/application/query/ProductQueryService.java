@@ -7,7 +7,7 @@ import java.util.List;
 public interface ProductQueryService {
 
     /**
-     * 전체 상품 목록을 리턴한다
+     * 전체 상품 목록을 리턴한다.
      * @return 전체 상품 목록
      */
     List<ProductInfo> getProducts();
