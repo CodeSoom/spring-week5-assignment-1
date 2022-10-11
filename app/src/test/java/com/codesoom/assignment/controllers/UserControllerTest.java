@@ -64,5 +64,78 @@ class UserControllerTest {
                         .andExpect(jsonPath("$.password").value(requestUser.getPassword()));
             }
         }
+        @Nested
+        @DisplayName("UserRequest 에 일부 필드가 null 인 경우")
+        class Context_with_partial_null_userRequest {
+            private String requestBodyWithNullEmail;
+            private String requestBodyWithNullPassword;
+            private String requestBodyWithBlankEmail;
+            private String requestBodyWithBlankPassword;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                UserRequest userRequestWithNullEmail = UserRequest.builder()
+                        .email(null)
+                        .password("123")
+                        .build();
+                requestBodyWithNullEmail = objectMapper.writeValueAsString(userRequestWithNullEmail);
+
+                UserRequest requestUserWithNullPassword = UserRequest.builder()
+                        .email("a@a.com")
+                        .password(null)
+                        .build();
+                requestBodyWithNullPassword = objectMapper.writeValueAsString(requestUserWithNullPassword);
+
+                UserRequest requestUserWithBlankEmail = UserRequest.builder()
+                        .email("")
+                        .password("123")
+                        .build();
+                requestBodyWithBlankEmail = objectMapper.writeValueAsString(requestUserWithBlankEmail);
+
+                UserRequest requestUserWithBlankPassword = UserRequest.builder()
+                        .email("a@a.com")
+                        .password("")
+                        .build();
+                requestBodyWithBlankPassword = objectMapper.writeValueAsString(requestUserWithBlankPassword);
+            }
+
+            @AfterEach
+            void after() {
+                userCommandService.deleteAll();
+            }
+
+            @Test
+            @DisplayName("email 필드가 null 인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_null_email() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(requestBodyWithNullEmail)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+            @Test
+            @DisplayName("password 필드가 null 인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_null_password() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(requestBodyWithNullPassword)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+            @Test
+            @DisplayName("email 필드가 빈 문자열인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_blank_email() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(requestBodyWithBlankPassword)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+            @Test
+            @DisplayName("password 필드가 빈 문자열인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_blank_password() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(requestBodyWithBlankPassword)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+        }
     }
 }
