@@ -30,6 +30,11 @@ public class UserCommandService {
         return userRepository.save(findUser);
     }
 
+    public Long deleteUser(Long id) {
+        userRepository.deleteById(id);
+        return id;
+    }
+
     public void deleteAll() {
         userRepository.deleteAll();
     }
