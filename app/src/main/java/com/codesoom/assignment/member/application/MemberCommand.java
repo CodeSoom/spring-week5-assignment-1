@@ -5,7 +5,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 
+@lombok.Generated
 public class MemberCommand {
+
+    @lombok.Generated
     @Getter
     @Builder
     @ToString
@@ -26,6 +29,7 @@ public class MemberCommand {
 
     }
 
+    @lombok.Generated
     @Getter
     @Builder
     @ToString

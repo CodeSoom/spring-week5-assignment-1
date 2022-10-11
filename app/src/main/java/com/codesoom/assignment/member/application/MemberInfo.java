@@ -4,6 +4,7 @@ import com.codesoom.assignment.member.domain.Member;
 import lombok.Getter;
 import lombok.ToString;
 
+@lombok.Generated
 @Getter
 @ToString
 public class MemberInfo {
