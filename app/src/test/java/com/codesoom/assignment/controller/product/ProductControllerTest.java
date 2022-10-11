@@ -4,7 +4,6 @@ import com.codesoom.assignment.application.product.ProductCommand;
 import com.codesoom.assignment.application.product.ProductCommand.Register;
 import com.codesoom.assignment.application.product.ProductCommand.UpdateRequest;
 import com.codesoom.assignment.application.product.ProductCommandService;
-import com.codesoom.assignment.application.product.ProductInfo;
 import com.codesoom.assignment.application.product.ProductQueryService;
 import com.codesoom.assignment.common.ProductSampleFactory;
 import com.codesoom.assignment.common.exception.InvalidParamException;
@@ -88,12 +87,12 @@ class ProductControllerTest {
         @Nested
         @DisplayName("상품이 존재하면")
         class Context_with_products {
-            private final List<ProductInfo> givenProducts = new ArrayList<>();
+            private final List<Product> givenProducts = new ArrayList<>();
 
             @BeforeEach
             void prepare() {
-                givenProducts.add(new ProductInfo(ProductSampleFactory.createProduct(1L)));
-                givenProducts.add(new ProductInfo(ProductSampleFactory.createProduct(2L)));
+                givenProducts.add(ProductSampleFactory.createProduct(1L));
+                givenProducts.add(ProductSampleFactory.createProduct(2L));
 
                 given(productQueryService.getProducts()).willReturn(givenProducts);
             }
@@ -142,7 +141,7 @@ class ProductControllerTest {
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
             private final Long PRODUCT_ID = 1L;
-            private final ProductInfo givenProduct = new ProductInfo(ProductSampleFactory.createProduct(1L));
+            private final Product givenProduct = ProductSampleFactory.createProduct(1L);
 
             @BeforeEach
             void prepare() {
@@ -205,7 +204,7 @@ class ProductControllerTest {
             @BeforeEach
             void prepare() {
                 given(productCommandService.createProduct(any(Register.class)))
-                        .willReturn(new ProductInfo(ProductFactory.of(1L, givenRequest).toEntity()));
+                        .willReturn(ProductFactory.of(1L, givenRequest).toEntity());
             }
 
             @Test
@@ -318,7 +317,7 @@ class ProductControllerTest {
                 givenRequest.setPrice(savedProduct.getPrice() + 5000);
 
                 given(productCommandService.updateProduct(any(UpdateRequest.class)))
-                        .willReturn(new ProductInfo(ProductFactory.of(PRODUCT_ID, givenRequest).toEntity()));
+                        .willReturn(ProductFactory.of(PRODUCT_ID, givenRequest).toEntity());
             }
 
             @Test

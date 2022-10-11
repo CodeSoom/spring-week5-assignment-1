@@ -3,7 +3,6 @@ package com.codesoom.assignment.controller.member;
 import com.codesoom.assignment.application.member.MemberCommand;
 import com.codesoom.assignment.application.member.MemberCommand.UpdateRequest;
 import com.codesoom.assignment.application.member.MemberCommandService;
-import com.codesoom.assignment.application.member.MemberInfo;
 import com.codesoom.assignment.common.MemberSampleFactory;
 import com.codesoom.assignment.common.exception.InvalidParamException;
 import com.codesoom.assignment.common.exception.MemberNotFoundException;
@@ -90,7 +89,7 @@ class MemberControllerTest {
                         .email(givenRequest.getEmail())
                         .build();
                 given(memberCommandService.createMember(any(MemberCommand.Register.class)))
-                        .willReturn(new MemberInfo(member));
+                        .willReturn(member);
             }
 
             @Test
@@ -203,7 +202,7 @@ class MemberControllerTest {
                 givenRequest.setPassword("수정_" + savedMember.getPassword());
 
                 given(memberCommandService.updateMember(any(UpdateRequest.class)))
-                        .willReturn(new MemberInfo(MemberFactory.of(MEMBER_ID, givenRequest).toEntity()));
+                        .willReturn(MemberFactory.of(MEMBER_ID, givenRequest).toEntity());
             }
 
             @Test

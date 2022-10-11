@@ -49,7 +49,7 @@ class ProductCommandServiceTest {
             void it_returns_registered_product() {
                 final ProductCommand.Register command = ProductSampleFactory.of(givenProduct);
 
-                final ProductInfo actualProduct = getProductService().createProduct(command);
+                final Product actualProduct = getProductService().createProduct(command);
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getMaker()).isEqualTo(givenProduct.getMaker());
@@ -86,7 +86,7 @@ class ProductCommandServiceTest {
                         .imageUrl("modified_" + givenProduct.getImageUrl())
                         .build();
 
-                final ProductInfo actualProduct = getProductService().updateProduct(command);
+                final Product actualProduct = getProductService().updateProduct(command);
 
                 assertThat(actualProduct.getPrice()).isEqualTo(command.getPrice());
             }

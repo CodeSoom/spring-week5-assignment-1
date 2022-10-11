@@ -1,7 +1,7 @@
 package com.codesoom.assignment.application.member;
 
-import com.codesoom.assignment.application.member.implement.MemberCommandServiceImpl;
 import com.codesoom.assignment.application.member.MemberCommand.Register;
+import com.codesoom.assignment.application.member.implement.MemberCommandServiceImpl;
 import com.codesoom.assignment.common.MemberSampleFactory;
 import com.codesoom.assignment.common.exception.MemberNotFoundException;
 import com.codesoom.assignment.controller.member.MemberFactory;
@@ -56,7 +56,7 @@ class MemberCommandServiceTest {
                         .email("hogn@test.com")
                         .build();
 
-                final MemberInfo savedMember = getMemberService().createMember(command);
+                final Member savedMember = getMemberService().createMember(command);
 
                 assertThat(savedMember.getName()).isEqualTo(command.getName());
                 assertThat(savedMember.getPassword()).isEqualTo(command.getPassword());
@@ -87,7 +87,7 @@ class MemberCommandServiceTest {
                         .password("test1111")
                         .email("test@gmail.com").build();
 
-                final MemberInfo updatedMember = getMemberService().updateMember(command);
+                final Member updatedMember = getMemberService().updateMember(command);
 
                 assertThat(updatedMember.getId()).isEqualTo(command.getId());
                 assertThat(updatedMember.getName()).isEqualTo(command.getName());

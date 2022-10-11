@@ -53,7 +53,7 @@ class ProductQueryServiceMockTest {
             @Test
             @DisplayName("모든 상품을 리턴한다")
             void it_returns_all_products() {
-                final List<ProductInfo> actualProducts = productService.getProducts();
+                final List<Product> actualProducts = productService.getProducts();
 
                 assertThat(actualProducts).hasSize(givenProducts.size());
             }
@@ -70,7 +70,7 @@ class ProductQueryServiceMockTest {
             @Test
             @DisplayName("빈 컬렉션을 리턴한다")
             void it_returns_empty_data() {
-                final List<ProductInfo> actualProducts = productService.getProducts();
+                final List<Product> actualProducts = productService.getProducts();
 
                 assertThat(actualProducts).hasSize(0);
             }
@@ -95,7 +95,7 @@ class ProductQueryServiceMockTest {
             @Test
             @DisplayName("상품을 찾아 리턴한다")
             void it_returns_searched_product() {
-                final ProductInfo actualProduct = productService.getProduct(PRODUCT_ID);
+                final Product actualProduct = productService.getProduct(PRODUCT_ID);
 
                 assertThat(actualProduct.getName()).isEqualTo(givenProduct.getName());
                 assertThat(actualProduct.getMaker()).isEqualTo(givenProduct.getMaker());

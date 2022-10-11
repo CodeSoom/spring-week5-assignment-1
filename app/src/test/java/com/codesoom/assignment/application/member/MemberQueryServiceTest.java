@@ -54,7 +54,7 @@ class MemberQueryServiceTest {
         @Test
         @DisplayName("등록된 모든 회원정보를 리턴한다")
         void it_returns_all_member_info() {
-            final List<MemberInfo> actualMember = getMemberService().getMembers();
+            final List<Member> actualMember = getMemberService().getMembers();
 
             assertThat(actualMember).hasSize(givenMember.size());
         }
@@ -76,7 +76,7 @@ class MemberQueryServiceTest {
             @Test
             @DisplayName("회원정보를 리턴한다")
             void it_returns_member() {
-                final MemberInfo actualMember = getMemberService().getMember(givenMember.getId());
+                final Member actualMember = getMemberService().getMember(givenMember.getId());
 
                 assertThat(actualMember.getId()).isEqualTo(givenMember.getId());
                 assertThat(actualMember.getName()).isEqualTo(givenMember.getName());

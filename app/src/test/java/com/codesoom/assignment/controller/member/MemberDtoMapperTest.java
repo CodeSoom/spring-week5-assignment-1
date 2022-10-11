@@ -1,7 +1,7 @@
 package com.codesoom.assignment.controller.member;
 
-import com.codesoom.assignment.common.MemberSampleFactory;
 import com.codesoom.assignment.application.member.MemberCommand;
+import com.codesoom.assignment.common.MemberSampleFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
