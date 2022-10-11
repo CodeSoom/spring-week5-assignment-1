@@ -87,7 +87,6 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").value(user.getId()))
                 .andExpect(jsonPath("$.name").value(UPDATE_REQUEST.getName()))
-                .andExpect(jsonPath("$.password").value(UPDATE_REQUEST.getPassword()))
                 .andDo(print());
     }
 
