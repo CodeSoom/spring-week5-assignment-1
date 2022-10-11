@@ -1,12 +1,13 @@
 package com.codesoom.assignment.product.controller;
 
+import com.codesoom.assignment.product.application.ProductCommand.Register;
+import com.codesoom.assignment.product.application.ProductCommand.UpdateRequest;
+import com.codesoom.assignment.product.application.ProductInfo;
 import com.codesoom.assignment.product.application.command.ProductCommandService;
 import com.codesoom.assignment.product.common.ProductFactory;
 import com.codesoom.assignment.product.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.controller.ProductDto.RequestParam;
-import com.codesoom.assignment.product.application.ProductCommand.Register;
-import com.codesoom.assignment.product.application.ProductCommand.UpdateRequest;
-import com.codesoom.assignment.product.application.ProductInfo;
+import com.codesoom.assignment.product.domain.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -23,6 +24,15 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.codesoom.assignment.product.common.ProductFactory.FieldName.MAKER;
+import static com.codesoom.assignment.product.common.ProductFactory.FieldName.NAME;
+import static com.codesoom.assignment.product.common.ProductFactory.FieldName.PRICE;
+import static com.codesoom.assignment.product.common.ProductFactory.ValueType.BLANK;
+import static com.codesoom.assignment.product.common.ProductFactory.ValueType.EMPTY;
+import static com.codesoom.assignment.product.common.ProductFactory.ValueType.NULL;
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
 import static org.mockito.ArgumentMatchers.any;
@@ -50,6 +60,9 @@ class ProductCommandControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Autowired
+    ProductDtoMapperImpl productDtoMapper;
+
     @MockBean
     private ProductCommandService productService;
 
@@ -64,24 +77,26 @@ class ProductCommandControllerTest {
     @Nested
     @DisplayName("registerProduct[/products::POST] 메소드는")
     class Describe_registerProduct {
+        ResultActions subject(RequestParam request) throws Exception {
+            return mockMvc.perform(post("/products")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)));
+        }
         @Nested
         @DisplayName("새로운 상품을 등록하면")
         class Context_with_new_product {
-            private final ProductDtoMapperImpl mapper = new ProductDtoMapperImpl();
             private final RequestParam givenRequest = ProductFactory.createRequestParam();
-            private final ProductInfo givenProduct = new ProductInfo(mapper.of(1L, givenRequest).toEntity());
 
             @BeforeEach
             void prepare() {
-                given(productService.createProduct(any(Register.class))).willReturn(givenProduct);
+                given(productService.createProduct(any(Register.class)))
+                        .willReturn(new ProductInfo(productDtoMapper.of(1L, givenRequest).toEntity()));
             }
 
             @Test
             @DisplayName("CREATED(201)와 등록된 상품을 리턴한다")
             void it_returns_201_and_registered_product() throws Exception {
-                final ResultActions resultActions = mockMvc.perform(post("/products")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(givenRequest)));
+                final ResultActions resultActions = subject(givenRequest);
 
                 resultActions.andExpect(status().isCreated())
                         .andExpect(jsonPath("name").value(equalTo(givenRequest.getName())))
@@ -91,27 +106,55 @@ class ProductCommandControllerTest {
         }
 
         @Nested
-        @DisplayName("입력필드 중 null이 있으면")
-        class Context_with_null {
-            private RequestParam givenRequest;
+        @DisplayName("필수항목에 빈 값이 주어지면")
+        class Context_with_blank_field {
+            private final List<ProductDto.RequestParam> testList = new ArrayList<>();
 
             @BeforeEach
             void prepare() {
-                givenRequest = new RequestParam();
-                givenRequest.setName(null);
-                givenRequest.setMaker(null);
-                givenRequest.setPrice(null);
-                givenRequest.setImageUrl(null);
-
-                given(productService.createProduct(any(Register.class))).willThrow(new IllegalArgumentException());
+                testList.add(ProductFactory.createRequestParamWith(NAME, NULL));
+                testList.add(ProductFactory.createRequestParamWith(NAME, EMPTY));
+                testList.add(ProductFactory.createRequestParamWith(NAME, BLANK));
+                testList.add(ProductFactory.createRequestParamWith(MAKER, NULL));
+                testList.add(ProductFactory.createRequestParamWith(MAKER, EMPTY));
+                testList.add(ProductFactory.createRequestParamWith(MAKER, BLANK));
+                testList.add(ProductFactory.createRequestParamWith(PRICE, NULL));
             }
 
             @Test
-            @DisplayName("BAD_REQUEST(400)을 리턴한다")
-            void it_returns_201_and_registered_product() throws Exception {
-                final ResultActions resultActions = mockMvc.perform(post("/products")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(givenRequest)));
+            @DisplayName("BAD_REQUEST(400)와 에러메시지를 리턴한다")
+            void it_returns_400_and_error_message() {
+                testList.forEach(this::test);
+            }
+
+            private void test(ProductDto.RequestParam request) {
+                try {
+                    ResultActions resultActions = subject(request);
+
+                    resultActions.andExpect(status().isBadRequest())
+                            .andDo(print());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("금액 범위가 벗어나면")
+        class Context_with_invalid_range_price {
+            private final ProductDto.RequestParam givenRequest = new ProductDto.RequestParam();
+
+            @BeforeEach
+            void prepare() {
+                givenRequest.setName("뉴 고양이 장난감");
+                givenRequest.setMaker("애플");
+                givenRequest.setPrice(100L);
+            }
+
+            @Test
+            @DisplayName("BAD_REQUEST(400)와 에러메시지를 리턴한다")
+            void it_returns_400_and_error_message() throws Exception {
+                ResultActions resultActions = subject(givenRequest);
 
                 resultActions.andExpect(status().isBadRequest())
                         .andDo(print());
@@ -132,23 +175,28 @@ class ProductCommandControllerTest {
         @DisplayName("유효한 ID가 주어지면")
         class Context_with_valid_id {
             private final Long PRODUCT_ID = 1L;
-            private final ProductDtoMapperImpl mapper = new ProductDtoMapperImpl();
-            private final RequestParam givenRequest = ProductFactory.createRequestParam();
-            private final ProductInfo modifiedProduct = new ProductInfo(mapper.of(PRODUCT_ID, givenRequest).toEntity());
+            private final Product savedProduct = ProductFactory.createProduct(PRODUCT_ID);
+            private final RequestParam givenRequest = new RequestParam();
 
             @BeforeEach
             void prepare() {
-                given(productService.updateProduct(any(UpdateRequest.class))).willReturn(modifiedProduct);
+                givenRequest.setName("수정_" + savedProduct.getName());
+                givenRequest.setMaker("수정_" + savedProduct.getMaker());
+                givenRequest.setPrice(savedProduct.getPrice() + 5000);
+
+                given(productService.updateProduct(any(UpdateRequest.class)))
+                        .willReturn(new ProductInfo(productDtoMapper.of(PRODUCT_ID, givenRequest).toEntity()));
             }
 
             @Test
             @DisplayName("상품을 수정하고 OK(200)와 수정된 상품을 리턴한다")
-            void it_returns_modified_product() throws Exception {
+            void it_returns_200_and_modified_product() throws Exception {
                 final ResultActions resultActions = subject(PRODUCT_ID, givenRequest);
 
                 resultActions.andExpect(status().isOk())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(jsonPath("name").value(equalTo(modifiedProduct.getName())))
+                        .andExpect(jsonPath("name").value(equalTo(givenRequest.getName())))
+                        .andExpect(jsonPath("maker").value(equalTo(givenRequest.getMaker())))
                         .andDo(print());
             }
         }
@@ -172,6 +220,64 @@ class ProductCommandControllerTest {
                 resultActions.andExpect(status().isNotFound())
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("message", containsString("요청하신 상품이 없습니다.")))
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayName("필수항목에 빈 값이 주어지면")
+        class Context_with_blank_field {
+            private final Long PRODUCT_ID = 1L;
+            private final List<ProductDto.RequestParam> testList = new ArrayList<>();
+
+            @BeforeEach
+            void prepare() {
+                testList.add(ProductFactory.createRequestParamWith(NAME, NULL));
+                testList.add(ProductFactory.createRequestParamWith(NAME, EMPTY));
+                testList.add(ProductFactory.createRequestParamWith(NAME, BLANK));
+                testList.add(ProductFactory.createRequestParamWith(MAKER, NULL));
+                testList.add(ProductFactory.createRequestParamWith(MAKER, EMPTY));
+                testList.add(ProductFactory.createRequestParamWith(MAKER, BLANK));
+                testList.add(ProductFactory.createRequestParamWith(PRICE, NULL));
+            }
+
+            @Test
+            @DisplayName("BAD_REQUEST(400)와 에러메시지를 리턴한다")
+            void it_returns_400_and_error_message() {
+                testList.forEach(this::test);
+            }
+
+            private void test(ProductDto.RequestParam request) {
+                try {
+                    ResultActions resultActions = subject(PRODUCT_ID, request);
+
+                    resultActions.andExpect(status().isBadRequest())
+                            .andDo(print());
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("금액 범위가 벗어나면")
+        class Context_with_invalid_range_price {
+            private final Long PRODUCT_ID = 1L;
+            private final ProductDto.RequestParam givenRequest = new ProductDto.RequestParam();
+
+            @BeforeEach
+            void prepare() {
+                givenRequest.setName("뉴 고양이 장난감");
+                givenRequest.setMaker("애플");
+                givenRequest.setPrice(100L);
+            }
+
+            @Test
+            @DisplayName("BAD_REQUEST(400)와 에러메시지를 리턴한다")
+            void it_returns_400_and_error_message() throws Exception {
+                ResultActions resultActions = subject(PRODUCT_ID, givenRequest);
+
+                resultActions.andExpect(status().isBadRequest())
                         .andDo(print());
             }
         }

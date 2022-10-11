@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @Slf4j
 @RestController
 @CrossOrigin
@@ -33,14 +35,14 @@ public class ProductCommandController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductInfo registerProduct(@RequestBody ProductDto.RequestParam request) {
+    public ProductInfo registerProduct(@RequestBody @Valid ProductDto.RequestParam request) {
         final ProductCommand.Register command = productDtoMapper.of(request);
         return productService.createProduct(command);
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfo updateProduct(@PathVariable Long id, @RequestBody ProductDto.RequestParam request) {
+    public ProductInfo updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDto.RequestParam request) {
         final ProductCommand.UpdateRequest command = productDtoMapper.of(id, request);
         return productService.updateProduct(command);
     }
