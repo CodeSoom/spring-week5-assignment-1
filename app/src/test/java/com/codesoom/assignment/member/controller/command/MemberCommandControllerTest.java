@@ -79,6 +79,12 @@ class MemberCommandControllerTest {
     @Nested
     @DisplayName("registerMember[/users::POST] 메소드는")
     class Describe_registerMember {
+        ResultActions subject(RequestParam request) throws Exception {
+            return mockMvc.perform(post("/users")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(objectMapper.writeValueAsString(request)));
+        }
+
         @Nested
         @DisplayName("새로운 회원정보가 주어지면")
         class Context_with_new_member {
@@ -93,9 +99,7 @@ class MemberCommandControllerTest {
             @Test
             @DisplayName("CREATED(201)와 등록된 회원정보를 리턴한다")
             void it_returns_201_registered_member() throws Exception {
-                final ResultActions resultActions = mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(givenRequest)));
+                final ResultActions resultActions = subject(givenRequest);
 
                 resultActions.andExpect(status().isCreated())
                         .andExpect(jsonPath("name").value(equalTo(givenRequest.getName())))
@@ -107,7 +111,7 @@ class MemberCommandControllerTest {
 
         @Nested
         @DisplayName("필수항목에 빈 값이 주어지면")
-        class Context_with_blank_name {
+        class Context_with_blank_field {
             private final List<RequestParam> testList = new ArrayList<>();
 
             @BeforeEach
@@ -131,9 +135,7 @@ class MemberCommandControllerTest {
 
             private void test(RequestParam request) {
                 try {
-                    ResultActions resultActions = mockMvc.perform(post("/users")
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)));
+                    ResultActions resultActions = subject(request);
 
                     resultActions.andExpect(status().isBadRequest())
                             .andDo(print());
@@ -158,9 +160,7 @@ class MemberCommandControllerTest {
             @Test
             @DisplayName("BAD_REQUEST(400)와 에러메시지를 리턴한다")
             void it_returns_400_and_error_message() throws Exception {
-                ResultActions resultActions = mockMvc.perform(post("/users")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(givenRequest)));
+                ResultActions resultActions = subject(givenRequest);
 
                 resultActions.andExpect(status().isBadRequest())
                         .andDo(print());
@@ -258,9 +258,7 @@ class MemberCommandControllerTest {
 
             private void test(RequestParam request) {
                 try {
-                    ResultActions resultActions = mockMvc.perform(patch("/users/{id}", MEMBER_ID)
-                            .contentType(MediaType.APPLICATION_JSON)
-                            .content(objectMapper.writeValueAsString(request)));
+                    ResultActions resultActions = subject(MEMBER_ID, request);
 
                     resultActions.andExpect(status().isBadRequest())
                             .andDo(print());
@@ -286,9 +284,7 @@ class MemberCommandControllerTest {
             @Test
             @DisplayName("BAD_REQUEST(400)와 에러메시지를 리턴한다")
             void it_returns_400_and_error_message() throws Exception {
-                ResultActions resultActions = mockMvc.perform(patch("/users/{id}", MEMBER_ID)
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(givenRequest)));
+                ResultActions resultActions = subject(MEMBER_ID, givenRequest);
 
                 resultActions.andExpect(status().isBadRequest())
                         .andDo(print());
