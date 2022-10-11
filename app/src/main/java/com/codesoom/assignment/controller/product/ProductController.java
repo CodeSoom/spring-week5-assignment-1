@@ -2,7 +2,6 @@ package com.codesoom.assignment.controller.product;
 
 import com.codesoom.assignment.application.product.ProductCommand;
 import com.codesoom.assignment.application.product.ProductCommandService;
-import com.codesoom.assignment.application.product.ProductInfo;
 import com.codesoom.assignment.application.product.ProductQueryService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -38,30 +37,30 @@ public class ProductController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ProductInfo> list() {
+    public List<ProductDto.ProductInfo> list() {
         return productQueryService.getProducts().stream()
-                .map(ProductInfo::new)
+                .map(ProductDto.ProductInfo::new)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfo detail(@PathVariable Long id) {
-        return new ProductInfo(productQueryService.getProduct(id));
+    public ProductDto.ProductInfo detail(@PathVariable Long id) {
+        return new ProductDto.ProductInfo(productQueryService.getProduct(id));
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductInfo registerProduct(@RequestBody @Valid ProductDto.RequestParam request) {
+    public ProductDto.ProductInfo registerProduct(@RequestBody @Valid ProductDto.RequestParam request) {
         final ProductCommand.Register command = ProductFactory.of(request);
-        return new ProductInfo(productCommandService.createProduct(command));
+        return new ProductDto.ProductInfo(productCommandService.createProduct(command));
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ProductInfo updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDto.RequestParam request) {
+    public ProductDto.ProductInfo updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDto.RequestParam request) {
         final ProductCommand.UpdateRequest command = ProductFactory.of(id, request);
-        return new ProductInfo(productCommandService.updateProduct(command));
+        return new ProductDto.ProductInfo(productCommandService.updateProduct(command));
     }
 
     @DeleteMapping("{id}")
