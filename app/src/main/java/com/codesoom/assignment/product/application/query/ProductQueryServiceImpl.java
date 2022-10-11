@@ -1,7 +1,7 @@
 package com.codesoom.assignment.product.application.query;
 
-import com.codesoom.assignment.product.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.application.ProductInfo;
+import com.codesoom.assignment.product.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.domain.ProductRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

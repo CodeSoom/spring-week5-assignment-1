@@ -1,7 +1,7 @@
 package com.codesoom.assignment.product.controller;
 
-import com.codesoom.assignment.product.controller.ProductDto.RequestParam;
 import com.codesoom.assignment.product.application.ProductCommand;
+import com.codesoom.assignment.product.controller.ProductDto.RequestParam;
 import org.springframework.stereotype.Component;
 
 @Component

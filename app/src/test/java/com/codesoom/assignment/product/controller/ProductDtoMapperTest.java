@@ -1,8 +1,8 @@
 package com.codesoom.assignment.product.controller;
 
+import com.codesoom.assignment.product.application.ProductCommand;
 import com.codesoom.assignment.product.common.ProductFactory;
 import com.codesoom.assignment.product.domain.Product;
-import com.codesoom.assignment.product.application.ProductCommand;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

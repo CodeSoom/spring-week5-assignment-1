@@ -6,8 +6,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static com.codesoom.assignment.member.application.MemberCommand.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static com.codesoom.assignment.member.application.MemberCommand.Register;
+import static com.codesoom.assignment.member.application.MemberCommand.UpdateRequest;
 
 @DisplayName("MemberCommand 클래스")
 class MemberCommandTest {

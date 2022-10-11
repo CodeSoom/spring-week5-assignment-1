@@ -1,7 +1,5 @@
 package com.codesoom.assignment.product.controller;
 
-import com.codesoom.assignment.member.application.MemberCommand;
-import com.codesoom.assignment.member.common.MemberFactory;
 import com.codesoom.assignment.member.common.exception.InvalidParamException;
 import com.codesoom.assignment.product.application.ProductCommand;
 import com.codesoom.assignment.product.application.ProductCommand.Register;

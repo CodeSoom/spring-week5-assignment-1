@@ -1,7 +1,5 @@
 package com.codesoom.assignment.member.domain;
 
-import com.codesoom.assignment.product.domain.Product;
-
 import java.util.List;
 import java.util.Optional;
 

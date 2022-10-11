@@ -1,9 +1,9 @@
 package com.codesoom.assignment.product.controller;
 
+import com.codesoom.assignment.product.application.ProductInfo;
 import com.codesoom.assignment.product.application.query.ProductQueryService;
 import com.codesoom.assignment.product.common.ProductFactory;
 import com.codesoom.assignment.product.common.exception.ProductNotFoundException;
-import com.codesoom.assignment.product.application.ProductInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;

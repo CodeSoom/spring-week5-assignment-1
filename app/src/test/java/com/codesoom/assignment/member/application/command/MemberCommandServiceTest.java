@@ -151,9 +151,4 @@ class MemberCommandServiceTest {
             }
         }
     }
-
-
-
-
-
 }

@@ -3,7 +3,6 @@ package com.codesoom.assignment.member.controller.command;
 import com.codesoom.assignment.member.application.MemberCommand;
 import com.codesoom.assignment.member.application.MemberInfo;
 import com.codesoom.assignment.member.application.command.MemberCommandService;
-import com.codesoom.assignment.member.controller.MemberDto;
 import com.codesoom.assignment.member.controller.MemberDto.RequestParam;
 import com.codesoom.assignment.member.controller.MemberDto.UpdateParam;
 import com.codesoom.assignment.member.controller.MemberDtoMapper;
