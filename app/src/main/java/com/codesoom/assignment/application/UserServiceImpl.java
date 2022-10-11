@@ -7,8 +7,7 @@ import com.codesoom.assignment.dto.UserUpdateRequest;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
-
-import javax.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @Transactional
