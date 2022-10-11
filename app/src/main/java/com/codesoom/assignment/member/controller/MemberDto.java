@@ -26,4 +26,20 @@ public class MemberDto {
         private String email;
     }
 
+    @lombok.Generated
+    @Getter
+    @Setter
+    @ToString
+    public static class UpdateParam {
+
+        @NotBlank(message = "이름은 필수항목 입니다.")
+        private String name;
+
+        @NotBlank(message = "패스워드는 필수항목 입니다.")
+        private String password;
+
+        private String email;
+
+    }
+
 }

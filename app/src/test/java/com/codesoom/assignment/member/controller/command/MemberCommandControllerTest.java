@@ -8,6 +8,7 @@ import com.codesoom.assignment.member.common.MemberFactory;
 import com.codesoom.assignment.member.common.exception.MemberNotFoundException;
 import com.codesoom.assignment.member.controller.MemberDto;
 import com.codesoom.assignment.member.controller.MemberDto.RequestParam;
+import com.codesoom.assignment.member.controller.MemberDto.UpdateParam;
 import com.codesoom.assignment.member.controller.MemberDtoMapper;
 import com.codesoom.assignment.member.domain.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -92,8 +93,14 @@ class MemberCommandControllerTest {
 
             @BeforeEach
             void prepare() {
+                Member member = Member.builder()
+                        .id(1L)
+                        .name(givenRequest.getName())
+                        .password(givenRequest.getPassword())
+                        .email(givenRequest.getEmail())
+                        .build();
                 given(memberService.createMember(any(MemberCommand.Register.class)))
-                        .willReturn(new MemberInfo(memberDtoMapper.of(1L, givenRequest).toEntity()));
+                        .willReturn(new MemberInfo(member));
             }
 
             @Test
@@ -104,7 +111,6 @@ class MemberCommandControllerTest {
                 resultActions.andExpect(status().isCreated())
                         .andExpect(jsonPath("name").value(equalTo(givenRequest.getName())))
                         .andExpect(jsonPath("password").value(equalTo(givenRequest.getPassword())))
-                        .andExpect(jsonPath("email").value(equalTo(givenRequest.getEmail())))
                         .andDo(print());
             }
         }
@@ -154,7 +160,6 @@ class MemberCommandControllerTest {
             void prepare() {
                 givenRequest.setName("홍길동");
                 givenRequest.setPassword("test1234");
-                givenRequest.setEmail("test@.com");
             }
 
             @Test
@@ -171,7 +176,7 @@ class MemberCommandControllerTest {
     @Nested
     @DisplayName("updateMember[/users/id::PATCH] 메소드는")
     class Describe_updateMember {
-        ResultActions subject(Long id, MemberDto.RequestParam request) throws Exception {
+        ResultActions subject(Long id, MemberDto.UpdateParam request) throws Exception {
             return mockMvc.perform(patch("/users/{id}", id)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(objectMapper.writeValueAsString(request)));
@@ -182,13 +187,12 @@ class MemberCommandControllerTest {
         class Context_with_valid_id {
             private final Long MEMBER_ID = 1L;
             private final Member savedMember = MemberFactory.createMember(MEMBER_ID);
-            private final RequestParam givenRequest = new RequestParam();
+            private final UpdateParam givenRequest = new UpdateParam();
 
             @BeforeEach
             void prepare() {
                 givenRequest.setName("수정_" + savedMember.getName());
                 givenRequest.setPassword("수정_" + savedMember.getPassword());
-                givenRequest.setEmail("modified_" + savedMember.getEmail());
 
                 given(memberService.updateMember(any(UpdateRequest.class)))
                         .willReturn(new MemberInfo(memberDtoMapper.of(MEMBER_ID, givenRequest).toEntity()));
@@ -203,7 +207,6 @@ class MemberCommandControllerTest {
                         .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                         .andExpect(jsonPath("name").value(equalTo(givenRequest.getName())))
                         .andExpect(jsonPath("password").value(equalTo(givenRequest.getPassword())))
-                        .andExpect(jsonPath("email").value(equalTo(givenRequest.getEmail())))
                         .andDo(print());
             }
         }
@@ -212,7 +215,7 @@ class MemberCommandControllerTest {
         @DisplayName("유효하지않은 ID가 주어지면")
         class Context_with_invalid_id {
             private final Long MEMBER_ID = 9999L;
-            private final MemberDto.RequestParam givenRequest = MemberFactory.createRequestParam();
+            private final MemberDto.UpdateParam givenRequest = MemberFactory.createUpdateParam();
 
             @BeforeEach
             void prepare() {
@@ -235,19 +238,16 @@ class MemberCommandControllerTest {
         @DisplayName("필수항목에 빈 값이 주어지면")
         class Context_with_blank_name {
             private final Long MEMBER_ID = 1L;
-            private final List<RequestParam> testList = new ArrayList<>();
+            private final List<UpdateParam> testList = new ArrayList<>();
 
             @BeforeEach
             void prepare() {
-                testList.add(MemberFactory.createRequestParamWith(NAME, NULL));
-                testList.add(MemberFactory.createRequestParamWith(NAME, EMPTY));
-                testList.add(MemberFactory.createRequestParamWith(NAME, BLANK));
-                testList.add(MemberFactory.createRequestParamWith(PASSWORD, NULL));
-                testList.add(MemberFactory.createRequestParamWith(PASSWORD, EMPTY));
-                testList.add(MemberFactory.createRequestParamWith(PASSWORD, BLANK));
-                testList.add(MemberFactory.createRequestParamWith(EMAIL, NULL));
-                testList.add(MemberFactory.createRequestParamWith(EMAIL, EMPTY));
-                testList.add(MemberFactory.createRequestParamWith(EMAIL, BLANK));
+                testList.add(MemberFactory.createUpdateParamWith(NAME, NULL));
+                testList.add(MemberFactory.createUpdateParamWith(NAME, EMPTY));
+                testList.add(MemberFactory.createUpdateParamWith(NAME, BLANK));
+                testList.add(MemberFactory.createUpdateParamWith(PASSWORD, NULL));
+                testList.add(MemberFactory.createUpdateParamWith(PASSWORD, EMPTY));
+                testList.add(MemberFactory.createUpdateParamWith(PASSWORD, BLANK));
             }
 
             @Test
@@ -256,7 +256,7 @@ class MemberCommandControllerTest {
                 testList.forEach(this::test);
             }
 
-            private void test(RequestParam request) {
+            private void test(UpdateParam request) {
                 try {
                     ResultActions resultActions = subject(MEMBER_ID, request);
 
@@ -265,29 +265,6 @@ class MemberCommandControllerTest {
                 } catch (Exception e) {
                     throw new RuntimeException(e);
                 }
-            }
-        }
-
-        @Nested
-        @DisplayName("유효하지않은 이메일이 주어지면")
-        class Context_with_invalid_email {
-            private final Long MEMBER_ID = 1L;
-            private final RequestParam givenRequest = new RequestParam();
-
-            @BeforeEach
-            void prepare() {
-                givenRequest.setName("홍길동");
-                givenRequest.setPassword("test1234");
-                givenRequest.setEmail("test@.com");
-            }
-
-            @Test
-            @DisplayName("BAD_REQUEST(400)와 에러메시지를 리턴한다")
-            void it_returns_400_and_error_message() throws Exception {
-                ResultActions resultActions = subject(MEMBER_ID, givenRequest);
-
-                resultActions.andExpect(status().isBadRequest())
-                        .andDo(print());
             }
         }
     }

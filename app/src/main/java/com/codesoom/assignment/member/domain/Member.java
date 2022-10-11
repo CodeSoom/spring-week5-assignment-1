@@ -34,9 +34,6 @@ public class Member {
         if (StringUtils.isEmpty(name)){
             throw new IllegalArgumentException("이름이 비어있습니다.");
         }
-        if (StringUtils.isEmpty(email)) {
-            throw new IllegalArgumentException("이메일이 비어있습니다.");
-        }
         if (StringUtils.isEmpty(password)) {
             throw new IllegalArgumentException("비밀번호가 비어있습니다.");
         }
@@ -50,7 +47,9 @@ public class Member {
     public void modifyMemberInfo(Member member) {
         this.name = member.getName();
         this.password = member.getPassword();
-        this.email = member.getEmail();
+        if (!StringUtils.isEmpty(member.getEmail())) {
+            this.email = member.getEmail();
+        }
     }
 
 

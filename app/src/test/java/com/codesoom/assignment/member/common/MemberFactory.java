@@ -47,6 +47,15 @@ public class MemberFactory {
         return request;
     }
 
+    public static MemberDto.UpdateParam createUpdateParam() {
+        final MemberDto.UpdateParam request = new MemberDto.UpdateParam();
+        request.setName(getRandomName());
+        request.setPassword(UUID.randomUUID().toString());
+        request.setEmail("test" + random.nextInt(100) + "@gmail.com");
+
+        return request;
+    }
+
     public static MemberDto.RequestParam createRequestParamWith(FieldName fieldName, ValueType valueType) {
         final MemberDto.RequestParam request = new MemberDto.RequestParam();
         String testValue;
@@ -62,6 +71,24 @@ public class MemberFactory {
         request.setName(fieldName == NAME ? testValue : getRandomName());
         request.setPassword(fieldName == PASSWORD ? testValue : UUID.randomUUID().toString());
         request.setEmail(fieldName == EMAIL ? testValue : "test" + random.nextInt(100) + "@gmail.com");
+
+        return request;
+    }
+
+    public static MemberDto.UpdateParam createUpdateParamWith(FieldName fieldName, ValueType valueType) {
+        final MemberDto.UpdateParam request = new MemberDto.UpdateParam();
+        String testValue;
+
+        if (valueType == ValueType.NULL) {
+            testValue = null;
+        } else if (valueType == ValueType.EMPTY) {
+            testValue = "";
+        } else {
+            testValue = "  ";
+        }
+
+        request.setName(fieldName == NAME ? testValue : getRandomName());
+        request.setPassword(fieldName == PASSWORD ? testValue : UUID.randomUUID().toString());
 
         return request;
     }

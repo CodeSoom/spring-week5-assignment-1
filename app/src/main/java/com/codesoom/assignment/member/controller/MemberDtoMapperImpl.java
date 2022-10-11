@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class MemberDtoMapperImpl implements MemberDtoMapper {
+    @Override
     public MemberCommand.Register of(RequestParam request) {
         if (request == null) {
             return null;
@@ -18,16 +19,17 @@ public class MemberDtoMapperImpl implements MemberDtoMapper {
                 .build();
     }
 
-    public MemberCommand.UpdateRequest of(Long id, RequestParam requestParam) {
-        if (id == null || requestParam == null) {
+    @Override
+    public MemberCommand.UpdateRequest of(Long id, MemberDto.UpdateParam updateParam) {
+        if (id == null || updateParam == null) {
             return null;
         }
 
         return MemberCommand.UpdateRequest.builder()
                 .id(id)
-                .name(requestParam.getName())
-                .password(requestParam.getPassword())
-                .email(requestParam.getEmail())
+                .name(updateParam.getName())
+                .password(updateParam.getPassword())
+                .email(updateParam.getEmail())
                 .build();
     }
 }
