@@ -5,8 +5,8 @@ import com.codesoom.assignment.member.application.MemberInfo;
 import com.codesoom.assignment.member.application.command.MemberCommandService;
 import com.codesoom.assignment.member.controller.MemberDto.RequestParam;
 import com.codesoom.assignment.member.controller.MemberDtoMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -17,6 +17,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
+@Slf4j
 @RestController
 @CrossOrigin
 @RequestMapping("/users")
@@ -33,14 +36,14 @@ public class MemberCommandController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public MemberInfo registerMember(@RequestBody @Validated RequestParam request) {
+    public Object registerMember(@RequestBody @Valid RequestParam request) {
         final MemberCommand.Register command = memberDtoMapper.of(request);
         return memberService.createMember(command);
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
-    public MemberInfo updateMember(@PathVariable Long id, @RequestBody @Validated RequestParam request) {
+    public MemberInfo updateMember(@PathVariable Long id, @RequestBody @Valid RequestParam request) {
         final MemberCommand.UpdateRequest command = memberDtoMapper.of(id, request);
         return memberService.updateMember(command);
     }
