@@ -1,8 +1,8 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -92,6 +92,7 @@ class UserCommandServiceTest {
                 assertThat(updatedUser.getPassword()).isEqualTo(requestUser.getPassword());
             }
         }
+
         @Nested
         @DisplayName("요청하는 User 가 존재하지 않는 경우")
         class Context_with_non_existence_user {
@@ -111,6 +112,39 @@ class UserCommandServiceTest {
                 assertThatThrownBy(
                         () -> userCommandService.updateUser(INVALID_USER_ID, requestUser)
                 ).isExactlyInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteUser 메서드는")
+    class Describe_deleteUser {
+        @Nested
+        @DisplayName("저장되어있는 user 의 id가 주어지면 ")
+        @SpringBootTest
+        class Context_with_existing_user_id {
+            private Long deleteId;
+
+            @Autowired
+            private UserRepository userRepository;
+
+            @BeforeEach
+            void setUp() {
+                User savedUser = userCommandService.createUser(
+                        UserRequest.builder()
+                                .email("before@before.com")
+                                .password("before")
+                                .build()
+                );
+                deleteId = savedUser.getId();
+            }
+
+            @Test
+            @DisplayName("user 를 삭제하고 리턴한다")
+            void it_returns_deleted_user() {
+                Long deletedUserId = userCommandService.deleteUser(deleteId);
+
+                assertThat(userRepository.findById(deletedUserId)).isEmpty();
             }
         }
     }
