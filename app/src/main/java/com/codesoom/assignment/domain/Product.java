@@ -12,8 +12,6 @@ import javax.persistence.Id;
 @Entity
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class Product {
     @Id
     @GeneratedValue
@@ -25,7 +23,20 @@ public class Product {
 
     private Integer price;
 
+
     private String imageUrl;
+
+    public Product(Long id, String name, String maker, Integer price, String imageUrl) {
+        this.id = id;
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public Product() {
+
+    }
 
     public void change(String name,
                        String maker,

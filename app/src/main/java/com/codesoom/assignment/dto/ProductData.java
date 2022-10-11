@@ -8,8 +8,6 @@ import javax.validation.constraints.NotNull;
 @Setter
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ProductData {
     private Long id;
 
