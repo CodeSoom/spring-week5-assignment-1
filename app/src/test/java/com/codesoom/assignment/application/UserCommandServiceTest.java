@@ -48,4 +48,44 @@ class UserCommandServiceTest {
             }
         }
     }
+
+    @Nested
+    @DisplayName("updateUser 메서드는")
+    class Describe_updateUser {
+        @Nested
+        @DisplayName("요청하는 User 가 존재하는 경우")
+        class Context_with_user {
+            private User savedUser;
+            private UserRequest requestUser;
+
+            @BeforeEach
+            void setUp() {
+                savedUser = userCommandService.createUser(
+                        UserRequest.builder()
+                                .email("before@before.com")
+                                .password("before")
+                                .build()
+                );
+
+                requestUser = UserRequest.builder()
+                        .email("after@after.com")
+                        .password("after")
+                        .build();
+            }
+
+            @AfterEach
+            void after() {
+                userCommandService.deleteAll();
+            }
+
+            @Test
+            @DisplayName("User 를 수정하고 리턴한다")
+            void it_returns_updated_user() {
+                User updatedUser = userCommandService.updateUser(savedUser.getId(), requestUser);
+
+                assertThat(updatedUser.getEmail()).isEqualTo(requestUser.getEmail());
+                assertThat(updatedUser.getPassword()).isEqualTo(requestUser.getPassword());
+            }
+        }
+    }
 }
