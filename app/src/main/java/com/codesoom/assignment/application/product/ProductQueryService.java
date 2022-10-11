@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application.product;
 
-import com.codesoom.assignment.application.product.ProductInfo;
 import com.codesoom.assignment.domain.product.Product;
 
 import java.util.List;

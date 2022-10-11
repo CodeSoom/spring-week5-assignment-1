@@ -23,6 +23,9 @@ public class MemberQueryServiceImpl implements MemberQueryService {
         return memberRepository.findAll();
     }
 
+    /**
+     * @throws MemberNotFoundException 회원정보가 없을 경우
+     */
     @Override
     public Member getMember(Long id) {
         return memberRepository.findById(id).orElseThrow(() -> new MemberNotFoundException(id));

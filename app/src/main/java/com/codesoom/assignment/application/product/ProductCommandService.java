@@ -19,8 +19,8 @@ public interface ProductCommandService {
     Product updateProduct(ProductCommand.UpdateRequest command);
 
     /**
-     * 상품ID에 해당하는 상품을 검색하고 해당 상품을 삭제한다.
-     * @param id 상품 ID
+     * 상품ID의 상품을 삭제한다.
+     * @param id 삭제할 상품 ID
      */
     void deleteProduct(Long id);
 }

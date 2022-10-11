@@ -22,6 +22,9 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         return memberRepository.save(command.toEntity());
     }
 
+    /**
+     * @throws MemberNotFoundException 회원정보가 없을 경우
+     */
     @Transactional
     @Override
     public Member updateMember(MemberCommand.UpdateRequest command) {
@@ -33,6 +36,9 @@ public class MemberCommandServiceImpl implements MemberCommandService {
         return findMember;
     }
 
+    /**
+     * @throws MemberNotFoundException 회원정보가 없을 경우
+     */
     @Transactional
     @Override
     public void deleteMember(Long id) {
