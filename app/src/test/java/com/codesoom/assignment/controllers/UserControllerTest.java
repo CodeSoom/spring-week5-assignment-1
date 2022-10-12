@@ -191,20 +191,21 @@ class UserControllerTest {
         @Nested
         @DisplayName("요청하는 User 의 필드가 모두 있는 경우")
         class Context_with_full_value {
-            private User savedUser;
+            private Long userId;
             private UserRequest requestUser;
             private String requestBody;
 
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                savedUser = userCommandService.createUser(
+                User savedUser = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("before@before.com")
                                 .name("김 코")
                                 .password("123")
                                 .build()
                 );
+                userId = savedUser.getId();
 
                 requestUser = UserRequest.builder()
                         .email("after@after.com")
@@ -218,13 +219,139 @@ class UserControllerTest {
             @Test
             @DisplayName("모든 필드를 수정 후 리턴한다")
             void it_returns_updated_User() throws Exception {
-                mockMvc.perform(patch("/users/" + savedUser.getId())
+                mockMvc.perform(patch("/users/" + userId)
                                 .content(requestBody)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(jsonPath("$.email").value(requestUser.getEmail()))
                         .andExpect(jsonPath("$.name").value(requestUser.getName()))
                         .andExpect(jsonPath("$.password").value(requestUser.getPassword()));
+            }
+        }
+
+        @Nested
+        @DisplayName("UserRequest 에 일부 필드가 invalid 한 경우")
+        class Context_with_invalid_userRequest {
+            private Long userId;
+
+            private String requestBodyWithNullEmail;
+            private String requestBodyWithNullName;
+            private String requestBodyWithNullPassword;
+            private String requestBodyWithBlankEmail;
+            private String requestBodyWithBlankName;
+            private String requestBodyWithBlankPassword;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                User savedUser = userCommandService.createUser(
+                        UserRequest.builder()
+                                .email("before@before.com")
+                                .name("김 코")
+                                .password("123")
+                                .build()
+                );
+                userId = savedUser.getId();
+
+                UserRequest userRequestWithNullEmail = UserRequest.builder()
+                        .email(null)
+                        .name("김 코")
+                        .password("123")
+                        .build();
+                requestBodyWithNullEmail = objectMapper.writeValueAsString(userRequestWithNullEmail);
+
+                UserRequest userRequestWithNullName = UserRequest.builder()
+                        .email("a@a.com")
+                        .name(null)
+                        .password("123")
+                        .build();
+                requestBodyWithNullName = objectMapper.writeValueAsString(userRequestWithNullName);
+
+                UserRequest requestUserWithNullPassword = UserRequest.builder()
+                        .email("a@a.com")
+                        .name("김 코")
+                        .password(null)
+                        .build();
+                requestBodyWithNullPassword = objectMapper.writeValueAsString(requestUserWithNullPassword);
+
+                UserRequest requestUserWithBlankEmail = UserRequest.builder()
+                        .email("")
+                        .name("김 코")
+                        .password("123")
+                        .build();
+                requestBodyWithBlankEmail = objectMapper.writeValueAsString(requestUserWithBlankEmail);
+
+                UserRequest requestUserWithBlankName = UserRequest.builder()
+                        .email("a@a.com")
+                        .name("")
+                        .password("123")
+                        .build();
+                requestBodyWithBlankName = objectMapper.writeValueAsString(requestUserWithBlankName);
+
+                UserRequest requestUserWithBlankPassword = UserRequest.builder()
+                        .email("a@a.com")
+                        .name("김 코")
+                        .password("")
+                        .build();
+                requestBodyWithBlankPassword = objectMapper.writeValueAsString(requestUserWithBlankPassword);
+            }
+
+            @AfterEach
+            void after() {
+                userCommandService.deleteAll();
+            }
+
+            @Test
+            @DisplayName("email 필드가 null 인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_null_email() throws Exception {
+                mockMvc.perform(patch("/users/" + userId)
+                                .content(requestBodyWithNullEmail)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("name 필드가 null 인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_null_name() throws Exception {
+                mockMvc.perform(patch("/users/" + userId)
+                                .content(requestBodyWithNullName)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("password 필드가 null 인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_null_password() throws Exception {
+                mockMvc.perform(patch("/users/" + userId)
+                                .content(requestBodyWithNullPassword)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("email 필드가 빈 문자열인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_blank_email() throws Exception {
+                mockMvc.perform(patch("/users/" + userId)
+                                .content(requestBodyWithBlankEmail)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("name 필드가 빈 문자열인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_blank_name() throws Exception {
+                mockMvc.perform(patch("/users/" + userId)
+                                .content(requestBodyWithBlankName)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            @DisplayName("password 필드가 빈 문자열인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_blank_password() throws Exception {
+                mockMvc.perform(patch("/users/" + userId)
+                                .content(requestBodyWithBlankPassword)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
             }
         }
     }
