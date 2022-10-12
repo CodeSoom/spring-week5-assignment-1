@@ -12,6 +12,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.util.Arrays;
+import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
@@ -164,6 +167,49 @@ class UserCommandServiceTest {
                 assertThatThrownBy(
                         () -> userCommandService.deleteUser(INVALID_USER_ID)
                 ).isExactlyInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteUsers 메서드는")
+    class Describe_deleteUsers {
+        @Nested
+        @DisplayName("저장되어있는 user 의 id가 주어지면 ")
+        @SpringBootTest
+        class Context_with_existing_user_id {
+            private Long deleteId1;
+            private Long deleteId2;
+
+            @Autowired
+            private UserRepository userRepository;
+
+            @BeforeEach
+            void setUp() {
+                User savedUser1 = userCommandService.createUser(
+                        UserRequest.builder()
+                                .email("a@a.com")
+                                .name("김 코")
+                                .password("a")
+                                .build()
+                );
+                User savedUser2 = userCommandService.createUser(
+                        UserRequest.builder()
+                                .email("b@b.com")
+                                .name("김 코")
+                                .password("b")
+                                .build()
+                );
+                deleteId1 = savedUser1.getId();
+                deleteId2 = savedUser2.getId();
+            }
+
+            @Test
+            @DisplayName("user 들을 삭제하고 user id 들을 리턴한다")
+            void it_returns_deleted_user_ids() {
+                List<Long> deletedIds = userCommandService.deleteUsers(Arrays.asList(deleteId1, deleteId2));
+
+                assertThat(userRepository.findAllById(deletedIds)).isEmpty();
             }
         }
     }
