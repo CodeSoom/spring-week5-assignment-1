@@ -32,7 +32,7 @@ public class UserCommandService {
 
         User user = mapper.map(userRequest, User.class);
 
-        findUser.change(user.getEmail(), user.getName(), user.getPassword());
+        findUser.update(user.getEmail(), user.getName(), user.getPassword());
         return userRepository.save(findUser);
     }
 

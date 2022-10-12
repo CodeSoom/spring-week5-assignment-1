@@ -20,7 +20,7 @@ public class User {
 
     private String password;
 
-    public void change(String email, String name, String password) {
+    public void update(String email, String name, String password) {
         this.email = email;
         this.name = name;
         this.password = password;
