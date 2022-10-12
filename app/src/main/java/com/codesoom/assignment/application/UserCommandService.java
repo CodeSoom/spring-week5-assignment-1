@@ -8,8 +8,9 @@ import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class UserCommandService {
@@ -44,6 +45,15 @@ public class UserCommandService {
 
     public List<Long> deleteUsers(List<Long> ids) {
         Iterable<User> users = userRepository.findAllById(ids);
+
+        Set<Long> userSet = new HashSet<>();
+        users.forEach(user -> userSet.add(user.getId()));
+
+        ids.forEach(id -> {
+            if (!userSet.contains(id)) {
+                throw new UserNotFoundException();
+            }
+        });
 
         userRepository.deleteAll(users);
         return ids;
