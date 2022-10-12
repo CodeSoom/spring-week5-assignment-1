@@ -76,7 +76,7 @@ class UserTest {
             @DisplayName("throws illegal argument exception")
             @Test
             void it_throws_illegal_argument() {
-                Throwable throwable = catchThrowable(() -> User.builder().username(null).email("email@gmail.com").password("password").build());
+                Throwable throwable = catchThrowable(() -> User.builder().username("").email("email@gmail.com").password("password").build());
                 assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
                 assertThat(throwable).hasMessage(UserErrorMessage.USERNAME_NOT_BLANK);
             }

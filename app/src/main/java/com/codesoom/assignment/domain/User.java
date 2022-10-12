@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class User {
 
-    @NotBlank(message = "The username must contain at least one non-whitespace character.")
-    @NotNull(message = "The U")
+    @NotBlank(message = UserErrorMessage.EMAIL_NOT_NULL)
+    @NotNull(message = UserErrorMessage.EMAIL_NOT_BLANK)
     @Id
     private String username;
 
@@ -35,6 +35,8 @@ public class User {
         Assert.notNull(email, UserErrorMessage.EMAIL_NOT_NULL);
         Assert.hasText(email, UserErrorMessage.EMAIL_NOT_BLANK);
 
+        Assert.notNull(username,UserErrorMessage.USERNAME_NOT_NULL);
+        Assert.hasText(username,UserErrorMessage.USERNAME_NOT_BLANK);
 
         this.username = username;
         this.password = password;
