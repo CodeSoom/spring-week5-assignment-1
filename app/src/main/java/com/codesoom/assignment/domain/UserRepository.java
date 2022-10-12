@@ -9,6 +9,8 @@ public interface UserRepository extends CrudRepository<User, Long> {
 
     Optional<User> findById(Long id);
 
+    Iterable<User> findAllById(Iterable<Long> ids);
+
     void deleteById(Long id);
 
     void deleteAll();
