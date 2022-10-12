@@ -37,7 +37,8 @@ public class UserCommandService {
     }
 
     public Long deleteUser(Long id) {
-        userRepository.findById(id).orElseThrow(UserNotFoundException::new);
+        userRepository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
 
         userRepository.deleteById(id);
         return id;
