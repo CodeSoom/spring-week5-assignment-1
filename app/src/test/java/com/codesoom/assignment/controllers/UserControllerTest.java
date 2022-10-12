@@ -30,6 +30,7 @@ class UserControllerTest {
     private MockMvc mockMvc;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
+    private final Long INVALID_USER_ID = 0L;
 
     @Nested
     @DisplayName("createUser 메서드는")
@@ -352,6 +353,33 @@ class UserControllerTest {
                                 .content(requestBodyWithBlankPassword)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("저장되어 있지 않은 User 의 id로 요청한 경우")
+        class Context_with_non_existence_id {
+            private UserRequest requestUser;
+            private String requestBody;
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                requestUser = UserRequest.builder()
+                        .email("a@a.com")
+                        .name("김 코")
+                        .password("123")
+                        .build();
+                requestBody = objectMapper.writeValueAsString(requestUser);
+
+            }
+
+            @Test
+            @DisplayName("사용자를 찾을 수 없다는 예외를 던진다")
+            void it_throws_exception() throws Exception {
+                mockMvc.perform(patch("/users/" + INVALID_USER_ID)
+                                .content(requestBody)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
             }
         }
     }
