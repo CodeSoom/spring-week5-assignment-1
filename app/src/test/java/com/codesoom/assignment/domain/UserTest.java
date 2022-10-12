@@ -17,12 +17,11 @@ class UserTest {
     private final String password = "12345Passwrod";
 
 
-
     @DisplayName("User class Email validations")
     @Nested
     class Describe_email_validation {
 
-        @DisplayName("if null is givien")
+        @DisplayName("if null is given")
         @Nested
         class Context_null_email {
 
@@ -52,7 +51,38 @@ class UserTest {
 
     }
 
+    @DisplayName("Username validation")
+    @Nested
+    class Describe_username {
 
+        @DisplayName("if null is given")
+        @Nested
+        class Context_no_username {
+
+            @DisplayName("throws illegal argument exception")
+            @Test
+            void it_throws_illegal_argument() {
+                Throwable throwable = catchThrowable(() -> User.builder().username(null).email("email@gmail.com").password("password").build());
+                assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
+                assertThat(throwable).hasMessage(UserErrorMessage.USERNAME_NOT_NULL);
+
+            }
+        }
+
+        @DisplayName("if empty username is given")
+        @Nested
+        class Context_empty_username {
+
+            @DisplayName("throws illegal argument exception")
+            @Test
+            void it_throws_illegal_argument() {
+                Throwable throwable = catchThrowable(() -> User.builder().username(null).email("email@gmail.com").password("password").build());
+                assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
+                assertThat(throwable).hasMessage(UserErrorMessage.USERNAME_NOT_BLANK);
+            }
+        }
+
+    }
 
 
 }

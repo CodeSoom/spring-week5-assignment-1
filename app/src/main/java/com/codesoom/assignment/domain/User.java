@@ -1,7 +1,9 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.Exceptions.UserErrorMessage;
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -30,6 +32,10 @@ public class User {
 
     @Builder
     public User(String username, String password, String email) {
+        Assert.notNull(email, UserErrorMessage.EMAIL_NOT_NULL);
+        Assert.hasText(email, UserErrorMessage.EMAIL_NOT_BLANK);
+
+
         this.username = username;
         this.password = password;
         this.email = email;
