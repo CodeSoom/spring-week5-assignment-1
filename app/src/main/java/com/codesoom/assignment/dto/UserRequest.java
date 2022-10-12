@@ -15,6 +15,10 @@ public class UserRequest {
     private String email;
 
     @NotBlank
+    @Mapping("name")
+    private String name;
+
+    @NotBlank
     @Mapping("password")
     private String password;
 }

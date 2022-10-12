@@ -26,7 +26,7 @@ public class UserCommandService {
         User findUser = userRepository.findById(id).orElseThrow(UserNotFoundException::new);
         User user = mapper.map(userRequest, User.class);
 
-        findUser.change(user.getEmail(), user.getPassword());
+        findUser.change(user.getEmail(),user.getName(), user.getPassword());
         return userRepository.save(findUser);
     }
 

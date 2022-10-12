@@ -14,12 +14,15 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String name;
+
     private String email;
 
     private String password;
 
-    public void change(String email, String password) {
+    public void change(String email, String name, String password) {
         this.email = email;
+        this.name = name;
         this.password = password;
     }
 }

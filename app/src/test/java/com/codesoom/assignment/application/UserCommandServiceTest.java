@@ -34,6 +34,7 @@ class UserCommandServiceTest {
             void setUp() {
                 requestUser = UserRequest.builder()
                         .email("a@a.com")
+                        .name("김 코")
                         .password("123")
                         .build();
             }
@@ -49,6 +50,7 @@ class UserCommandServiceTest {
                 User savedUser = userCommandService.createUser(requestUser);
 
                 assertThat(savedUser.getEmail()).isEqualTo(requestUser.getEmail());
+                assertThat(savedUser.getName()).isEqualTo(requestUser.getName());
                 assertThat(savedUser.getPassword()).isEqualTo(requestUser.getPassword());
             }
         }
@@ -68,12 +70,14 @@ class UserCommandServiceTest {
                 savedUser = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("before@before.com")
+                                .name("김 코")
                                 .password("before")
                                 .build()
                 );
 
                 requestUser = UserRequest.builder()
                         .email("after@after.com")
+                        .name("김 딩")
                         .password("after")
                         .build();
             }
@@ -89,6 +93,7 @@ class UserCommandServiceTest {
                 User updatedUser = userCommandService.updateUser(savedUser.getId(), requestUser);
 
                 assertThat(updatedUser.getEmail()).isEqualTo(requestUser.getEmail());
+                assertThat(updatedUser.getName()).isEqualTo(requestUser.getName());
                 assertThat(updatedUser.getPassword()).isEqualTo(requestUser.getPassword());
             }
         }
@@ -102,6 +107,7 @@ class UserCommandServiceTest {
             void setUp() {
                 requestUser = UserRequest.builder()
                         .email("after@after.com")
+                        .name("김 코")
                         .password("after")
                         .build();
             }
@@ -133,6 +139,7 @@ class UserCommandServiceTest {
                 User savedUser = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("before@before.com")
+                                .name("김 코")
                                 .password("before")
                                 .build()
                 );

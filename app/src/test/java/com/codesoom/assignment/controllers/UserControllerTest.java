@@ -42,6 +42,7 @@ class UserControllerTest {
             void setUp() throws JsonProcessingException {
                 requestUser = UserRequest.builder()
                         .email("a@a.com")
+                        .name("김 코")
                         .password("123")
                         .build();
 
@@ -61,39 +62,61 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("$.email").value(requestUser.getEmail()))
+                        .andExpect(jsonPath("$.name").value(requestUser.getName()))
                         .andExpect(jsonPath("$.password").value(requestUser.getPassword()));
             }
         }
+
         @Nested
         @DisplayName("UserRequest 에 일부 필드가 null 인 경우")
         class Context_with_partial_null_userRequest {
             private String requestBodyWithNullEmail;
+            private String requestBodyWithNullName;
             private String requestBodyWithNullPassword;
             private String requestBodyWithBlankEmail;
+            private String requestBodyWithBlankName;
             private String requestBodyWithBlankPassword;
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
                 UserRequest userRequestWithNullEmail = UserRequest.builder()
                         .email(null)
+                        .name("김 코")
                         .password("123")
                         .build();
                 requestBodyWithNullEmail = objectMapper.writeValueAsString(userRequestWithNullEmail);
 
+                UserRequest userRequestWithNullName = UserRequest.builder()
+                        .email("a@a.com")
+                        .name(null)
+                        .password("123")
+                        .build();
+                requestBodyWithNullName = objectMapper.writeValueAsString(userRequestWithNullName);
+
                 UserRequest requestUserWithNullPassword = UserRequest.builder()
                         .email("a@a.com")
+                        .name("김 코")
                         .password(null)
                         .build();
                 requestBodyWithNullPassword = objectMapper.writeValueAsString(requestUserWithNullPassword);
 
                 UserRequest requestUserWithBlankEmail = UserRequest.builder()
                         .email("")
+                        .name("김 코")
                         .password("123")
                         .build();
                 requestBodyWithBlankEmail = objectMapper.writeValueAsString(requestUserWithBlankEmail);
 
+                UserRequest requestUserWithBlankName = UserRequest.builder()
+                        .email("a@a.com")
+                        .name("")
+                        .password("123")
+                        .build();
+                requestBodyWithBlankName = objectMapper.writeValueAsString(requestUserWithBlankName);
+
                 UserRequest requestUserWithBlankPassword = UserRequest.builder()
                         .email("a@a.com")
+                        .name("김 코")
                         .password("")
                         .build();
                 requestBodyWithBlankPassword = objectMapper.writeValueAsString(requestUserWithBlankPassword);
@@ -112,6 +135,16 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
             }
+
+            @Test
+            @DisplayName("name 필드가 null 인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_null_name() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(requestBodyWithNullName)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
             @Test
             @DisplayName("password 필드가 null 인 경우 400 status 코드를 응답한다")
             void it_returns_badRequest_with_null_password() throws Exception {
@@ -120,14 +153,25 @@ class UserControllerTest {
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
             }
+
             @Test
             @DisplayName("email 필드가 빈 문자열인 경우 400 status 코드를 응답한다")
             void it_returns_badRequest_with_blank_email() throws Exception {
                 mockMvc.perform(post("/users")
-                                .content(requestBodyWithBlankPassword)
+                                .content(requestBodyWithBlankEmail)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
             }
+
+            @Test
+            @DisplayName("name 필드가 빈 문자열인 경우 400 status 코드를 응답한다")
+            void it_returns_badRequest_with_blank_name() throws Exception {
+                mockMvc.perform(post("/users")
+                                .content(requestBodyWithBlankName)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
             @Test
             @DisplayName("password 필드가 빈 문자열인 경우 400 status 코드를 응답한다")
             void it_returns_badRequest_with_blank_password() throws Exception {
