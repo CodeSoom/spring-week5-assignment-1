@@ -12,12 +12,12 @@ import java.beans.ConstructorProperties;
 @Getter
 public class UserUpdateRequest {
 
-    @NotEmpty
+    @NotEmpty(message = "이름은 필수값 입니다.")
     private String name;
 
     private String email;
 
-    @NotEmpty
+    @NotEmpty(message = "비밀번호는 필수값입니다.")
     private String password;
 
     @Builder

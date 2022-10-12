@@ -14,15 +14,15 @@ import java.beans.ConstructorProperties;
 public class UserCreateRequest {
 
     @Mapping("name")
-    @NotEmpty
+    @NotEmpty(message = "이름은 필수값 입니다.")
     private String name;
 
     @Mapping("email")
-    @NotEmpty
+    @NotEmpty(message = "이메일은 필수값 입니다.")
     private String email;
 
     @Mapping("password")
-    @NotEmpty
+    @NotEmpty(message = "비밀번호는 필수값 입니다.")
     private String password;
 
     @ConstructorProperties({"name", "email", "password"})

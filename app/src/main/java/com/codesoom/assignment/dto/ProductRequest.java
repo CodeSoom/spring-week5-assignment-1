@@ -10,15 +10,14 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ProductRequest {
-    private Long id;
 
-    @NotBlank
+    @NotBlank(message = "이름은 필수값 입니다.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "제조사는 필수값 입니다.")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "가격은 필수값 입니다.")
     private Integer price;
 
     private String imageUrl;
