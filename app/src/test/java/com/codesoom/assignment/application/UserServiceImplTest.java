@@ -46,18 +46,20 @@ class UserServiceImplTest {
     @Nested
     @DisplayName("create 메소드는")
     class Describe_create {
-        private UserCreateRequest subject() {
-            return UserCreateRequest.builder()
-                    .name(NAME)
-                    .email(EMAIL)
-                    .password(PASSWORD)
-                    .build();
+        private User subject() {
+            return userService.create(
+                    UserCreateRequest.builder()
+                        .name(NAME)
+                        .email(EMAIL)
+                        .password(PASSWORD)
+                        .build()
+            );
         }
 
         @Test
         @DisplayName("회원을 생성하여 반환한다")
         void it_returns_created_user() {
-            User user = userService.create(subject());
+            User user = subject();
 
             assertThat(user).isNotNull();
             assertThat(user.getId()).isNotNull();
@@ -114,6 +116,7 @@ class UserServiceImplTest {
             }
 
             @Test
+            @DisplayName("예외를 던진")
             void it_throws_exception() {
                 assertThatThrownBy(() -> userService.update(id, subject()))
                         .isInstanceOf(UserNotFoundException.class);
