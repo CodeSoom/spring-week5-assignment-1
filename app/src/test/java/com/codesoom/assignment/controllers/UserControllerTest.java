@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserCommandService;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserRequest;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -179,6 +181,50 @@ class UserControllerTest {
                                 .content(requestBodyWithBlankPassword)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isBadRequest());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("updateUser 메서드는")
+    class Describe_updateUser {
+        @Nested
+        @DisplayName("요청하는 User 의 필드가 모두 있는 경우")
+        class Context_with_full_value {
+            private User savedUser;
+            private UserRequest requestUser;
+            private String requestBody;
+
+
+            @BeforeEach
+            void setUp() throws JsonProcessingException {
+                savedUser = userCommandService.createUser(
+                        UserRequest.builder()
+                                .email("before@before.com")
+                                .name("김 코")
+                                .password("123")
+                                .build()
+                );
+
+                requestUser = UserRequest.builder()
+                        .email("after@after.com")
+                        .name("김 딩")
+                        .password("456")
+                        .build();
+                requestBody = objectMapper.writeValueAsString(requestUser);
+
+            }
+
+            @Test
+            @DisplayName("모든 필드를 수정 후 리턴한다")
+            void it_returns_updated_User() throws Exception {
+                mockMvc.perform(patch("/users/" + savedUser.getId())
+                                .content(requestBody)
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.email").value(requestUser.getEmail()))
+                        .andExpect(jsonPath("$.name").value(requestUser.getName()))
+                        .andExpect(jsonPath("$.password").value(requestUser.getPassword()));
             }
         }
     }
