@@ -13,7 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
 @WebMvcTest(UserController.class)
@@ -27,36 +30,43 @@ class UserControllerTest {
     @MockBean
     private UserService userService;
 
-    private UserData userData = UserData.builder().build();
+    private UserData userData = UserData.builder().username("username").email("email@gmail.com").password("2334").build();
 
 
-    @DisplayName("Mocking with UserService")
+    @DisplayName("UserService 클라스")
     @Test
     void setup() {
-//        given(userService.create(userRequestDto)).willReturn(userResponseDto);
+        given(userService.create(userData)).willReturn(userData);
     }
 
-    @DisplayName("UserController Create Method")
+    @DisplayName("UserController Create 메소드")
     @Nested
     class Describe_create {
 
-        @DisplayName("if a user requests for a valid sign up")
+        @DisplayName("유저가 유효한 데이터를 보낼때")
         @Nested
-        class Context_user_requests {
+        class Context_valid_user {
 
-            @DisplayName("returns a UserResponseDto")
+            @DisplayName("userdata를 반환한다")
             @Test
             void it_returns_userResponseDto() throws Exception {
                 mockMvc.perform(MockMvcRequestBuilders.post("/user")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(objectMapper.writeValueAsString(userData)))
-//                              .andExpect(status().isCreated());
-                                .andDo(print());
-//                              .andExpect(jsonPath("$.").value("12345"))
-//                              .andExpect(content().objectMapper.writeValueAsString(userResponseDto))
+                        .andExpect(status().isCreated())
+                        .andExpect(jsonPath("$.username").value(userData.getUsername()))
+                        .andExpect(jsonPath("$.password").value(userData.getPassword()))
+                        .andExpect(jsonPath("$.email").value(userData.getEmail()))
+                        .andDo(print());
             }
         }
+
+
+
+
+
+
     }
 
 

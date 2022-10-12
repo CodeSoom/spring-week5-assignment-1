@@ -1,7 +1,6 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.dto.UserRequestDto;
-import com.codesoom.assignment.dto.UserResponseDto;
+import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.infra.JpaUserRepository;
 import org.springframework.stereotype.Service;
 
@@ -13,7 +12,7 @@ public class UserService {
         this.jpaUserRepository = jpaUserRepository;
     }
 
-    public UserResponseDto create(UserRequestDto userRequestDto) {
+    public UserData create(UserData userData) {
         return null;
     }
 }

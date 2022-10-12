@@ -41,7 +41,7 @@ public class Product {
 
     }
 
-    public void change(String name,
+    public void update(String name,
                        String maker,
                        Integer price,
                        String imageUrl) {

@@ -17,15 +17,15 @@ class UserTest {
     private final String password = "12345Passwrod";
 
 
-    @DisplayName("User class Email validations")
+    @DisplayName("Email 필드 유효성 검사")
     @Nested
     class Describe_email_validation {
 
-        @DisplayName("if null is given")
+        @DisplayName("null 들어올때")
         @Nested
         class Context_null_email {
 
-            @DisplayName("throws illegal argument exception if null was passed")
+            @DisplayName("llegalArgumentException를 던진다")
             @Test
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("usernaem").email(null).password("password").build());
@@ -35,11 +35,11 @@ class UserTest {
         }
 
 
-        @DisplayName("if an empty string is given")
+        @DisplayName("공백이 들어올때")
         @Nested
         class Context_empty_email {
 
-            @DisplayName("throws illegal argument exception")
+            @DisplayName("llegalArgumentException를 던진다")
             @Test
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("username").email("").password("password").build());
@@ -51,15 +51,15 @@ class UserTest {
 
     }
 
-    @DisplayName("Username validation")
+    @DisplayName("Username 필드 유효성 검사")
     @Nested
     class Describe_username {
 
-        @DisplayName("if null is given")
+        @DisplayName("null 들어올때")
         @Nested
         class Context_no_username {
 
-            @DisplayName("throws illegal argument exception")
+            @DisplayName("IllegalArgumentException를 던진다")
             @Test
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username(null).email("email@gmail.com").password("password").build());
@@ -69,11 +69,11 @@ class UserTest {
             }
         }
 
-        @DisplayName("if empty username is given")
+        @DisplayName("공백으로 들어올때")
         @Nested
         class Context_empty_username {
 
-            @DisplayName("throws illegal argument exception")
+            @DisplayName("llegalArgumentException를 던진다")
             @Test
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("").email("email@gmail.com").password("password").build());
@@ -84,15 +84,15 @@ class UserTest {
 
     }
 
-    @DisplayName("Password validation")
+    @DisplayName("Password 필드 유효성 검사")
     @Nested
     class Describe_password {
 
-        @DisplayName("if no password is given")
+        @DisplayName("null 들어올때")
         @Nested
         class Context_null_Password {
 
-            @DisplayName("throws an illegal argument exception")
+            @DisplayName("llegalArgumentException를 던진다")
             @Test
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("usernaem").email("email@mail.com").password(null).build());
@@ -101,11 +101,11 @@ class UserTest {
             }
         }
 
-        @DisplayName("if empty password is given")
+        @DisplayName("공백으로 들어올때")
         @Nested
         class Context_EmptyL_Password {
 
-            @DisplayName("throws an illegal argument exception")
+            @DisplayName("llegalArgumentException를 던진다")
             @Test
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("usernaem").email("email@mail.com").password("").build());

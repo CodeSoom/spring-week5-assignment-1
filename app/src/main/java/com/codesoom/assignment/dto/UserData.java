@@ -30,7 +30,6 @@ public class UserData {
         this.email = email;
     }
 
-
     public UserData() {
     }
 }
