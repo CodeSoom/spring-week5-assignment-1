@@ -212,5 +212,31 @@ class UserCommandServiceTest {
                 assertThat(userRepository.findAllById(deletedIds)).isEmpty();
             }
         }
+
+        @Nested
+        @DisplayName("저장되어있지 않은 user 의 id가 주어지면 ")
+        class Context_with_non_existence_user_id {
+            private Long deleteId;
+
+            @BeforeEach
+            void setUp() {
+                User savedUser = userCommandService.createUser(
+                        UserRequest.builder()
+                                .email("a@a.com")
+                                .name("김 코")
+                                .password("a")
+                                .build()
+                );
+                deleteId = savedUser.getId();
+            }
+
+            @Test
+            @DisplayName("사용자가 존재하지 않다는 예외를 던진다")
+            void it_throws_exception() {
+                assertThatThrownBy(
+                        () -> userCommandService.deleteUsers(Arrays.asList(deleteId, INVALID_USER_ID))
+                ).isExactlyInstanceOf(UserNotFoundException.class);
+            }
+        }
     }
 }
