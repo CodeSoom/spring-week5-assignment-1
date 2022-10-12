@@ -413,5 +413,16 @@ class UserControllerTest {
                         .andExpect(status().isNoContent());
             }
         }
+
+        @Nested
+        @DisplayName("저장되어 있지 않는 user 의 id가 주어진다면 ")
+        class Context_with_non_existence_user_id {
+            @Test
+            @DisplayName("제품을 찾을 수 없는 예외를 던진다")
+            void it_delete_user() throws Exception {
+                mockMvc.perform(delete("/users/" + INVALID_USER_ID))
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 }
