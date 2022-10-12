@@ -16,8 +16,8 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class User {
 
-    @NotBlank(message = UserErrorMessage.EMAIL_NOT_NULL)
-    @NotNull(message = UserErrorMessage.EMAIL_NOT_BLANK)
+    @NotBlank(message = UserErrorMessage.EMAIL_NULL)
+    @NotNull(message = UserErrorMessage.EMAIL_BLANK)
     @Id
     private String username;
 
@@ -32,11 +32,11 @@ public class User {
 
     @Builder
     public User(String username, String password, String email) {
-        Assert.notNull(email, UserErrorMessage.EMAIL_NOT_NULL);
-        Assert.hasText(email, UserErrorMessage.EMAIL_NOT_BLANK);
+        Assert.notNull(email, UserErrorMessage.EMAIL_NULL);
+        Assert.hasText(email, UserErrorMessage.EMAIL_BLANK);
 
-        Assert.notNull(username,UserErrorMessage.USERNAME_NOT_NULL);
-        Assert.hasText(username,UserErrorMessage.USERNAME_NOT_BLANK);
+        Assert.notNull(username,UserErrorMessage.USERNAME_NULL);
+        Assert.hasText(username,UserErrorMessage.USERNAME_BLANK);
 
         this.username = username;
         this.password = password;
