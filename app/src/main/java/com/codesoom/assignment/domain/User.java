@@ -37,10 +37,13 @@ public class User {
      * @param name 수정할 이름
      * @param email 수정할 이메일
      * @param password 수정할 비밀번호
+     * @return 수정된 회원
      */
-    public void update(String name, String email, String password) {
+    public User update(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+
+        return this;
     }
 }

@@ -37,14 +37,11 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User update(Long id, UserUpdateRequest source) {
-        User user = userRepository.findById(id)
+        return userRepository.findById(id)
+                .map(user -> user.update(source.getName(),
+                        source.getEmail(),
+                        source.getPassword()))
                 .orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 회원을 찾지 못해 수정할 수 없습니다."));
-
-        user.update(source.getName(),
-                source.getEmail(),
-                source.getPassword());
-
-        return user;
     }
 
     /**
