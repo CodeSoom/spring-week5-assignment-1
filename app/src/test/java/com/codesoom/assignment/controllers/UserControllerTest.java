@@ -16,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -380,6 +381,36 @@ class UserControllerTest {
                                 .content(requestBody)
                                 .contentType(MediaType.APPLICATION_JSON))
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("deleteUser 메서드는")
+    class Describe_deleteUser {
+        @Nested
+        @DisplayName("저장되어있는 user 의 id가 주어진다면 ")
+        class Context_with_existing_user_id {
+            private Long userId;
+
+            @BeforeEach
+            void setUp() {
+                User savedUser = userCommandService.createUser(
+                        UserRequest.builder()
+                                .email("a@a.com")
+                                .name("김 코")
+                                .password("123")
+                                .build()
+                );
+                userId = savedUser.getId();
+
+            }
+
+            @Test
+            @DisplayName("user 를 삭제한다")
+            void it_returns_204() throws Exception {
+                mockMvc.perform(delete("/users/" + userId))
+                        .andExpect(status().isNoContent());
             }
         }
     }
