@@ -27,7 +27,7 @@ class UserControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Nested
     @DisplayName("createUser 메서드는")
