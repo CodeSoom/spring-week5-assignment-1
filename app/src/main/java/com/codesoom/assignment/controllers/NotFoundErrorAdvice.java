@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.dto.ErrorResponse;
 import com.codesoom.assignment.exception.UserNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -16,7 +16,7 @@ public class NotFoundErrorAdvice {
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler({ProductNotFoundException.class, UserNotFoundException.class})
-    public ErrorResponse handleProductTaskNotFound(Exception e) {
+    public ErrorResponse handleNotFound(Exception e) {
         return new ErrorResponse(e.getMessage());
     }
 }

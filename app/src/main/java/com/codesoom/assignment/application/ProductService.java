@@ -1,9 +1,9 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductRequest;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -26,24 +26,24 @@ public class ProductService {
         return findProduct(id);
     }
 
-    public Product createProduct(ProductData productData) {
+    public Product createProduct(ProductRequest source) {
         Product product = Product.builder()
-                .name(productData.getName())
-                .maker(productData.getMaker())
-                .price(productData.getPrice())
-                .imageUrl(productData.getImageUrl())
+                .name(source.getName())
+                .maker(source.getMaker())
+                .price(source.getPrice())
+                .imageUrl(source.getImageUrl())
                 .build();
         return productRepository.save(product);
     }
 
-    public Product updateProduct(Long id, ProductData productData) {
+    public Product updateProduct(Long id, ProductRequest source) {
         Product product = findProduct(id);
 
         product.change(
-                productData.getName(),
-                productData.getMaker(),
-                productData.getPrice(),
-                productData.getImageUrl()
+                source.getName(),
+                source.getMaker(),
+                source.getPrice(),
+                source.getImageUrl()
         );
 
         return product;
