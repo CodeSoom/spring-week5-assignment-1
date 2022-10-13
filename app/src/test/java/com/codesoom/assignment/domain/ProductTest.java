@@ -28,7 +28,7 @@ class ProductTest {
             }
         }
         @Nested
-        @DisplayName("제조사가 입력되지 않으면")
+        @DisplayName("제조사가 Null 이면")
         class Context_with_empty_maker {
             @Test
             @DisplayName("예외를 던진다")
@@ -42,7 +42,7 @@ class ProductTest {
             }
         }
         @Nested
-        @DisplayName("가격이 입력되지 않으면")
+        @DisplayName("가격이 Null 이면")
         class Context_with_empty_price {
             @Test
             @DisplayName("예외를 던진다")
