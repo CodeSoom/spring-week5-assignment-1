@@ -31,25 +31,22 @@ class ProductRepositoryTest {
 
     @Nested
     @DisplayName("findAll 메소드는")
-    class Describe_findAll {
-        @Nested
-        @DisplayName("데이터가 존재한다면")
-        class Context_with_existed_data extends JpaTest {
-            private final List<Product> givenProducts = new ArrayList<>();
+    class Describe_findAll extends JpaTest {
 
-            @BeforeEach
-            void prepare() {
-                givenProducts.add(getProductRepository().save(ProductSampleFactory.createProduct(1L)));
-                givenProducts.add(getProductRepository().save(ProductSampleFactory.createProduct(2L)));
-            }
+        private final List<Product> givenProducts = new ArrayList<>();
 
-            @Test
-            @DisplayName("모든 장난감을 리턴한다")
-            void it_returns_all_toy() {
-                final List<Product> actualProducts = getProductRepository().findAll();
+        @BeforeEach
+        void prepare() {
+            givenProducts.add(getProductRepository().save(ProductSampleFactory.createProduct(1L)));
+            givenProducts.add(getProductRepository().save(ProductSampleFactory.createProduct(2L)));
+        }
 
-                assertThat(actualProducts).hasSize(givenProducts.size());
-            }
+        @Test
+        @DisplayName("모든 장난감을 리턴한다")
+        void it_returns_all_toy() {
+            final List<Product> actualProducts = getProductRepository().findAll();
+
+            assertThat(actualProducts).hasSize(givenProducts.size());
         }
     }
 
@@ -81,7 +78,7 @@ class ProductRepositoryTest {
         @DisplayName("유효하지 않은 ID가 주어지면")
         class Context_with_non_existed_id extends JpaTest {
             @Test
-            @DisplayName("Optional.empty()를 리턴한다")
+            @DisplayName("'결과 없음'을 리턴한다")
             void it_returns_optional_empty() {
                 assertThat(getProductRepository().findById(100L)).isEmpty();
             }
