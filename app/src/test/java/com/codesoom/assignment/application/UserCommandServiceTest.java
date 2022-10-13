@@ -52,9 +52,9 @@ class UserCommandServiceTest {
             void it_returns_user() {
                 User savedUser = userCommandService.createUser(requestUser);
 
-                assertThat(savedUser.getEmail()).isEqualTo(requestUser.getEmail());
-                assertThat(savedUser.getName()).isEqualTo(requestUser.getName());
-                assertThat(savedUser.getPassword()).isEqualTo(requestUser.getPassword());
+                assertThat(savedUser).usingRecursiveComparison()
+                        .ignoringFields("id")
+                        .isEqualTo(requestUser);
             }
         }
     }
@@ -95,9 +95,9 @@ class UserCommandServiceTest {
             void it_returns_updated_user() {
                 User updatedUser = userCommandService.updateUser(savedUser.getId(), requestUser);
 
-                assertThat(updatedUser.getEmail()).isEqualTo(requestUser.getEmail());
-                assertThat(updatedUser.getName()).isEqualTo(requestUser.getName());
-                assertThat(updatedUser.getPassword()).isEqualTo(requestUser.getPassword());
+                assertThat(updatedUser).usingRecursiveComparison()
+                        .ignoringFields("id")
+                        .isEqualTo(requestUser);
             }
         }
 
