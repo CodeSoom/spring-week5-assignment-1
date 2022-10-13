@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserCommandService;
-import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserRequest;
+import com.codesoom.assignment.dto.UserResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -26,12 +26,12 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User createUser(@RequestBody @Valid UserRequest userRequest) {
+    public UserResponse createUser(@RequestBody @Valid UserRequest userRequest) {
         return userCommandService.createUser(userRequest);
     }
 
     @PatchMapping("/{id}")
-    public User updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest userRequest) {
+    public UserResponse updateUser(@PathVariable Long id, @RequestBody @Valid UserRequest userRequest) {
         return userCommandService.updateUser(id, userRequest);
     }
 

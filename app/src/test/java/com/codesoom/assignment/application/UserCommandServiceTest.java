@@ -1,9 +1,9 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserRequest;
+import com.codesoom.assignment.dto.UserResponse;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -49,7 +49,7 @@ class UserCommandServiceTest {
             @Test
             @DisplayName("User 를 저장하고 리턴한다")
             void it_returns_user() {
-                User savedUser = userCommandService.createUser(requestUser);
+                UserResponse savedUser = userCommandService.createUser(requestUser);
 
                 assertThat(savedUser).usingRecursiveComparison()
                         .ignoringFields("id")
@@ -64,7 +64,7 @@ class UserCommandServiceTest {
         @Nested
         @DisplayName("요청하는 User 가 존재하는 경우")
         class Context_with_user {
-            private User savedUser;
+            private UserResponse savedUser;
             private UserRequest requestUser;
 
             @BeforeEach
@@ -92,7 +92,7 @@ class UserCommandServiceTest {
             @Test
             @DisplayName("User 를 수정하고 리턴한다")
             void it_returns_updated_user() {
-                User updatedUser = userCommandService.updateUser(savedUser.getId(), requestUser);
+                UserResponse updatedUser = userCommandService.updateUser(savedUser.getId(), requestUser);
 
                 assertThat(updatedUser).usingRecursiveComparison()
                         .ignoringFields("id")
@@ -138,7 +138,7 @@ class UserCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                User savedUser = userCommandService.createUser(
+                UserResponse savedUser = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("before@before.com")
                                 .name("김 코")
@@ -185,14 +185,14 @@ class UserCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                User savedUser1 = userCommandService.createUser(
+                UserResponse savedUser1 = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("a@a.com")
                                 .name("김 코")
                                 .password("a")
                                 .build()
                 );
-                User savedUser2 = userCommandService.createUser(
+                UserResponse savedUser2 = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("b@b.com")
                                 .name("김 코")
@@ -219,7 +219,7 @@ class UserCommandServiceTest {
 
             @BeforeEach
             void setUp() {
-                User savedUser = userCommandService.createUser(
+                UserResponse savedUser = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("a@a.com")
                                 .name("김 코")

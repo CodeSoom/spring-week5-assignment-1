@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserRequest;
+import com.codesoom.assignment.dto.UserResponse;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
@@ -20,19 +21,33 @@ public class UserCommandService {
         this.userRepository = userRepository;
     }
 
-    public User createUser(UserRequest userRequest) {
+    public UserResponse createUser(UserRequest userRequest) {
         User user = mapper.map(userRequest, User.class);
-        return userRepository.save(user);
+        User savedUser = userRepository.save(user);
+
+        return UserResponse.builder()
+                .id(savedUser.getId())
+                .name(savedUser.getName())
+                .email(savedUser.getEmail())
+                .password(savedUser.getPassword())
+                .build();
     }
 
-    public User updateUser(Long id, UserRequest userRequest) {
+    public UserResponse updateUser(Long id, UserRequest userRequest) {
         User findUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 user를 찾지 못했으므로 업데이트에 실패했습니다."));
 
         User user = mapper.map(userRequest, User.class);
 
         findUser.update(user.getEmail(), user.getName(), user.getPassword());
-        return userRepository.save(findUser);
+        User updatedUser = userRepository.save(findUser);
+
+        return UserResponse.builder()
+                .id(updatedUser.getId())
+                .name(updatedUser.getName())
+                .email(updatedUser.getEmail())
+                .password(updatedUser.getPassword())
+                .build();
     }
 
     public Long deleteUser(Long id) {

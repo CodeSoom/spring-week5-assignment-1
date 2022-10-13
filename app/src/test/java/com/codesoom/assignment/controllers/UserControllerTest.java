@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserCommandService;
-import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserRequest;
+import com.codesoom.assignment.dto.UserResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.AfterEach;
@@ -200,7 +200,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                User savedUser = userCommandService.createUser(
+                UserResponse savedUser = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("before@before.com")
                                 .name("김 코")
@@ -245,7 +245,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                User savedUser = userCommandService.createUser(
+                UserResponse savedUser = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("before@before.com")
                                 .name("김 코")
@@ -395,7 +395,7 @@ class UserControllerTest {
 
             @BeforeEach
             void setUp() {
-                User savedUser = userCommandService.createUser(
+                UserResponse savedUser = userCommandService.createUser(
                         UserRequest.builder()
                                 .email("a@a.com")
                                 .name("김 코")
