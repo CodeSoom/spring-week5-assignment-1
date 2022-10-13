@@ -9,7 +9,6 @@ import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 @Service
@@ -44,20 +43,20 @@ public class UserCommandService {
         return id;
     }
 
-    public List<Long> deleteUsers(List<Long> ids) {
+    public Set<Long> deleteUsers(Set<Long> ids) {
         Iterable<User> users = userRepository.findAllById(ids);
 
-        Set<Long> userSet = new HashSet<>();
-        users.forEach(user -> userSet.add(user.getId()));
+        Set<Long> userIdSet = new HashSet<>();
+        users.forEach(user -> userIdSet.add(user.getId()));
 
         ids.forEach(id -> {
-            if (!userSet.contains(id)) {
+            if (!userIdSet.contains(id)) {
                 throw new UserNotFoundException(id + "에 해당하는 user를 찾지 못했으므로 요청한 모든 user삭제에 실패했습니다.");
             }
         });
 
         userRepository.deleteAll(users);
-        return ids;
+        return userIdSet;
     }
 
     public void deleteAll() {

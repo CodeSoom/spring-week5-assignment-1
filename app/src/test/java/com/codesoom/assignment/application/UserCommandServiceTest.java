@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.Arrays;
-import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -207,7 +206,7 @@ class UserCommandServiceTest {
             @Test
             @DisplayName("user 들을 삭제하고 user id 들을 리턴한다")
             void it_returns_deleted_user_ids() {
-                List<Long> deletedIds = userCommandService.deleteUsers(Arrays.asList(deleteId1, deleteId2));
+                Set<Long> deletedIds = userCommandService.deleteUsers(Set.of(deleteId1, deleteId2));
 
                 assertThat(userRepository.findAllById(deletedIds)).isEmpty();
             }
@@ -234,7 +233,7 @@ class UserCommandServiceTest {
             @DisplayName("사용자가 존재하지 않다는 예외를 던진다")
             void it_throws_exception() {
                 assertThatThrownBy(
-                        () -> userCommandService.deleteUsers(Arrays.asList(deleteId, INVALID_USER_ID))
+                        () -> userCommandService.deleteUsers(Set.of(deleteId, INVALID_USER_ID))
                 ).isExactlyInstanceOf(UserNotFoundException.class);
             }
         }
