@@ -3,7 +3,7 @@ package com.codesoom.assignment.dto;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.beans.ConstructorProperties;
 
 /**
@@ -12,12 +12,12 @@ import java.beans.ConstructorProperties;
 @Getter
 public class UserUpdateRequest {
 
-    @NotEmpty(message = "이름은 필수값 입니다.")
+    @NotBlank(message = "{user.name.not.blank}")
     private String name;
 
     private String email;
 
-    @NotEmpty(message = "비밀번호는 필수값입니다.")
+    @NotBlank(message = "{user.password.not.blank}")
     private String password;
 
     @Builder

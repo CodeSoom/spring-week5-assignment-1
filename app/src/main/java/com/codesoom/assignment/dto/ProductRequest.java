@@ -11,13 +11,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 public class ProductRequest {
 
-    @NotBlank(message = "이름은 필수값 입니다.")
+    @NotBlank(message = "{product.name.not.blank}")
     private String name;
 
-    @NotBlank(message = "제조사는 필수값 입니다.")
+    @NotBlank(message = "{product.maker.not.blank}")
     private String maker;
 
-    @NotNull(message = "가격은 필수값 입니다.")
+    @NotNull(message = "{product.price.not.null}")
     private Integer price;
 
     private String imageUrl;

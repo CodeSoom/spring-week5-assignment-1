@@ -4,7 +4,7 @@ import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
 
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.beans.ConstructorProperties;
 
 /**
@@ -14,15 +14,15 @@ import java.beans.ConstructorProperties;
 public class UserCreateRequest {
 
     @Mapping("name")
-    @NotEmpty(message = "이름은 필수값 입니다.")
+    @NotBlank(message = "{user.name.not.blank}")
     private String name;
 
     @Mapping("email")
-    @NotEmpty(message = "이메일은 필수값 입니다.")
+    @NotBlank(message = "{user.email.not.blank}")
     private String email;
 
     @Mapping("password")
-    @NotEmpty(message = "비밀번호는 필수값 입니다.")
+    @NotBlank(message = "{user.password.not.blank}")
     private String password;
 
     @ConstructorProperties({"name", "email", "password"})
