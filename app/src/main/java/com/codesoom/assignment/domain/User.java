@@ -1,9 +1,7 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.Exceptions.UserErrorMessage;
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.util.Assert;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -16,28 +14,22 @@ import javax.validation.constraints.NotNull;
 @Entity
 public class User {
 
-    @NotBlank(message = UserErrorMessage.EMAIL_NULL)
-    @NotNull(message = UserErrorMessage.EMAIL_BLANK)
+    @NotBlank(message = "{username.notBlank}")
+    @NotNull(message = "{username.notNull}")
     @Id
     private String username;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "{password.notBlank}")
+    @NotNull(message = "{password.notNull}")
     private String password;
 
-    @NotBlank
-    @NotNull
+    @NotBlank(message = "{email.notBlank}")
+    @NotNull(message = "{email.notNull}")
     @Email
     private String email;
 
     @Builder
     public User(String username, String password, String email) {
-        Assert.notNull(email, UserErrorMessage.EMAIL_NULL);
-        Assert.hasText(email, UserErrorMessage.EMAIL_BLANK);
-
-        Assert.notNull(username,UserErrorMessage.USERNAME_NULL);
-        Assert.hasText(username,UserErrorMessage.USERNAME_BLANK);
-
         this.username = username;
         this.password = password;
         this.email = email;
