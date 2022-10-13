@@ -32,25 +32,21 @@ class MemberRepositoryTest {
 
     @Nested
     @DisplayName("findAll 메소드는")
-    class Describe_findAll {
-        @Nested
-        @DisplayName("데이터가 존재한다면")
-        class Context_with_existed_data extends JpaTest {
-            private final List<Member> givenMembers = new ArrayList<>();
+    class Describe_findAll extends JpaTest {
+        private final List<Member> givenMembers = new ArrayList<>();
 
-            @BeforeEach
-            void prepare() {
-                givenMembers.add(getMemberRepository().save(MemberSampleFactory.createMember(1L)));
-                givenMembers.add(getMemberRepository().save(MemberSampleFactory.createMember(2L)));
-            }
+        @BeforeEach
+        void prepare() {
+            givenMembers.add(getMemberRepository().save(MemberSampleFactory.createMember(1L)));
+            givenMembers.add(getMemberRepository().save(MemberSampleFactory.createMember(2L)));
+        }
 
-            @Test
-            @DisplayName("모든 회원을 리턴한다")
-            void it_returns_all_data() {
-                List<Member> actualMembers = getMemberRepository().findAll();
+        @Test
+        @DisplayName("모든 회원을 리턴한다")
+        void it_returns_all_data() {
+            List<Member> actualMembers = getMemberRepository().findAll();
 
-                assertThat(actualMembers).hasSize(givenMembers.size());
-            }
+            assertThat(actualMembers).hasSize(givenMembers.size());
         }
     }
 
@@ -76,6 +72,16 @@ class MemberRepositoryTest {
                 assertThat(actualMember.get().getName()).isEqualTo(givenMember.getName());
                 assertThat(actualMember.get().getEmail()).isEqualTo(givenMember.getEmail());
                 assertThat(actualMember.get().getPassword()).isEqualTo(givenMember.getPassword());
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 ID가 주어지면")
+        class Context_with_non_existed_id extends JpaTest {
+            @Test
+            @DisplayName("'결과 없음'을 리턴한다")
+            void it_returns_optional_empty() {
+                assertThat(getMemberRepository().findById(9999L)).isEmpty();
             }
         }
     }
