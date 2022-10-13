@@ -28,7 +28,7 @@ public class UserCommandService {
 
     public User updateUser(Long id, UserRequest userRequest) {
         User findUser = userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 user를 찾지 못했으므로 업데이트에 실패했습니다."));
 
         User user = mapper.map(userRequest, User.class);
 
@@ -38,7 +38,7 @@ public class UserCommandService {
 
     public Long deleteUser(Long id) {
         userRepository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+                .orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 user를 찾지 못했으므로 삭제에 실패했습니다."));
 
         userRepository.deleteById(id);
         return id;
@@ -52,7 +52,7 @@ public class UserCommandService {
 
         ids.forEach(id -> {
             if (!userSet.contains(id)) {
-                throw new UserNotFoundException();
+                throw new UserNotFoundException(id + "에 해당하는 user를 찾지 못했으므로 요청한 모든 user삭제에 실패했습니다.");
             }
         });
 
