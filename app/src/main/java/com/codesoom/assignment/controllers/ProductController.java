@@ -1,8 +1,8 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,23 +29,23 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<Product> list() {
+    public List<ProductResponse> list() {
         return productService.getProducts();
     }
 
     @GetMapping("{id}")
-    public Product detail(@PathVariable Long id) {
+    public ProductResponse detail(@PathVariable Long id) {
         return productService.getProduct(id);
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody @Valid ProductData productData) {
+    public ProductResponse create(@RequestBody @Valid ProductData productData) {
         return productService.createProduct(productData);
     }
 
     @PatchMapping("{id}")
-    public Product update(
+    public ProductResponse update(
             @PathVariable Long id,
             @RequestBody @Valid ProductData productData
     ) {

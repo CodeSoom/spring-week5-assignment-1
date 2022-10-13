@@ -4,9 +4,11 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductResponse;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,25 +20,39 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public List<ProductResponse> getProducts() {
+        List<Product> products = productRepository.findAll();
+        List<ProductResponse> responseProducts = new ArrayList<>();
+
+        products.forEach(
+                product -> {
+                    responseProducts.add(
+                            ProductResponse.from(product)
+                    );
+                }
+        );
+        return responseProducts;
     }
 
-    public Product getProduct(Long id) {
-        return findProduct(id);
+    public ProductResponse getProduct(Long id) {
+        Product product = findProduct(id);
+
+        return ProductResponse.from(product);
     }
 
-    public Product createProduct(ProductData productData) {
-        Product product = Product.builder()
-                .name(productData.getName())
-                .maker(productData.getMaker())
-                .price(productData.getPrice())
-                .imageUrl(productData.getImageUrl())
-                .build();
-        return productRepository.save(product);
+    public ProductResponse createProduct(ProductData productData) {
+        Product savedProduct = productRepository.save(
+                Product.builder()
+                        .name(productData.getName())
+                        .maker(productData.getMaker())
+                        .price(productData.getPrice())
+                        .imageUrl(productData.getImageUrl())
+                        .build()
+        );
+        return ProductResponse.from(savedProduct);
     }
 
-    public Product updateProduct(Long id, ProductData productData) {
+    public ProductResponse updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
         product.change(
@@ -46,15 +62,15 @@ public class ProductService {
                 productData.getImageUrl()
         );
 
-        return product;
+        return ProductResponse.from(product);
     }
 
-    public Product deleteProduct(Long id) {
+    public ProductResponse deleteProduct(Long id) {
         Product product = findProduct(id);
 
         productRepository.delete(product);
 
-        return product;
+        return ProductResponse.from(product);
     }
 
     private Product findProduct(Long id) {

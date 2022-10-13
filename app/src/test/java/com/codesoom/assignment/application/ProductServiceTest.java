@@ -4,6 +4,7 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -57,18 +58,18 @@ class ProductServiceTest {
 
     @Test
     void getProducts() {
-        List<Product> products = productService.getProducts();
+        List<ProductResponse> products = productService.getProducts();
 
         assertThat(products).isNotEmpty();
 
-        Product product = products.get(0);
+        ProductResponse product = products.get(0);
 
         assertThat(product.getName()).isEqualTo("쥐돌이");
     }
 
     @Test
     void getProductWithExsitedId() {
-        Product product = productService.getProduct(1L);
+        ProductResponse product = productService.getProduct(1L);
 
         assertThat(product).isNotNull();
         assertThat(product.getName()).isEqualTo("쥐돌이");
@@ -88,7 +89,7 @@ class ProductServiceTest {
                 .price(5000)
                 .build();
 
-        Product product = productService.createProduct(productData);
+        ProductResponse product = productService.createProduct(productData);
 
         verify(productRepository).save(any(Product.class));
 
@@ -105,7 +106,7 @@ class ProductServiceTest {
                 .price(5000)
                 .build();
 
-        Product product = productService.updateProduct(1L, productData);
+        ProductResponse product = productService.updateProduct(1L, productData);
 
         assertThat(product.getId()).isEqualTo(1L);
         assertThat(product.getName()).isEqualTo("쥐순이");
