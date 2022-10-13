@@ -11,17 +11,17 @@ import javax.validation.constraints.NotNull;
 
 @Getter
 public class UserData {
-    @NotBlank(message = "{username.notBlank}")
-    @NotNull(message = "{username.notNull}")
+    @NotBlank(message = "{User.usernameNotBlank}")
+    @NotNull(message = "{User.usernameNotNull}")
     @Id
     private String username;
 
-    @NotBlank(message = "{password.notBlank}")
-    @NotNull(message = "{password.notNull}")
+    @NotBlank(message = "{User.passwordNotBlank}")
+    @NotNull(message = "{User.passwordNotNull}")
     private String password;
 
-    @NotBlank(message = "{email.notBlank}")
-    @NotNull(message = "{email.notNull}")
+    @NotBlank(message = "{User.emailNotBlank}")
+    @NotNull(message = "{User.emailNotNull}")
     @Email
     private String email;
 

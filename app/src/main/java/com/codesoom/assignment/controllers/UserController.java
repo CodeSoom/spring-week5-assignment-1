@@ -24,7 +24,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
     public UserData createUser(@RequestBody @Valid UserData userData) {
-        userservice.create(userData);
+        return userservice.create(userData);
     }
 
 

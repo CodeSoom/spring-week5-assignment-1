@@ -1,6 +1,5 @@
 package com.codesoom.assignment.domain;
 
-import com.codesoom.assignment.Exceptions.UserErrorMessage;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -8,13 +7,14 @@ import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 
+
 class UserTest {
 
     private String email = "kc@gmail.com";
 
     private String username = "username";
 
-    private final String password = "12345Passwrod";
+    private String password = "12345Passwrod";
 
 
     @DisplayName("Email 필드 유효성 검사")
@@ -30,7 +30,7 @@ class UserTest {
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("usernaem").email(null).password("password").build());
                 assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
-                assertThat(throwable).hasMessage(UserErrorMessage.EMAIL_NULL);
+
             }
         }
 
@@ -44,7 +44,7 @@ class UserTest {
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("username").email("").password("password").build());
                 assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
-                assertThat(throwable).hasMessage(UserErrorMessage.EMAIL_BLANK);
+
             }
         }
 
@@ -64,7 +64,7 @@ class UserTest {
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username(null).email("email@gmail.com").password("password").build());
                 assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
-                assertThat(throwable).hasMessage(UserErrorMessage.USERNAME_NULL);
+
 
             }
         }
@@ -78,7 +78,7 @@ class UserTest {
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("").email("email@gmail.com").password("password").build());
                 assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
-                assertThat(throwable).hasMessage(UserErrorMessage.USERNAME_BLANK);
+
             }
         }
 
@@ -97,7 +97,7 @@ class UserTest {
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("usernaem").email("email@mail.com").password(null).build());
                 assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
-                assertThat(throwable).hasMessage(UserErrorMessage.PASSWORD_NULL);
+
             }
         }
 
@@ -110,7 +110,7 @@ class UserTest {
             void it_throws_illegal_argument() {
                 Throwable throwable = catchThrowable(() -> User.builder().username("usernaem").email("email@mail.com").password("").build());
                 assertThat(throwable).isInstanceOf(IllegalArgumentException.class);
-                assertThat(throwable).hasMessage(UserErrorMessage.PASSWORD_BLANK);
+
             }
         }
     }

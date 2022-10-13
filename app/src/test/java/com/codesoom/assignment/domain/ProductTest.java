@@ -22,7 +22,7 @@ class ProductTest {
     }
 
     @Test
-    void change() {
+    void update() {
         Product product = Product.builder()
                 .id(1L)
                 .name("쥐돌이")
