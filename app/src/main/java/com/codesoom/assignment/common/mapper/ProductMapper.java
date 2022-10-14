@@ -1,8 +1,11 @@
-package com.codesoom.assignment.controller.product;
+package com.codesoom.assignment.common.mapper;
 
 import com.codesoom.assignment.application.product.ProductCommand;
+import com.codesoom.assignment.controller.product.ProductDto;
+import com.codesoom.assignment.domain.product.Product;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 import org.mapstruct.factory.Mappers;
 
@@ -11,11 +14,16 @@ import org.mapstruct.factory.Mappers;
         injectionStrategy = InjectionStrategy.CONSTRUCTOR,
         unmappedTargetPolicy = ReportingPolicy.ERROR
 )
-public interface ProductDtoMapper {
+public interface ProductMapper {
 
-    ProductDtoMapper INSTANCE = Mappers.getMapper(ProductDtoMapper.class);
+    ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
     ProductCommand.Register of(ProductDto.RequestParam request);
 
     ProductCommand.UpdateRequest of(Long id, ProductDto.RequestParam request);
+
+    @Mapping(target = "id", ignore = true)
+    Product toEntity(ProductCommand.Register command);
+
+    Product toEntity(ProductCommand.UpdateRequest command);
 }

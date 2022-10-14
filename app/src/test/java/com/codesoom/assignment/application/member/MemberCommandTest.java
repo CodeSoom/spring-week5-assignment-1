@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application.member;
 
+import com.codesoom.assignment.common.mapper.MemberMapper;
 import com.codesoom.assignment.domain.member.Member;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
@@ -26,7 +27,7 @@ class MemberCommandTest {
                     .password("test1234")
                     .email("test@gmail.com");
 
-            Assertions.assertThat(registerBuilder.build().toEntity()).isInstanceOf(Member.class);
+            Assertions.assertThat(MemberMapper.INSTANCE.toEntity(registerBuilder.build())).isInstanceOf(Member.class);
         }
     }
 
@@ -45,7 +46,7 @@ class MemberCommandTest {
                     .password("test1234")
                     .email("test@gmail.com");
 
-            Assertions.assertThat(builder.build().toEntity()).isInstanceOf(Member.class);
+            Assertions.assertThat(MemberMapper.INSTANCE.toEntity(builder.build())).isInstanceOf(Member.class);
         }
     }
 }

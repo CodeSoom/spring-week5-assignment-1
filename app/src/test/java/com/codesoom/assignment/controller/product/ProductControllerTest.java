@@ -8,6 +8,7 @@ import com.codesoom.assignment.application.product.ProductQueryService;
 import com.codesoom.assignment.common.ProductSampleFactory;
 import com.codesoom.assignment.common.exception.InvalidParamException;
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
+import com.codesoom.assignment.common.mapper.ProductMapper;
 import com.codesoom.assignment.controller.product.ProductDto.RequestParam;
 import com.codesoom.assignment.domain.product.Product;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -204,7 +205,7 @@ class ProductControllerTest {
             @BeforeEach
             void prepare() {
                 given(productCommandService.createProduct(any(Register.class)))
-                        .willReturn(ProductDtoMapper.INSTANCE.of(1L, givenRequest).toEntity());
+                        .willReturn(ProductMapper.INSTANCE.toEntity(ProductMapper.INSTANCE.of(1L, givenRequest)));
             }
 
             @Test
@@ -317,7 +318,7 @@ class ProductControllerTest {
                 givenRequest.setPrice(savedProduct.getPrice() + 5000);
 
                 given(productCommandService.updateProduct(any(UpdateRequest.class)))
-                        .willReturn(ProductDtoMapper.INSTANCE.of(PRODUCT_ID, givenRequest).toEntity());
+                        .willReturn(ProductMapper.INSTANCE.toEntity(ProductMapper.INSTANCE.of(PRODUCT_ID, givenRequest)));
             }
 
             @Test

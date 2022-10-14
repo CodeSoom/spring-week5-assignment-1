@@ -3,6 +3,7 @@ package com.codesoom.assignment.application.member.implement;
 import com.codesoom.assignment.application.member.MemberCommand;
 import com.codesoom.assignment.application.member.MemberCommandService;
 import com.codesoom.assignment.common.exception.MemberNotFoundException;
+import com.codesoom.assignment.common.mapper.MemberMapper;
 import com.codesoom.assignment.domain.member.Member;
 import com.codesoom.assignment.domain.member.MemberRepository;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Transactional
     @Override
     public Member createMember(MemberCommand.Register command) {
-        return memberRepository.save(command.toEntity());
+        return memberRepository.save(MemberMapper.INSTANCE.toEntity(command));
     }
 
     /**
@@ -28,7 +29,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Transactional
     @Override
     public Member updateMember(MemberCommand.UpdateRequest command) {
-        Member source = command.toEntity();
+        Member source = MemberMapper.INSTANCE.toEntity(command);
         Member findMember = getFindMember(source.getId());
 
         findMember.modifyMemberInfo(source);

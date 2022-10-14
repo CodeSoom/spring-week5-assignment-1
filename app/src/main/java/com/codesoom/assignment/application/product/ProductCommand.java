@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application.product;
 
-import com.codesoom.assignment.domain.product.Product;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -21,15 +20,6 @@ public class ProductCommand {
 
         private final String imageUrl;
 
-        public Product toEntity() {
-            return Product.builder()
-                    .name(name)
-                    .maker(maker)
-                    .price(price)
-                    .imageUrl(imageUrl)
-                    .build();
-        }
-
     }
 
     @lombok.Generated
@@ -46,16 +36,6 @@ public class ProductCommand {
         private final Long price;
 
         private final String imageUrl;
-
-        public Product toEntity() {
-            return Product.builder()
-                    .id(id)
-                    .name(name)
-                    .maker(maker)
-                    .price(price)
-                    .imageUrl(imageUrl)
-                    .build();
-        }
 
     }
 }

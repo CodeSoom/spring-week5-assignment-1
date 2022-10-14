@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application.member;
 
-import com.codesoom.assignment.domain.member.Member;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
@@ -19,14 +18,6 @@ public class MemberCommand {
 
         private final String email;
 
-        public Member toEntity() {
-            return Member.builder()
-                    .name(name)
-                    .password(password)
-                    .email(email)
-                    .build();
-        }
-
     }
 
     @lombok.Generated
@@ -42,13 +33,5 @@ public class MemberCommand {
 
         private final String email;
 
-        public Member toEntity() {
-            return Member.builder()
-                    .id(id)
-                    .name(name)
-                    .password(password)
-                    .email(email)
-                    .build();
-        }
     }
 }

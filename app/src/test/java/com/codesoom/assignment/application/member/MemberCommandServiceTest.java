@@ -4,7 +4,7 @@ import com.codesoom.assignment.application.member.MemberCommand.Register;
 import com.codesoom.assignment.application.member.implement.MemberCommandServiceImpl;
 import com.codesoom.assignment.common.MemberSampleFactory;
 import com.codesoom.assignment.common.exception.MemberNotFoundException;
-import com.codesoom.assignment.controller.member.MemberDtoMapper;
+import com.codesoom.assignment.common.mapper.MemberMapper;
 import com.codesoom.assignment.domain.member.Member;
 import com.codesoom.assignment.domain.member.MemberRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -100,7 +100,7 @@ class MemberCommandServiceTest {
         @DisplayName("유효하지않은 ID가 주어지면")
         class Context_with_invalid_id extends JpaTest {
             private final Long MEMBER_ID = 9999L;
-            private final MemberCommand.UpdateRequest command = MemberDtoMapper.INSTANCE.of(MEMBER_ID, MemberSampleFactory.createUpdateParam());
+            private final MemberCommand.UpdateRequest command = MemberMapper.INSTANCE.of(MEMBER_ID, MemberSampleFactory.createUpdateParam());
 
             @Test
             @DisplayName("예외를 던진다")

@@ -3,6 +3,7 @@ package com.codesoom.assignment.controller.product;
 import com.codesoom.assignment.application.product.ProductCommand;
 import com.codesoom.assignment.application.product.ProductCommandService;
 import com.codesoom.assignment.application.product.ProductQueryService;
+import com.codesoom.assignment.common.mapper.ProductMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -30,12 +31,12 @@ public class ProductController {
 
     private final ProductQueryService productQueryService;
 
-    private final ProductDtoMapper productDtoMapper;
+    private final ProductMapper productMapper;
 
-    public ProductController(ProductCommandService productCommandService, ProductQueryService productQueryService, ProductDtoMapper productDtoMapper) {
+    public ProductController(ProductCommandService productCommandService, ProductQueryService productQueryService, ProductMapper productMapper) {
         this.productCommandService = productCommandService;
         this.productQueryService = productQueryService;
-        this.productDtoMapper = productDtoMapper;
+        this.productMapper = productMapper;
     }
 
     @GetMapping
@@ -55,14 +56,14 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto.ProductInfo registerProduct(@RequestBody @Valid ProductDto.RequestParam request) {
-        final ProductCommand.Register command = productDtoMapper.of(request);
+        final ProductCommand.Register command = productMapper.of(request);
         return new ProductDto.ProductInfo(productCommandService.createProduct(command));
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public ProductDto.ProductInfo updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDto.RequestParam request) {
-        final ProductCommand.UpdateRequest command = productDtoMapper.of(id, request);
+        final ProductCommand.UpdateRequest command = productMapper.of(id, request);
         return new ProductDto.ProductInfo(productCommandService.updateProduct(command));
     }
 

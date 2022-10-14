@@ -6,6 +6,7 @@ import com.codesoom.assignment.application.member.MemberCommandService;
 import com.codesoom.assignment.common.MemberSampleFactory;
 import com.codesoom.assignment.common.exception.InvalidParamException;
 import com.codesoom.assignment.common.exception.MemberNotFoundException;
+import com.codesoom.assignment.common.mapper.MemberMapper;
 import com.codesoom.assignment.controller.member.MemberDto.RequestParam;
 import com.codesoom.assignment.controller.member.MemberDto.UpdateParam;
 import com.codesoom.assignment.domain.member.Member;
@@ -202,7 +203,7 @@ class MemberControllerTest {
                 givenRequest.setPassword("수정_" + savedMember.getPassword());
 
                 given(memberCommandService.updateMember(any(UpdateRequest.class)))
-                        .willReturn(MemberDtoMapper.INSTANCE.of(MEMBER_ID, givenRequest).toEntity());
+                        .willReturn(MemberMapper.INSTANCE.toEntity(MemberMapper.INSTANCE.of(MEMBER_ID, givenRequest)));
             }
 
             @Test

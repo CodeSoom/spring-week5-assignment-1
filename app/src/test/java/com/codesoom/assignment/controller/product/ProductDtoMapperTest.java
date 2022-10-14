@@ -2,8 +2,8 @@ package com.codesoom.assignment.controller.product;
 
 import com.codesoom.assignment.application.product.ProductCommand;
 import com.codesoom.assignment.common.ProductSampleFactory;
+import com.codesoom.assignment.common.mapper.ProductMapper;
 import com.codesoom.assignment.domain.product.Product;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,7 @@ class ProductDtoMapperTest {
             void it_returns_register() {
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.Register actual = ProductDtoMapper.INSTANCE.of(request);
+                final ProductCommand.Register actual = ProductMapper.INSTANCE.of(request);
 
                 assertThat(actual).isNull();
             }
@@ -56,7 +56,7 @@ class ProductDtoMapperTest {
             void it_returns_register() {
                 final Long id = 1L;
 
-                final ProductCommand.UpdateRequest actual = ProductDtoMapper.INSTANCE.of(id, ProductSampleFactory.createRequestParam());
+                final ProductCommand.UpdateRequest actual = ProductMapper.INSTANCE.of(id, ProductSampleFactory.createRequestParam());
 
                 assertThat(actual).isInstanceOf(ProductCommand.UpdateRequest.class);
             }
@@ -71,7 +71,7 @@ class ProductDtoMapperTest {
                 final Long id = null;
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.UpdateRequest actual = ProductDtoMapper.INSTANCE.of(id, request);
+                final ProductCommand.UpdateRequest actual = ProductMapper.INSTANCE.of(id, request);
 
                 assertThat(actual).isNull();
             }
@@ -85,7 +85,7 @@ class ProductDtoMapperTest {
             void it_returns_null() {
                 final Long id = null;
 
-                final ProductCommand.UpdateRequest actual = ProductDtoMapper.INSTANCE.of(id, ProductSampleFactory.createRequestParam());
+                final ProductCommand.UpdateRequest actual = ProductMapper.INSTANCE.of(id, ProductSampleFactory.createRequestParam());
                 System.out.println(actual);
 
                 assertThat(actual.getId()).isNull();
@@ -101,12 +101,78 @@ class ProductDtoMapperTest {
                 final Long id = 1L;
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.UpdateRequest actual = ProductDtoMapper.INSTANCE.of(id, request);
+                final ProductCommand.UpdateRequest actual = ProductMapper.INSTANCE.of(id, request);
 
                 assertThat(actual.getName()).isNull();
                 assertThat(actual.getMaker()).isNull();
                 assertThat(actual.getPrice()).isNull();
             }
         }
+    }
+
+
+    @Nested
+    @DisplayName("toEntity(ProductCommand.UpdateRequest) 메소드는")
+    class Describe_toEntity_updaterequest {
+        @Nested
+        @DisplayName("유효한 파라미터가 주어지면")
+        class Context_with_valid_param {
+            @Test
+            @DisplayName("Product 객체를 리턴한다")
+            void it_returns_update_request_object() {
+                final Long id = 1L;
+                final ProductCommand.UpdateRequest command = ProductMapper.INSTANCE.of(id, ProductSampleFactory.createRequestParam());
+
+                assertThat(ProductMapper.INSTANCE.toEntity(command)).isInstanceOf(Product.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("입력 파라미터가 Null이면")
+        class Context_with_null {
+            @Test
+            @DisplayName("Null을 리턴한다")
+            void it_returns_member_object() {
+                final ProductCommand.UpdateRequest command = null;
+
+                final Product actual = ProductMapper.INSTANCE.toEntity(command);
+
+                assertThat(actual).isNull();
+            }
+        }
+
+    }
+
+    @Nested
+    @DisplayName("toEntity(ProductCommand.Register) 메소드는")
+    class Describe_toEntity_register {
+        @Nested
+        @DisplayName("유효한 파라미터가 주어지면")
+        class Context_with_valid_param {
+            @Test
+            @DisplayName("Product 객체를 리턴한다")
+            void it_returns_member_object() {
+                final ProductDto.RequestParam member = ProductSampleFactory.createRequestParam();
+
+                final ProductCommand.Register actual = ProductMapper.INSTANCE.of(member);
+
+                assertThat(ProductMapper.INSTANCE.toEntity(actual)).isInstanceOf(Product.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("입력 파라미터가 Null이면")
+        class Context_with_null {
+            @Test
+            @DisplayName("Null을 리턴한다")
+            void it_returns_update_request_object() {
+                final ProductCommand.Register command = null;
+
+                Product actual = ProductMapper.INSTANCE.toEntity(command);
+
+                assertThat(actual).isNull();
+            }
+        }
+
     }
 }

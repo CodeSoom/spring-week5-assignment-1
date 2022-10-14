@@ -3,6 +3,7 @@ package com.codesoom.assignment.application.product.implement;
 import com.codesoom.assignment.application.product.ProductCommand;
 import com.codesoom.assignment.application.product.ProductCommandService;
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
+import com.codesoom.assignment.common.mapper.ProductMapper;
 import com.codesoom.assignment.domain.product.Product;
 import com.codesoom.assignment.domain.product.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -20,7 +21,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     @Transactional
     @Override
     public Product createProduct(ProductCommand.Register command) {
-        return productRepository.save(command.toEntity());
+        return productRepository.save(ProductMapper.INSTANCE.toEntity(command));
     }
 
     /**
@@ -29,7 +30,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     @Transactional
     @Override
     public Product updateProduct(ProductCommand.UpdateRequest command) {
-        Product product = command.toEntity();
+        Product product = ProductMapper.INSTANCE.toEntity(command);
         Product findProduct = productRepository.findById(product.getId())
                 .orElseThrow(() -> new ProductNotFoundException(product.getId()));
 
