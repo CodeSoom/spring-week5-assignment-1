@@ -38,10 +38,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public User update(Long id, UserUpdateRequest source) {
         return userRepository.findById(id)
-                .map(user -> user.update(source.getName(),
+                .map(user -> {
+                    user.update(source.getName(),
                         source.getEmail(),
-                        source.getPassword()))
-                .orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 회원을 찾지 못해 수정할 수 없습니다."));
+                        source.getPassword());
+                    return user;
+                }).orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 회원을 찾지 못해 수정할 수 없습니다."));
     }
 
     /**
@@ -53,11 +55,10 @@ public class UserServiceImpl implements UserService {
      */
     @Override
     public User delete(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 회원을 찾지 못해 삭제할 수 없습니다."));
-
-        userRepository.delete(user);
-
-        return user;
+        return userRepository.findById(id)
+                .map(user -> {
+                    userRepository.delete(user);
+                    return user;
+                }).orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 회원을 찾지 못해 삭제할 수 없습니다."));
     }
 }
