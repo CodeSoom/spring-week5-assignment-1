@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -31,6 +32,24 @@ public class UserData {
         this.password = password;
         this.email = email;
     }
+
+
+    public User toEntity(){
+        return User.builder()
+                .username(username)
+                .password(password)
+                .email(email)
+                .build();
+    }
+
+    public UserData fromEntity(User user) {
+        return UserData.builder()
+                .username(user.getUsername())
+                .password(user.getPassword())
+                .email(user.getEmail())
+                .build();
+    }
+
 
     public UserData() {
     }
