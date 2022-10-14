@@ -64,7 +64,7 @@ class ProductServiceTest {
 
         ProductResponse product = products.get(0);
 
-        assertThat(product.getName()).isEqualTo("쥐돌이");
+        assertThat(product.getProduct().getName()).isEqualTo("쥐돌이");
     }
 
     @Test
@@ -72,7 +72,7 @@ class ProductServiceTest {
         ProductResponse product = productService.getProduct(1L);
 
         assertThat(product).isNotNull();
-        assertThat(product.getName()).isEqualTo("쥐돌이");
+        assertThat(product.getProduct().getName()).isEqualTo("쥐돌이");
     }
 
     @Test
@@ -93,9 +93,9 @@ class ProductServiceTest {
 
         verify(productRepository).save(any(Product.class));
 
-        assertThat(product.getId()).isEqualTo(2L);
-        assertThat(product.getName()).isEqualTo("쥐돌이");
-        assertThat(product.getMaker()).isEqualTo("냥이월드");
+        assertThat(product.getProduct().getId()).isEqualTo(2L);
+        assertThat(product.getProduct().getName()).isEqualTo("쥐돌이");
+        assertThat(product.getProduct().getMaker()).isEqualTo("냥이월드");
     }
 
     @Test
@@ -108,8 +108,8 @@ class ProductServiceTest {
 
         ProductResponse product = productService.updateProduct(1L, productData);
 
-        assertThat(product.getId()).isEqualTo(1L);
-        assertThat(product.getName()).isEqualTo("쥐순이");
+        assertThat(product.getProduct().getId()).isEqualTo(1L);
+        assertThat(product.getProduct().getName()).isEqualTo("쥐순이");
     }
 
     @Test

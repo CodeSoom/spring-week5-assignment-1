@@ -27,7 +27,7 @@ public class ProductService {
         products.forEach(
                 product -> {
                     responseProducts.add(
-                            ProductResponse.from(product)
+                            new ProductResponse(product)
                     );
                 }
         );
@@ -37,7 +37,7 @@ public class ProductService {
     public ProductResponse getProduct(Long id) {
         Product product = findProduct(id);
 
-        return ProductResponse.from(product);
+        return new ProductResponse(product);
     }
 
     public ProductResponse createProduct(ProductData productData) {
@@ -49,7 +49,7 @@ public class ProductService {
                         .imageUrl(productData.getImageUrl())
                         .build()
         );
-        return ProductResponse.from(savedProduct);
+        return new ProductResponse(savedProduct);
     }
 
     public ProductResponse updateProduct(Long id, ProductData productData) {
@@ -62,7 +62,7 @@ public class ProductService {
                 productData.getImageUrl()
         );
 
-        return ProductResponse.from(product);
+        return new ProductResponse(product);
     }
 
     public ProductResponse deleteProduct(Long id) {
@@ -70,7 +70,7 @@ public class ProductService {
 
         productRepository.delete(product);
 
-        return ProductResponse.from(product);
+        return new ProductResponse(product);
     }
 
     private Product findProduct(Long id) {
