@@ -3,6 +3,7 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserDeleteReport;
 import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
@@ -58,20 +59,30 @@ public class UserCommandService {
         return id;
     }
 
-    public Set<Long> deleteUsers(Set<Long> ids) {
-        Iterable<User> users = userRepository.findAllById(ids);
+    public UserDeleteReport deleteUsers(Set<Long> ids) {
+        Iterable<User> findUsers = userRepository.findAllById(ids);
+        userRepository.deleteAll(findUsers);
 
+        Set<Long> findUserIds = getFindUserIds(findUsers);
+        Set<Long> notFindUserIds = getNotFindUserIds(ids, findUserIds);
+
+        return new UserDeleteReport(findUserIds, notFindUserIds);
+    }
+
+    private Set<Long> getFindUserIds(Iterable<User> findUsers) {
         Set<Long> userIdSet = new HashSet<>();
-        users.forEach(user -> userIdSet.add(user.getId()));
+        findUsers.forEach(user -> userIdSet.add(user.getId()));
+        return userIdSet;
+    }
 
+    private Set<Long> getNotFindUserIds(Set<Long> ids, Set<Long> findUserIds) {
+        Set<Long> notFoundIds = new HashSet<>();
         ids.forEach(id -> {
-            if (!userIdSet.contains(id)) {
-                throw new UserNotFoundException(id + "에 해당하는 user를 찾지 못했으므로 요청한 모든 user삭제에 실패했습니다.");
+            if (!findUserIds.contains(id)) {
+                notFoundIds.add(id);
             }
         });
-
-        userRepository.deleteAll(users);
-        return userIdSet;
+        return notFoundIds;
     }
 
     public void deleteAll() {

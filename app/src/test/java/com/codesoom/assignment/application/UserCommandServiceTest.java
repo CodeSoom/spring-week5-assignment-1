@@ -2,6 +2,7 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserDeleteReport;
 import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
 import org.junit.jupiter.api.AfterEach;
@@ -172,16 +173,16 @@ class UserCommandServiceTest {
 
     @Nested
     @DisplayName("deleteUsers 메서드는")
+    @SpringBootTest
     class Describe_deleteUsers {
+
+        @Autowired
+        private UserRepository userRepository;
+
         @Nested
         @DisplayName("저장되어있는 user 의 id가 주어지면 ")
-        @SpringBootTest
         class Context_with_existing_user_id {
-            private Long deleteId1;
-            private Long deleteId2;
-
-            @Autowired
-            private UserRepository userRepository;
+            private Set<Long> deletedIds;
 
             @BeforeEach
             void setUp() {
@@ -199,16 +200,21 @@ class UserCommandServiceTest {
                                 .password("b")
                                 .build()
                 );
-                deleteId1 = savedUser1.getId();
-                deleteId2 = savedUser2.getId();
+
+                deletedIds = Set.of(savedUser1.getId(), savedUser2.getId());
             }
 
             @Test
-            @DisplayName("user 들을 삭제하고 user id 들을 리턴한다")
-            void it_returns_deleted_user_ids() {
-                Set<Long> deletedIds = userCommandService.deleteUsers(Set.of(deleteId1, deleteId2));
+            @DisplayName("user 들을 삭제하고 삭제한 user ids 와 삭제하지 못한 user ids(빈 set)를 리턴한다")
+            void it_returns_delete_user_report() {
+
+                UserDeleteReport userDeleteReport = userCommandService.deleteUsers(deletedIds);
 
                 assertThat(userRepository.findAllById(deletedIds)).isEmpty();
+                assertThat(userRepository.findAllById(userDeleteReport.getDeletedSuccessIds())).isEmpty();
+
+                assertThat(userDeleteReport.getDeletedSuccessIds()).isEqualTo(deletedIds);
+                assertThat(userDeleteReport.getDeletedFailIds()).isEmpty();
             }
         }
 
@@ -230,11 +236,15 @@ class UserCommandServiceTest {
             }
 
             @Test
-            @DisplayName("사용자가 존재하지 않다는 예외를 던진다")
-            void it_throws_exception() {
-                assertThatThrownBy(
-                        () -> userCommandService.deleteUsers(Set.of(deleteId, INVALID_USER_ID))
-                ).isExactlyInstanceOf(UserNotFoundException.class);
+            @DisplayName("user 들을 삭제하고 삭제한 user ids 와 삭제하지 못한 user ids 를 리턴한다")
+            void it_returns_delete_user_report() {
+                UserDeleteReport userDeleteReport = userCommandService.deleteUsers(Set.of(deleteId, INVALID_USER_ID));
+
+                assertThat(userRepository.findById(deleteId)).isEmpty();
+                assertThat(userRepository.findAllById(userDeleteReport.getDeletedSuccessIds())).isEmpty();
+
+                assertThat(userDeleteReport.getDeletedSuccessIds()).contains(deleteId);
+                assertThat(userDeleteReport.getDeletedFailIds()).contains(INVALID_USER_ID);
             }
         }
     }
