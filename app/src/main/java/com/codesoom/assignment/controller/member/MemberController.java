@@ -21,24 +21,25 @@ import javax.validation.Valid;
 @CrossOrigin
 @RequestMapping("/users")
 public class MemberController {
-
     private final MemberCommandService memberService;
+    private final MemberDtoMapper memberDtoMapper;
 
-    public MemberController(MemberCommandService memberService) {
+    public MemberController(MemberCommandService memberService, MemberDtoMapper memberDtoMapper) {
         this.memberService = memberService;
+        this.memberDtoMapper = memberDtoMapper;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public MemberDto.MemberInfo registerMember(@RequestBody @Valid MemberDto.RequestParam request) {
-        final MemberCommand.Register command = MemberFactory.of(request);
+        final MemberCommand.Register command = memberDtoMapper.of(request);
         return new MemberDto.MemberInfo(memberService.createMember(command));
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public MemberDto.MemberInfo updateMember(@PathVariable Long id, @RequestBody @Valid MemberDto.UpdateParam request) {
-        final MemberCommand.UpdateRequest command = MemberFactory.of(id, request);
+        final MemberCommand.UpdateRequest command = memberDtoMapper.of(id, request);
         return new MemberDto.MemberInfo(memberService.updateMember(command));
     }
 

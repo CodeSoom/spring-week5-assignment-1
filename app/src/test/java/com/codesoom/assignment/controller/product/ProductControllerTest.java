@@ -204,7 +204,7 @@ class ProductControllerTest {
             @BeforeEach
             void prepare() {
                 given(productCommandService.createProduct(any(Register.class)))
-                        .willReturn(ProductFactory.of(1L, givenRequest).toEntity());
+                        .willReturn(ProductDtoMapper.INSTANCE.of(1L, givenRequest).toEntity());
             }
 
             @Test
@@ -317,7 +317,7 @@ class ProductControllerTest {
                 givenRequest.setPrice(savedProduct.getPrice() + 5000);
 
                 given(productCommandService.updateProduct(any(UpdateRequest.class)))
-                        .willReturn(ProductFactory.of(PRODUCT_ID, givenRequest).toEntity());
+                        .willReturn(ProductDtoMapper.INSTANCE.of(PRODUCT_ID, givenRequest).toEntity());
             }
 
             @Test

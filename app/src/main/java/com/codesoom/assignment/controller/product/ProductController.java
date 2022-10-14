@@ -30,9 +30,12 @@ public class ProductController {
 
     private final ProductQueryService productQueryService;
 
-    public ProductController(ProductCommandService productCommandService, ProductQueryService productQueryService) {
+    private final ProductDtoMapper productDtoMapper;
+
+    public ProductController(ProductCommandService productCommandService, ProductQueryService productQueryService, ProductDtoMapper productDtoMapper) {
         this.productCommandService = productCommandService;
         this.productQueryService = productQueryService;
+        this.productDtoMapper = productDtoMapper;
     }
 
     @GetMapping
@@ -52,14 +55,14 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ProductDto.ProductInfo registerProduct(@RequestBody @Valid ProductDto.RequestParam request) {
-        final ProductCommand.Register command = ProductFactory.of(request);
+        final ProductCommand.Register command = productDtoMapper.of(request);
         return new ProductDto.ProductInfo(productCommandService.createProduct(command));
     }
 
     @PatchMapping("{id}")
     @ResponseStatus(HttpStatus.OK)
     public ProductDto.ProductInfo updateProduct(@PathVariable Long id, @RequestBody @Valid ProductDto.RequestParam request) {
-        final ProductCommand.UpdateRequest command = ProductFactory.of(id, request);
+        final ProductCommand.UpdateRequest command = productDtoMapper.of(id, request);
         return new ProductDto.ProductInfo(productCommandService.updateProduct(command));
     }
 

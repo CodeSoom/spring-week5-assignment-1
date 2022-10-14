@@ -12,13 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("ProductDtoMapper 클래스")
 class ProductDtoMapperTest {
 
-    private ProductFactory productDtoMapper;
-
-    @BeforeEach
-    void setUp() {
-        productDtoMapper = new ProductFactory();
-    }
-
     @Nested
     @DisplayName("of(RequestParam) 메소드는")
     class Describe_of_request_param {
@@ -37,14 +30,14 @@ class ProductDtoMapperTest {
         }
 
         @Nested
-        @DisplayName("빈 요청 파라미터가 주어지면")
+        @DisplayName("요청 파라미터가 Null이면")
         class Context_with_invalid_request_parameter {
             @Test
             @DisplayName("Null을 리턴한다")
             void it_returns_register() {
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.Register actual = productDtoMapper.of(request);
+                final ProductCommand.Register actual = ProductDtoMapper.INSTANCE.of(request);
 
                 assertThat(actual).isNull();
             }
@@ -63,14 +56,14 @@ class ProductDtoMapperTest {
             void it_returns_register() {
                 final Long id = 1L;
 
-                final ProductCommand.UpdateRequest actual = productDtoMapper.of(id, ProductSampleFactory.createRequestParam());
+                final ProductCommand.UpdateRequest actual = ProductDtoMapper.INSTANCE.of(id, ProductSampleFactory.createRequestParam());
 
                 assertThat(actual).isInstanceOf(ProductCommand.UpdateRequest.class);
             }
         }
 
         @Nested
-        @DisplayName("모든 파라미터가 빈 값이 주어지면")
+        @DisplayName("모든 파라미터가 Null이면")
         class Context_with_invalid_request_parameter {
             @Test
             @DisplayName("Null을 리턴한다")
@@ -78,38 +71,41 @@ class ProductDtoMapperTest {
                 final Long id = null;
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.UpdateRequest actual = productDtoMapper.of(id, request);
+                final ProductCommand.UpdateRequest actual = ProductDtoMapper.INSTANCE.of(id, request);
 
                 assertThat(actual).isNull();
             }
         }
 
         @Nested
-        @DisplayName("ID만 빈 값으로 주어지면")
+        @DisplayName("ID가 Null이면")
         class Context_with_id_null {
             @Test
-            @DisplayName("Null을 리턴한다")
+            @DisplayName("ID필드가 Null인 객체를 리턴한다")
             void it_returns_null() {
                 final Long id = null;
 
-                final ProductCommand.UpdateRequest actual = productDtoMapper.of(id, ProductSampleFactory.createRequestParam());
+                final ProductCommand.UpdateRequest actual = ProductDtoMapper.INSTANCE.of(id, ProductSampleFactory.createRequestParam());
+                System.out.println(actual);
 
-                assertThat(actual).isNull();
+                assertThat(actual.getId()).isNull();
             }
         }
 
         @Nested
-        @DisplayName("RequestParam만 빈 값으로 주어지면")
+        @DisplayName("RequestParam이 Null이면")
         class Context_with_requestparam_null {
             @Test
-            @DisplayName("Null을 리턴한다")
+            @DisplayName("RequestParam의 필드들이 Null인 객체를 리턴한다")
             void it_returns_null() {
                 final Long id = 1L;
                 final ProductDto.RequestParam request = null;
 
-                final ProductCommand.UpdateRequest actual = productDtoMapper.of(id, request);
+                final ProductCommand.UpdateRequest actual = ProductDtoMapper.INSTANCE.of(id, request);
 
-                assertThat(actual).isNull();
+                assertThat(actual.getName()).isNull();
+                assertThat(actual.getMaker()).isNull();
+                assertThat(actual.getPrice()).isNull();
             }
         }
     }

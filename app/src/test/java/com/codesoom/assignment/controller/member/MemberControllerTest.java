@@ -202,7 +202,7 @@ class MemberControllerTest {
                 givenRequest.setPassword("수정_" + savedMember.getPassword());
 
                 given(memberCommandService.updateMember(any(UpdateRequest.class)))
-                        .willReturn(MemberFactory.of(MEMBER_ID, givenRequest).toEntity());
+                        .willReturn(MemberDtoMapper.INSTANCE.of(MEMBER_ID, givenRequest).toEntity());
             }
 
             @Test

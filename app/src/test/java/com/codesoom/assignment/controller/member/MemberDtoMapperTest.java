@@ -12,13 +12,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DisplayName("MemberDtoMapper 클래스")
 class MemberDtoMapperTest {
 
-    private MemberFactory memberDtoMapper;
-
-    @BeforeEach
-    void setUp() {
-        memberDtoMapper = new MemberFactory();
-    }
-
     @Nested
     @DisplayName("of(RequestParam) 메소드는")
     class Describe_of_request_param {
@@ -30,19 +23,19 @@ class MemberDtoMapperTest {
             void it_returns_register() {
                 MemberDto.RequestParam member = MemberSampleFactory.createRequestParam();
 
-                final MemberCommand.Register actual = memberDtoMapper.of(member);
+                final MemberCommand.Register actual = MemberDtoMapper.INSTANCE.of(member);
 
                 assertThat(actual).isInstanceOf(MemberCommand.Register.class);
             }
         }
 
         @Nested
-        @DisplayName("빈 요청 파라미터가 주어지면")
+        @DisplayName("요청 파라미터가 Null이면")
         class Context_with_invalid_request_parameter {
             @Test
             @DisplayName("Null을 리턴한다")
             void it_returns_register() {
-                final MemberCommand.Register actual = memberDtoMapper.of(null);
+                final MemberCommand.Register actual = MemberDtoMapper.INSTANCE.of(null);
 
                 assertThat(actual).isNull();
             }
@@ -61,47 +54,53 @@ class MemberDtoMapperTest {
             void it_returns_register() {
                 final Long id = 1L;
 
-                final MemberCommand.UpdateRequest actual = memberDtoMapper.of(id, MemberSampleFactory.createUpdateParam());
+                final MemberCommand.UpdateRequest actual = MemberDtoMapper.INSTANCE.of(id, MemberSampleFactory.createUpdateParam());
 
                 assertThat(actual).isInstanceOf(MemberCommand.UpdateRequest.class);
             }
         }
 
         @Nested
-        @DisplayName("모든 파라미터가 빈 값이 주어지면")
+        @DisplayName("모든 파라미터가 Null이면")
         class Context_with_invalid_request_parameter {
             @Test
             @DisplayName("Null을 리턴한다")
             void it_returns_null() {
-                final MemberCommand.UpdateRequest actual = memberDtoMapper.of(null, null);
+                final MemberCommand.UpdateRequest actual = MemberDtoMapper.INSTANCE.of(null, null);
 
                 assertThat(actual).isNull();
             }
         }
 
         @Nested
-        @DisplayName("ID만 빈 값으로 주어지면")
+        @DisplayName("ID가 Null이면")
         class Context_with_id_null {
             @Test
-            @DisplayName("Null을 리턴한다")
+            @DisplayName("ID 필드가 Null인 객체를 리턴한다")
             void it_returns_null() {
-                final MemberCommand.UpdateRequest actual = memberDtoMapper.of(null, MemberSampleFactory.createUpdateParam());
+                final MemberCommand.UpdateRequest actual = MemberDtoMapper.INSTANCE.of(null, MemberSampleFactory.createUpdateParam());
 
-                assertThat(actual).isNull();
+                assertThat(actual.getId()).isNull();
+                assertThat(actual.getName()).isNotNull();
+                assertThat(actual.getPassword()).isNotNull();
             }
         }
 
         @Nested
-        @DisplayName("RequestParam만 빈 값으로 주어지면")
+        @DisplayName("UpdateParam이 Null이면")
         class Context_with_requestparam_null {
             @Test
-            @DisplayName("Null을 리턴한다")
+            @DisplayName("UpdateParam 필드들이 Null인 객체를 리턴한다")
             void it_returns_null() {
                 final Long id = 1L;
 
-                final MemberCommand.UpdateRequest actual = memberDtoMapper.of(id, null);
+                final MemberCommand.UpdateRequest actual = MemberDtoMapper.INSTANCE.of(id, null);
 
-                assertThat(actual).isNull();
+                assertThat(actual.getId()).isNotNull();
+                assertThat(actual.getName()).isNull();
+                assertThat(actual.getPassword()).isNull();
+                assertThat(actual.getEmail()).isNull();
+
             }
         }
     }
