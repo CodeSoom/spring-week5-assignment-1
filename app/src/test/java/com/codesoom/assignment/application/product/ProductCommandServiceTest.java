@@ -5,6 +5,7 @@ import com.codesoom.assignment.common.ProductSampleFactory;
 import com.codesoom.assignment.common.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.product.Product;
 import com.codesoom.assignment.domain.product.ProductRepository;
+import com.codesoom.assignment.common.mapper.ProductMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -24,13 +25,19 @@ class ProductCommandServiceTest {
         ProductRepository repository;
         ProductCommandService service;
 
+        private final ProductMapper productMapper = ProductMapper.INSTANCE;
+
+        public ProductMapper getProductMapper() {
+            return productMapper;
+        }
+
         public ProductRepository getProductRepository() {
             return repository;
         }
 
         public ProductCommandService getProductService() {
             if (service == null) {
-                service = new ProductCommandServiceImpl(repository);
+                service = new ProductCommandServiceImpl(repository, productMapper);
             }
             return service;
         }
@@ -95,7 +102,7 @@ class ProductCommandServiceTest {
         @Nested
         @DisplayName("유효하지않은 ID가 주어지면")
         class Context_with_invalid_id extends JpaTest {
-            private final Long PRODUCT_ID = 100L;
+            private final Long PRODUCT_ID = -1L;
             private final Product givenProduct = ProductSampleFactory.createProduct(PRODUCT_ID);
 
             @Test
@@ -134,7 +141,7 @@ class ProductCommandServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                assertThatThrownBy(() -> getProductService().deleteProduct(100L)).isInstanceOf(ProductNotFoundException.class);
+                assertThatThrownBy(() -> getProductService().deleteProduct(-1L)).isInstanceOf(ProductNotFoundException.class);
             }
         }
     }

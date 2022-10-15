@@ -91,7 +91,7 @@ class MemberQueryServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                assertThatThrownBy(() -> getMemberService().getMember(9999L)).isInstanceOf(MemberNotFoundException.class);
+                assertThatThrownBy(() -> getMemberService().getMember(-1L)).isInstanceOf(MemberNotFoundException.class);
             }
         }
     }

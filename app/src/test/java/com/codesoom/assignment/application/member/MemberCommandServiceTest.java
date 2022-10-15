@@ -29,13 +29,19 @@ class MemberCommandServiceTest {
         private MemberRepository repository;
         private MemberCommandService service;
 
+        private final MemberMapper memberMapper = MemberMapper.INSTANCE;
+
+        public MemberMapper getMemberMapper() {
+            return memberMapper;
+        }
+
         public MemberRepository getMemberRepository() {
             return repository;
         }
 
         public MemberCommandService getMemberService() {
             if (service == null) {
-                service = new MemberCommandServiceImpl(repository);
+                service = new MemberCommandServiceImpl(repository, memberMapper);
             }
             return service;
         }
@@ -99,7 +105,7 @@ class MemberCommandServiceTest {
         @Nested
         @DisplayName("유효하지않은 ID가 주어지면")
         class Context_with_invalid_id extends JpaTest {
-            private final Long MEMBER_ID = 9999L;
+            private final Long MEMBER_ID = -1L;
             private final MemberCommand.UpdateRequest command = MemberMapper.INSTANCE.of(MEMBER_ID, MemberSampleFactory.createUpdateParam());
 
             @Test
@@ -144,7 +150,7 @@ class MemberCommandServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                assertThatThrownBy(() -> getMemberService().deleteMember(9999L)).isInstanceOf(MemberNotFoundException.class);
+                assertThatThrownBy(() -> getMemberService().deleteMember(-1L)).isInstanceOf(MemberNotFoundException.class);
             }
         }
     }

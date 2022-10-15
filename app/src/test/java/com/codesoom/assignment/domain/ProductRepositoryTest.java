@@ -80,7 +80,7 @@ class ProductRepositoryTest {
             @Test
             @DisplayName("'결과 없음'을 리턴한다")
             void it_returns_optional_empty() {
-                assertThat(getProductRepository().findById(100L)).isEmpty();
+                assertThat(getProductRepository().findById(-1L)).isEmpty();
             }
         }
     }
@@ -131,7 +131,7 @@ class ProductRepositoryTest {
         @Nested
         @DisplayName("유효하지 않은 ID가 주어지면")
         class Context_with_non_existed_id extends JpaTest {
-            private final Product givenProduct = ProductSampleFactory.createProduct(100L);
+            private final Product givenProduct = ProductSampleFactory.createProduct(-1L);
 
             @Test
             @DisplayName("삭제하지않는다")

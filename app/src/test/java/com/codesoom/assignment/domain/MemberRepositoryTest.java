@@ -81,7 +81,7 @@ class MemberRepositoryTest {
             @Test
             @DisplayName("'결과 없음'을 리턴한다")
             void it_returns_optional_empty() {
-                assertThat(getMemberRepository().findById(9999L)).isEmpty();
+                assertThat(getMemberRepository().findById(-1L)).isEmpty();
             }
         }
     }

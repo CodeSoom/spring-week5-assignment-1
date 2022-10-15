@@ -104,7 +104,7 @@ class ProductQueryServiceTest {
         @Nested
         @DisplayName("유효하지않은 ID가 주어지면")
         class Context_with_invalid_id extends JpaTest {
-            private final Long PRODUCT_ID = 100L;
+            private final Long PRODUCT_ID = -1L;
 
             @Test
             @DisplayName("예외를 던진다")
