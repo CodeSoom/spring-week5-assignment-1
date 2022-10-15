@@ -142,7 +142,7 @@ class MemberDtoMapperTest {
     @DisplayName("toEntity(MemberCommand.Register) 메소드는")
     class Describe_toEntity_register {
         @Nested
-        @DisplayName("유효한 파라미터가 주어지면")
+        @DisplayName("유효한 Register 객체가 주어지면")
         class Context_with_valid_param {
             @Test
             @DisplayName("Member 객체를 리턴한다")
