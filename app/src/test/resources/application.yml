@@ -1,6 +1,7 @@
 spring:
   datasource:
-    url: jdbc:h2:~/data/demotest
+    url: jdbc:h2:mem:demotest
   jpa:
     hibernate:
       ddl-auto: create
+
