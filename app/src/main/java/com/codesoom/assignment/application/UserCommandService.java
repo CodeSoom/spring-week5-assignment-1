@@ -3,9 +3,10 @@ package com.codesoom.assignment.application;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserDeleteReport;
-import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
+import com.codesoom.assignment.dto.UserUpdateRequest;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class UserCommandService {
         this.userRepository = userRepository;
     }
 
-    public UserResponse createUser(UserRequest userRequest) {
-        User user = mapper.map(userRequest, User.class);
+    public UserResponse createUser(UserCreateRequest userCreateRequest) {
+        User user = mapper.map(userCreateRequest, User.class);
         User savedUser = userRepository.save(user);
 
         return UserResponse.builder()
@@ -34,11 +35,11 @@ public class UserCommandService {
                 .build();
     }
 
-    public UserResponse updateUser(Long id, UserRequest userRequest) {
+    public UserResponse updateUser(Long id, UserUpdateRequest userUpdateRequest) {
         User findUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 user를 찾지 못했으므로 업데이트에 실패했습니다."));
 
-        User user = mapper.map(userRequest, User.class);
+        User user = mapper.map(userUpdateRequest, User.class);
 
         findUser.update(user.getEmail(), user.getName(), user.getPassword());
         User updatedUser = userRepository.save(findUser);

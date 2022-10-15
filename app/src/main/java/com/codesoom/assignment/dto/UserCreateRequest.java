@@ -7,7 +7,7 @@ import lombok.Getter;
 import javax.validation.constraints.NotBlank;
 
 @Getter
-public class UserRequest {
+public class UserCreateRequest {
 
     @NotBlank
     @Mapping("email")
@@ -22,7 +22,7 @@ public class UserRequest {
     private String password;
 
     @Builder
-    public UserRequest(String email, String name, String password) {
+    public UserCreateRequest(String email, String name, String password) {
         this.email = email;
         this.name = name;
         this.password = password;

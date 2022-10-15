@@ -2,9 +2,10 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserDeleteReport;
-import com.codesoom.assignment.dto.UserRequest;
 import com.codesoom.assignment.dto.UserResponse;
+import com.codesoom.assignment.dto.UserUpdateRequest;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -31,11 +32,11 @@ class UserCommandServiceTest {
         @Nested
         @DisplayName("User 가 주어진다면")
         class Context_with_user {
-            private UserRequest requestUser;
+            private UserCreateRequest requestUser;
 
             @BeforeEach
             void setUp() {
-                requestUser = UserRequest.builder()
+                requestUser = UserCreateRequest.builder()
                         .email("a@a.com")
                         .name("김 코")
                         .password("123")
@@ -66,20 +67,19 @@ class UserCommandServiceTest {
         @DisplayName("요청하는 User 가 존재하는 경우")
         class Context_with_user {
             private UserResponse savedUser;
-            private UserRequest requestUser;
+            private UserUpdateRequest requestUser;
 
             @BeforeEach
             void setUp() {
                 savedUser = userCommandService.createUser(
-                        UserRequest.builder()
+                        UserCreateRequest.builder()
                                 .email("before@before.com")
                                 .name("김 코")
                                 .password("before")
                                 .build()
                 );
 
-                requestUser = UserRequest.builder()
-                        .email("after@after.com")
+                requestUser = UserUpdateRequest.builder()
                         .name("김 딩")
                         .password("after")
                         .build();
@@ -96,7 +96,7 @@ class UserCommandServiceTest {
                 UserResponse updatedUser = userCommandService.updateUser(savedUser.getId(), requestUser);
 
                 assertThat(updatedUser).usingRecursiveComparison()
-                        .ignoringFields("id")
+                        .ignoringFields("id", "email")
                         .isEqualTo(requestUser);
             }
         }
@@ -104,12 +104,11 @@ class UserCommandServiceTest {
         @Nested
         @DisplayName("요청하는 User 가 존재하지 않는 경우")
         class Context_with_non_existence_user {
-            private UserRequest requestUser;
+            private UserUpdateRequest requestUser;
 
             @BeforeEach
             void setUp() {
-                requestUser = UserRequest.builder()
-                        .email("after@after.com")
+                requestUser = UserUpdateRequest.builder()
                         .name("김 코")
                         .password("after")
                         .build();
@@ -140,7 +139,7 @@ class UserCommandServiceTest {
             @BeforeEach
             void setUp() {
                 UserResponse savedUser = userCommandService.createUser(
-                        UserRequest.builder()
+                        UserCreateRequest.builder()
                                 .email("before@before.com")
                                 .name("김 코")
                                 .password("before")
@@ -187,14 +186,14 @@ class UserCommandServiceTest {
             @BeforeEach
             void setUp() {
                 UserResponse savedUser1 = userCommandService.createUser(
-                        UserRequest.builder()
+                        UserCreateRequest.builder()
                                 .email("a@a.com")
                                 .name("김 코")
                                 .password("a")
                                 .build()
                 );
                 UserResponse savedUser2 = userCommandService.createUser(
-                        UserRequest.builder()
+                        UserCreateRequest.builder()
                                 .email("b@b.com")
                                 .name("김 코")
                                 .password("b")
@@ -226,7 +225,7 @@ class UserCommandServiceTest {
             @BeforeEach
             void setUp() {
                 UserResponse savedUser = userCommandService.createUser(
-                        UserRequest.builder()
+                        UserCreateRequest.builder()
                                 .email("a@a.com")
                                 .name("김 코")
                                 .password("a")
