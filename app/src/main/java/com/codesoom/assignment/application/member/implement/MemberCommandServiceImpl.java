@@ -13,14 +13,17 @@ import org.springframework.transaction.annotation.Transactional;
 public class MemberCommandServiceImpl implements MemberCommandService {
     private final MemberRepository memberRepository;
 
-    public MemberCommandServiceImpl(MemberRepository memberRepository) {
+    private final MemberMapper memberMapper;
+
+    public MemberCommandServiceImpl(MemberRepository memberRepository, MemberMapper memberMapper) {
         this.memberRepository = memberRepository;
+        this.memberMapper = memberMapper;
     }
 
     @Transactional
     @Override
     public Member createMember(MemberCommand.Register command) {
-        return memberRepository.save(MemberMapper.INSTANCE.toEntity(command));
+        return memberRepository.save(memberMapper.toEntity(command));
     }
 
     /**
@@ -29,7 +32,7 @@ public class MemberCommandServiceImpl implements MemberCommandService {
     @Transactional
     @Override
     public Member updateMember(MemberCommand.UpdateRequest command) {
-        Member source = MemberMapper.INSTANCE.toEntity(command);
+        Member source = memberMapper.toEntity(command);
         Member findMember = getFindMember(source.getId());
 
         findMember.modifyMemberInfo(source);

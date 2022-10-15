@@ -14,8 +14,11 @@ public class ProductCommandServiceImpl implements ProductCommandService {
 
     private final ProductRepository productRepository;
 
-    public ProductCommandServiceImpl(ProductRepository productRepository) {
+    private final ProductMapper productMapper;
+
+    public ProductCommandServiceImpl(ProductRepository productRepository, ProductMapper productMapper) {
         this.productRepository = productRepository;
+        this.productMapper = productMapper;
     }
 
     @Transactional
@@ -30,7 +33,7 @@ public class ProductCommandServiceImpl implements ProductCommandService {
     @Transactional
     @Override
     public Product updateProduct(ProductCommand.UpdateRequest command) {
-        Product product = ProductMapper.INSTANCE.toEntity(command);
+        Product product = productMapper.toEntity(command);
         Product findProduct = productRepository.findById(product.getId())
                 .orElseThrow(() -> new ProductNotFoundException(product.getId()));
 
