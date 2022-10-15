@@ -1,11 +1,19 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.common.ProductSampleFactory;
 import com.codesoom.assignment.common.exception.InvalidParamException;
 import com.codesoom.assignment.domain.product.Product;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import static com.codesoom.assignment.common.ProductSampleFactory.FieldName.*;
+import static com.codesoom.assignment.common.ProductSampleFactory.ValueType.*;
 
 @DisplayName("Product 클래스")
 class ProductTest {
@@ -14,45 +22,25 @@ class ProductTest {
     @DisplayName("빌더는")
     class Describe_builder {
         @Nested
-        @DisplayName("이름이 Null 이면")
+        @DisplayName("이름 or 제조사 or 가격이 Null 이면")
         class Context_with_empty_name {
-            @Test
-            @DisplayName("예외를 던진다")
-            void it_throws_exception() {
-                Assertions.assertThatThrownBy(() -> Product.builder()
-                        .name(null)
-                        .maker("삼성")
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build()).isInstanceOf(InvalidParamException.class);
+            List<Product.ProductBuilder> givenProducts = new ArrayList<>();
+
+            @BeforeEach
+            void prepare() {
+                givenProducts.add(ProductSampleFactory.createProductParamWith(NAME, NULL));
+                givenProducts.add(ProductSampleFactory.createProductParamWith(MAKER, NULL));
+                givenProducts.add(ProductSampleFactory.createProductParamWith(PRICE, NULL));
             }
-        }
-        @Nested
-        @DisplayName("제조사가 Null 이면")
-        class Context_with_empty_maker {
+
             @Test
             @DisplayName("예외를 던진다")
             void it_throws_exception() {
-                Assertions.assertThatThrownBy(() -> Product.builder()
-                        .name("고양이 장난감1")
-                        .maker(null)
-                        .price(10000L)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build()).isInstanceOf(InvalidParamException.class);
+                givenProducts.forEach(this::test);
             }
-        }
-        @Nested
-        @DisplayName("가격이 Null 이면")
-        class Context_with_empty_price {
-            @Test
-            @DisplayName("예외를 던진다")
-            void it_throws_exception() {
-                Assertions.assertThatThrownBy(() -> Product.builder()
-                        .name("고양이 장난감1")
-                        .maker("삼성")
-                        .price(null)
-                        .imageUrl("https://user-images.githubusercontent.com/47380072/83365762-9d4b0880-a3e5-11ea-856e-d71c97ab691e.png")
-                        .build()).isInstanceOf(InvalidParamException.class);
+
+            private void test(Product.ProductBuilder builder) {
+                Assertions.assertThatThrownBy(builder::build).isInstanceOf(InvalidParamException.class);
             }
         }
     }

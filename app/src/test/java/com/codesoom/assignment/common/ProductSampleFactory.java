@@ -68,6 +68,25 @@ public class ProductSampleFactory {
         return request;
     }
 
+    public static Product.ProductBuilder createProductParamWith(ProductSampleFactory.FieldName fieldName, ProductSampleFactory.ValueType valueType) {
+        final Product.ProductBuilder builder = Product.builder();
+        String testValue;
+
+        if (valueType == ProductSampleFactory.ValueType.NULL) {
+            testValue = null;
+        } else if (valueType == ProductSampleFactory.ValueType.EMPTY) {
+            testValue = "";
+        } else {
+            testValue = "  ";
+        }
+
+        builder.name(fieldName == NAME ? testValue : "고양이 장난감" + random.nextInt(100));
+        builder.maker(fieldName == MAKER ? testValue : UUID.randomUUID().toString());
+        builder.price(fieldName == PRICE ? null : randomPrice());
+
+        return builder;
+    }
+
     public static ProductCommand.Register of(Product product) {
         ProductCommand.Register.RegisterBuilder registerBuilder = ProductCommand.Register.builder();
 
