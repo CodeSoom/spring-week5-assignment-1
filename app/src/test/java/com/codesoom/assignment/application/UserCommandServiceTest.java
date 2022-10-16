@@ -115,7 +115,7 @@ class UserCommandServiceTest {
             }
 
             @Test
-            @DisplayName("사용자가 존재하지 않다는 예외를 던진다")
+            @DisplayName("사용자를 찾지 못했다는 예외를 던진다")
             void it_throws_exception() {
                 assertThatThrownBy(
                         () -> userCommandService.updateUser(INVALID_USER_ID, requestUser)
@@ -161,7 +161,7 @@ class UserCommandServiceTest {
         @DisplayName("저장되어있지 않은 user 의 id가 주어지면 ")
         class Context_with_non_existence_user_id {
             @Test
-            @DisplayName("사용자가 존재하지 않다는 예외를 던진다")
+            @DisplayName("사용자를 찾지 못했다는 예외를 던진다")
             void it_throws_exception() {
                 assertThatThrownBy(
                         () -> userCommandService.deleteUser(INVALID_USER_ID)
