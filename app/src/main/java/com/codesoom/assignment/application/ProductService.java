@@ -27,13 +27,14 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-        Product product = Product.builder()
-                .name(productData.getName())
-                .maker(productData.getMaker())
-                .price(productData.getPrice())
-                .imageUrl(productData.getImageUrl())
-                .build();
-        return productRepository.save(product);
+        return productRepository.save(
+                Product.builder()
+                        .name(productData.getName())
+                        .maker(productData.getMaker())
+                        .price(productData.getPrice())
+                        .imageUrl(productData.getImageUrl())
+                        .build()
+        );
     }
 
     public Product updateProduct(Long id, ProductData productData) {
