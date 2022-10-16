@@ -204,7 +204,7 @@ class UserCommandServiceTest {
             }
 
             @Test
-            @DisplayName("user 들을 삭제하고 삭제한 user ids 와 삭제하지 못한 user ids(빈 set)를 리턴한다")
+            @DisplayName("user 들을 삭제하고 삭제 보고서를 리턴한다")
             void it_returns_delete_user_report() {
 
                 UserDeleteReport userDeleteReport = userCommandService.deleteUsers(deletedIds);
@@ -235,7 +235,7 @@ class UserCommandServiceTest {
             }
 
             @Test
-            @DisplayName("user 들을 삭제하고 삭제한 user ids 와 삭제하지 못한 user ids 를 리턴한다")
+            @DisplayName("user 들을 삭제하고 삭제 보고서를 리턴한다")
             void it_returns_delete_user_report() {
                 UserDeleteReport userDeleteReport = userCommandService.deleteUsers(Set.of(deleteId, INVALID_USER_ID));
 
