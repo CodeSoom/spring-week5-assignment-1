@@ -1,42 +1,47 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.common.ProductSampleFactory;
+import com.codesoom.assignment.common.exception.InvalidParamException;
+import com.codesoom.assignment.domain.product.Product;
+import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import java.util.ArrayList;
+import java.util.List;
 
+import static com.codesoom.assignment.common.ProductSampleFactory.FieldName.*;
+import static com.codesoom.assignment.common.ProductSampleFactory.ValueType.*;
+
+@DisplayName("Product 클래스")
 class ProductTest {
-    @Test
-    void creationWithBuilder() {
-        Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
 
-        assertThat(product.getId()).isEqualTo(1L);
-        assertThat(product.getName()).isEqualTo("쥐돌이");
-        assertThat(product.getMaker()).isEqualTo("냥이월드");
-        assertThat(product.getPrice()).isEqualTo(5000);
-        assertThat(product.getImageUrl()).isNull();
-    }
+    @Nested
+    @DisplayName("빌더는")
+    class Describe_builder {
+        @Nested
+        @DisplayName("이름 or 제조사 or 가격이 Null 이면")
+        class Context_with_empty_name {
+            List<Product.ProductBuilder> givenProducts = new ArrayList<>();
 
-    @Test
-    void change() {
-        Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
+            @BeforeEach
+            void prepare() {
+                givenProducts.add(ProductSampleFactory.createProductParamWith(NAME, NULL));
+                givenProducts.add(ProductSampleFactory.createProductParamWith(MAKER, NULL));
+                givenProducts.add(ProductSampleFactory.createProductParamWith(PRICE, NULL));
+            }
 
-        product.change("쥐순이", "코드숨", 10000,
-                "http://localhost:8080/rat");
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_throws_exception() {
+                givenProducts.forEach(this::test);
+            }
 
-        assertThat(product.getName()).isEqualTo("쥐순이");
-        assertThat(product.getMaker()).isEqualTo("코드숨");
-        assertThat(product.getPrice()).isEqualTo(10000);
-        assertThat(product.getImageUrl())
-                .isEqualTo("http://localhost:8080/rat");
+            private void test(Product.ProductBuilder builder) {
+                Assertions.assertThatThrownBy(builder::build).isInstanceOf(InvalidParamException.class);
+            }
+        }
     }
 }
