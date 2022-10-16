@@ -239,11 +239,19 @@ class UserCommandServiceTest {
             void it_returns_delete_user_report() {
                 UserDeleteReport userDeleteReport = userCommandService.deleteUsers(Set.of(deleteId, INVALID_USER_ID));
 
-                assertThat(userRepository.findById(deleteId)).isEmpty();
-                assertThat(userRepository.findAllById(userDeleteReport.getDeletedSuccessIds())).isEmpty();
+                assertThat(userRepository.findById(deleteId))
+                        .as("삭제되어야할" + deleteId + "가 삭제됐는지 확인")
+                        .isEmpty();
+                assertThat(userRepository.findAllById(userDeleteReport.getDeletedSuccessIds()))
+                        .as("삭제되어야할 successIds 가 삭제됐는지 확인")
+                        .isEmpty();
 
-                assertThat(userDeleteReport.getDeletedSuccessIds()).contains(deleteId);
-                assertThat(userDeleteReport.getDeletedFailIds()).contains(INVALID_USER_ID);
+                assertThat(userDeleteReport.getDeletedSuccessIds())
+                        .as("삭제된 id 만 리턴하는지 확인")
+                        .containsExactly(deleteId);
+                assertThat(userDeleteReport.getDeletedFailIds())
+                        .as("삭제되지 않은 id 만 리턴하는지 확인")
+                        .containsExactly(INVALID_USER_ID);
             }
         }
     }
