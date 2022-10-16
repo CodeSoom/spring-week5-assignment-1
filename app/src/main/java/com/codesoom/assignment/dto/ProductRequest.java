@@ -5,21 +5,19 @@ import lombok.*;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Setter
 @Getter
 @Builder
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class ProductData {
-    private Long id;
+public class ProductRequest {
 
-    @NotBlank
+    @NotBlank(message = "{product.name.not.blank}")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "{product.maker.not.blank}")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "{product.price.not.null}")
     private Integer price;
 
     private String imageUrl;

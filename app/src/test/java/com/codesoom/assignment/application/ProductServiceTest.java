@@ -1,9 +1,9 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.dto.ProductRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -82,13 +82,13 @@ class ProductServiceTest {
 
     @Test
     void createProduct() {
-        ProductData productData = ProductData.builder()
+        ProductRequest productRequest = ProductRequest.builder()
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
                 .build();
 
-        Product product = productService.createProduct(productData);
+        Product product = productService.createProduct(productRequest);
 
         verify(productRepository).save(any(Product.class));
 
@@ -99,13 +99,13 @@ class ProductServiceTest {
 
     @Test
     void updateProductWithExistedId() {
-        ProductData productData = ProductData.builder()
+        ProductRequest productRequest = ProductRequest.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
                 .price(5000)
                 .build();
 
-        Product product = productService.updateProduct(1L, productData);
+        Product product = productService.updateProduct(1L, productRequest);
 
         assertThat(product.getId()).isEqualTo(1L);
         assertThat(product.getName()).isEqualTo("쥐순이");
@@ -113,13 +113,13 @@ class ProductServiceTest {
 
     @Test
     void updateProductWithNotExistedId() {
-        ProductData productData = ProductData.builder()
+        ProductRequest productRequest = ProductRequest.builder()
                 .name("쥐순이")
                 .maker("냥이월드")
                 .price(5000)
                 .build();
 
-        assertThatThrownBy(() -> productService.updateProduct(1000L, productData))
+        assertThatThrownBy(() -> productService.updateProduct(1000L, productRequest))
                 .isInstanceOf(ProductNotFoundException.class);
     }
 
