@@ -4,7 +4,6 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
-import com.codesoom.assignment.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,13 +36,12 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        ProductResponse product = new ProductResponse(Product.builder()
+        Product product = Product.builder()
                 .id(1L)
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
-                .build()
-        );
+                .build();
 
         given(productService.getProducts()).willReturn(List.of(product));
 
@@ -59,13 +57,12 @@ class ProductControllerTest {
                 .will(invocation -> {
                     Long id = invocation.getArgument(0);
                     ProductData productData = invocation.getArgument(1);
-                    return new ProductResponse(Product.builder()
+                    return Product.builder()
                             .id(id)
                             .name(productData.getName())
                             .maker(productData.getMaker())
                             .price(productData.getPrice())
-                            .build()
-                    );
+                            .build();
                 });
 
         given(productService.updateProduct(eq(1000L), any(ProductData.class)))

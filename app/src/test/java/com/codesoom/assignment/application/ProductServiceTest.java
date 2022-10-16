@@ -4,7 +4,6 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
-import com.codesoom.assignment.dto.ProductResponse;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -58,21 +57,21 @@ class ProductServiceTest {
 
     @Test
     void getProducts() {
-        List<ProductResponse> products = productService.getProducts();
+        List<Product> products = productService.getProducts();
 
         assertThat(products).isNotEmpty();
 
-        ProductResponse product = products.get(0);
+        Product product = products.get(0);
 
-        assertThat(product.getProduct().getName()).isEqualTo("쥐돌이");
+        assertThat(product.getName()).isEqualTo("쥐돌이");
     }
 
     @Test
     void getProductWithExsitedId() {
-        ProductResponse product = productService.getProduct(1L);
+        Product product = productService.getProduct(1L);
 
         assertThat(product).isNotNull();
-        assertThat(product.getProduct().getName()).isEqualTo("쥐돌이");
+        assertThat(product.getName()).isEqualTo("쥐돌이");
     }
 
     @Test
@@ -89,13 +88,13 @@ class ProductServiceTest {
                 .price(5000)
                 .build();
 
-        ProductResponse product = productService.createProduct(productData);
+        Product product = productService.createProduct(productData);
 
         verify(productRepository).save(any(Product.class));
 
-        assertThat(product.getProduct().getId()).isEqualTo(2L);
-        assertThat(product.getProduct().getName()).isEqualTo("쥐돌이");
-        assertThat(product.getProduct().getMaker()).isEqualTo("냥이월드");
+        assertThat(product.getId()).isEqualTo(2L);
+        assertThat(product.getName()).isEqualTo("쥐돌이");
+        assertThat(product.getMaker()).isEqualTo("냥이월드");
     }
 
     @Test
@@ -106,10 +105,10 @@ class ProductServiceTest {
                 .price(5000)
                 .build();
 
-        ProductResponse product = productService.updateProduct(1L, productData);
+        Product product = productService.updateProduct(1L, productData);
 
-        assertThat(product.getProduct().getId()).isEqualTo(1L);
-        assertThat(product.getProduct().getName()).isEqualTo("쥐순이");
+        assertThat(product.getId()).isEqualTo(1L);
+        assertThat(product.getName()).isEqualTo("쥐순이");
     }
 
     @Test
