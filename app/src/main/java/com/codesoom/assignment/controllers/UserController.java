@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserCommandService;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserResponse;
 import com.codesoom.assignment.dto.UserUpdateRequest;
@@ -28,12 +29,26 @@ public class UserController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public UserResponse createUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
-        return userCommandService.createUser(userCreateRequest);
+        User user = userCommandService.createUser(userCreateRequest);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
     }
 
     @PatchMapping("/{id}")
     public UserResponse updateUser(@PathVariable Long id, @RequestBody @Valid UserUpdateRequest userUpdateRequest) {
-        return userCommandService.updateUser(id, userUpdateRequest);
+        User user = userCommandService.updateUser(id, userUpdateRequest);
+
+        return UserResponse.builder()
+                .id(user.getId())
+                .name(user.getName())
+                .email(user.getEmail())
+                .password(user.getPassword())
+                .build();
     }
 
     @DeleteMapping("/{id}")

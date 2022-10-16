@@ -5,7 +5,6 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserCreateRequest;
 import com.codesoom.assignment.dto.UserDeleteReport;
-import com.codesoom.assignment.dto.UserResponse;
 import com.codesoom.assignment.dto.UserUpdateRequest;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
@@ -23,33 +22,20 @@ public class UserCommandService {
         this.userRepository = userRepository;
     }
 
-    public UserResponse createUser(UserCreateRequest userCreateRequest) {
+    public User createUser(UserCreateRequest userCreateRequest) {
         User user = mapper.map(userCreateRequest, User.class);
-        User savedUser = userRepository.save(user);
-
-        return UserResponse.builder()
-                .id(savedUser.getId())
-                .name(savedUser.getName())
-                .email(savedUser.getEmail())
-                .password(savedUser.getPassword())
-                .build();
+        return userRepository.save(user);
     }
 
-    public UserResponse updateUser(Long id, UserUpdateRequest userUpdateRequest) {
+    public User updateUser(Long id, UserUpdateRequest userUpdateRequest) {
         User findUser = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id + "에 해당하는 user를 찾지 못했으므로 업데이트에 실패했습니다."));
 
         User user = mapper.map(userUpdateRequest, User.class);
 
         findUser.update(user.getEmail(), user.getName(), user.getPassword());
-        User updatedUser = userRepository.save(findUser);
 
-        return UserResponse.builder()
-                .id(updatedUser.getId())
-                .name(updatedUser.getName())
-                .email(updatedUser.getEmail())
-                .password(updatedUser.getPassword())
-                .build();
+        return userRepository.save(findUser);
     }
 
     public Long deleteUser(Long id) {
