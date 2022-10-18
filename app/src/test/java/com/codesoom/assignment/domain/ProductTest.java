@@ -22,7 +22,7 @@ class ProductTest {
     }
 
     @Test
-    void change() {
+    void update() {
         Product product = Product.builder()
                 .id(1L)
                 .name("쥐돌이")
@@ -30,7 +30,7 @@ class ProductTest {
                 .price(5000)
                 .build();
 
-        product.change("쥐순이", "코드숨", 10000,
+        product.update("쥐순이", "코드숨", 10000,
                 "http://localhost:8080/rat");
 
         assertThat(product.getName()).isEqualTo("쥐순이");

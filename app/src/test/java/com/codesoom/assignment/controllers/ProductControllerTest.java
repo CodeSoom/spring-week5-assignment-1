@@ -161,7 +161,6 @@ class ProductControllerTest {
                                 "\"price\":5000}")
         )
                 .andExpect(status().isNotFound());
-
         verify(productService).updateProduct(eq(1000L), any(ProductData.class));
     }
 
@@ -172,8 +171,7 @@ class ProductControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0}")
-        )
+                                "\"price\":0}"))
                 .andExpect(status().isBadRequest());
     }
 
