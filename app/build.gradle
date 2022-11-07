@@ -47,21 +47,35 @@ dependencies {
     implementation 'com.fasterxml.jackson.core:jackson-core:2.11.3'
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.11.3'
 
-    // Lombok
+/*  Lombok
+    - getter, toString, builder 등 반복 작성이 필요한 메서드를 어노테이션을 통해 코드를 줄여주는 기능 제공
+*/
     compileOnly 'org.projectlombok:lombok:1.18.16'
     annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+/*  mapstruct
+    - 어노테이션 프로세서를 사용하여 객체 간 Mapping을 도와주는 라이브러리
+*/
+    implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
     // Spring Web
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
-    // Spring Validation
+/*  Spring Boot Validation
+    - Spring Boot 2.3 버전부터는 spring-boot-starter-web 의존성 내부에 있던 validation이 사라짐
+    - @Valid 관련 검증 어노테이션 기능 제공
+*/
     implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     // Spring Data JPA
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     runtimeOnly 'com.h2database:h2'
 
-    // Spring Developer Tools
+/*  Spring devTool
+    - Automatic Restart: claapath에 있는 파일이 변경될 때마다 애플리케이션을 자동으로 재시작해주는 기능 제공
+    - Live Reload: 정적 자원(html, css, js) 수정 시 새로고침 없이 바로 적용되는 기능 제공
+*/
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
 
     // Spring Boot Test

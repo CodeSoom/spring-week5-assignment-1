@@ -1,7 +1,7 @@
-package com.codesoom.assignment.infra;
+package com.codesoom.assignment.product.adapter.out.persistence;
 
-import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.domain.ProductRepository;
+import com.codesoom.assignment.product.application.port.out.ProductRepository;
+import com.codesoom.assignment.product.domain.Product;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.repository.CrudRepository;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Primary
-public interface JpaProductRepository
+public interface JpaProductPersistenceAdapter
         extends ProductRepository, CrudRepository<Product, Long> {
     List<Product> findAll();
 

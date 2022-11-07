@@ -1,6 +1,10 @@
-package com.codesoom.assignment.dto;
+package com.codesoom.assignment.product.adapter.in.web.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -10,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductData {
+public class ProductRequest {
     private Long id;
 
     @NotBlank
