@@ -20,7 +20,7 @@ public class ErrorResponse {
      * @param exception CommonException을 상속받는 예외
      * @return 에러 응답 body 리턴
      */
-    public static ErrorResponse from(final CommonException exception) {
+    public static ErrorResponse from(final HttpBusinessException exception) {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .occuredTime(exception.getOccuredTime())
