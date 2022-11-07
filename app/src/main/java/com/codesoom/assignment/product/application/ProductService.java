@@ -2,6 +2,7 @@ package com.codesoom.assignment.product.application;
 
 import com.codesoom.assignment.exceptions.product.ProductNotFoundException;
 import com.codesoom.assignment.product.adapter.in.web.dto.ProductRequest;
+import com.codesoom.assignment.product.application.port.in.ProductCommand;
 import com.codesoom.assignment.product.application.port.in.ProductUseCase;
 import com.codesoom.assignment.product.application.port.out.ProductRepository;
 import com.codesoom.assignment.product.domain.Product;
@@ -27,14 +28,8 @@ public class ProductService implements ProductUseCase {
         return findProduct(id);
     }
 
-    public Product createProduct(final ProductRequest productRequest) {
-        Product product = Product.builder()
-                .name(productRequest.getName())
-                .maker(productRequest.getMaker())
-                .price(productRequest.getPrice())
-                .imageUrl(productRequest.getImageUrl())
-                .build();
-        return productRepository.save(product);
+    public Product createProduct(final ProductCommand productCommand) {
+        return productRepository.save(productCommand.toEntity());
     }
 
     public Product updateProduct(final Long id, final ProductRequest productRequest) {

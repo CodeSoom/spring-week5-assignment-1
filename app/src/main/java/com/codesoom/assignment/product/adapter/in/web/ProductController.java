@@ -39,7 +39,7 @@ public class ProductController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public Product create(@RequestBody @Valid final ProductRequest productRequest) {
-        return productUseCase.createProduct(productRequest);
+        return productUseCase.createProduct(productRequest.toCommand());
     }
 
     @PatchMapping("{id}")

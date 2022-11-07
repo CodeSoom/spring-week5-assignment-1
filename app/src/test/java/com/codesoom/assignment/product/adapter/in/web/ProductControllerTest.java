@@ -3,6 +3,7 @@ package com.codesoom.assignment.product.adapter.in.web;
 import com.codesoom.assignment.exceptions.product.ProductNotFoundException;
 import com.codesoom.assignment.product.adapter.in.web.dto.ProductRequest;
 import com.codesoom.assignment.product.application.ProductService;
+import com.codesoom.assignment.product.application.port.in.ProductCommand;
 import com.codesoom.assignment.product.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -50,7 +51,7 @@ class ProductControllerTest {
         given(productService.getProduct(1000L))
                 .willThrow(new ProductNotFoundException(1000L));
 
-        given(productService.createProduct(any(ProductRequest.class)))
+        given(productService.createProduct(any(ProductCommand.class)))
                 .willReturn(product);
 
         given(productService.updateProduct(eq(1L), any(ProductRequest.class)))
@@ -110,7 +111,7 @@ class ProductControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("쥐돌이")));
 
-        verify(productService).createProduct(any(ProductRequest.class));
+        verify(productService).createProduct(any(ProductCommand.class));
     }
 
     @Test
@@ -125,7 +126,7 @@ class ProductControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString("쥐돌이")));
 
-        verify(productService).createProduct(any(ProductRequest.class));
+        verify(productService).createProduct(any(ProductCommand.class));
     }
 
     @Test

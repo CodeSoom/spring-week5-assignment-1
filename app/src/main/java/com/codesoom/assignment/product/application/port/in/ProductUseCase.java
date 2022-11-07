@@ -27,7 +27,7 @@ public interface ProductUseCase {
      * @param productCommand 등록할 상품 정보
      * @return 등록한 상품 리턴
      */
-    Product createProduct(final ProductRequest productCommand);
+    Product createProduct(final ProductCommand productCommand);
 
     /**
      * 상품을 수정하고 리턴합니다.
