@@ -1,4 +1,6 @@
-package com.codesoom.assignment.domain;
+package com.codesoom.assignment.product.application.port.out;
+
+import com.codesoom.assignment.product.domain.Product;
 
 import java.util.List;
 import java.util.Optional;
