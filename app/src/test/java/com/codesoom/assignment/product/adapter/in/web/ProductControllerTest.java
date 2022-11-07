@@ -1,199 +1,188 @@
 package com.codesoom.assignment.product.adapter.in.web;
 
-import com.codesoom.assignment.exceptions.product.ProductNotFoundException;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductRequest;
-import com.codesoom.assignment.product.application.ProductService;
-import com.codesoom.assignment.product.application.port.in.ProductCommand;
 import com.codesoom.assignment.product.domain.Product;
+import com.codesoom.assignment.utils.JsonUtil;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.DisplayNameGeneration;
+import org.junit.jupiter.api.DisplayNameGenerator;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.List;
-
+import static com.codesoom.assignment.support.IdFixture.ID_MAX;
+import static com.codesoom.assignment.support.ProductFixture.TOY_1;
+import static com.codesoom.assignment.support.ProductFixture.TOY_2;
 import static org.hamcrest.Matchers.containsString;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(ProductController.class)
+@SpringBootTest
+@AutoConfigureMockMvc
+@DisplayName("ProductController 통합 웹 테스트")
 class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private ProductService productService;
+    @Autowired
+    private ProductController productController;
 
-    @BeforeEach
-    void setUp() {
-        Product product = Product.builder()
-                .id(1L)
-                .name("쥐돌이")
-                .maker("냥이월드")
-                .price(5000)
-                .build();
-
-        given(productService.getProducts()).willReturn(List.of(product));
-
-        given(productService.getProduct(1L)).willReturn(product);
-
-        given(productService.getProduct(1000L))
-                .willThrow(new ProductNotFoundException(1000L));
-
-        given(productService.createProduct(any(ProductCommand.class)))
-                .willReturn(product);
-
-        given(productService.updateProduct(eq(1L), any(ProductRequest.class)))
-                .will(invocation -> {
-                    Long id = invocation.getArgument(0);
-                    ProductRequest productRequest = invocation.getArgument(1);
-                    return Product.builder()
-                            .id(id)
-                            .name(productRequest.getName())
-                            .maker(productRequest.getMaker())
-                            .price(productRequest.getPrice())
-                            .build();
-                });
-
-        given(productService.updateProduct(eq(1000L), any(ProductRequest.class)))
-                .willThrow(new ProductNotFoundException(1000L));
-
-        given(productService.deleteProduct(1000L))
-                .willThrow(new ProductNotFoundException(1000L));
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class list_메서드는 {
+        @Test
+        @DisplayName("200 코드를 반환한다")
+        void it_responses_200() throws Exception {
+            mockMvc.perform(
+                            get("/products")
+                    )
+                    .andExpect(status().isOk());
+        }
     }
 
-    @Test
-    void list() throws Exception {
-        mockMvc.perform(
-                        get("/products")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐돌이")));
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class detail_메서드는 {
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            @Test
+            @DisplayName("200 코드를 반환한다")
+            void it_responses_200() throws Exception {
+                Product productSource = productController.create(TOY_1.요청_데이터_생성());
+
+                mockMvc.perform(
+                                get("/products/" + productSource.getId())
+                                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        )
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(TOY_1.NAME())))
+                        .andExpect(content().string(containsString(TOY_1.MAKER())));
+                ;
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("404 코드를 반환한다")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(
+                                get("/products/" + ID_MAX.value())
+                        )
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 
-    @Test
-    void deatilWithExsitedProduct() throws Exception {
-        mockMvc.perform(
-                        get("/products/1")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐돌이")));
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class create_메서드는 {
+        @Test
+        @DisplayName("201 코드를 반환한다")
+        void it_responses_201() throws Exception {
+            mockMvc.perform(
+                            post("/products")
+                                    .accept(MediaType.APPLICATION_JSON_UTF8)
+                                    .contentType(MediaType.APPLICATION_JSON)
+                                    .content(JsonUtil.writeValue(TOY_1.요청_데이터_생성()))
+                    )
+                    .andExpect(status().isCreated())
+                    .andExpect(content().string(containsString(TOY_1.NAME())))
+                    .andExpect(content().string(containsString(TOY_1.MAKER())));
+        }
     }
 
-    @Test
-    void deatilWithNotExsitedProduct() throws Exception {
-        mockMvc.perform(get("/products/1000"))
-                .andExpect(status().isNotFound());
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class update_메서드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            private Long fixtureId;
+
+            @BeforeEach
+            void setUpCreateFixture() {
+                Product productSource = productController.create(TOY_1.요청_데이터_생성());
+                fixtureId = productSource.getId();
+            }
+
+            @Test
+            @DisplayName("200 코드를 반환한다")
+            void it_responses_200() throws Exception {
+                mockMvc.perform(
+                                put("/products/" + fixtureId)
+                                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(JsonUtil.writeValue(TOY_2.요청_데이터_생성()))
+                        )
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(TOY_2.NAME())))
+                        .andExpect(content().string(containsString(TOY_2.MAKER())));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("404 코드를 반환한다")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(
+                                put("/products/" + ID_MAX.value())
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(JsonUtil.writeValue(TOY_2.요청_데이터_생성()))
+                        )
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 
-    @Test
-    void create() throws Exception {
-        mockMvc.perform(
-                        post("/products")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                        "\"price\":5000}")
-                )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class delete_메서드는 {
+        private Long fixtureId;
 
-        verify(productService).createProduct(any(ProductCommand.class));
-    }
+        @BeforeEach
+        void setUpCreateFixture() {
+            Product productSource = productController.create(TOY_1.요청_데이터_생성());
+            fixtureId = productSource.getId();
+        }
 
-    @Test
-    void createWithValidAttributes() throws Exception {
-        mockMvc.perform(
-                        post("/products")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"쥐돌이\",\"maker\":\"냥이월드\"," +
-                                        "\"price\":5000}")
-                )
-                .andExpect(status().isCreated())
-                .andExpect(content().string(containsString("쥐돌이")));
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            @Test
+            @DisplayName("204 코드를 반환한다")
+            void it_responses_204() throws Exception {
+                mockMvc.perform(
+                                delete("/products/" + fixtureId)
+                        )
+                        .andExpect(status().isNoContent());
+            }
+        }
 
-        verify(productService).createProduct(any(ProductCommand.class));
-    }
-
-    @Test
-    void createWithInvalidAttributes() throws Exception {
-        mockMvc.perform(
-                        post("/products")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"\",\"maker\":\"\"," +
-                                        "\"price\":0}")
-                )
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void updateWithExistedProduct() throws Exception {
-        mockMvc.perform(
-                        patch("/products/1")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                        "\"price\":5000}")
-                )
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString("쥐순이")));
-
-        verify(productService).updateProduct(eq(1L), any(ProductRequest.class));
-    }
-
-    @Test
-    void updateWithNotExistedProduct() throws Exception {
-        mockMvc.perform(
-                        patch("/products/1000")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                        "\"price\":5000}")
-                )
-                .andExpect(status().isNotFound());
-
-        verify(productService).updateProduct(eq(1000L), any(ProductRequest.class));
-    }
-
-    @Test
-    void updateWithInvalidAttributes() throws Exception {
-        mockMvc.perform(
-                        patch("/products/1")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"\",\"maker\":\"\"," +
-                                        "\"price\":0}")
-                )
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
-    void destroyWithExistedProduct() throws Exception {
-        mockMvc.perform(delete("/products/1"))
-                .andExpect(status().isNoContent());
-
-        verify(productService).deleteProduct(1L);
-    }
-
-    @Test
-    void destroyWithNotExistedProduct() throws Exception {
-        mockMvc.perform(delete("/products/1000"))
-                .andExpect(status().isNotFound());
-
-        verify(productService).deleteProduct(1000L);
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("404 코드를 반환한다")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(
+                                delete("/products/" + ID_MAX.value())
+                        )
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 }
