@@ -7,7 +7,9 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.factory.Mappers;
 
-@Mapper
+import java.util.List;
+
+@Mapper(componentModel = "spring")
 public interface ProductMapper {
     ProductMapper INSTANCE = Mappers.getMapper(ProductMapper.class);
 
@@ -26,4 +28,9 @@ public interface ProductMapper {
      * Entity 객체에서 ResponseDto 객체로 매핑합니다.
      */
     ProductResponse entityToResponse(Product entity);
+
+    /**
+     * Entity 객체의 리스트에서 ResponseDto 객체의 리스트로 매핑합니다.
+     */
+    List<ProductResponse> entityListToResponseList(List<Product> entity);
 }

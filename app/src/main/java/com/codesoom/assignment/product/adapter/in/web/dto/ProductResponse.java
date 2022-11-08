@@ -5,6 +5,8 @@ import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 public class ProductResponse {
     private Long id;
@@ -24,5 +26,9 @@ public class ProductResponse {
 
     public static ProductResponse from(Product product) {
         return ProductMapper.INSTANCE.entityToResponse(product);
+    }
+
+    public static List<ProductResponse> fromList(List<Product> product) {
+        return ProductMapper.INSTANCE.entityListToResponseList(product);
     }
 }
