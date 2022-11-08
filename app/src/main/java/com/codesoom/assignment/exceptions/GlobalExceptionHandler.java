@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 @RestControllerAdvice
 public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
-    @ExceptionHandler(value = {CommonException.class})
-    protected ResponseEntity<ErrorResponse> handleCommonException(final CommonException exception) {
+    @ExceptionHandler(value = {HttpBusinessException.class})
+    protected ResponseEntity<ErrorResponse> handleHttpBusinessException(final HttpBusinessException exception) {
         return ResponseEntity
                 .status(exception.getStatus())
                 .body(ErrorResponse.from(exception));

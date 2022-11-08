@@ -1,22 +1,15 @@
 package com.codesoom.assignment.product.adapter.in.web.dto;
 
-import lombok.AllArgsConstructor;
+import com.codesoom.assignment.product.application.port.in.ProductCommand;
+import com.codesoom.assignment.product.application.port.in.ProductMapper;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@Setter
 @Getter
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ProductRequest {
-    private Long id;
-
     @NotBlank
     private String name;
 
@@ -27,4 +20,16 @@ public class ProductRequest {
     private Integer price;
 
     private String imageUrl;
+
+    @Builder
+    public ProductRequest(String name, String maker, Integer price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
+
+    public ProductCommand toCommand() {
+        return ProductMapper.INSTANCE.requestToCommand(this);
+    }
 }
