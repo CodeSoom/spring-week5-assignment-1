@@ -1,6 +1,7 @@
 package com.codesoom.assignment.product.adapter.in.web;
 
 import com.codesoom.assignment.product.adapter.in.web.dto.ProductRequest;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductResponse;
 import com.codesoom.assignment.product.application.port.in.ProductUseCase;
 import com.codesoom.assignment.product.domain.Product;
 import org.springframework.http.HttpStatus;
@@ -38,8 +39,10 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Product create(@RequestBody @Valid final ProductRequest productRequest) {
-        return productUseCase.createProduct(productRequest.toCommand());
+    public ProductResponse create(@RequestBody @Valid final ProductRequest productRequest) {
+        return ProductResponse.from(
+                productUseCase.createProduct(productRequest.toCommand())
+        );
     }
 
     @RequestMapping(path = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
