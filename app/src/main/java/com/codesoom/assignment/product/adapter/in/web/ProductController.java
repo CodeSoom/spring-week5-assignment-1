@@ -1,7 +1,8 @@
 package com.codesoom.assignment.product.adapter.in.web;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductRequest;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequestDto;
 import com.codesoom.assignment.product.adapter.in.web.dto.ProductResponse;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequestDto;
 import com.codesoom.assignment.product.application.port.in.ProductUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -42,17 +43,17 @@ public class ProductController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse create(@RequestBody @Valid final ProductRequest productRequest) {
+    public ProductResponse create(@RequestBody @Valid final ProductCreateRequestDto productCreateRequestDto) {
         return ProductResponse.from(
-                productUseCase.createProduct(productRequest.toCommand())
+                productUseCase.createProduct(productCreateRequestDto)
         );
     }
 
     @RequestMapping(path = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
     public ProductResponse update(@PathVariable final Long id,
-                                  @RequestBody @Valid final ProductRequest productRequest) {
+                                  @RequestBody @Valid final ProductUpdateRequestDto productUpdateRequestDto) {
         return ProductResponse.from(
-                productUseCase.updateProduct(id, productRequest)
+                productUseCase.updateProduct(id, productUpdateRequestDto)
         );
     }
 

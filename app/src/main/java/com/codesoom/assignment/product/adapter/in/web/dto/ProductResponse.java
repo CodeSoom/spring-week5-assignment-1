@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.adapter.in.web.dto;
 
-import com.codesoom.assignment.product.application.port.in.ProductMapper;
+import com.codesoom.assignment.product.application.port.in.command.ProductMapper;
 import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
 import lombok.Getter;

@@ -1,8 +1,7 @@
 package com.codesoom.assignment.support;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductRequest;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductResponse;
-import com.codesoom.assignment.product.application.port.in.ProductCommand;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequestDto;
 import com.codesoom.assignment.product.domain.Product;
 
 public enum ProductFixture {
@@ -37,8 +36,8 @@ public enum ProductFixture {
                 .build();
     }
 
-    public ProductRequest 요청_데이터_생성() {
-        return ProductRequest.builder()
+    public ProductCreateRequestDto 생성_요청_데이터_생성() {
+        return ProductCreateRequestDto.builder()
                 .name(name)
                 .maker(maker)
                 .price(price)
@@ -46,18 +45,8 @@ public enum ProductFixture {
                 .build();
     }
 
-    public ProductCommand 커맨드_데이터_생성() {
-        return ProductCommand.builder()
-                .name(name)
-                .maker(maker)
-                .price(price)
-                .imageUrl(imageUrl)
-                .build();
-    }
-
-    public ProductResponse 응답_데이터_생성(final Long id) {
-        return ProductResponse.builder()
-                .id(id)
+    public ProductUpdateRequestDto 수정_요청_데이터_생성() {
+        return ProductUpdateRequestDto.builder()
                 .name(name)
                 .maker(maker)
                 .price(price)
