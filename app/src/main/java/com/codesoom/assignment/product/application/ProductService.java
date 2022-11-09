@@ -1,9 +1,9 @@
 package com.codesoom.assignment.product.application;
 
 import com.codesoom.assignment.exceptions.product.ProductNotFoundException;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductRequest;
-import com.codesoom.assignment.product.application.port.in.ProductCommand;
 import com.codesoom.assignment.product.application.port.in.ProductUseCase;
+import com.codesoom.assignment.product.application.port.in.command.ProductCreateRequest;
+import com.codesoom.assignment.product.application.port.in.command.ProductUpdateRequest;
 import com.codesoom.assignment.product.application.port.out.ProductRepository;
 import com.codesoom.assignment.product.domain.Product;
 import org.springframework.stereotype.Service;
@@ -28,19 +28,14 @@ public class ProductService implements ProductUseCase {
         return findProduct(id);
     }
 
-    public Product createProduct(final ProductCommand productCommand) {
-        return productRepository.save(productCommand.toEntity());
+    public Product createProduct(final ProductCreateRequest productCreateRequest) {
+        return productRepository.save(productCreateRequest.toEntity());
     }
 
-    public Product updateProduct(final Long id, final ProductRequest productRequest) {
+    public Product updateProduct(final Long id, final ProductUpdateRequest productUpdateRequest) {
         Product product = findProduct(id);
 
-        product.change(
-                productRequest.getName(),
-                productRequest.getMaker(),
-                productRequest.getPrice(),
-                productRequest.getImageUrl()
-        );
+        product.change(productUpdateRequest.toEntity());
 
         return product;
     }

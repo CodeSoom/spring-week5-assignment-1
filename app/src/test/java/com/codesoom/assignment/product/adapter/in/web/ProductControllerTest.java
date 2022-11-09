@@ -58,7 +58,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("200 코드를 반환한다")
             void it_responses_200() throws Exception {
-                ProductResponse productSource = productController.create(TOY_1.요청_데이터_생성());
+                ProductResponse productSource = productController.create(TOY_1.생성_요청_데이터_생성());
 
                 mockMvc.perform(
                                 get("/products/" + productSource.getId())
@@ -93,7 +93,7 @@ class ProductControllerTest {
             mockMvc.perform(
                             post("/products")
                                     .contentType(MediaType.APPLICATION_JSON)
-                                    .content(JsonUtil.writeValue(TOY_1.요청_데이터_생성()))
+                                    .content(JsonUtil.writeValue(TOY_1.생성_요청_데이터_생성()))
                     )
                     .andExpect(status().isCreated())
                     .andExpect(content().string(containsString(TOY_1.NAME())))
@@ -111,7 +111,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUpCreateFixture() {
-                ProductResponse productSource = productController.create(TOY_1.요청_데이터_생성());
+                ProductResponse productSource = productController.create(TOY_1.생성_요청_데이터_생성());
                 fixtureId = productSource.getId();
             }
 
@@ -121,7 +121,7 @@ class ProductControllerTest {
                 mockMvc.perform(
                                 put("/products/" + fixtureId)
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(JsonUtil.writeValue(TOY_2.요청_데이터_생성()))
+                                        .content(JsonUtil.writeValue(TOY_2.수정_요청_데이터_생성()))
                         )
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(TOY_2.NAME())))
@@ -138,7 +138,7 @@ class ProductControllerTest {
                 mockMvc.perform(
                                 put("/products/" + ID_MAX.value())
                                         .contentType(MediaType.APPLICATION_JSON)
-                                        .content(JsonUtil.writeValue(TOY_2.요청_데이터_생성()))
+                                        .content(JsonUtil.writeValue(TOY_2.수정_요청_데이터_생성()))
                         )
                         .andExpect(status().isNotFound());
             }
@@ -152,7 +152,7 @@ class ProductControllerTest {
 
         @BeforeEach
         void setUpCreateFixture() {
-            ProductResponse productSource = productController.create(TOY_1.요청_데이터_생성());
+            ProductResponse productSource = productController.create(TOY_1.생성_요청_데이터_생성());
             fixtureId = productSource.getId();
         }
 

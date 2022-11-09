@@ -33,13 +33,34 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public void change(String name,
-                       String maker,
-                       Integer price,
-                       String imageUrl) {
-        this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
+    public void change(Product updateProduct) {
+        updateName(updateProduct.getName());
+        updateMaker(updateProduct.getMaker());
+        updatePrice(updateProduct.getPrice());
+        updateImageUrl(updateProduct.getImageUrl());
+    }
+
+    private void updateName(String name) {
+        if (name != null) {
+            this.name = name;
+        }
+    }
+
+    private void updateMaker(String maker) {
+        if (maker != null) {
+            this.maker = maker;
+        }
+    }
+
+    private void updatePrice(Integer price) {
+        if (price != null) {
+            this.price = price;
+        }
+    }
+
+    private void updateImageUrl(String imageUrl) {
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
     }
 }
