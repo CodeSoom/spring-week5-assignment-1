@@ -62,7 +62,6 @@ class ProductControllerTest {
 
                 mockMvc.perform(
                                 get("/products/" + productSource.getId())
-                                        .accept(MediaType.APPLICATION_JSON_UTF8)
                         )
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(TOY_1.NAME())))
@@ -93,7 +92,6 @@ class ProductControllerTest {
         void it_responses_201() throws Exception {
             mockMvc.perform(
                             post("/products")
-                                    .accept(MediaType.APPLICATION_JSON_UTF8)
                                     .contentType(MediaType.APPLICATION_JSON)
                                     .content(JsonUtil.writeValue(TOY_1.요청_데이터_생성()))
                     )
@@ -122,7 +120,6 @@ class ProductControllerTest {
             void it_responses_200() throws Exception {
                 mockMvc.perform(
                                 put("/products/" + fixtureId)
-                                        .accept(MediaType.APPLICATION_JSON_UTF8)
                                         .contentType(MediaType.APPLICATION_JSON)
                                         .content(JsonUtil.writeValue(TOY_2.요청_데이터_생성()))
                         )
