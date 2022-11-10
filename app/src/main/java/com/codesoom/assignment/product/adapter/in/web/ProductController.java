@@ -1,8 +1,10 @@
 package com.codesoom.assignment.product.adapter.in.web;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequestDto;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductResponse;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductCreateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductUpdateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.CreateProductResponseDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.ProductResponseDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.UpdateProductResponseDto;
 import com.codesoom.assignment.product.application.port.in.ProductUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -28,31 +30,31 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponse> list() {
-        return ProductResponse.fromList(
+    public List<ProductResponseDto> list() {
+        return ProductResponseDto.fromList(
                 productUseCase.getProducts()
         );
     }
 
     @GetMapping("{id}")
-    public ProductResponse detail(@PathVariable final Long id) {
-        return ProductResponse.from(
+    public ProductResponseDto detail(@PathVariable final Long id) {
+        return ProductResponseDto.from(
                 productUseCase.getProduct(id)
         );
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public ProductResponse create(@RequestBody @Valid final ProductCreateRequestDto productCreateRequestDto) {
-        return ProductResponse.from(
+    public CreateProductResponseDto create(@RequestBody @Valid final ProductCreateRequestDto productCreateRequestDto) {
+        return new CreateProductResponseDto(
                 productUseCase.createProduct(productCreateRequestDto)
         );
     }
 
     @RequestMapping(path = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
-    public ProductResponse update(@PathVariable final Long id,
-                                  @RequestBody @Valid final ProductUpdateRequestDto productUpdateRequestDto) {
-        return ProductResponse.from(
+    public UpdateProductResponseDto update(@PathVariable final Long id,
+                                           @RequestBody @Valid final ProductUpdateRequestDto productUpdateRequestDto) {
+        return new UpdateProductResponseDto(
                 productUseCase.updateProduct(id, productUpdateRequestDto)
         );
     }

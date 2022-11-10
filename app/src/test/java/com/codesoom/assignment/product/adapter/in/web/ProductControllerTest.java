@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.adapter.in.web;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductResponse;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.CreateProductResponseDto;
 import com.codesoom.assignment.utils.JsonUtil;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -58,7 +58,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("200 코드를 반환한다")
             void it_responses_200() throws Exception {
-                ProductResponse productSource = productController.create(TOY_1.생성_요청_데이터_생성());
+                CreateProductResponseDto productSource = productController.create(TOY_1.생성_요청_데이터_생성());
 
                 mockMvc.perform(
                                 get("/products/" + productSource.getId())
@@ -111,7 +111,7 @@ class ProductControllerTest {
 
             @BeforeEach
             void setUpCreateFixture() {
-                ProductResponse productSource = productController.create(TOY_1.생성_요청_데이터_생성());
+                CreateProductResponseDto productSource = productController.create(TOY_1.생성_요청_데이터_생성());
                 fixtureId = productSource.getId();
             }
 
@@ -152,7 +152,7 @@ class ProductControllerTest {
 
         @BeforeEach
         void setUpCreateFixture() {
-            ProductResponse productSource = productController.create(TOY_1.생성_요청_데이터_생성());
+            CreateProductResponseDto productSource = productController.create(TOY_1.생성_요청_데이터_생성());
             fixtureId = productSource.getId();
         }
 

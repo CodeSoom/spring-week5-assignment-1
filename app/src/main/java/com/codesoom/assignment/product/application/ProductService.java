@@ -35,7 +35,7 @@ public class ProductService implements ProductUseCase {
     public Product updateProduct(final Long id, final ProductUpdateRequest productUpdateRequest) {
         Product product = findProduct(id);
 
-        product.change(productUpdateRequest.toEntity());
+        product.update(productUpdateRequest.toEntity());
 
         return product;
     }

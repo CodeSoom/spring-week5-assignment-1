@@ -1,4 +1,4 @@
-package com.codesoom.assignment.product.adapter.in.web.dto;
+package com.codesoom.assignment.product.adapter.in.web.dto.request;
 
 import com.codesoom.assignment.product.application.port.in.command.ProductMapper;
 import com.codesoom.assignment.product.application.port.in.command.ProductUpdateRequest;
@@ -10,7 +10,6 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@Builder
 public class ProductUpdateRequestDto implements ProductUpdateRequest {
     @NotBlank
     private String name;
@@ -22,6 +21,14 @@ public class ProductUpdateRequestDto implements ProductUpdateRequest {
     private Integer price;
 
     private String imageUrl;
+
+    @Builder
+    public ProductUpdateRequestDto(String name, String maker, Integer price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     @Override
     public Product toEntity() {

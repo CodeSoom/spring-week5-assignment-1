@@ -1,7 +1,7 @@
 package com.codesoom.assignment.support;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequestDto;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductCreateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductUpdateRequestDto;
 import com.codesoom.assignment.product.domain.Product;
 
 public enum ProductFixture {

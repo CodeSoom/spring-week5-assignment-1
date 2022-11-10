@@ -23,7 +23,7 @@ class ProductTest {
     void change() {
         Product product = TOY_1.엔티티_생성(ID_MIN.value());
 
-        product.change(TOY_3.수정_요청_데이터_생성().toEntity());
+        product.update(TOY_3.수정_요청_데이터_생성().toEntity());
 
         assertThat(product.getName()).isEqualTo(TOY_3.NAME());
         assertThat(product.getMaker()).isEqualTo(TOY_3.MAKER());

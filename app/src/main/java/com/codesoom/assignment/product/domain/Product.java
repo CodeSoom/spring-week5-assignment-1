@@ -12,7 +12,6 @@ import javax.persistence.Id;
 
 @Entity
 @Getter
-@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode
 public class Product {
@@ -33,7 +32,7 @@ public class Product {
         this.imageUrl = imageUrl;
     }
 
-    public void change(Product updateProduct) {
+    public void update(Product updateProduct) {
         updateName(updateProduct.getName());
         updateMaker(updateProduct.getMaker());
         updatePrice(updateProduct.getPrice());
