@@ -22,8 +22,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("FakeProductPersistenceAdapter InMemory 테스트")
 class FakeInMemoryProductRepositoryTest {
     private FakeInMemoryProductRepository fakeProductRepository;
-
-    PageRequest pageable = PageRequest.of(PAGE_DEFAULT.getValue(), PAGE_SIZE_DEFAULT.getValue());
+    private final PageRequest pageable = PageRequest.of(PAGE_DEFAULT.getValue(), PAGE_SIZE_DEFAULT.getValue());
 
     @BeforeEach
     void setUpVariable() {
@@ -56,7 +55,8 @@ class FakeInMemoryProductRepositoryTest {
             @Test
             @DisplayName("비어있지 않은 리스트를 리턴한다")
             void it_returns_empty_list() {
-                List<Product> products = fakeProductRepository.findAll(pageable).getContent();
+                List<Product> products = fakeProductRepository.findAll(pageable)
+                        .getContent();
 
                 assertThat(products).isNotEmpty();
             }
@@ -130,11 +130,15 @@ class FakeInMemoryProductRepositoryTest {
             @Test
             @DisplayName("findAll 메서드 리턴값이 1 증가한다")
             void it_returns_count() {
-                int oldSize = fakeProductRepository.findAll(pageable).getContent().size();
+                int oldSize = fakeProductRepository.findAll(pageable)
+                        .getContent()
+                        .size();
 
                 fakeProductRepository.save(TOY_1.엔티티_생성());
 
-                int newSize = fakeProductRepository.findAll(pageable).getContent().size();
+                int newSize = fakeProductRepository.findAll(pageable)
+                        .getContent()
+                        .size();
 
                 assertThat(newSize - oldSize).isEqualTo(1);
             }

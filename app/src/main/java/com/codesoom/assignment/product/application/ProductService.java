@@ -22,7 +22,8 @@ public class ProductService implements ProductUseCase {
     }
 
     public List<Product> getProducts(Pageable pageable) {
-        return productRepository.findAll(pageable).getContent();
+        return productRepository.findAll(pageable)
+                .getContent();
     }
 
     public Product getProduct(Long id) {

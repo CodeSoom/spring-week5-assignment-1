@@ -9,11 +9,14 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.codesoom.assignment.support.IdFixture.ID_MAX;
+import static com.codesoom.assignment.support.PagingFixture.PAGE_DEFAULT;
+import static com.codesoom.assignment.support.PagingFixture.PAGE_SIZE_DEFAULT;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -21,9 +24,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 @DisplayName("ProductPersistenceAdapter JPA 테스트")
 class JpaProductPersistenceAdapterTest {
-
     @Autowired
     private JpaProductPersistenceAdapter jpaProductPersistenceAdapter;
+
+    private final PageRequest pageable = PageRequest.of(PAGE_DEFAULT.getValue(), PAGE_SIZE_DEFAULT.getValue());
 
     @BeforeEach
     void setUpDeleteAllFixture() {
@@ -40,7 +44,7 @@ class JpaProductPersistenceAdapterTest {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty_list() {
-                assertThat(jpaProductPersistenceAdapter.findAll())
+                assertThat(jpaProductPersistenceAdapter.findAll(pageable))
                         .isEmpty();
             }
         }
@@ -56,7 +60,8 @@ class JpaProductPersistenceAdapterTest {
             @Test
             @DisplayName("비어있지 않은 리스트를 리턴한다")
             void it_returns_empty_list() {
-                List<Product> products = jpaProductPersistenceAdapter.findAll();
+                List<Product> products = jpaProductPersistenceAdapter.findAll(pageable)
+                        .getContent();
 
                 assertThat(products).isNotEmpty();
             }
@@ -135,11 +140,15 @@ class JpaProductPersistenceAdapterTest {
             @Test
             @DisplayName("findAll 메서드 리턴값이 1 증가한다")
             void it_returns_count() {
-                int oldSize = jpaProductPersistenceAdapter.findAll().size();
+                int oldSize = jpaProductPersistenceAdapter.findAll(pageable)
+                        .getContent()
+                        .size();
 
                 jpaProductPersistenceAdapter.save(TOY_1.엔티티_생성());
 
-                int newSize = jpaProductPersistenceAdapter.findAll().size();
+                int newSize = jpaProductPersistenceAdapter.findAll(pageable)
+                        .getContent()
+                        .size();
 
                 assertThat(newSize - oldSize).isEqualTo(1);
             }

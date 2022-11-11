@@ -26,7 +26,7 @@ public class FakeInMemoryProductRepository implements ProductRepository {
 
     @Override
     public Page<Product> findAll(Pageable pageable) {
-        long start = Long.valueOf((pageable.getPageNumber() + 1) * pageable.getPageSize());
+        long start = Long.valueOf(pageable.getPageNumber() * pageable.getPageSize());
 
         return new PageImpl<>(
                 products.stream()
