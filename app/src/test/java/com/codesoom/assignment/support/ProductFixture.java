@@ -1,13 +1,16 @@
 package com.codesoom.assignment.support;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequestDto;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductCreateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductUpdateRequestDto;
 import com.codesoom.assignment.product.domain.Product;
 
 public enum ProductFixture {
     TOY_1("범냐옹", "메이드인 코리아", 2000000, "https://avatars.githubusercontent.com/u/59248326"),
     TOY_2("기냐옹", "메이드인 안양", 3000000, "https://avatars.githubusercontent.com/u/59248326"),
     TOY_3("코드숨냐옹", "매이드인 서울", 5000000, null),
+    TOY_INVALID_NAME("", "메이드인 코리아", 2000000, "https://avatars.githubusercontent.com/u/59248326"),
+    TOY_INVALID_MAKER("이름은 있지롱", "", 2000000, "https://avatars.githubusercontent.com/u/59248326"),
+    TOY_INVALID_PRICE("가격은 있지롱", "메이드인 코리아", -20000, "https://avatars.githubusercontent.com/u/59248326"),
     ;
 
     private final String name;

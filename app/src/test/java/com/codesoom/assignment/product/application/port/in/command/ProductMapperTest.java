@@ -1,8 +1,8 @@
 package com.codesoom.assignment.product.application.port.in.command;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductCreateRequestDto;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductResponse;
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductUpdateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.ProductResponseDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductCreateRequestDto;
+import com.codesoom.assignment.product.adapter.in.web.dto.request.ProductUpdateRequestDto;
 import com.codesoom.assignment.product.domain.Product;
 import com.codesoom.assignment.support.IdFixture;
 import com.codesoom.assignment.support.ProductFixture;
@@ -47,7 +47,7 @@ class ProductMapperTest {
     void convertEntityToResponse() {
         Product product = ProductFixture.TOY_1.엔티티_생성(IdFixture.ID_MIN.value());
 
-        ProductResponse productResponse = ProductResponse.from(product);
+        ProductResponseDto productResponse = ProductResponseDto.from(product);
 
         assertThat(productResponse.getName()).isEqualTo(product.getName());
         assertThat(productResponse.getMaker()).isEqualTo(product.getMaker());
@@ -63,8 +63,8 @@ class ProductMapperTest {
         productList.add(ProductFixture.TOY_3.엔티티_생성());
         productList.add(null);
 
-        List<ProductResponse> productResponses = ProductResponse.fromList(productList);
+        List<ProductResponseDto> productResponseList = ProductResponseDto.fromList(productList);
 
-        assertThat(productResponses).hasSize(productList.size());
+        assertThat(productResponseList).hasSize(productList.size());
     }
 }

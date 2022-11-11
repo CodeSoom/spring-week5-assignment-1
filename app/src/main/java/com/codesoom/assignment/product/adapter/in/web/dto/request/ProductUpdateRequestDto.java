@@ -1,4 +1,4 @@
-package com.codesoom.assignment.product.adapter.in.web.dto;
+package com.codesoom.assignment.product.adapter.in.web.dto.request;
 
 import com.codesoom.assignment.product.application.port.in.command.ProductMapper;
 import com.codesoom.assignment.product.application.port.in.command.ProductUpdateRequest;
@@ -6,22 +6,31 @@ import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
-@Builder
 public class ProductUpdateRequestDto implements ProductUpdateRequest {
-    @NotBlank
+    @NotBlank(message = "이름을 입력하세요")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "메이커를 입력하세요")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "가격을 입력하세요")
+    @Min(value = 0, message = "가격은 0원 이상으로 입력하세요")
     private Integer price;
 
     private String imageUrl;
+
+    @Builder
+    public ProductUpdateRequestDto(String name, String maker, Integer price, String imageUrl) {
+        this.name = name;
+        this.maker = maker;
+        this.price = price;
+        this.imageUrl = imageUrl;
+    }
 
     @Override
     public Product toEntity() {

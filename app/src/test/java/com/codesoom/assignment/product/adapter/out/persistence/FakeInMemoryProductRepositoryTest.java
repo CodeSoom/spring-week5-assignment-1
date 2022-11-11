@@ -7,11 +7,14 @@ import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.codesoom.assignment.support.IdFixture.ID_MAX;
+import static com.codesoom.assignment.support.PagingFixture.PAGE_DEFAULT;
+import static com.codesoom.assignment.support.PagingFixture.PAGE_SIZE_DEFAULT;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -19,6 +22,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("FakeProductPersistenceAdapter InMemory 테스트")
 class FakeInMemoryProductRepositoryTest {
     private FakeInMemoryProductRepository fakeProductRepository;
+
+    PageRequest pageable = PageRequest.of(PAGE_DEFAULT.getValue(), PAGE_SIZE_DEFAULT.getValue());
 
     @BeforeEach
     void setUpVariable() {
@@ -35,7 +40,7 @@ class FakeInMemoryProductRepositoryTest {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty_list() {
-                assertThat(fakeProductRepository.findAll())
+                assertThat(fakeProductRepository.findAll(pageable))
                         .isEmpty();
             }
         }
@@ -51,7 +56,7 @@ class FakeInMemoryProductRepositoryTest {
             @Test
             @DisplayName("비어있지 않은 리스트를 리턴한다")
             void it_returns_empty_list() {
-                List<Product> products = fakeProductRepository.findAll();
+                List<Product> products = fakeProductRepository.findAll(pageable).getContent();
 
                 assertThat(products).isNotEmpty();
             }
@@ -125,11 +130,11 @@ class FakeInMemoryProductRepositoryTest {
             @Test
             @DisplayName("findAll 메서드 리턴값이 1 증가한다")
             void it_returns_count() {
-                int oldSize = fakeProductRepository.findAll().size();
+                int oldSize = fakeProductRepository.findAll(pageable).getContent().size();
 
                 fakeProductRepository.save(TOY_1.엔티티_생성());
 
-                int newSize = fakeProductRepository.findAll().size();
+                int newSize = fakeProductRepository.findAll(pageable).getContent().size();
 
                 assertThat(newSize - oldSize).isEqualTo(1);
             }

@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.application.port.in.command;
 
-import com.codesoom.assignment.product.adapter.in.web.dto.ProductResponse;
+import com.codesoom.assignment.product.adapter.in.web.dto.response.ProductResponseDto;
 import com.codesoom.assignment.product.domain.Product;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -21,13 +21,7 @@ public interface ProductMapper {
     @Mapping(target = "id", ignore = true)
     Product toEntity(ProductUpdateRequest productUpdateRequest);
 
-    /**
-     * Entity 객체에서 ResponseDto 객체로 매핑합니다.
-     */
-    ProductResponse entityToResponse(Product entity);
+    ProductResponseDto toResponse(Product entity);
 
-    /**
-     * Entity 객체의 리스트에서 ResponseDto 객체의 리스트로 매핑합니다.
-     */
-    List<ProductResponse> entityListToResponseList(List<Product> entity);
+    List<ProductResponseDto> toResponseList(List<Product> entity);
 }

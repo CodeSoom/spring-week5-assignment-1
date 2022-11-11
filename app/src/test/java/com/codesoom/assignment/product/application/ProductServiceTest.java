@@ -11,10 +11,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.springframework.data.domain.PageRequest;
 
 import java.util.List;
 
 import static com.codesoom.assignment.support.IdFixture.ID_MAX;
+import static com.codesoom.assignment.support.PagingFixture.PAGE_DEFAULT;
+import static com.codesoom.assignment.support.PagingFixture.PAGE_SIZE_DEFAULT;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static com.codesoom.assignment.support.ProductFixture.TOY_2;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -23,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("ProductService 단위 테스트")
 class ProductServiceTest {
     private ProductService productService;
+    PageRequest pageable = PageRequest.of(PAGE_DEFAULT.getValue(), PAGE_SIZE_DEFAULT.getValue());
 
     @BeforeEach
     void setUp() {
@@ -40,7 +44,7 @@ class ProductServiceTest {
             @Test
             @DisplayName("빈 리스트를 리턴한다")
             void it_returns_empty_list() {
-                List<Product> products = productService.getProducts();
+                List<Product> products = productService.getProducts(pageable);
 
                 assertThat(products).isEmpty();
             }
@@ -57,7 +61,7 @@ class ProductServiceTest {
                     productService.createProduct(TOY_1.생성_요청_데이터_생성());
                 }
 
-                List<Product> products = productService.getProducts();
+                List<Product> products = productService.getProducts(pageable);
 
                 assertThat(products)
                         .isNotEmpty()

@@ -3,12 +3,16 @@ package com.codesoom.assignment.product.adapter.out.persistence;
 import com.codesoom.assignment.product.application.port.out.ProductRepository;
 import com.codesoom.assignment.product.domain.Product;
 import org.springframework.context.annotation.Primary;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicLong;
+import java.util.stream.Collectors;
 
 /**
  * `@Primary` 설정을 통해 웹 통합 테스트 실행 시에는 ProductRepository에 FakeInMemory bean이 DI됩니다.
@@ -21,8 +25,15 @@ public class FakeInMemoryProductRepository implements ProductRepository {
     private static final AtomicLong productId = new AtomicLong(1L);
 
     @Override
-    public List<Product> findAll() {
-        return products;
+    public Page<Product> findAll(Pageable pageable) {
+        long start = Long.valueOf((pageable.getPageNumber() + 1) * pageable.getPageSize());
+
+        return new PageImpl<>(
+                products.stream()
+                        .skip(start)
+                        .limit(pageable.getPageSize())
+                        .collect(Collectors.toList())
+        );
     }
 
     @Override
