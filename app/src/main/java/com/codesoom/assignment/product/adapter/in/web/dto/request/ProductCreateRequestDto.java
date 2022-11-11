@@ -6,18 +6,20 @@ import com.codesoom.assignment.product.domain.Product;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
 @Getter
 public class ProductCreateRequestDto implements ProductCreateRequest {
-    @NotBlank
+    @NotBlank(message = "이름을 입력하세요")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "메이커를 입력하세요")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "가격을 입력하세요")
+    @Min(value = 0, message = "가격은 0원 이상으로 입력하세요")
     private Integer price;
 
     private String imageUrl;

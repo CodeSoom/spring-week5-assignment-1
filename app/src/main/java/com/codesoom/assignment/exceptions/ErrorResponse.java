@@ -3,23 +3,39 @@ package com.codesoom.assignment.exceptions;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.time.LocalDateTime;
+import java.util.stream.Collectors;
 
 /**
  * 에러의 응답 body를 공통 포맷에 맞게 변경하여 리턴합니다.
  */
 @Getter
-@Builder
 @Slf4j
 public class ErrorResponse {
-    private final LocalDateTime occuredTime;
+    private final LocalDateTime occuredTime = LocalDateTime.now();
     private final String message;
+
+    @Builder
+    public ErrorResponse(String message) {
+        this.message = message;
+    }
+
+    public static ErrorResponse from(final MethodArgumentNotValidException exception) {
+        return ErrorResponse.builder()
+                .message(exception.getBindingResult().getFieldErrors()
+                        .stream()
+                        .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                        .collect(Collectors.toList()).toString()
+                )
+                .build();
+    }
 
     public static <T extends Exception> ErrorResponse from(final T exception) {
         return ErrorResponse.builder()
                 .message(exception.getMessage())
-                .occuredTime(LocalDateTime.now())
                 .build();
     }
 }
