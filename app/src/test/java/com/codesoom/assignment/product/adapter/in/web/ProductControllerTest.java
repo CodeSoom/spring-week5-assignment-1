@@ -17,6 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.codesoom.assignment.support.IdFixture.ID_MAX;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static com.codesoom.assignment.support.ProductFixture.TOY_2;
+import static com.codesoom.assignment.support.ProductFixture.TOY_INVALID_MAKER;
+import static com.codesoom.assignment.support.ProductFixture.TOY_INVALID_NAME;
+import static com.codesoom.assignment.support.ProductFixture.TOY_INVALID_PRICE;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -87,26 +90,82 @@ class ProductControllerTest {
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class create_메서드는 {
-        @Test
-        @DisplayName("201 코드를 반환한다")
-        void it_responses_201() throws Exception {
-            mockMvc.perform(
-                            post("/products")
-                                    .contentType(MediaType.APPLICATION_JSON)
-                                    .content(JsonUtil.writeValue(TOY_1.생성_요청_데이터_생성()))
-                    )
-                    .andExpect(status().isCreated())
-                    .andExpect(content().string(containsString(TOY_1.NAME())))
-                    .andExpect(content().string(containsString(TOY_1.MAKER())));
+
+        @Nested
+        @DisplayName("유효하지 않은 상품 정보가 주어지면")
+        class Context_with_invalid_product {
+
+            @Nested
+            @DisplayName("상품명이 공백일 경우")
+            class Context_with_empty_name {
+                @Test
+                @DisplayName("400 코드를 반환한다")
+                void it_responses_400() throws Exception {
+                    mockMvc.perform(
+                                    post("/products")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(JsonUtil.writeValue(TOY_INVALID_NAME.생성_요청_데이터_생성()))
+                            )
+                            .andExpect(status().isBadRequest());
+                }
+            }
+
+            @Nested
+            @DisplayName("메이커가 공백일 경우")
+            class Context_with_empty_maker {
+                @Test
+                @DisplayName("400 코드를 반환한다")
+                void it_responses_400() throws Exception {
+                    mockMvc.perform(
+                                    post("/products")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(JsonUtil.writeValue(TOY_INVALID_MAKER.생성_요청_데이터_생성()))
+                            )
+                            .andExpect(status().isBadRequest());
+                }
+            }
+
+            @Nested
+            @DisplayName("가격이 0원 미만일 경우")
+            class Context_with_negative_price {
+                @Test
+                @DisplayName("400 코드를 반환한다")
+                void it_responses_400() throws Exception {
+                    mockMvc.perform(
+                                    post("/products")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(JsonUtil.writeValue(TOY_INVALID_PRICE.생성_요청_데이터_생성()))
+                            )
+                            .andExpect(status().isBadRequest());
+                }
+            }
+        }
+
+        @Nested
+        @DisplayName("유효한 상품 정보가 주어지면")
+        class Context_with_valid_product {
+            @Test
+            @DisplayName("201 코드를 반환한다")
+            void it_responses_201() throws Exception {
+                mockMvc.perform(
+                                post("/products")
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(JsonUtil.writeValue(TOY_1.생성_요청_데이터_생성()))
+                        )
+                        .andExpect(status().isCreated())
+                        .andExpect(content().string(containsString(TOY_1.NAME())))
+                        .andExpect(content().string(containsString(TOY_1.MAKER())));
+            }
         }
     }
+
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class update_메서드는 {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 찾을_수_있는_id가_주어지면 {
+        class 찾을_수_있는_id가_주어질_때 {
             private Long fixtureId;
 
             @BeforeEach
@@ -115,23 +174,78 @@ class ProductControllerTest {
                 fixtureId = productSource.getId();
             }
 
-            @Test
-            @DisplayName("200 코드를 반환한다")
-            void it_responses_200() throws Exception {
-                mockMvc.perform(
-                                put("/products/" + fixtureId)
-                                        .contentType(MediaType.APPLICATION_JSON)
-                                        .content(JsonUtil.writeValue(TOY_2.수정_요청_데이터_생성()))
-                        )
-                        .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(TOY_2.NAME())))
-                        .andExpect(content().string(containsString(TOY_2.MAKER())));
+            @Nested
+            @DisplayName("유효한 상품 정보가 주어지면")
+            class Context_with_valid_product {
+
+                @Test
+                @DisplayName("200 코드를 반환한다")
+                void it_responses_200() throws Exception {
+                    mockMvc.perform(
+                                    put("/products/" + fixtureId)
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(JsonUtil.writeValue(TOY_2.수정_요청_데이터_생성()))
+                            )
+                            .andExpect(status().isOk())
+                            .andExpect(content().string(containsString(TOY_2.NAME())))
+                            .andExpect(content().string(containsString(TOY_2.MAKER())));
+                }
+            }
+
+            @Nested
+            @DisplayName("유효하지 않은 상품 정보가 주어지면")
+            class Context_with_invalid_product {
+
+                @Nested
+                @DisplayName("상품명이 공백일 경우")
+                class Context_with_empty_name {
+                    @Test
+                    @DisplayName("400 코드를 반환한다")
+                    void it_responses_400() throws Exception {
+                        mockMvc.perform(
+                                        put("/products/" + fixtureId)
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JsonUtil.writeValue(TOY_INVALID_NAME.수정_요청_데이터_생성()))
+                                )
+                                .andExpect(status().isBadRequest());
+                    }
+                }
+
+                @Nested
+                @DisplayName("메이커가 공백일 경우")
+                class Context_with_empty_maker {
+                    @Test
+                    @DisplayName("400 코드를 반환한다")
+                    void it_responses_400() throws Exception {
+                        mockMvc.perform(
+                                        put("/products/" + fixtureId)
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JsonUtil.writeValue(TOY_INVALID_MAKER.수정_요청_데이터_생성()))
+                                )
+                                .andExpect(status().isBadRequest());
+                    }
+                }
+
+                @Nested
+                @DisplayName("가격이 0원 미만일 경우")
+                class Context_with_negative_price {
+                    @Test
+                    @DisplayName("400 코드를 반환한다")
+                    void it_responses_400() throws Exception {
+                        mockMvc.perform(
+                                        put("/products/" + fixtureId)
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JsonUtil.writeValue(TOY_INVALID_PRICE.수정_요청_데이터_생성()))
+                                )
+                                .andExpect(status().isBadRequest());
+                    }
+                }
             }
         }
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 찾을_수_없는_id가_주어지면 {
+        class 찾을_수_없는_id가_주어질_때 {
             @Test
             @DisplayName("404 코드를 반환한다")
             void it_responses_404() throws Exception {
