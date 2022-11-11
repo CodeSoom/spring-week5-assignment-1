@@ -1,12 +1,13 @@
 package com.codesoom.assignment.product.application.port.out;
 
 import com.codesoom.assignment.product.domain.Product;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
-import java.util.List;
 import java.util.Optional;
 
 public interface ProductRepository {
-    List<Product> findAll();
+    Page<Product> findAll(Pageable pageable);
 
     Optional<Product> findById(Long id);
 

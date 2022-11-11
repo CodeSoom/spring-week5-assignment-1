@@ -3,6 +3,7 @@ package com.codesoom.assignment.product.application.port.in;
 import com.codesoom.assignment.product.application.port.in.command.ProductCreateRequest;
 import com.codesoom.assignment.product.application.port.in.command.ProductUpdateRequest;
 import com.codesoom.assignment.product.domain.Product;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ public interface ProductUseCase {
      *
      * @return 상품 목록 리턴
      */
-    List<Product> getProducts();
+    List<Product> getProducts(Pageable pageable);
 
     /**
      * 상품의 상세 정보를 리턴합니다.

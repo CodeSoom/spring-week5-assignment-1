@@ -6,6 +6,7 @@ import com.codesoom.assignment.product.application.port.in.command.ProductCreate
 import com.codesoom.assignment.product.application.port.in.command.ProductUpdateRequest;
 import com.codesoom.assignment.product.application.port.out.ProductRepository;
 import com.codesoom.assignment.product.domain.Product;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,8 +21,8 @@ public class ProductService implements ProductUseCase {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getProducts() {
-        return productRepository.findAll();
+    public List<Product> getProducts(Pageable pageable) {
+        return productRepository.findAll(pageable).getContent();
     }
 
     public Product getProduct(Long id) {

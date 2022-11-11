@@ -6,6 +6,8 @@ import com.codesoom.assignment.product.adapter.in.web.dto.response.CreateProduct
 import com.codesoom.assignment.product.adapter.in.web.dto.response.ProductResponseDto;
 import com.codesoom.assignment.product.adapter.in.web.dto.response.UpdateProductResponseDto;
 import com.codesoom.assignment.product.application.port.in.ProductUseCase;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,9 +32,9 @@ public class ProductController {
     }
 
     @GetMapping
-    public List<ProductResponseDto> list() {
+    public List<ProductResponseDto> list(@PageableDefault(size = 20, sort = "id") Pageable pageable) {
         return ProductResponseDto.fromList(
-                productUseCase.getProducts()
+                productUseCase.getProducts(pageable)
         );
     }
 
