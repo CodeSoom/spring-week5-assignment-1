@@ -18,7 +18,7 @@ public class UserService implements UserUseCase {
 
     @Override
     public User createUser(final UserCreateRequest createUserRequest) {
-        return null;
+        return userRepository.save(createUserRequest.toEntity());
     }
 
     @Override

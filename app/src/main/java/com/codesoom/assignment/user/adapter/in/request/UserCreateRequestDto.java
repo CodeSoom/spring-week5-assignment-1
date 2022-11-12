@@ -1,6 +1,7 @@
 package com.codesoom.assignment.user.adapter.in.request;
 
 import com.codesoom.assignment.user.application.in.command.UserCreateRequest;
+import com.codesoom.assignment.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
@@ -15,5 +16,13 @@ public class UserCreateRequestDto implements UserCreateRequest {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public User toEntity() {
+        return User.builder()
+                .name(this.name)
+                .email(this.email)
+                .password(this.password)
+                .build();
     }
 }
