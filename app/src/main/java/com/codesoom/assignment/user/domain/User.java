@@ -29,4 +29,28 @@ public class User {
         this.email = email;
         this.password = password;
     }
+
+    public void update(User updateUser) {
+        updateName(updateUser.getName());
+        updateEmail(updateUser.getEmail());
+        updatePassword(updateUser.getPassword());
+    }
+
+    private void updateName(String name) {
+        if (name != null) {
+            this.name = name;
+        }
+    }
+
+    private void updateEmail(String email) {
+        if (email != null) {
+            this.email = email;
+        }
+    }
+
+    private void updatePassword(String password) {
+        if (password != null) {
+            this.password = password;
+        }
+    }
 }

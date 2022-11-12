@@ -2,6 +2,7 @@ package com.codesoom.assignment.user.adapter.out.persistence;
 
 import com.codesoom.assignment.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -14,6 +15,7 @@ import static com.codesoom.assignment.support.UserFixture.USER_1;
 import static com.codesoom.assignment.support.UserFixture.USER_2;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Disabled("단지 JPA 테스트만을 목적으로 한다면 작성할 필요가 없습니다")
 @DataJpaTest
 @DisplayName("UserPersistenceAdapter JPA 테스트")
 class JpaUserPersistenceAdapterTest {
