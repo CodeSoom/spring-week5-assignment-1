@@ -7,7 +7,10 @@ import com.codesoom.assignment.user.application.out.UserRepository;
 import com.codesoom.assignment.user.domain.User;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class UserService implements UserUseCase {
 
     private final UserRepository userRepository;
@@ -23,7 +26,12 @@ public class UserService implements UserUseCase {
 
     @Override
     public User updateUser(final Long id, final UserUpdateRequest updateUserRequest) {
-        return null;
+        User user = userRepository.findById(id)
+                .get();
+
+        user.update(updateUserRequest.toEntity());
+
+        return user;
     }
 
     @Override
