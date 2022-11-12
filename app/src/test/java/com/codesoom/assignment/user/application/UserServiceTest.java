@@ -141,6 +141,18 @@ class UserServiceTest {
                 assertThat(fakeUserRepository.findById(userFixture.getId()))
                         .isEmpty();
             }
+
+            @Test
+            @DisplayName("회원이 1 감소한다")
+            void it_delete_user_size() {
+                int oldSize = fakeUserRepository.findAll().size();
+
+                userService.deleteUser(userFixture.getId());
+
+                int newSize = fakeUserRepository.findAll().size();
+
+                assertThat(newSize - oldSize).isEqualTo(-1);
+            }
         }
     }
 }
