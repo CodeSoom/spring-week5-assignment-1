@@ -1,7 +1,7 @@
 package com.codesoom.assignment.support;
 
-import com.codesoom.assignment.user.adapter.in.request.UserCreateRequestDto;
-import com.codesoom.assignment.user.adapter.in.request.UserUpdateRequestDto;
+import com.codesoom.assignment.user.adapter.in.web.dto.request.UserCreateRequestDto;
+import com.codesoom.assignment.user.adapter.in.web.dto.request.UserUpdateRequestDto;
 import com.codesoom.assignment.user.domain.User;
 
 public enum UserFixture {
