@@ -68,4 +68,38 @@ class UserServiceTest {
             }
         }
     }
+
+    /*
+        updateUser 메서드는
+        - 찾을 수 있는 id가 주어지면
+            - 회원을 수정하고 리턴한다
+        - 찾을 수 없는 id가 주어지면
+            - 예외를 던진다
+    */
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class updateUser_메서드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            private User userFixture;
+
+            @BeforeEach
+            void setUpCreateFixture() {
+                userFixture = userService.createUser(USER_1.생성_요청_데이터_생성());
+            }
+
+            @Test
+            @DisplayName("회원을 수정하고 리턴한다")
+            void it_returns_user() {
+                User user = userService.updateUser(userFixture.getId(), USER_2.수정_요청_데이터_생성());
+
+                assertThat(user).isNotNull();
+                assertThat(user.getId()).isEqualTo(userFixture.getId());
+                assertThat(user.getName()).isEqualTo(USER_2.NAME());
+                assertThat(user.getEmail()).isEqualTo(USER_2.EMAIL());
+                assertThat(user.getPassword()).isEqualTo(USER_2.PASSWORD());
+            }
+        }
+    }
 }
