@@ -14,6 +14,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static com.codesoom.assignment.support.IdFixture.ID_MAX;
 import static com.codesoom.assignment.support.UserFixture.USER_1;
 import static com.codesoom.assignment.support.UserFixture.USER_2;
 import static org.hamcrest.Matchers.containsString;
@@ -90,6 +91,21 @@ class UserControllerTest {
                             .andExpect(content().string(containsString(USER_2.EMAIL())))
                             .andExpect(content().string(containsString(USER_2.PASSWORD())));
                 }
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어질_때 {
+            @Test
+            @DisplayName("404 코드를 반환한다")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(
+                                patch("/users/" + ID_MAX.value())
+                                        .contentType(MediaType.APPLICATION_JSON)
+                                        .content(JsonUtil.writeValue(USER_2.수정_요청_데이터_생성()))
+                        )
+                        .andExpect(status().isNotFound());
             }
         }
     }
