@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.application;
 
+import com.codesoom.assignment.exceptions.user.UserNotFoundException;
 import com.codesoom.assignment.user.application.in.UserUseCase;
 import com.codesoom.assignment.user.application.in.command.UserCreateRequest;
 import com.codesoom.assignment.user.application.in.command.UserUpdateRequest;
@@ -27,7 +28,7 @@ public class UserService implements UserUseCase {
     @Override
     public User updateUser(final Long id, final UserUpdateRequest updateUserRequest) {
         User user = userRepository.findById(id)
-                .get();
+                .orElseThrow(() -> new UserNotFoundException(id));
 
         user.update(updateUserRequest.toEntity());
 
