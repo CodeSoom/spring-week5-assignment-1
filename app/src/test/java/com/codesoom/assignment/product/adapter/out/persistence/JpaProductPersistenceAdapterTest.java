@@ -2,6 +2,7 @@ package com.codesoom.assignment.product.adapter.out.persistence;
 
 import com.codesoom.assignment.product.domain.Product;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -21,6 +22,7 @@ import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
+@Disabled("단지 JPA 테스트만을 목적으로 한다면 작성할 필요가 없습니다")
 @DataJpaTest
 @DisplayName("ProductPersistenceAdapter JPA 테스트")
 class JpaProductPersistenceAdapterTest {
