@@ -1,5 +1,6 @@
 package com.codesoom.assignment.support;
 
+import com.codesoom.assignment.user.adapter.in.request.UserCreateRequestDto;
 import com.codesoom.assignment.user.domain.User;
 
 public enum UserFixture {
@@ -24,6 +25,14 @@ public enum UserFixture {
     public User 회원_엔티티_생성(Long id) {
         return User.builder()
                 .id(id)
+                .name(this.name)
+                .email(this.email)
+                .password(this.password)
+                .build();
+    }
+
+    public UserCreateRequestDto 생성_요청_데이터_생성() {
+        return UserCreateRequestDto.builder()
                 .name(this.name)
                 .email(this.email)
                 .password(this.password)
