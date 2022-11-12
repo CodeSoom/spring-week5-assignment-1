@@ -1,4 +1,4 @@
-package com.codesoom.assignment.user.adapter.in.request;
+package com.codesoom.assignment.user.adapter.in.web.dto.request;
 
 import com.codesoom.assignment.user.application.in.command.UserUpdateRequest;
 import com.codesoom.assignment.user.domain.User;
