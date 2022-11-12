@@ -18,6 +18,7 @@ import static com.codesoom.assignment.support.IdFixture.ID_MAX;
 import static com.codesoom.assignment.support.UserFixture.USER_1;
 import static com.codesoom.assignment.support.UserFixture.USER_2;
 import static org.hamcrest.Matchers.containsString;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -106,6 +107,32 @@ class UserControllerTest {
                                         .content(JsonUtil.writeValue(USER_2.수정_요청_데이터_생성()))
                         )
                         .andExpect(status().isNotFound());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class 회원_삭제_API는 {
+        private Long fixtureId;
+
+        @BeforeEach
+        void setUpCreateFixture() {
+            UserCreateResponse user = userController.create(USER_1.생성_요청_데이터_생성());
+            fixtureId = user.getId();
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어질_때 {
+            @Test
+            @DisplayName("204 코드를 반환한다")
+            void it_responses_204() throws Exception {
+                mockMvc.perform(
+                                delete("/users/" + fixtureId)
+                        )
+                        .andExpect(status().isNoContent())
+                        .andExpect(content().string(containsString(String.valueOf(fixtureId))));
             }
         }
     }
