@@ -27,8 +27,7 @@ public class UserService implements UserUseCase {
 
     @Override
     public User updateUser(final Long id, final UserUpdateRequest updateUserRequest) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new UserNotFoundException(id));
+        User user = findUser(id);
 
         user.update(updateUserRequest.toEntity());
 
@@ -37,6 +36,15 @@ public class UserService implements UserUseCase {
 
     @Override
     public Long deleteUser(final Long id) {
-        return null;
+        User user = findUser(id);
+
+        userRepository.delete(user);
+
+        return user.getId();
+    }
+
+    private User findUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }
