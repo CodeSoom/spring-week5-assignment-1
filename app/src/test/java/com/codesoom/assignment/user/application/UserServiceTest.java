@@ -1,5 +1,6 @@
 package com.codesoom.assignment.user.application;
 
+import com.codesoom.assignment.exceptions.user.UserNotFoundException;
 import com.codesoom.assignment.user.adapter.out.persistence.FakeInMemoryUserPersistenceAdapter;
 import com.codesoom.assignment.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import static com.codesoom.assignment.support.IdFixture.ID_MAX;
 import static com.codesoom.assignment.support.UserFixture.USER_1;
 import static com.codesoom.assignment.support.UserFixture.USER_2;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -69,13 +71,6 @@ class UserServiceTest {
         }
     }
 
-    /*
-        updateUser 메서드는
-        - 찾을 수 있는 id가 주어지면
-            - 회원을 수정하고 리턴한다
-        - 찾을 수 없는 id가 주어지면
-            - 예외를 던진다
-    */
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class updateUser_메서드는 {
@@ -99,6 +94,17 @@ class UserServiceTest {
                 assertThat(user.getName()).isEqualTo(USER_2.NAME());
                 assertThat(user.getEmail()).isEqualTo(USER_2.EMAIL());
                 assertThat(user.getPassword()).isEqualTo(USER_2.PASSWORD());
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_exception() {
+                assertThatThrownBy(() -> userService.updateUser(ID_MAX.value(),USER_2.수정_요청_데이터_생성()))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
