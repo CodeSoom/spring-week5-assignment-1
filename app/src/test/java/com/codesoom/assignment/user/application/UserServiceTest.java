@@ -103,8 +103,43 @@ class UserServiceTest {
             @Test
             @DisplayName("예외를 던진다")
             void it_returns_exception() {
-                assertThatThrownBy(() -> userService.updateUser(ID_MAX.value(),USER_2.수정_요청_데이터_생성()))
+                assertThatThrownBy(() -> userService.updateUser(ID_MAX.value(), USER_2.수정_요청_데이터_생성()))
                         .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+    }
+
+    /*
+        deleteUser 메서드는
+        - 찾을 수 있는 id가 주어지면
+            - 회원을 삭제한다
+            - 회원이 1 감소한다.
+        - 찾을 수 없는 id가 주어지면
+            - 예외를 던진다
+    */
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class deleteUser_메서드는 {
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_있는_id가_주어지면 {
+            private User userFixture;
+
+            @BeforeEach
+            void setUpCreateFixture() {
+                userFixture = userService.createUser(USER_1.생성_요청_데이터_생성());
+            }
+
+            @Test
+            @DisplayName("회원을 삭제한다")
+            void it_delete_user() {
+                assertThat(fakeUserRepository.findById(userFixture.getId()))
+                        .isNotEmpty();
+
+                userService.deleteUser(userFixture.getId());
+
+                assertThat(fakeUserRepository.findById(userFixture.getId()))
+                        .isEmpty();
             }
         }
     }
