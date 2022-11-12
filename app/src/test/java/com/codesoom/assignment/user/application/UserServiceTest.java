@@ -109,14 +109,6 @@ class UserServiceTest {
         }
     }
 
-    /*
-        deleteUser 메서드는
-        - 찾을 수 있는 id가 주어지면
-            - 회원을 삭제한다
-            - 회원이 1 감소한다.
-        - 찾을 수 없는 id가 주어지면
-            - 예외를 던진다
-    */
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class deleteUser_메서드는 {
@@ -152,6 +144,17 @@ class UserServiceTest {
                 int newSize = fakeUserRepository.findAll().size();
 
                 assertThat(newSize - oldSize).isEqualTo(-1);
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_exception() {
+                assertThatThrownBy(() -> userService.deleteUser(ID_MAX.value()))
+                        .isInstanceOf(UserNotFoundException.class);
             }
         }
     }
