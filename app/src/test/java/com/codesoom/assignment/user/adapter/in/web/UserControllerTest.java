@@ -135,5 +135,18 @@ class UserControllerTest {
                         .andExpect(content().string(containsString(String.valueOf(fixtureId))));
             }
         }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 찾을_수_없는_id가_주어질_때 {
+            @Test
+            @DisplayName("404 코드를 반환한다")
+            void it_responses_404() throws Exception {
+                mockMvc.perform(
+                                delete("/users/" + ID_MAX.value())
+                        )
+                        .andExpect(status().isNotFound());
+            }
+        }
     }
 }
