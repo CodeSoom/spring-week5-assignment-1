@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import static com.codesoom.assignment.support.UserFixture.USER_1;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("UserService 테스트")
 class UserServiceTest {
@@ -46,6 +47,17 @@ class UserServiceTest {
                 assertThat(user.getName()).isEqualTo(USER_1.NAME());
                 assertThat(user.getEmail()).isEqualTo(USER_1.EMAIL());
                 assertThat(user.getPassword()).isEqualTo(USER_1.PASSWORD());
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class null이_주어지면 {
+            @Test
+            @DisplayName("예외를 던진다")
+            void it_returns_null_pointer_exception() {
+                assertThatThrownBy(() -> userService.createUser(null))
+                        .isInstanceOf(NullPointerException.class);
             }
         }
     }
