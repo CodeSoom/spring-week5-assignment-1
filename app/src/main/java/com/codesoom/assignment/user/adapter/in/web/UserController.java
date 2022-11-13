@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.validation.Valid;
+
 @RestController
 @RequestMapping("/users")
 public class UserController {
@@ -26,7 +28,7 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserCreateResponse create(@RequestBody UserCreateRequestDto userCreateRequestDto) {
+    public UserCreateResponse create(@RequestBody @Valid UserCreateRequestDto userCreateRequestDto) {
         return new UserCreateResponse(
                 userUseCase.createUser(userCreateRequestDto)
         );
