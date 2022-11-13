@@ -1,4 +1,4 @@
-package com.codesoom.assignment.exceptions;
+package com.codesoom.assignment.common.exception;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.stream.Collectors;
 
@@ -34,6 +35,16 @@ public class ErrorResponse {
     }
 
     public static <T extends Exception> ErrorResponse from(final T exception) {
+        return ErrorResponse.builder()
+                .message(exception.getMessage())
+                .build();
+    }
+
+    public static ErrorResponse from(final HttpServletRequest request,
+                                     final Exception exception) {
+        log.error("[ERROR-]\t{}\t{}\t{}", request.getMethod(), request.getRequestURI(), exception.getMessage());
+        log.error("{}", (Object) exception.getStackTrace());
+
         return ErrorResponse.builder()
                 .message(exception.getMessage())
                 .build();

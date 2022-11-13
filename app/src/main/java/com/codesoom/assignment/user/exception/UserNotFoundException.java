@@ -1,4 +1,4 @@
-package com.codesoom.assignment.exceptions.user;
+package com.codesoom.assignment.user.exception;
 
 /**
  * 회원을 찾지 못했을 때 던지는 예외입니다.

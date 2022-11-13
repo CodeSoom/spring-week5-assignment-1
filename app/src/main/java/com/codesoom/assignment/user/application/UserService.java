@@ -1,6 +1,6 @@
 package com.codesoom.assignment.user.application;
 
-import com.codesoom.assignment.exceptions.user.UserNotFoundException;
+import com.codesoom.assignment.user.exception.UserNotFoundException;
 import com.codesoom.assignment.user.application.in.UserUseCase;
 import com.codesoom.assignment.user.application.in.command.UserCreateRequest;
 import com.codesoom.assignment.user.application.in.command.UserUpdateRequest;

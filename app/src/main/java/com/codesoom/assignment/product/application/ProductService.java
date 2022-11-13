@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.application;
 
-import com.codesoom.assignment.exceptions.product.ProductNotFoundException;
+import com.codesoom.assignment.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.application.port.in.ProductUseCase;
 import com.codesoom.assignment.product.application.port.in.command.ProductCreateRequest;
 import com.codesoom.assignment.product.application.port.in.command.ProductUpdateRequest;
