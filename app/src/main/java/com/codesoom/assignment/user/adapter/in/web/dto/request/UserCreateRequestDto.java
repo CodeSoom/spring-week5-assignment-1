@@ -5,8 +5,8 @@ import com.codesoom.assignment.user.domain.User;
 import lombok.Builder;
 import lombok.Getter;
 
+import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Pattern;
 
 @Getter
 public class UserCreateRequestDto implements UserCreateRequest {
@@ -14,10 +14,8 @@ public class UserCreateRequestDto implements UserCreateRequest {
     @NotBlank(message = "이름을 입력하세요")
     private String name;
 
-    // Regular Expression by RFC 5322 for Email Validation
-    // Ref: https://www.baeldung.com/java-email-validation-regex#regular-expression-by-rfc-5322-for-email-validation
-    @Pattern(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$",
-            message = "올바른 이메일 형식으로 입력하세요")
+    @NotBlank(message = "이메일은 필수 입력 값입니다.")
+    @Email(message = "이메일 형식에 맞지 않습니다.")
     private String email;
 
     @NotBlank(message = "비밀번호를 입력하세요")
