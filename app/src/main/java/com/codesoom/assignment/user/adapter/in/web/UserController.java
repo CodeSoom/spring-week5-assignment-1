@@ -36,7 +36,7 @@ public class UserController {
 
     @RequestMapping(path = "/{id}", method = {RequestMethod.PUT, RequestMethod.PATCH})
     public UserUpdateResponse update(@PathVariable Long id,
-                                     @RequestBody UserUpdateRequestDto userUpdateRequestDto) {
+                                     @RequestBody @Valid UserUpdateRequestDto userUpdateRequestDto) {
         return new UserUpdateResponse(
                 userUseCase.updateUser(id, userUpdateRequestDto)
         );
