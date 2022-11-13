@@ -46,7 +46,7 @@ class UserControllerTest {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 유효한_상품_정보가_주어지면 {
+        class 유효한_회원_정보가_주어지면 {
             @Test
             @DisplayName("201 코드를 반환한다")
             void it_responses_201() throws Exception {
@@ -64,7 +64,7 @@ class UserControllerTest {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 유효하지_않은_상품_정보가_주어지면 {
+        class 유효하지_않은_회원_정보가_주어지면 {
 
             @Nested
             @DisplayName("이름이 공백일 경우")
@@ -129,8 +129,8 @@ class UserControllerTest {
             }
 
             @Nested
-            @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-            class 유효한_상품_정보라면 {
+            @DisplayName("유효한 회원 정보가 주어지면")
+            class Context_with_valid_user {
                 @Test
                 @DisplayName("200 코드를 반환한다")
                 void it_responses_200() throws Exception {
@@ -144,6 +144,56 @@ class UserControllerTest {
                             .andExpect(content().string(containsString(USER_2.NAME())))
                             .andExpect(content().string(containsString(USER_2.EMAIL())))
                             .andExpect(content().string(containsString(USER_2.PASSWORD())));
+                }
+            }
+
+            @Nested
+            @DisplayName("유효하지 않은 회원 정보가 주어지면")
+            class Context_with_invalid_user {
+
+                @Nested
+                @DisplayName("이름이 공백일 경우")
+                class Context_with_invalid_name {
+                    @Test
+                    @DisplayName("400 코드를 반환한다")
+                    void it_responses_400() throws Exception {
+                        mockMvc.perform(
+                                        patch("/users/" + fixtureId)
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JsonUtil.writeValue(USER_INVALID_NAME.수정_요청_데이터_생성()))
+                                )
+                                .andExpect(status().isBadRequest());
+                    }
+                }
+
+                @Nested
+                @DisplayName("이메일에 '@'가 안들어갈 경우")
+                class Context_with_invalid_email {
+                    @Test
+                    @DisplayName("400 코드를 반환한다")
+                    void it_responses_400() throws Exception {
+                        mockMvc.perform(
+                                        patch("/users/" + fixtureId)
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JsonUtil.writeValue(USER_INVALID_EMAIL.수정_요청_데이터_생성()))
+                                )
+                                .andExpect(status().isBadRequest());
+                    }
+                }
+
+                @Nested
+                @DisplayName("비밀번호가 공백일 경우")
+                class Context_with_invalid_password {
+                    @Test
+                    @DisplayName("400 코드를 반환한다")
+                    void it_responses_400() throws Exception {
+                        mockMvc.perform(
+                                        patch("/users/" + fixtureId)
+                                                .contentType(MediaType.APPLICATION_JSON)
+                                                .content(JsonUtil.writeValue(USER_INVALID_PASSWORD.수정_요청_데이터_생성()))
+                                )
+                                .andExpect(status().isBadRequest());
+                    }
                 }
             }
         }
