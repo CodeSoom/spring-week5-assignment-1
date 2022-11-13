@@ -17,6 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import static com.codesoom.assignment.support.IdFixture.ID_MAX;
 import static com.codesoom.assignment.support.UserFixture.USER_1;
 import static com.codesoom.assignment.support.UserFixture.USER_2;
+import static com.codesoom.assignment.support.UserFixture.USER_INVALID_EMAIL;
+import static com.codesoom.assignment.support.UserFixture.USER_INVALID_NAME;
+import static com.codesoom.assignment.support.UserFixture.USER_INVALID_PASSWORD;
 import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -56,6 +59,56 @@ class UserControllerTest {
                         .andExpect(content().string(containsString(USER_1.NAME())))
                         .andExpect(content().string(containsString(USER_1.EMAIL())))
                         .andExpect(content().string(containsString(USER_1.PASSWORD())));
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 유효하지_않은_상품_정보가_주어지면 {
+
+            @Nested
+            @DisplayName("이름이 공백일 경우")
+            class Context_with_invalid_name {
+                @Test
+                @DisplayName("400 코드를 반환한다")
+                void it_responses_400() throws Exception {
+                    mockMvc.perform(
+                                    post("/users")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(JsonUtil.writeValue(USER_INVALID_NAME.생성_요청_데이터_생성()))
+                            )
+                            .andExpect(status().isBadRequest());
+                }
+            }
+
+            @Nested
+            @DisplayName("이메일에 '@'가 안들어갈 경우")
+            class Context_with_invalid_email {
+                @Test
+                @DisplayName("400 코드를 반환한다")
+                void it_responses_400() throws Exception {
+                    mockMvc.perform(
+                                    post("/users")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(JsonUtil.writeValue(USER_INVALID_EMAIL.생성_요청_데이터_생성()))
+                            )
+                            .andExpect(status().isBadRequest());
+                }
+            }
+
+            @Nested
+            @DisplayName("비밀번호가 공백일 경우")
+            class Context_with_invalid_password {
+                @Test
+                @DisplayName("400 코드를 반환한다")
+                void it_responses_400() throws Exception {
+                    mockMvc.perform(
+                                    post("/users")
+                                            .contentType(MediaType.APPLICATION_JSON)
+                                            .content(JsonUtil.writeValue(USER_INVALID_PASSWORD.생성_요청_데이터_생성()))
+                            )
+                            .andExpect(status().isBadRequest());
+                }
             }
         }
     }
