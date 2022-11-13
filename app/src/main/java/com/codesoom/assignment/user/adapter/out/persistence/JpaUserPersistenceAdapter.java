@@ -14,7 +14,7 @@ public interface JpaUserPersistenceAdapter
 
     Optional<User> findById(Long id);
 
-    User save(User product);
+    User save(User user);
 
-    void delete(User product);
+    void delete(User user);
 }
