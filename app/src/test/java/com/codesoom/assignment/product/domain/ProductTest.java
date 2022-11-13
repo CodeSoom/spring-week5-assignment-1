@@ -1,10 +1,14 @@
 package com.codesoom.assignment.product.domain;
 
+import com.codesoom.assignment.user.domain.User;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.codesoom.assignment.support.IdFixture.ID_MAX;
 import static com.codesoom.assignment.support.IdFixture.ID_MIN;
 import static com.codesoom.assignment.support.ProductFixture.TOY_1;
 import static com.codesoom.assignment.support.ProductFixture.TOY_3;
+import static com.codesoom.assignment.support.UserFixture.USER_1;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class ProductTest {
@@ -30,5 +34,18 @@ class ProductTest {
         assertThat(product.getPrice()).isEqualTo(TOY_3.PRICE());
         // PATCH: null이면 변경 안함
         assertThat(product.getImageUrl()).isEqualTo(TOY_1.IMAGE());
+    }
+
+    @Test
+    @DisplayName("Product 객체 비교 테스트")
+    void equals_and_hashcode() {
+        Product product1 = TOY_1.엔티티_생성(ID_MIN.value());
+        Product product2 = TOY_1.엔티티_생성(ID_MIN.value());
+
+        assertThat(product1).isEqualTo(product2);
+
+        Product product3 = TOY_1.엔티티_생성(ID_MAX.value());
+
+        assertThat(product1).isNotEqualTo(product3);
     }
 }

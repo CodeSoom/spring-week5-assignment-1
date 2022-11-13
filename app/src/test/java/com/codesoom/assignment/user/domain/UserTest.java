@@ -3,6 +3,7 @@ package com.codesoom.assignment.user.domain;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import static com.codesoom.assignment.support.IdFixture.ID_MAX;
 import static com.codesoom.assignment.support.IdFixture.ID_MIN;
 import static com.codesoom.assignment.support.UserFixture.USER_1;
 import static com.codesoom.assignment.support.UserFixture.USER_2;
@@ -35,5 +36,18 @@ class UserTest {
         assertThat(user.getName()).isEqualTo(USER_2.NAME());
         assertThat(user.getEmail()).isEqualTo(USER_2.EMAIL());
         assertThat(user.getPassword()).isEqualTo(USER_2.PASSWORD());
+    }
+
+    @Test
+    @DisplayName("User 객체 비교 테스트")
+    void equals_and_hashcode() {
+        User user1 = USER_1.회원_엔티티_생성(ID_MIN.value());
+        User user2 = USER_1.회원_엔티티_생성(ID_MIN.value());
+
+        assertThat(user1).isEqualTo(user2);
+
+        User user3 = USER_1.회원_엔티티_생성(ID_MAX.value());
+
+        assertThat(user1).isNotEqualTo(user3);
     }
 }

@@ -1,6 +1,6 @@
 package com.codesoom.assignment.user.application;
 
-import com.codesoom.assignment.exceptions.user.UserNotFoundException;
+import com.codesoom.assignment.user.exception.UserNotFoundException;
 import com.codesoom.assignment.user.adapter.out.persistence.FakeInMemoryUserPersistenceAdapter;
 import com.codesoom.assignment.user.domain.User;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package com.codesoom.assignment.product.application;
 
-import com.codesoom.assignment.exceptions.product.ProductNotFoundException;
+import com.codesoom.assignment.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.product.adapter.out.persistence.FakeInMemoryProductRepository;
 import com.codesoom.assignment.product.domain.Product;
 import org.junit.jupiter.api.BeforeEach;

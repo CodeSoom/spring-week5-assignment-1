@@ -7,6 +7,9 @@ import com.codesoom.assignment.user.domain.User;
 public enum UserFixture {
     USER_1("기범", "dev.gibeom@gmail.com", "비밀번호486"),
     USER_2("Alex", "dev.gibeom@gmail.com", "password486"),
+    USER_INVALID_NAME("", "alex@gmail.com", "코드숨5주차"),
+    USER_INVALID_EMAIL("이메일에 골뱅이가 없어요", "alexgmail.com", "코드숨5주차"),
+    USER_INVALID_PASSWORD("이메일에 골뱅이가 없어요", "alexgmail.com", ""),
     ;
 
     private String name;
