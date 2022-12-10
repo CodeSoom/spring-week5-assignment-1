@@ -24,7 +24,7 @@ public class UserService {
     }
 
     public User findUser(Long id) {
-        return repository.findById(id)
+        return repository.findByIdAndDeletedIsFalse(id)
                 .orElseThrow(UserNotFoundException::new);
     }
 
@@ -45,9 +45,10 @@ public class UserService {
         return user;
     }
 
-    public void deleteUser(Long id) {
-        findUser(id);
+    public User deleteUser(Long id) {
+        User user = findUser(id);
+        user.destroy();
 
-        repository.deleteById(id);
+        return user;
     }
 }

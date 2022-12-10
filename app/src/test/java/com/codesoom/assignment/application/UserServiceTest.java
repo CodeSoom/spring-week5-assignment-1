@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.infra.UserRepository;
@@ -11,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -18,6 +20,8 @@ import static org.mockito.Mockito.verify;
 
 @DisplayName("UserService 클래스")
 class UserServiceTest {
+
+    private static final Long DELETED_ID = 200L;
 
     private UserRepository repository;
     private UserService service;
@@ -34,7 +38,11 @@ class UserServiceTest {
                 .password("abc123")
                 .build();
 
-        given(repository.findById(1L)).willReturn(Optional.ofNullable(user));
+        given(repository.findById(1L))
+                .willReturn(Optional.ofNullable(user));
+
+        given(repository.findByIdAndDeletedIsFalse(1L))
+                .willReturn(Optional.of(user));
     }
 
     @Nested
@@ -46,6 +54,39 @@ class UserServiceTest {
             service.findAll();
 
             verify(repository).findAll();
+        }
+    }
+
+    @Nested
+    @DisplayName("findUser 메소드는")
+    class Describe_findUser {
+        @Nested
+        @DisplayName("존재하는 id를 파라미터로 받을 경우")
+        class Context_with_existedId {
+            @Test
+            @DisplayName("해당하는 id의 user 정보를 리턴한다")
+            void it_return_user() {
+                User user = service.findUser(1L);
+
+                assertThat(user.getId()).isEqualTo(1L);
+                assertThat(user.getName()).isEqualTo("홍길동");
+                assertThat(user.isDeleted()).isFalse();
+
+                verify(repository).findByIdAndDeletedIsFalse(1L);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 id나 삭제된 id를 파라미터로 받을 경우")
+        class Context_with_notValidOrDeletedId {
+            @Test
+            @DisplayName("UserNotFoundException을 던진다")
+            void it_throw_UserNotFoundException() {
+                assertThatThrownBy(() -> service.findUser(DELETED_ID))
+                        .isInstanceOf(UserNotFoundException.class);
+
+                verify(repository).findByIdAndDeletedIsFalse(DELETED_ID);
+            }
         }
     }
 
@@ -106,13 +147,28 @@ class UserServiceTest {
     class Describe_deleteById {
         @Nested
         @DisplayName("존재하는 id가 넘어올 경우")
-        class Context_with_validId {
+        class Context_with_existedId {
             @Test
             @DisplayName("User 삭제한다")
             void it_delete_user() {
-                service.deleteUser(1L);
+                User user = service.deleteUser(1L);
 
-                verify(repository).deleteById(1L);
+                assertThat(user.isDeleted()).isTrue();
+
+                verify(repository).findByIdAndDeletedIsFalse(1L);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않는 id나 삭제된 id가 넘어올 경우")
+        class Context_with_notValidOrDeletedId {
+            @Test
+            @DisplayName("UserNotFoundException을 던진다")
+            void it_throw_UserNotFoundException() {
+                assertThatThrownBy(() -> service.findUser(DELETED_ID))
+                        .isInstanceOf(UserNotFoundException.class);
+
+                verify(repository).findByIdAndDeletedIsFalse(DELETED_ID);
             }
         }
     }

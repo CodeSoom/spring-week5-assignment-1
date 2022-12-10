@@ -18,15 +18,22 @@ public class User {
 
     @Id
     @GeneratedValue
-    Long id;
+    private Long id;
 
-    String name;
-    String email;
-    String password;
+    private String name;
+    private String email;
+    private String password;
+
+    @Builder.Default
+    private boolean deleted = false;
 
     public void changeUser(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    public void destroy() {
+        deleted = true;
     }
 }
