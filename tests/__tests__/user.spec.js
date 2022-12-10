@@ -46,6 +46,7 @@ describe('Users', () => {
     const userData = {
       name: 'updated name',
       password: 12345678,
+      email: 'abc@gmail.com'
     };
 
     let id;

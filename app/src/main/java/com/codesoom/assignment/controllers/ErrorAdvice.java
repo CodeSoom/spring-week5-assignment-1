@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
-public class ProductErrorAdvice {
+public class ErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
