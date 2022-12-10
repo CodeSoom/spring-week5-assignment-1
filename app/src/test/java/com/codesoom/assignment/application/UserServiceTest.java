@@ -1,6 +1,5 @@
 package com.codesoom.assignment.application;
 
-
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.infra.UserRepository;
@@ -36,7 +35,19 @@ class UserServiceTest {
                 .build();
 
         given(repository.findById(1L)).willReturn(Optional.ofNullable(user));
-    } //setUp
+    }
+
+    @Nested
+    @DisplayName("findAll 메소드는")
+    class Describe_findAll {
+        @Test
+        @DisplayName("모든 User 정보들을 리턴한다")
+        void it_return_users() {
+            service.findAll();
+
+            verify(repository).findAll();
+        }
+    }
 
     @Nested
     @DisplayName("saveUser 메소드는")
@@ -81,7 +92,7 @@ class UserServiceTest {
                         .password("def456")
                         .build();
 
-                user.changeUser(userData.getName(), userData.getEmail(), userData.getPassword());
+                service.updateUser(1L, userData);
 
                 assertThat(user.getName()).isEqualTo("고길동");
                 assertThat(user.getEmail()).isEqualTo("def@gmail.com");
@@ -106,4 +117,3 @@ class UserServiceTest {
         }
     }
 }
-
