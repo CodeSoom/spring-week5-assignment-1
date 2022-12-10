@@ -27,6 +27,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 
+import java.util.List;
+
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
 
@@ -38,6 +40,16 @@ public class UserController {
 
     public UserController(UserService service) {
         this.service = service;
+    }
+
+    @GetMapping
+    public List<User> findAllUsers() {
+        return service.findAll();
+    }
+
+    @GetMapping("{id}")
+    public User findUser(@PathVariable Long id) {
+        return service.findUser(id);
     }
 
     @PostMapping

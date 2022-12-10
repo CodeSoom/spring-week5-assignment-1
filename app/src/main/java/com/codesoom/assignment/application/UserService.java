@@ -7,6 +7,7 @@ import com.codesoom.assignment.infra.UserRepository;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.List;
 
 @Service
 @Transactional
@@ -16,6 +17,15 @@ public class UserService {
 
     public UserService(UserRepository repository) {
         this.repository = repository;
+    }
+
+    public List<User> findAll() {
+        return repository.findAll();
+    }
+
+    public User findUser(Long id) {
+        return repository.findById(id)
+                .orElseThrow(UserNotFoundException::new);
     }
 
     public User saveUser(UserData userData) {
@@ -36,11 +46,8 @@ public class UserService {
     }
 
     public void deleteUser(Long id) {
-        repository.deleteById(id);
-    }
+        findUser(id);
 
-    public User findUser(Long id) {
-        return repository.findById(id)
-                .orElseThrow(UserNotFoundException::new);
+        repository.deleteById(id);
     }
 }
