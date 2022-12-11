@@ -3,7 +3,8 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserModificationData;
+import com.codesoom.assignment.dto.UserRegistrationData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -44,14 +45,13 @@ class UserControllerTest {
 
     @BeforeEach
     void setUp() {
-        given(userService.updateUser(eq(1L), any(UserData.class)))
+        given(userService.updateUser(eq(1L), any(UserModificationData.class)))
                 .will(invocation -> {
                     Long id = invocation.getArgument(0);
-                    UserData userData = invocation.getArgument(1);
+                    UserModificationData userData = invocation.getArgument(1);
                     return User.builder()
                             .id(id)
                             .name(userData.getName())
-                            .email(userData.getEmail())
                             .password(userData.getPassword())
                             .build();
                 });
@@ -127,7 +127,7 @@ class UserControllerTest {
             @Test
             @DisplayName("생성된 user를 리턴한다")
             void it_return_user() throws Exception {
-                UserData userData = UserData.builder()
+                UserRegistrationData userData = UserRegistrationData.builder()
                         .name("홍길동")
                         .email("abc@gmail.com")
                         .password("abc123")
@@ -140,7 +140,7 @@ class UserControllerTest {
                                 .content(content))
                         .andExpect(status().isCreated());
 
-                verify(userService).saveUser(any(UserData.class));
+                verify(userService).saveUser(any(UserRegistrationData.class));
             }
         }
 
@@ -164,12 +164,11 @@ class UserControllerTest {
     @DisplayName("PATCH 요청은")
     class Describe_PATCH {
         //Static declarations in inner classes are not supported at language level '15'.
-        private String userDataToJson(String name, String email, String password)
+        private String userDataToJson(String name, String password)
                 throws JsonProcessingException {
 
-            UserData userData = UserData.builder()
+            UserModificationData userData = UserModificationData.builder()
                     .name(name)
-                    .email(email)
                     .password(password)
                     .build();
 
@@ -184,10 +183,10 @@ class UserControllerTest {
             void it_update_user() throws Exception {
                 mockMvc.perform(patch("/users/1")
                                 .contentType(APPLICATION_JSON)
-                                .content(userDataToJson("홍길동", "abc@gmail.com", "abc123")))
+                                .content(userDataToJson("홍길동", "abc123")))
                         .andExpect(status().isOk());
 
-                verify(userService).updateUser(eq(1L), any(UserData.class));
+                verify(userService).updateUser(eq(1L), any(UserModificationData.class));
             }
         }
 
@@ -196,7 +195,7 @@ class UserControllerTest {
         class Context_with_notExistedId {
             @BeforeEach
             void setUp() {
-                given(userService.updateUser(eq(1000L), any(UserData.class)))
+                given(userService.updateUser(eq(1000L), any(UserModificationData.class)))
                         .willThrow(UserNotFoundException.class);
             }
 
@@ -205,13 +204,10 @@ class UserControllerTest {
             void it_throws_UserNotFoundException() throws Exception {
                 mockMvc.perform(patch("/users/1000")
                                 .contentType(APPLICATION_JSON)
-                                .content(userDataToJson("홍길동", "abc@gmail.com", "abc123")))
+                                .content(userDataToJson("홍길동",  "abc123")))
                         .andExpect(status().isNotFound());
 
-                verify(userService).updateUser(eq(1000L), any(UserData.class));
-
-                assertThatThrownBy(() -> userService.updateUser(1000L, new UserData()))
-                        .isInstanceOf(UserNotFoundException.class);
+                verify(userService).updateUser(eq(1000L), any(UserModificationData.class));
             }
         }
 
@@ -223,7 +219,7 @@ class UserControllerTest {
             void it_throws_MethodArgumentNotValidException() throws Exception {
                 mockMvc.perform(patch("/users/1")
                                 .contentType(APPLICATION_JSON)
-                                .content(userDataToJson("", "", "")))
+                                .content(userDataToJson("",  "")))
                         .andExpect(status().isBadRequest())
                         .andExpect(result -> assertThat(result.getResolvedException())
                                                 .isInstanceOf(MethodArgumentNotValidException.class));

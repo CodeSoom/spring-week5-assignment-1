@@ -2,7 +2,8 @@ package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
-import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.dto.UserModificationData;
+import com.codesoom.assignment.dto.UserRegistrationData;
 import com.codesoom.assignment.infra.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -99,7 +100,7 @@ class UserServiceTest {
             @Test
             @DisplayName("생성된 User를 리턴한다")
             void it_return_user() {
-                UserData userData = UserData.builder()
+                UserRegistrationData userData = UserRegistrationData.builder()
                         .name("홍길동")
                         .email("abc@gmail.com")
                         .password("abc123")
@@ -127,16 +128,15 @@ class UserServiceTest {
 
                 assertThat(service.findUser(1L)).isNotNull();
 
-                UserData userData = UserData.builder()
+                UserModificationData userData = UserModificationData.builder()
                         .name("고길동")
-                        .email("def@gmail.com")
                         .password("def456")
                         .build();
 
                 service.updateUser(1L, userData);
 
                 assertThat(user.getName()).isEqualTo("고길동");
-                assertThat(user.getEmail()).isEqualTo("def@gmail.com");
+                assertThat(user.getEmail()).isEqualTo("abc@gmail.com");
                 assertThat(user.getPassword()).isEqualTo("def456");
             }
         }
