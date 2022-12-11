@@ -27,9 +27,8 @@ public class User {
     @Builder.Default
     private boolean deleted = false;
 
-    public void changeUser(String name, String email, String password) {
+    public void changeUser(String name, String password) {
         this.name = name;
-        this.email = email;
         this.password = password;
     }
 
