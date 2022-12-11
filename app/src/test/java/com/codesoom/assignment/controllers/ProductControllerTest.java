@@ -13,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import java.util.List;
 
@@ -23,7 +26,6 @@ import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -36,6 +38,9 @@ class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Autowired
+    private WebApplicationContext applicationContext;
+
     @MockBean
     private ProductService productService;
 
@@ -44,8 +49,15 @@ class ProductControllerTest {
     private static final Integer PRICE       = 10000;
     private static final String IMAGE_URL    = "http://localhost:8080/choonsik";
 
+    private static final Boolean FORCE_ENCODING = true;
+
     @BeforeEach
     void setUp() {
+        //MediaType.APPLICATION_JSON_UTF8 Deprecated로 인한 UTF-8 필터 추가
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext)
+                .addFilters(new CharacterEncodingFilter("UTF-8", FORCE_ENCODING))
+                .build();
+
         Product product = Product.builder()
                 .id(1L)
                 .name(PRODUCT_NAME)
@@ -57,8 +69,7 @@ class ProductControllerTest {
 
         given(productService.getProduct(1L)).willReturn(product);
 
-//        given(productService.getProduct(1000L))
-//                .willThrow(new ProductNotFoundException(1000L));
+//        given(productService.getProduct(1000L)).willThrow(new ProductNotFoundException(1000L));
 
         given(productService.createProduct(any(ProductData.class)))
                 .willReturn(product);
@@ -78,8 +89,7 @@ class ProductControllerTest {
         given(productService.updateProduct(eq(1000L), any(ProductData.class)))
                 .willThrow(new ProductNotFoundException(1000L));
 
-//        given(productService.deleteProduct(1000L))
-//                .willThrow(new ProductNotFoundException(1000L));
+//        given(productService.deleteProduct(1000L)).willThrow(new ProductNotFoundException(1000L));
     }
 
     @Nested
@@ -105,8 +115,7 @@ class ProductControllerTest {
             @Test
             @DisplayName("해당하는 id의 Product를 리턴한다")
             void it_return_product() throws Exception {
-                mockMvc.perform(get("/products/1")
-                                .accept(APPLICATION_JSON_UTF8))
+                mockMvc.perform(get("/products/1"))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString(PRODUCT_NAME)));
 
@@ -176,8 +185,7 @@ class ProductControllerTest {
 
                 mockMvc.perform(post("/products")
                                 .content(content)
-                                .contentType(APPLICATION_JSON)
-                                .accept(APPLICATION_JSON_UTF8))
+                                .contentType(APPLICATION_JSON))
                         .andExpect(status().isBadRequest())
                         .andExpect(content().string(containsString("필수 입력 사항입니다.")));
             }

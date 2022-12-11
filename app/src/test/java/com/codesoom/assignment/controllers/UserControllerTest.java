@@ -15,7 +15,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -26,7 +29,6 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -37,14 +39,23 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(UserController.class)
 @DisplayName("UserController 클래스")
 class UserControllerTest {
+    private static final Boolean FORCE_ENCODING = true;
+
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    private WebApplicationContext applicationContext;
 
     @MockBean
     private UserService userService;
 
     @BeforeEach
     void setUp() {
+        this.mockMvc = MockMvcBuilders.webAppContextSetup(applicationContext)
+                        .addFilters(new CharacterEncodingFilter("UTF-8", FORCE_ENCODING))
+                        .build();
+
         given(userService.updateUser(eq(1L), any(UserModificationData.class)))
                 .will(invocation -> {
                     Long id = invocation.getArgument(0);
@@ -89,7 +100,6 @@ class UserControllerTest {
             @DisplayName("해당 id의 user 정보를 리턴한다")
             void it_return_user() throws Exception {
                 mockMvc.perform(get("/users/1")
-                                .accept(APPLICATION_JSON_UTF8)
                                 .contentType(APPLICATION_JSON))
                         .andExpect(status().isOk())
                         .andExpect(content().string(containsString("홍길동")));
