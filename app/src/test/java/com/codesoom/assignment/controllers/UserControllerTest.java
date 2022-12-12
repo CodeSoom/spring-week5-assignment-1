@@ -75,6 +75,8 @@ class UserControllerTest {
                 .build();
 
         given(userService.findUser(1L)).willReturn(user);
+
+        given(userService.findUser(1000L)).willThrow(UserNotFoundException.class);
     }
 
     @Nested
@@ -94,10 +96,10 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("파라미터로 넘어오는 id가 존재하면")
-        class Context_with_existedId {
+        @DisplayName("파라미터가 존재할 때")
+        class Context_with_segment {
             @Test
-            @DisplayName("해당 id의 user 정보를 리턴한다")
+            @DisplayName("해당 id가 존재한다면, user 정보를 리턴한다")
             void it_return_user() throws Exception {
                 mockMvc.perform(get("/users/1")
                                 .contentType(APPLICATION_JSON))
@@ -106,18 +108,9 @@ class UserControllerTest {
 
                 verify(userService).findUser(1L);
             }
-        }
-
-        @Nested
-        @DisplayName("파라미터로 넘어오는 id가 존재하지 않으면")
-        class Context_with_notExistedId {
-            @BeforeEach
-            void setUp() {
-                given(userService.findUser(1000L)).willThrow(UserNotFoundException.class);
-            }
 
             @Test
-            @DisplayName("UserNotFoundException을 던진다")
+            @DisplayName("해당 id가 존재하지 않는다면, UserNotFoundException을 던진다")
             void it_throws_UserNotFoundException() throws Exception {
                 mockMvc.perform(get("/users/1000"))
                         .andExpect(status().isNotFound());
@@ -128,11 +121,12 @@ class UserControllerTest {
         }
     }
 
+
     @Nested
     @DisplayName("POST 요청은")
     class Describe_POST {
         @Nested
-        @DisplayName("valid한 UserData가 넘어오면")
+        @DisplayName("유효성검사에 통과한 이름, 이메일, 비밀번호가 넘어오면")
         class Context_with_validUserData {
             @Test
             @DisplayName("생성된 user를 리턴한다")
@@ -155,7 +149,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("valid에 통과하지 못한 UserData가 넘어오면")
+        @DisplayName("이름, 이메일, 비밀번호가 비어있는 UserData가 넘어오면")
         class Context_with_notValidUserData {
             @Test
             @DisplayName("MethodArgumentNotValidException을 던진다")
@@ -186,7 +180,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("존재하는 id와 valid한 UserData가 넘어오면")
+        @DisplayName("존재하는 id와 유효성 검사에 통과한 이름, 비밀번호가 넘어오면")
         class Context_with_validIdAndUserData {
             @Test
             @DisplayName("해당 user를 업데이트한다")
@@ -222,7 +216,7 @@ class UserControllerTest {
         }
 
         @Nested
-        @DisplayName("valid에 통과하지 못한 UserData가 넘어오면")
+        @DisplayName("이름과 비밀번호가 비어있는 UserData가 넘어오면")
         class Context_with_notValidUserData {
             @Test
             @DisplayName("MethodArgumentNotValidException을 던진다")
