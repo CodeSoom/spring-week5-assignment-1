@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -9,13 +9,13 @@ import ProductsContainer from '../components/containers/ProductsContainer';
 import { loadProducts, clearSelectedProductId } from '../redux/slice';
 
 export default function ProductsPage() {
-  const history = useHistory();
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { selectedProductId } = useSelector((state) => state);
 
   const handleClick = () => {
-    history.push('/products/product');
+    navigate('/products/product');
   };
 
   useEffect(() => {
@@ -24,7 +24,7 @@ export default function ProductsPage() {
 
   useEffect(() => {
     if (selectedProductId) {
-      history.push(`/products/${selectedProductId}`);
+      navigate(`/products/${selectedProductId}`);
       dispatch(clearSelectedProductId());
     }
   }, [selectedProductId]);
