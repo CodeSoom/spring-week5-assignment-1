@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 
 @Setter
 @Getter
@@ -13,13 +14,14 @@ import javax.validation.constraints.NotNull;
 public class ProductData {
     private Long id;
 
-    @NotBlank
+    @NotBlank(message = "제품명을 입력하지 않았습니다. 제품명을 입력해주세요.")
     private String name;
 
-    @NotBlank
+    @NotBlank(message = "메이커를 입력하지 않았습니다. 메이커를 입력해주세요.")
     private String maker;
 
-    @NotNull
+    @NotNull(message = "가격을 입력하지 않았습니다. 가격을 입력해주세요.")
+    @PositiveOrZero(message = "가격을 잘못 입력하셨습니다. 0 이상의 양수만 입력해주세요.") // 양수와 0만 허용
     private Integer price;
 
     private String imageUrl;
