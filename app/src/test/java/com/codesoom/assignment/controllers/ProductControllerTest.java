@@ -33,12 +33,13 @@ class ProductControllerTest {
     유효성을 검사하여 올바른 에러 응답을 만들어주세요.
 
     고양이 장난감 상세 조회하기 - GET /products/{id}
-     - 유효한 ID가 아닐 경우에 대한 예외처리 > Service에서 예외처리.
+     - 유효한 ID가 아닐 경우에 대한 예외처리 > Service에서 예외처리. 
     고양이 장난감 등록하기 - POST /products
-     - 이름, 메이커, 가격에 대한 Validation 및 예외처리
-     - 가격이 문자열로 들어왔을 때의 예외처리
+     - 이름, 메이커, 가격에 대한 Validation 및 예외처리 o
+     - 가격이 문자열로 들어왔을 때의 예외처리 o
     고양이 장난감 수정하기 - PATCH /products/{id}
      - 이름, 메이커, 가격에 대한 Validation 및 예외처리
+     - 가격이 문자열로 들어왔을 때의 예외처리 o
     고양이 장난감 삭제하기 - DELETE /products/{id}
     */
 
@@ -206,8 +207,23 @@ class ProductControllerTest {
                         .content("{\"name\":\"\",\"maker\":\"\"," +
                                 "\"price\":0}")
         )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("예외문구"));
     }
+
+    @Test
+    void updateWithStringTypePrice() throws Exception {
+        mockMvc.perform(
+                        patch("/products/1")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
+                                        "\"price\":\"1,000\"}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("예외문구"));
+    }
+
 
     @Test
     void destroyWithExistedProduct() throws Exception {
