@@ -15,7 +15,7 @@ import javax.validation.constraints.PositiveOrZero;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProductData {
-    
+
     private Long id;
 
     @Mapping("name")
