@@ -25,6 +25,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
+
+
+    /* Validation 처리
+    고양이 장난감은 이름, 메이커 그리고 가격은 필수 입력 항목입니다.
+    이 중에서 하나라도 빠트린 경우에는 처리를 거부하고 웹에게 에러 응답을 전달해야 합니다.
+    유효성을 검사하여 올바른 에러 응답을 만들어주세요.
+
+    고양이 장난감 상세 조회하기 - GET /products/{id}
+     - 유효한 ID가 아닐 경우에 대한 예외처리 > Service에서 예외처리.
+    고양이 장난감 등록하기 - POST /products
+     - 이름, 메이커, 가격에 대한 Validation 및 예외처리
+    고양이 장난감 수정하기 - PATCH /products/{id}
+     - 이름, 메이커, 가격에 대한 Validation 및 예외처리
+    고양이 장난감 삭제하기 - DELETE /products/{id}
+    */
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -135,6 +151,19 @@ class ProductControllerTest {
                                 "\"price\":0}")
         )
                 .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void createWithStringTypePrice() throws Exception {
+        mockMvc.perform(
+                post("/products")
+                        .accept(MediaType.APPLICATION_JSON_UTF8)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
+                                "\"price\":\"0원\"}")
+        )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("예외문구"));
     }
 
     @Test
