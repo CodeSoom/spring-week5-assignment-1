@@ -189,10 +189,10 @@ class ProductControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                "\"price\":\"0원\"}")
+                                "\"price\":-1}")
         )
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("가격을 잘못 입력하셨습니다. 0 이상의 양수만 입력해주세요."));
+                .andExpect(content().string(containsString("가격을 잘못 입력하셨습니다. 0 이상의 양수만 입력해주세요.")));
     }
 
     @Test
@@ -269,10 +269,10 @@ class ProductControllerTest {
                                 .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
-                                        "\"price\":\"1,000\"}")
+                                        "\"price\":-1000}")
                 )
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("가격을 잘못 입력하셨습니다. 0 이상의 양수만 입력해주세요."));
+                .andExpect(content().string(containsString("가격을 잘못 입력하셨습니다. 0 이상의 양수만 입력해주세요.")));
     }
 
 
