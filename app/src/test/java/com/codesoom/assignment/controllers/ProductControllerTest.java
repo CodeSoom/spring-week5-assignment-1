@@ -4,6 +4,7 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.application.ProductService;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.dto.ProductData;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
+
+    @Autowired
+    ObjectMapper objectMapper;
 
     @MockBean
     private ProductService productService;
@@ -127,6 +131,7 @@ class ProductControllerTest {
 
     @Test
     void createWithInvalidAttributes() throws Exception {
+
         mockMvc.perform(
                 post("/products")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
@@ -139,6 +144,7 @@ class ProductControllerTest {
 
     @Test
     void updateWithExistedProduct() throws Exception {
+        objectMapper.writeValueAsString("name : 쥐순이");
         mockMvc.perform(
                 patch("/products/1")
                         .accept(MediaType.APPLICATION_JSON_UTF8)

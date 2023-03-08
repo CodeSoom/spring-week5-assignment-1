@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
@@ -16,7 +17,7 @@ import javax.persistence.Id;
 @AllArgsConstructor
 public class Product {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
@@ -35,5 +36,12 @@ public class Product {
         this.maker = maker;
         this.price = price;
         this.imageUrl = imageUrl;
+    }
+
+    public void change(Product product) {
+        this.name = product.getName();
+        this.maker = product.getMaker();
+        this.price = product.getPrice();
+        this.imageUrl = product.getImageUrl();
     }
 }

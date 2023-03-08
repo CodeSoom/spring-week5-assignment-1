@@ -4,6 +4,8 @@ import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.dto.ProductData;
+import com.github.dozermapper.core.Mapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -11,12 +13,11 @@ import java.util.List;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class ProductService {
     private final ProductRepository productRepository;
+    private final Mapper mapper;
 
-    public ProductService(ProductRepository productRepository) {
-        this.productRepository = productRepository;
-    }
 
     public List<Product> getProducts() {
         return productRepository.findAll();
@@ -27,19 +28,14 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-        Product product = Product.builder()
-                .name(productData.getName())
-                .maker(productData.getMaker())
-                .price(productData.getPrice())
-                .imageUrl(productData.getImageUrl())
-                .build();
+        Product product = mapper.map(productData,Product.class);
         return productRepository.save(product);
     }
 
     public Product updateProduct(Long id, ProductData productData) {
         Product product = findProduct(id);
 
-        product.change(
+        findProduct(id).change(
                 productData.getName(),
                 productData.getMaker(),
                 productData.getPrice(),
