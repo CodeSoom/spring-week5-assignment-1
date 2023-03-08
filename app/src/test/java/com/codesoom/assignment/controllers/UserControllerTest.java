@@ -138,7 +138,7 @@ class UserControllerTest {
                         patch("/users/"+DEFAULT_ID)
                                 .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"앙김홍집\",\"email\":\"hongzip@naver.com\"," +
+                                .content("{\"name\":\"앙김홍집\"," +
                                         "\"password\":\"123123\"}")
                 )
                 .andExpect(status().isOk())
@@ -151,7 +151,7 @@ class UserControllerTest {
         mockMvc.perform(
                         patch("/users/"+INVALID_ID)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"앙김홍집\",\"email\":\"hongzip@naver.com\"," +
+                                .content("{\"name\":\"앙김홍집\"," +
                                         "\"password\":\"123123\"}")
                 )
                 .andExpect(status().isNotFound());
@@ -163,20 +163,20 @@ class UserControllerTest {
                         patch("/users/1")
                                 .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"\",\"email\":\"hongzip@naver.com\"," +
+                                .content("{\"name\":\"\"," +
                                         "\"password\":\"123123\"}")
                 )
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(containsString("이름을 입력하지 않았습니다. 이름을 입력해주세요.")));
     }
-    
+
     @Test
     void updateWithInvalidPassword() throws Exception {
         mockMvc.perform(
                         patch("/users/1")
                                 .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"앙김홍집\",\"email\":\"hongzip@naver.com\"," +
+                                .content("{\"name\":\"앙김홍집\"," +
                                         "\"password\":\"\"}")
                 )
                 .andExpect(status().isBadRequest())

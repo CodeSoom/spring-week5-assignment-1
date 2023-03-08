@@ -8,7 +8,6 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class AppTest {
     @Test
     void main() {
-        String[] a = {};
-        App.main(a);
+        App.main(new String[] {});
     }
 }
