@@ -19,6 +19,7 @@ class ProductTest {
         assertThat(product.getMaker()).isEqualTo("냥이월드");
         assertThat(product.getPrice()).isEqualTo(5000);
         assertThat(product.getImageUrl()).isNull();
+        assertThat(Product.builder().toString()).isNotNull();
     }
 
     @Test
@@ -39,4 +40,5 @@ class ProductTest {
         assertThat(product.getImageUrl())
                 .isEqualTo("http://localhost:8080/rat");
     }
+
 }

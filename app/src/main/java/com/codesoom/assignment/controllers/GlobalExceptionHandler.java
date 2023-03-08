@@ -36,10 +36,7 @@ public class GlobalExceptionHandler {
 
         BindingResult bindingResult = e.getBindingResult();
 
-        if(bindingResult.hasErrors()){
-            return bindingResult.getFieldError().getDefaultMessage();
-        }
+        return bindingResult.getFieldError().getDefaultMessage();
 
-        return "잘못된 요청정보입니다. 관리자에게 문의해주세요.";
     }
 }

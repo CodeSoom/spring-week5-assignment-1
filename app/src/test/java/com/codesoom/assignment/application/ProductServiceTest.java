@@ -33,6 +33,7 @@ class ProductServiceTest {
                 .name("쥐돌이")
                 .maker("냥이월드")
                 .price(5000)
+                .imageUrl("test.co.kr")
                 .build();
 
         given(productRepository.findAll()).willReturn(List.of(product));

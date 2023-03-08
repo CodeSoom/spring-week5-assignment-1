@@ -7,7 +7,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 class AppTest {
     @Test
-    void appHasAGreeting() {
-        App classUnderTest = new App();
+    void main() {
+        String[] a = {};
+        App.main(a);
     }
 }
