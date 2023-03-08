@@ -169,33 +169,7 @@ class UserControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string(containsString("이름을 입력하지 않았습니다. 이름을 입력해주세요.")));
     }
-
-    @Test
-    void updateWithInvalidEmail() throws Exception {
-        mockMvc.perform(
-                        patch("/users/1")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"앙김홍집\",\"email\":\"\"," +
-                                        "\"password\":\"123123\"}")
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("이메일을 입력하지 않았습니다. 이메일을 입력해주세요.")));
-    }
-
-    @Test
-    void updateWithInvalidEmailType() throws Exception {
-        mockMvc.perform(
-                        patch("/users/1")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content("{\"name\":\"앙김홍집\",\"email\":\"hongzip@\"," +
-                                        "\"password\":\"123123\"}")
-                )
-                .andExpect(status().isBadRequest())
-                .andExpect(content().string(containsString("잘못된 형식의 이메일입니다. 형식에 맞는 이메일을 입력해주세요.")));
-    }
-
+    
     @Test
     void updateWithInvalidPassword() throws Exception {
         mockMvc.perform(

@@ -3,9 +3,12 @@ package com.codesoom.assignment.controllers;
 import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.group.UserCreateValidationGroup;
+import com.codesoom.assignment.group.UserUpdateValidationGroup;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -28,12 +31,12 @@ public class UserController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public User create(@RequestBody @Valid UserData userData){
+    public User create(@RequestBody @Validated(UserCreateValidationGroup.class) UserData userData){
         return userService.createUser(userData);
     }
 
     @PatchMapping ("/{id}")
-    public User update(@PathVariable Long id, @RequestBody UserData userData){
+    public User update(@PathVariable Long id, @RequestBody @Validated(UserUpdateValidationGroup.class) UserData userData){
         return userService.updateUser(id, userData);
     }
 
