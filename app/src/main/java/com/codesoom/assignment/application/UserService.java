@@ -25,16 +25,12 @@ public class UserService {
     }
 
     public void update(Long id, UserRequest userRequest) {
-        findById(id);
-        findById(id).change(
-                userRequest.getName(),
-                userRequest.getName(),
-                userRequest.getPassword()
-        );
+        User user = findById(id);
+        user.change(userRequest.getName(),user.getEmail(),user.getPassword());
     }
 
     private User findById(Long id) {
         return this.userRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

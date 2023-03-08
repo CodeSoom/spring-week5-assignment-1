@@ -1,5 +1,6 @@
 package com.codesoom.assignment.dto;
 
+import com.codesoom.assignment.domain.User;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,6 +14,8 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 public class UserCreateDto {
 
+    private Long id;
+
     @NotBlank(message = "이름을 입력하세요")
     private String name;
 
@@ -21,4 +24,13 @@ public class UserCreateDto {
 
     @NotBlank(message = "비밀번호를 입력하세요")
     private String password;
+
+    public User toEntity(){
+        return User.builder()
+                .id(id)
+                .name(name)
+                .email(email)
+                .password(password)
+                .build();
+    }
 }
