@@ -66,6 +66,26 @@ public class UserControllerTest {
         verify(userService,times(1)).create(any(UserCreateDto.class));
     }
     @Test
+    @DisplayName("create_Valid_Error")
+    public void createInValid_Arg() throws Exception{
+        //given
+        UserCreateDto user = UserCreateDto.builder()
+                .name("name")
+                .password("password")
+                .build();
+
+        mockMvc.perform(post("/user")
+                .contentType(APPLICATION_JSON)
+                .content(new ObjectMapper().writeValueAsString(user)))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("잘못된 입력으로 에러가 발생."))
+                .andExpect(jsonPath("$.code").value("400"))
+                .andExpect(jsonPath("$.validation.email").value("이메일을 입력하세요"))
+                .andDo(print());
+
+//        verify(userService,times(1)).create(any(UserCreateDto.class));
+    }
+    @Test
     @DisplayName("create")
     public void createInValid() throws Exception{
         //given
@@ -78,6 +98,8 @@ public class UserControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(new ObjectMapper().writeValueAsString(user)))
                 .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("잘못된 입력으로 에러가 발생."))
+                .andExpect(jsonPath("$.validation.email").value("이메일을 입력하세요"))
                 .andDo(print());
 
     }
