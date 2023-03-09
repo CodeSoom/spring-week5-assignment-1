@@ -5,6 +5,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserCreateDto;
 import com.codesoom.assignment.dto.UserRequest;
+import com.codesoom.assignment.exception.NotFoundIdException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,8 +30,16 @@ public class UserService {
         user.change(userRequest.getName(),user.getEmail(),user.getPassword());
     }
 
+
+    public void delete(Long id) {
+        this.userRepository.delete(findById(id));
+    }
+
+
     private User findById(Long id) {
         return this.userRepository.findById(id)
-                .orElseThrow(IllegalArgumentException::new);
+                .orElseThrow(()->new NotFoundIdException(id));
     }
+
+
 }
