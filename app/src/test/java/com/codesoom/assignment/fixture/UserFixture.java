@@ -5,7 +5,8 @@ import com.codesoom.assignment.dto.UserData;
 
 public enum UserFixture {
 
-    UPDATE_USER(1L, "앙김홍집","hongzip@naver.com","123123");
+    UPDATE_USER(1L, "앙김홍집","hongzip@naver.com","123123"),
+    CREATE_USER(2L, "앙생성집","sangzip@naver.com","12345");
 
     private final Long id;
     private final String name;

@@ -20,12 +20,7 @@ public class UserData {
     @NotBlank(message = "이름을 입력하지 않았습니다. 이름을 입력해주세요."
             ,groups = {UserCreateValidationGroup.class, UserUpdateValidationGroup.class})
     private String name;
-
-    @Mapping("password")
-    @NotBlank(message = "비밀번호를 입력하지 않았습니다. 비밀번호를 입력해주세요."
-            ,groups = {UserCreateValidationGroup.class, UserUpdateValidationGroup.class})
-    private String password;
-
+    
     @Mapping("email")
     @NotBlank(message = "이메일을 입력하지 않았습니다. 이메일을 입력해주세요."
             ,groups = {UserCreateValidationGroup.class})
@@ -33,6 +28,10 @@ public class UserData {
             ,groups = {UserCreateValidationGroup.class})
     private String email;
 
+    @Mapping("password")
+    @NotBlank(message = "비밀번호를 입력하지 않았습니다. 비밀번호를 입력해주세요."
+            ,groups = {UserCreateValidationGroup.class, UserUpdateValidationGroup.class})
+    private String password;
 
 
 

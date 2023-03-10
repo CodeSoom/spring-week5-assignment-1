@@ -57,14 +57,14 @@ class UserServiceTest {
 
     @Test
     void createUser() {
-        UserData userData = UserFixture.UPDATE_USER.getUserData();
+        UserData userData = UserFixture.CREATE_USER.getUserData();
 
         User user = userService.createUser(userData);
 
         assertThat(user.getId()).isEqualTo(2L);
-        assertThat(user.getName()).isEqualTo("앙김홍집");
-        assertThat(user.getEmail()).isEqualTo("hongzip@naver.com");
-        assertThat(user.getPassword()).isEqualTo("123123");
+        assertThat(user.getName()).isEqualTo("앙생성집");
+        assertThat(user.getEmail()).isEqualTo("sangzip@naver.com");
+        assertThat(user.getPassword()).isEqualTo("12345");
 
     }
 
