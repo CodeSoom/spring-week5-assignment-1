@@ -4,6 +4,7 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.codesoom.assignment.fixture.UserFixture;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -56,11 +57,7 @@ class UserServiceTest {
 
     @Test
     void createUser() {
-        UserData userData = UserData.builder()
-                .name("앙김홍집")
-                .email("hongzip@naver.com")
-                .password("123123")
-                .build();
+        UserData userData = UserFixture.UPDATE_USER.getUserData();
 
         User user = userService.createUser(userData);
 
@@ -73,11 +70,7 @@ class UserServiceTest {
 
     @Test
     void updateUserWithExistedId() {
-        UserData userData = UserData.builder()
-                .name("앙김홍집")
-                .email("hongzip@naver.com")
-                .password("123123")
-                .build();
+        UserData userData = UserFixture.UPDATE_USER.getUserData();
 
         User user = userService.updateUser(DEFAULT_ID, userData);
 
@@ -87,11 +80,7 @@ class UserServiceTest {
 
     @Test
     void updateUserWithNotExistedId() {
-        UserData userData = UserData.builder()
-                .name("앙김홍집")
-                .email("hongzip@naver.com")
-                .password("123123")
-                .build();
+        UserData userData = UserFixture.UPDATE_USER.getUserData();
 
         assertThatThrownBy(() -> userService.updateUser(INVALID_ID, userData))
                 .isInstanceOf(UserNotFoundException.class);
