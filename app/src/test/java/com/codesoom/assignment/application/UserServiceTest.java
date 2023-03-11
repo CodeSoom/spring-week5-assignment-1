@@ -7,6 +7,8 @@ import com.codesoom.assignment.dto.UserData;
 import com.codesoom.assignment.fixture.UserFixture;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -55,47 +57,83 @@ class UserServiceTest {
         });
     }
 
-    @Test
-    void createUser() {
-        UserData userData = UserFixture.CREATE_USER.getUserData();
+    @Nested
+    @DisplayName("유저 생성")
+    class CreateUser{
+        @Test
+        @DisplayName("유저를 생성한다.")
+        void createUser() {
+            UserData userData = UserFixture.CREATE_USER.getUserData();
 
-        User user = userService.createUser(userData);
+            User user = userService.createUser(userData);
 
-        assertThat(user.getId()).isEqualTo(2L);
-        assertThat(user.getName()).isEqualTo("앙생성집");
-        assertThat(user.getEmail()).isEqualTo("sangzip@naver.com");
-        assertThat(user.getPassword()).isEqualTo("12345");
+            assertThat(user.getId()).isEqualTo(2L);
+            assertThat(user.getName()).isEqualTo("앙생성집");
+            assertThat(user.getEmail()).isEqualTo("sangzip@naver.com");
+            assertThat(user.getPassword()).isEqualTo("12345");
 
+        }
     }
 
-    @Test
-    void updateUserWithExistedId() {
-        UserData userData = UserFixture.UPDATE_USER.getUserData();
 
-        User user = userService.updateUser(DEFAULT_ID, userData);
+    @Nested
+    @DisplayName("유저 수정")
+    class UpdateUser{
 
-        assertThat(user.getId()).isEqualTo(DEFAULT_ID);
-        assertThat(user.getName()).isEqualTo("앙김홍집");
+        @Nested
+        @DisplayName("존재하지 않는 유저라면")
+        class NotExistUser{
+            @Test
+            @DisplayName("UserNotFoundException 예외를 던진다")
+            void throwsUserNotFoundException() {
+                UserData userData = UserFixture.UPDATE_USER.getUserData();
+
+                assertThatThrownBy(() -> userService.updateUser(INVALID_ID, userData))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하는 유저라면")
+        class ExistUser{
+
+            @Test
+            @DisplayName("수정된 유저정보를 반환한다")
+            void updateUserInformation() {
+                UserData userData = UserFixture.UPDATE_USER.getUserData();
+
+                User user = userService.updateUser(DEFAULT_ID, userData);
+
+                assertThat(user.getId()).isEqualTo(DEFAULT_ID);
+                assertThat(user.getName()).isEqualTo("앙김홍집");
+            }
+        }
     }
 
-    @Test
-    void updateUserWithNotExistedId() {
-        UserData userData = UserFixture.UPDATE_USER.getUserData();
+    @Nested
+    @DisplayName("유저 삭제")
+    class DeleteUser{
+        
+        @Nested
+        @DisplayName("존재하지 않는 유저라면")
+        class NotExistUser{
+            @Test
+            @DisplayName("UserNotFoundException 을 던진다.")
+            void throwsUserNotFoundException() {
+                assertThatThrownBy(() -> userService.deleteUser(INVALID_ID))
+                        .isInstanceOf(UserNotFoundException.class);
+            }
+        }
 
-        assertThatThrownBy(() -> userService.updateUser(INVALID_ID, userData))
-                .isInstanceOf(UserNotFoundException.class);
-    }
-
-    @Test
-    void deleteUserWithExistedId() {
-        userService.deleteUser(DEFAULT_ID);
-
-        verify(userRepository).delete(any(User.class));
-    }
-
-    @Test
-    void deleteUserWithNotExistedId() {
-        assertThatThrownBy(() -> userService.deleteUser(INVALID_ID))
-                .isInstanceOf(UserNotFoundException.class);
+        @Nested
+        @DisplayName("존재하는 유저라면")
+        class ExistUser{
+            @Test
+            @DisplayName("유저를 삭제한다.")
+            void deleteUser() {
+                userService.deleteUser(DEFAULT_ID);
+                verify(userRepository).delete(any(User.class));
+            }
+        }
     }
 }
