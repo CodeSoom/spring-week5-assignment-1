@@ -1,8 +1,10 @@
 package com.codesoom.assignment.controllers;
 
+
 import com.codesoom.assignment.application.UserService;
-import com.codesoom.assignment.dto.UserCreateDto;
-import com.codesoom.assignment.dto.UserRequest;
+import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.dto.UserResultData;
+import com.codesoom.assignment.dto.UserRegistrationData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -10,29 +12,22 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
 @RequiredArgsConstructor
-@CrossOrigin
+@RequestMapping("/users")
 public class UserController {
 
     private final UserService userService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void create(@RequestBody @Valid UserCreateDto userCreateDto){
-        this.userService.create(userCreateDto);
-    }
+    public UserResultData create(@RequestBody @Valid UserRegistrationData userData){
+        User user = userService.registerUser(userData);
 
-    @PatchMapping("{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public void update(@PathVariable Long id , @RequestBody @Valid UserRequest userRequest){
-        this.userService.update(id , userRequest);
-    }
-
-    @DeleteMapping("{id}")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable Long id){
-        this.userService.delete(id);
+        return UserResultData.builder()
+                .id(user.getId())
+                .email(user.getEmail())
+                .name(user.getName())
+                .build();
     }
 
 }

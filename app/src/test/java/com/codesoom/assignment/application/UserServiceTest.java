@@ -1,98 +1,81 @@
 package com.codesoom.assignment.application;
 
-import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
-import com.codesoom.assignment.dto.UserCreateDto;
-import com.codesoom.assignment.dto.UserRequest;
-import com.codesoom.assignment.exception.NotFoundIdException;
+import com.codesoom.assignment.dto.UserRegistrationData;
+import com.codesoom.assignment.exception.UserEmailDuplcationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
-import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
+import static org.assertj.core.api.AssertionsForClassTypes.assertThatThrownBy;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.verify;
 
 @SpringBootTest
-@Transactional
 class UserServiceTest {
 
-    private UserService userService;
+    @Mock
+    private UserRepository userRepository;
 
-    private UserRepository userRepository = mock(UserRepository.class);
+    @InjectMocks
+    private UserService userService;
+    
+    private static final String EXIST_EMAIL = "EXIST_EMAIL@test.com";
+    private static final String EMAIL = "test@test.com";
 
     @BeforeEach
-    void setup(){
-        userService = new UserService(userRepository);
+    void setUp(){
+        given(userRepository.save(any(User.class))).will(invocation -> {
+            User source = invocation.getArgument(0);
+            return User.builder()
+                    .id(13L)
+                    .name(source.getName())
+                    .email(source.getEmail())
+                    .password(source.getPassword())
+                    .build();
+        });
 
-        User user= User.builder()
-                .id(1L)
-                .name("NAME")
-                .email("EMAIL")
-                .password("PASSWORD")
-                .build();
-        given(userRepository.findById(1L)).willReturn(Optional.of(user));
+        given(userRepository.existsByEmail(EXIST_EMAIL)).willThrow(new UserEmailDuplcationException(EXIST_EMAIL));
     }
 
     @Test
-    @DisplayName("post/user")
-    public void createValid() throws Exception{
-        //given
-        UserCreateDto dto = UserCreateDto.builder()
-                .id(1L)
-                .name("name")
-                .email("email")
-                .password("password")
+    @DisplayName("registerUser")
+    public void registerUser() throws Exception {
+        UserRegistrationData userRegistrationData = UserRegistrationData.builder()
+                .email(EMAIL)
+                .name("Tester")
+                .password("test")
                 .build();
 
-        userService.create(dto);
-        //when
+        User user = userService.registerUser(userRegistrationData);
 
-        //Then
+        assertThat(user.getName()).isEqualTo("Tester");
+        assertThat(user.getId()).isEqualTo(13L);
+
         verify(userRepository).save(any(User.class));
-        assertThat(userRepository.findAll()).isNotNull();
     }
 
     @Test
-    @DisplayName("patch /post/{id}")
-    public void updateValid() throws Exception{
-        //when
-        UserRequest userRequest = UserRequest.builder()
-                .name("update_name")
-                .email("update_email")
-                .password("update_password")
+    @DisplayName("registerUser")
+    public void registerUserWithDuplicatedEmail() throws Exception {
+        UserRegistrationData userRegistrationData = UserRegistrationData.builder()
+                .email(EXIST_EMAIL)
+                .name("Tester")
+                .password("test")
                 .build();
-        userService.update(1L , userRequest);
-        //Then
-        User findUser = userRepository.findById(1L)
-                .orElseThrow(IllegalArgumentException::new);
 
-        assertThat(findUser.getName()).isEqualTo("update_name");
+        assertThatThrownBy(()->userService.registerUser(userRegistrationData))
+                .isInstanceOf(UserEmailDuplcationException.class)
+                .hasMessageContaining("User email is already existed"+userRegistrationData.getEmail());
+
+
+        verify(userRepository).existsByEmail(EXIST_EMAIL);
     }
-
-    @Test
-    @DisplayName("delete /user/{id}")
-    public void deleteValid() throws Exception{
-        this.userService.delete(1L);
-        verify(userRepository).delete(any(User.class));
-    }
-
-    @Test
-    @DisplayName("delete/user{id}")
-    public void deleteInValid() throws Exception{
-        assertThatThrownBy(() -> userService.delete(1000L))
-                .isInstanceOf(NotFoundIdException.class);
-    }
-
-
-
 
 }
