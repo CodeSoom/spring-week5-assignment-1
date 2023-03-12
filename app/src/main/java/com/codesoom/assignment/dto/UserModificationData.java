@@ -4,14 +4,13 @@ import lombok.*;
 
 import javax.validation.constraints.NotBlank;
 
-@Getter
+@Data
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-public class UserResultData {
-    private Long id;
-    @NotBlank
-    private String email;
+public class UserModificationData {
     @NotBlank
     private String name;
+    @NotBlank
+    private String password;
 }

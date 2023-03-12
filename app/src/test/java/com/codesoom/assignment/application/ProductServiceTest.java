@@ -7,6 +7,7 @@ import com.codesoom.assignment.dto.ProductData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
@@ -138,5 +139,15 @@ class ProductServiceTest {
     void deleteProductWithNotExistedId() {
         assertThatThrownBy(() -> productService.deleteProduct(1000L))
                 .isInstanceOf(ProductNotFoundException.class);
+    }
+    
+    @Test
+    @DisplayName("업데이트 아이디 없음")        
+    public void updateUserWithInvalidAAttributes() throws Exception{
+        //given
+        
+        //when
+        
+        //Then
     }
 }

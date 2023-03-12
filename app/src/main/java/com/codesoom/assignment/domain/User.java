@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.UserModificationData;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -23,9 +24,15 @@ public class User {
 
     private String password;
 
-    public void change(String name, String email, String password) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
+    @Builder.Default
+    private boolean deleted = false;
+
+    public void change(UserModificationData userModificationData) {
+        this.name = userModificationData.getName();
+        this.password = userModificationData.getPassword();
+    }
+
+    public void destory(){
+        deleted = true;
     }
 }

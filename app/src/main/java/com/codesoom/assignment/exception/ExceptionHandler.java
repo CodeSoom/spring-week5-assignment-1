@@ -20,20 +20,27 @@ public class ExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @org.springframework.web.bind.annotation.ExceptionHandler(ProductNotFoundException.class)
     public ErrorResponse handleProductTaskNotFound(ProductNotFoundException e) {
-        return ErrorSet(400 , "잘못된 에러입니다.");
+        return ErrorSet(404 , "NOT FOUND PRODUCT:{}"+e.getMessage());
     }
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @org.springframework.web.bind.annotation.ExceptionHandler(UserNotFoundException.class)
+    public ErrorResponse UserNotFoundException(UserNotFoundException e) {
+        return ErrorSet(404 , "UserNotFoundException:{}"+e.getMessage());
+    }
+
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @org.springframework.web.bind.annotation.ExceptionHandler(UserEmailDuplcationException.class)
     public ErrorResponse userEmailDuplcationException(UserEmailDuplcationException e) {
-        return ErrorSet(400 , e.getMessage());
+        return ErrorSet(400 , "UserEmail Duplication:{}"+e.getMessage());
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @org.springframework.web.bind.annotation.ExceptionHandler(MethodArgumentNotValidException.class)
     public ErrorResponse exceptionHandler(MethodArgumentNotValidException e) {
-        ErrorResponse errorResponse = ErrorSet(400 , "잘못된 입력으로 에러가 발생.");
+        ErrorResponse errorResponse = ErrorSet(400 , "Parameter Not Valid :{}"+e.getMessage());
 
         for (FieldError fieldError : e.getBindingResult().getFieldErrors())
             errorResponse.addValidation(fieldError.getField(), fieldError.getDefaultMessage());
