@@ -2,9 +2,11 @@ package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.MemberService;
 import com.codesoom.assignment.domain.Member;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.codesoom.assignment.dto.MemberData;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/member")
@@ -17,10 +19,8 @@ public class MemberController {
     }
 
     @PostMapping
-    public Member create(String name, String phone) {
-        return Member.builder()
-                .name(name)
-                .phone(phone)
-                .build();
+    @ResponseStatus(HttpStatus.CREATED)
+    public Member create(@RequestBody @Valid MemberData memberData) {
+        return memberService.create(memberData);
     }
 }
