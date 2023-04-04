@@ -11,6 +11,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultHandler;
@@ -55,6 +56,7 @@ class MemberControllerTest {
             @DisplayName("정상적으로 멤버를 만든다.")
             public void createValidMemberWithAllParameter() throws Exception {
                 MemberController memberController = new MemberController(memberService);
+
                 MemberData memberData = MemberData.builder()
                         .name("김유신")
                         .phone("01047105883")
@@ -68,5 +70,17 @@ class MemberControllerTest {
                         .andExpect(status().isCreated());
             }
         }
+
+        @Nested
+        @DisplayName("특정 파라미터가 유효성 검증을 실패할 때")
+        class SpecificInvalidParameter {
+
+            @Test
+            @DisplayName("400 에러를 던진다.")
+            void throwBadRequest() throws Exception {
+            }
+        }
     }
+
+
 }
