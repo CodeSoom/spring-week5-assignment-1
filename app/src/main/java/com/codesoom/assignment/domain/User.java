@@ -10,27 +10,26 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 @Entity
-@Getter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class Product {
+@NoArgsConstructor
+@Builder
+@Getter //getter 없으면 ServletResponse에서 응답값 매핑이 안되어 응답값이 빈값으로 내려감
+public class User {
+
     @Id
     @GeneratedValue
     private Long id;
 
     private String name;
 
-    private String maker;
+    private String email;
 
-    private Integer price;
+    private String password;
 
-    private String imageUrl;
-
-    public void change(String name, String maker, Integer price, String imageUrl) {
+    public void change(String name, String email, String password){
         this.name = name;
-        this.maker = maker;
-        this.price = price;
-        this.imageUrl = imageUrl;
+        this.email = email;
+        this.password = password;
     }
+
 }

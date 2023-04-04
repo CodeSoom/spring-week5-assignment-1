@@ -25,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @WebMvcTest(ProductController.class)
 class ProductControllerTest {
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -126,15 +127,55 @@ class ProductControllerTest {
     }
 
     @Test
-    void createWithInvalidAttributes() throws Exception {
+    void createWithInvalidName() throws Exception {
+        mockMvc.perform(
+                        post("/products")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"\",\"maker\":\"냥이월드\"," +
+                                        "\"price\":0}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("제품명을 입력하지 않았습니다. 제품명을 입력해주세요.")));
+    }
+
+    @Test
+    void createWithInvalidMaker() throws Exception {
+        mockMvc.perform(
+                        post("/products")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"쥐순이\",\"maker\":\"\"," +
+                                        "\"price\":0}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("메이커를 입력하지 않았습니다. 메이커를 입력해주세요.")));
+    }
+
+    @Test
+    void createWithInvalidPrice() throws Exception {
+        mockMvc.perform(
+                        post("/products")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
+                                        "\"price\":\"\"}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("가격을 입력하지 않았습니다. 가격을 입력해주세요.")));
+    }
+
+    @Test
+    void createWithNegativePrice() throws Exception {
         mockMvc.perform(
                 post("/products")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"maker\":\"\"," +
-                                "\"price\":0}")
+                        .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
+                                "\"price\":-1}")
         )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("가격을 잘못 입력하셨습니다. 0 이상의 양수만 입력해주세요.")));
     }
 
     @Test
@@ -166,16 +207,57 @@ class ProductControllerTest {
     }
 
     @Test
-    void updateWithInvalidAttributes() throws Exception {
+    void updateWithInvalidName() throws Exception {
         mockMvc.perform(
                 patch("/products/1")
                         .accept(MediaType.APPLICATION_JSON_UTF8)
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\"name\":\"\",\"maker\":\"\"," +
+                        .content("{\"name\":\"\",\"maker\":\"냥이월드\"," +
                                 "\"price\":0}")
         )
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("제품명을 입력하지 않았습니다. 제품명을 입력해주세요.")));
     }
+
+    @Test
+    void updateWithInvalidMaker() throws Exception {
+        mockMvc.perform(
+                        patch("/products/1")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"쥐순이\",\"maker\":\"\"," +
+                                        "\"price\":0}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("메이커를 입력하지 않았습니다. 메이커를 입력해주세요.")));
+    }
+
+    @Test
+    void updateWithInvalidPrice() throws Exception {
+        mockMvc.perform(
+                        patch("/products/1")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
+                                        "\"price\":\"\"}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("가격을 입력하지 않았습니다. 가격을 입력해주세요.")));
+    }
+
+    @Test
+    void updateWithNegativePrice() throws Exception {
+        mockMvc.perform(
+                        patch("/products/1")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content("{\"name\":\"쥐순이\",\"maker\":\"냥이월드\"," +
+                                        "\"price\":-1000}")
+                )
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(containsString("가격을 잘못 입력하셨습니다. 0 이상의 양수만 입력해주세요.")));
+    }
+
 
     @Test
     void destroyWithExistedProduct() throws Exception {
