@@ -7,6 +7,8 @@ import com.codesoom.assignment.dto.MemberData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class MemberService {
@@ -22,5 +24,9 @@ public class MemberService {
     public Member getMember(Long id) {
         return memberRepository.findById(id)
                 .orElseThrow(() -> new MemberNotFoundException(id));
+    }
+
+    public List<Member> getMembers() {
+        return memberRepository.findAll();
     }
 }

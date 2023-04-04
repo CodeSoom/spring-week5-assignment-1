@@ -14,6 +14,8 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -56,6 +58,8 @@ class MemberControllerTest {
         given(memberService.getMember(1L))
                 .willReturn(result);
 
+        given(memberService.getMembers())
+                .willReturn(List.of(result));
     }
 
     @Nested
@@ -113,6 +117,21 @@ class MemberControllerTest {
             void throwNotFoundException() throws Exception {
                 mockMvc.perform(get("/members/1000"))
                         .andExpect(status().isNotFound());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하는 회원을 조회할 경우")
+        class ExistMember {
+
+            @Test
+            @DisplayName("해당 멤버 와 상태코드 200을 응답한다.")
+            void returnMemberAndIsOk() throws Exception {
+                given(memberService.getMembers())
+                        .willReturn(List.of());
+                mockMvc.perform(get("/members")
+                                .accept(MediaType.APPLICATION_JSON_UTF8))
+                        .andExpect(status().isOk());
             }
         }
     }
