@@ -12,11 +12,12 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -61,7 +62,7 @@ class MemberControllerTest {
             @Test
             @DisplayName("정상적으로 멤버를 만든다.")
             public void createValidMemberWithAllParameter() throws Exception {
-                mockMvc.perform(MockMvcRequestBuilders.post("/member")
+                mockMvc.perform(post("/member")
                                 .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(memberData.toString()))
@@ -82,7 +83,7 @@ class MemberControllerTest {
                         .phone("")
                         .build();
 
-                mockMvc.perform(MockMvcRequestBuilders.post("/member")
+                mockMvc.perform(post("/member")
                                 .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(memberData.toString()))
@@ -91,5 +92,22 @@ class MemberControllerTest {
         }
     }
 
+
+    @Nested
+    @DisplayName("GetMember 메소드는")
+    class GetMember {
+
+        @Nested
+        @DisplayName("존재하지 않는 회원을 조회할 경우")
+        class NotExistMember {
+
+            @Test
+            @DisplayName("404에러를 던진다.")
+            void throwNotFoundException() throws Exception {
+                mockMvc.perform(get("/1000"))
+                        .andExpect(status().isNotFound());
+            }
+        }
+    }
 
 }
