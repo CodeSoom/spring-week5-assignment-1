@@ -129,6 +129,7 @@ class MemberControllerTest {
             void returnMemberAndIsOk() throws Exception {
                 given(memberService.getMembers())
                         .willReturn(List.of());
+
                 mockMvc.perform(get("/members")
                                 .accept(MediaType.APPLICATION_JSON_UTF8))
                         .andExpect(status().isOk());
