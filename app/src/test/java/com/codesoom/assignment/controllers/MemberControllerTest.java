@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@DisplayName("MemberController")
+@DisplayName("MemberController 의")
 @WebMvcTest(MemberController.class)
 class MemberControllerTest {
 
@@ -133,6 +133,21 @@ class MemberControllerTest {
                 mockMvc.perform(get("/members")
                                 .accept(MediaType.APPLICATION_JSON_UTF8))
                         .andExpect(status().isOk());
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Update 메소드는")
+    class Describe_update {
+
+        @Nested
+        @DisplayName("멤버가 존재하는 경우 ")
+        class context_with_exist_member {
+
+            @Test
+            @DisplayName("해당 멤버를 업데이트하고 반환한다. ")
+            void it_returns_valid_member() {
             }
         }
     }
