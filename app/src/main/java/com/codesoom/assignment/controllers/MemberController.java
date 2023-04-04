@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/member")
+@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
@@ -22,5 +22,10 @@ public class MemberController {
     @ResponseStatus(HttpStatus.CREATED)
     public Member create(@RequestBody @Valid MemberData memberData) {
         return memberService.create(memberData);
+    }
+
+    @GetMapping("/{id}")
+    public Member getMember(@PathVariable Long id) {
+        return memberService.getMember(id);
     }
 }
