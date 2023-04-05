@@ -19,6 +19,11 @@ public class MemberController {
         this.memberService = memberService;
     }
 
+    @GetMapping("/{id}")
+    public Member getMember(@PathVariable Long id) {
+        return memberService.getMember(id);
+    }
+
     @GetMapping
     public List<Member> getMembers() {
         return memberService.getMembers();
@@ -30,8 +35,10 @@ public class MemberController {
         return memberService.create(memberData);
     }
 
-    @GetMapping("/{id}")
-    public Member getMember(@PathVariable Long id) {
-        return memberService.getMember(id);
+    @PatchMapping("/{id}")
+    public Member update(@PathVariable Long id, @RequestBody @Valid MemberData memberData) {
+        System.out.println("long " + id);
+        System.out.println("MemberData " + memberData.toString());
+        return memberService.updateMember(id, memberData);
     }
 }

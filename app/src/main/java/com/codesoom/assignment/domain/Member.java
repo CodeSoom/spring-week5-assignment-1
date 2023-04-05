@@ -8,4 +8,9 @@ import lombok.Getter;
 public class Member {
     private String name;
     private String phone;
+
+    public void update(String name, String phone) {
+        this.name = name;
+        this.phone = phone;
+    }
 }

@@ -19,6 +19,7 @@ import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -36,6 +37,8 @@ class MemberControllerTest {
 
     MemberData memberData;
 
+    MemberData updateRequestMember;
+
     @BeforeEach
     public void init() {
         memberData = MemberData.builder()
@@ -46,6 +49,11 @@ class MemberControllerTest {
         Member result = Member.builder()
                 .name("유재석")
                 .phone("01022222222")
+                .build();
+
+        updateRequestMember = MemberData.builder()
+                .name("변경된유재석")
+                .phone("01047105883")
                 .build();
 
         given(memberService.create(memberData)).willReturn(result);
@@ -142,7 +150,7 @@ class MemberControllerTest {
     class Describe_update {
 
         @Nested
-        @DisplayName("멤버가 존재하는 경우 ")
+        @DisplayName("멤버가 존재하는 경우에 ")
         class context_with_exist_member {
 
             @Test
@@ -153,11 +161,59 @@ class MemberControllerTest {
                         .phone("01047105883")
                         .build();
 
-                mockMvc.perform(patch("/1"))
+                Member updatedMember = Member.builder()
+                        .name(updateRequestMember.getName())
+                        .phone(updateRequestMember.getPhone())
+                        .build();
+
+                given(memberService.updateMember(anyLong(), any())).willReturn(updatedMember);
+
+                mockMvc.perform(patch("/members/1")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(updateRequestMember.toString()))
                         .andExpect(status().isOk())
-                        .andExpect(content().string(containsString(updateRequestMember.getName())));
+                        .andExpect(content().string(containsString("변경된유재석")));
+            }
+        }
+
+        @Nested
+        @DisplayName("유효하지 않은 요청값일 경우")
+        class context_with_invalid_parameter {
+
+            @Test
+            @DisplayName("400을 응답한다. ")
+            void it_returns_not_found_status() throws Exception {
+                MemberData invalidUpdateRequestMember = MemberData.builder()
+                        .name("")
+                        .phone("")
+                        .build();
+
+                mockMvc.perform(patch("/members/1")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(invalidUpdateRequestMember.toString()))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+        @Nested
+        @DisplayName("존재하지 않은 멤버를 요청할 때")
+        class context_with_not_exist_member {
+
+            @Test
+            @DisplayName("404을 응답한다. ")
+            void it_returns_not_found_status() throws Exception {
+
+                given(memberService.updateMember(anyLong(), any()))
+                        .willThrow(new MemberNotFoundException(1000L));
+
+                mockMvc.perform(patch("/members/1000")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(updateRequestMember.toString()))
+                        .andExpect(status().isNotFound());
             }
         }
     }
-
 }

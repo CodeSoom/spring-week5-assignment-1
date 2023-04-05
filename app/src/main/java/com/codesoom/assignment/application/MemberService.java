@@ -15,10 +15,12 @@ public class MemberService {
     private final MemberRepository memberRepository;
 
     public Member create(MemberData memberData) {
-        return Member.builder()
+        Member createdMember = Member.builder()
                 .name(memberData.getName())
                 .phone(memberData.getPhone())
                 .build();
+        memberRepository.save(createdMember);
+        return createdMember;
     }
 
     public Member getMember(Long id) {
@@ -28,5 +30,11 @@ public class MemberService {
 
     public List<Member> getMembers() {
         return memberRepository.findAll();
+    }
+
+    public Member updateMember(Long id, MemberData memberData) {
+        Member member = getMember(id);
+        member.update(memberData.getName(), member.getPhone());
+        return member;
     }
 }
