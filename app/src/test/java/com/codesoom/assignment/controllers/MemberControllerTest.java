@@ -87,7 +87,7 @@ class MemberControllerTest {
         class SpecificInvalidParameter {
 
             @Test
-            @DisplayName("400 에러를 던진다.")
+            @DisplayName("400을 응답한다.")
             void throwBadRequest() throws Exception {
                 MemberData memberData = MemberData.builder()
                         .name("name")
