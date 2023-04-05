@@ -1,6 +1,6 @@
 package com.codesoom.assignment.controllers;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.MemberNotFoundException;
 import com.codesoom.assignment.application.MemberService;
 import com.codesoom.assignment.domain.Member;
 import com.codesoom.assignment.dto.MemberData;
@@ -38,22 +38,19 @@ class MemberControllerTest {
 
     @BeforeEach
     public void init() {
-        MemberData.builder()
-                .name("김유신")
-                .phone("01047105883")
+        memberData = MemberData.builder()
+                .name("유재석")
+                .phone("01022222222")
                 .build();
 
         Member result = Member.builder()
-                .name("김유신")
-                .phone("01047105883")
+                .name("유재석")
+                .phone("01022222222")
                 .build();
 
         given(memberService.create(memberData)).willReturn(result);
 
         given(memberService.create(any())).willReturn(result);
-
-        given(memberService.getMember(1000L))
-                .willThrow(new ProductNotFoundException(1000L));
 
         given(memberService.getMember(1L))
                 .willReturn(result);
@@ -71,13 +68,13 @@ class MemberControllerTest {
         class ValidAllParameter {
 
             @Test
-            @DisplayName("정상적으로 멤버를 만든다.")
+            @DisplayName("정상적으로 데이터를 만들고 201을 응답한다.")
             public void createValidMemberWithAllParameter() throws Exception {
                 mockMvc.perform(post("/members")
                                 .accept(MediaType.APPLICATION_JSON_UTF8)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(memberData.toString()))
-                        .andExpect(content().string(containsString("김유신")))
+                        .andExpect(content().string(containsString(memberData.getName())))
                         .andExpect(status().isCreated());
             }
         }
@@ -88,7 +85,7 @@ class MemberControllerTest {
 
             @Test
             @DisplayName("400을 응답한다.")
-            void throwBadRequest() throws Exception {
+            void returnBadRequest() throws Exception {
                 MemberData memberData = MemberData.builder()
                         .name("name")
                         .phone("")
@@ -113,8 +110,11 @@ class MemberControllerTest {
         class NotExistMember {
 
             @Test
-            @DisplayName("404 에러를 던진다.")
-            void throwNotFoundException() throws Exception {
+            @DisplayName("404응답한다.")
+            void returnNotFoundStatus() throws Exception {
+                given(memberService.getMember(1000L))
+                        .willThrow(new MemberNotFoundException(1000L));
+
                 mockMvc.perform(get("/members/1000"))
                         .andExpect(status().isNotFound());
             }

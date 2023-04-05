@@ -22,6 +22,6 @@ public class NotFoundErrorAdvice {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(MemberNotFoundException.class)
     public ErrorResponse handlerMemberNotFound() {
-        return new ErrorResponse("Product not found");
+        return new ErrorResponse("Member not found");
     }
 }
