@@ -13,14 +13,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.List;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -147,7 +147,15 @@ class MemberControllerTest {
 
             @Test
             @DisplayName("해당 멤버를 업데이트하고 반환한다. ")
-            void it_returns_valid_member() {
+            void it_returns_valid_member() throws Exception {
+                MemberData updateRequestMember = MemberData.builder()
+                        .name("변경된유재석")
+                        .phone("01047105883")
+                        .build();
+
+                mockMvc.perform(patch("/1"))
+                        .andExpect(status().isOk())
+                        .andExpect(content().string(containsString(updateRequestMember.getName())));
             }
         }
     }
