@@ -14,4 +14,9 @@ public class MemberUpdateRequest extends MemberRequest {
         super(name, phone);
         this.id = id;
     }
+
+    @Override
+    public String toString() {
+        return "{\"id\" :" + this.id + ", \"name\":\"" + this.name + "\", \"phone\": \"" + this.phone + "\"}";
+    }
 }

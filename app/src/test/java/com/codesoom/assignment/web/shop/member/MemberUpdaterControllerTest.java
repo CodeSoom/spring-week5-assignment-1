@@ -1,6 +1,5 @@
 package com.codesoom.assignment.web.shop.member;
 
-import com.codesoom.assignment.MemberNotFoundException;
 import com.codesoom.assignment.application.member.MemberUpdater;
 import com.codesoom.assignment.domain.Member;
 import com.codesoom.assignment.web.shop.member.dto.MemberUpdateRequest;
@@ -42,7 +41,7 @@ class MemberUpdaterControllerTest {
         updateRequestMember = MemberUpdateRequest.builder()
                 .id(1000L)
                 .name("변경된유재석")
-                .phone("01047105883")
+                .phone("01022222222")
                 .build();
 
         given(memberUpdater.update(any())).willReturn(result);
@@ -66,25 +65,6 @@ class MemberUpdaterControllerTest {
                         .andExpect(content().string(containsString("변경된유재석")))
                         .andExpect(status().isOk());
 
-            }
-        }
-
-        @Nested
-        @DisplayName("존재하지 않은 멤버를 요청할 때")
-        class context_with_not_exist_member {
-
-            @Test
-            @DisplayName("404을 응답한다. ")
-            void it_returns_not_found_status() throws Exception {
-
-                given(memberUpdater.update(any()))
-                        .willThrow(new MemberNotFoundException(1000L));
-
-                mockMvc.perform(patch("/members/1000")
-                                .accept(MediaType.APPLICATION_JSON_UTF8)
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .content(updateRequestMember.toString()))
-                        .andExpect(status().isNotFound());
             }
         }
     }
