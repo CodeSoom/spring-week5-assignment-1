@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
 
 @RestController
 @RequestMapping("/members")
@@ -22,11 +21,6 @@ public class MemberController {
     @GetMapping("/{id}")
     public Member getMember(@PathVariable Long id) {
         return memberService.getMember(id);
-    }
-
-    @GetMapping
-    public List<Member> getMembers() {
-        return memberService.getMembers();
     }
 
     @PostMapping
