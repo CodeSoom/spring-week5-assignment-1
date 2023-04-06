@@ -21,8 +21,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @DisplayName("MemberCreateController")
-@WebMvcTest(MemberCreateController.class)
-class MemberCreateControllerTest {
+@WebMvcTest(MemberCreatorController.class)
+class MemberCreatorControllerTest {
     @Autowired
     MockMvc mockMvc;
 

@@ -13,7 +13,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RequestMapping("/members")
 @RestController
-public class MemberCreateController {
+public class MemberCreatorController {
     private final MemberCreator memberCreator;
 
     @PostMapping
