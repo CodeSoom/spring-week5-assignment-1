@@ -1,19 +1,23 @@
 package com.codesoom.assignment.application.member;
 
-import com.codesoom.assignment.MemberNotFoundException;
 import com.codesoom.assignment.domain.Member;
 import com.codesoom.assignment.domain.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@Service
 @RequiredArgsConstructor
-public class MemberReader {
-
+@Service
+public class MemberDeleter {
+    private final MemberReader memberReader;
     private final MemberRepository memberRepository;
 
-    public Member read(Long id) {
-        return memberRepository.findById(id)
-                .orElseThrow(() -> new MemberNotFoundException(id));
+    public boolean delete(long id) {
+        Member member = memberReader.read(id);
+        if (member.isGhost()) {
+            return false;
+        }
+
+        memberRepository.delete(member);
+        return true;
     }
 }

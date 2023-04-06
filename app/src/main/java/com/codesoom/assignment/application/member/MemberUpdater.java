@@ -14,7 +14,7 @@ public class MemberUpdater {
     private final MemberReader memberReader;
 
     public Member update(MemberUpdateRequest memberUpdateRequest) {
-        Member member = memberReader.findById(memberUpdateRequest.getId());
+        Member member = memberReader.read(memberUpdateRequest.getId());
         member.update(memberUpdateRequest.getName(), memberUpdateRequest.getPhone());
         return member;
     }
