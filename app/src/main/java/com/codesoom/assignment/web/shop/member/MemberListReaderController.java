@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/members")
 @RequiredArgsConstructor
+@RequestMapping("/members")
+@RestController
 public class MemberListReaderController {
     private final MemberListReader memberListReader;
 
