@@ -1,5 +1,6 @@
 package com.codesoom.assignment.web.shop.member;
 
+import com.codesoom.assignment.MemberNotFoundException;
 import com.codesoom.assignment.application.member.MemberUpdater;
 import com.codesoom.assignment.domain.Member;
 import com.codesoom.assignment.web.shop.member.dto.MemberUpdateRequest;
@@ -64,7 +65,51 @@ class MemberUpdaterControllerTest {
                                 .content(updateRequestMember.toString()))
                         .andExpect(content().string(containsString("변경된유재석")))
                         .andExpect(status().isOk());
+            }
+        }
 
+        @Nested
+        @DisplayName("필수 컬럼이 비어있을 경우")
+        class context_with_invalid_parameter {
+
+            @Test
+            @DisplayName("400을 응답한다.")
+            void it_returns_BadRequest() throws Exception {
+                MemberUpdateRequest invalidRequest = MemberUpdateRequest.builder()
+                        .id(1L)
+                        .name("")
+                        .phone("")
+                        .build();
+
+                mockMvc.perform(patch("/members")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(invalidRequest.toString()))
+                        .andExpect(status().isBadRequest());
+            }
+        }
+
+
+        @Nested
+        @DisplayName("필수 컬럼이 비어있을 경우")
+        class context_with_not_exist_member {
+
+            @Test
+            @DisplayName("400을 응답한다.")
+            void it_returns_BadRequest() throws Exception {
+                MemberUpdateRequest notExistMember = MemberUpdateRequest.builder()
+                        .id(1000L)
+                        .name("유재석")
+                        .phone("0103332233")
+                        .build();
+
+                given(memberUpdater.update(any())).willThrow(MemberNotFoundException.class);
+
+                mockMvc.perform(patch("/members")
+                                .accept(MediaType.APPLICATION_JSON_UTF8)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(notExistMember.toString()))
+                        .andExpect(status().isNotFound());
             }
         }
     }

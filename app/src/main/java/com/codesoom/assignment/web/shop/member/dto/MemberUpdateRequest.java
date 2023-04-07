@@ -4,9 +4,12 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.Min;
+
 @Getter
 @Setter
 public class MemberUpdateRequest extends MemberRequest {
+    @Min(1)
     private Long id;
 
     @Builder
