@@ -3,7 +3,6 @@ package com.codesoom.assignment.web.shop.member;
 import com.codesoom.assignment.MemberNotFoundException;
 import com.codesoom.assignment.application.member.MemberReader;
 import com.codesoom.assignment.domain.Member;
-import com.codesoom.assignment.web.shop.member.dto.MemberReaderController;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;

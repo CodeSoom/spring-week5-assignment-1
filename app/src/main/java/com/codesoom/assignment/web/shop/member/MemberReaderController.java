@@ -1,4 +1,4 @@
-package com.codesoom.assignment.web.shop.member.dto;
+package com.codesoom.assignment.web.shop.member;
 
 import com.codesoom.assignment.application.member.MemberReader;
 import com.codesoom.assignment.domain.Member;

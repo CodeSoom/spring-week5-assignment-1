@@ -13,7 +13,6 @@ public class MemberCreator {
 
     public Member create(MemberCreateRequest memberCreateRequest) {
         Member createdMember = memberCreateRequest.toMember();
-        Member result = memberRepository.save(createdMember);
-        return result;
+        return memberRepository.save(createdMember);
     }
 }
