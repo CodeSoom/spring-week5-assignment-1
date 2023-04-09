@@ -6,26 +6,18 @@ import com.codesoom.assignment.web.shop.user.dto.UserRegistrationData;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import com.github.dozermapper.core.Mapper;
 import org.assertj.core.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
 
 class UserServiceTest {
 
-    private UserService userService;
 
-    @Mock
-    private UserRepository userRepository;
+    private UserRepository userRepository = mock(UserRepository.class);
     private Mapper mapper = DozerBeanMapperBuilder.buildDefault();
-
-
-    @BeforeEach
-    public void init() {
-        userService = new UserService(userRepository, mapper);
-    }
+    private UserService userService = new UserService(userRepository, mapper);
 
     @Test
     void create() {
@@ -39,6 +31,7 @@ class UserServiceTest {
                 .password(registrationData.getPassword())
                 .email(registrationData.getEmail())
                 .build();
+
         given(userRepository.save(any())).willReturn(build);
         User user = userService.registerUser(registrationData);
         Assertions.assertThat(user.getEmail()).isEqualTo(registrationData.getEmail());
