@@ -77,6 +77,7 @@ class UserControllerTest {
 				.build();
 
 		mockMvc.perform(patch("/users/1")
+						.accept(MediaType.APPLICATION_JSON_UTF8)
 						.contentType(MediaType.APPLICATION_JSON)
 						.content(getJsonString(user)))
 				.andExpect(status().isOk())
@@ -99,19 +100,20 @@ class UserControllerTest {
 
 	@Test
 	public void remove() throws Exception {
-		mockMvc.perform(delete("/user/1"))
+		mockMvc.perform(delete("/users/1"))
 				.andExpect(status().isNoContent());
 	}
-	
+
 	@Test
 	public void getJsonStringTest() throws JsonProcessingException {
 		UserData user = UserData.builder()
+				.id(1L)
 				.name("지니")
 				.email("test@gmail.com")
 				.password("1234")
 				.build();
 
-		assertThat(getJsonString(user)).isEqualTo("{\"name\":\"지니\",\"email\":\"test@gmail.com\",\"password\":\"1234\"}");
+		assertThat(getJsonString(user)).isEqualTo("{\"id\":1,\"name\":\"지니\",\"email\":\"test@gmail.com\",\"password\":\"1234\"}");
 	}
 
 	public String getJsonString(UserData userData) throws JsonProcessingException {
