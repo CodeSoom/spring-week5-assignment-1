@@ -1,5 +1,6 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.MemberNotFoundException;
 import com.codesoom.assignment.ProductNotFoundException;
 import com.codesoom.assignment.dto.ErrorResponse;
 import org.springframework.http.HttpStatus;
@@ -15,5 +16,12 @@ public class NotFoundErrorAdvice {
     @ExceptionHandler(ProductNotFoundException.class)
     public ErrorResponse handleProductTaskNotFound() {
         return new ErrorResponse("Product not found");
+    }
+
+    @ResponseBody
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(MemberNotFoundException.class)
+    public ErrorResponse handlerMemberNotFound() {
+        return new ErrorResponse("Member not found");
     }
 }
