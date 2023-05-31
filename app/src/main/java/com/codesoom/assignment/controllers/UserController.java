@@ -1,6 +1,7 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,12 @@ public class UserController {
 	}
 
 	@GetMapping
-	public List<UserData> getAll() {
+	public List<User> getAll() {
 		return userService.getAll();
 	}
 
 	@GetMapping("{id}")
-	public UserData getDetail(@PathVariable long id) {
+	public User getDetail(@PathVariable long id) {
 		return userService.getDetail(id);
 	}
 

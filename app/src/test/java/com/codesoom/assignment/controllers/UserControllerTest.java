@@ -16,9 +16,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.UserData;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -38,19 +41,22 @@ class UserControllerTest {
 	@MockBean
 	private UserService userService;
 	private ObjectMapper objectMapper;
+	private Mapper mapper;
 
 	@BeforeEach
 	private void setUp() {
 		objectMapper = new ObjectMapper();
+		mapper = DozerBeanMapperBuilder.buildDefault();
 
 		UserData user = UserData.builder()
 			.name("지니")
 			.email("test@gmail.com")
 			.password("1234")
 			.build();
+		User userEntity = mapper.map(user, User.class);
 
-		given(userService.getAll()).willReturn((Collections.singletonList(user)));
-		given(userService.getDetail(1L)).willReturn(user);
+		given(userService.getAll()).willReturn((Collections.singletonList(userEntity)));
+		given(userService.getDetail(1L)).willReturn(userEntity);
 		given(userService.getDetail(100L)).willThrow(UserNotFoundException.class);
 		given(userService.create(any(UserData.class))).will(invocation -> {
 			UserData createdUser = invocation.getArgument(0);
@@ -112,7 +118,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	public void getDetailWithExsistedId() throws Exception {
+	public void getDetailWithExistedId() throws Exception {
 		mockMvc.perform(get("/users/1"))
 				.andExpect(status().isOk())
 				.andExpect(content().string(containsString("지니")));
@@ -121,7 +127,7 @@ class UserControllerTest {
 	}
 
 	@Test
-	public void getDetailWithNotExsistedId() throws Exception {
+	public void getDetailWithNotExistedId() throws Exception {
 		mockMvc.perform(get("/users/100"))
 				.andExpect(status().isNotFound());
 

@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -8,18 +9,24 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import lombok.ToString;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
+@ToString
 public class User {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Mapping("id")
 	private Long id;
+	@Mapping("name")
 	private String name;
+	@Mapping("email")
 	private String email;
+	@Mapping("password")
 	private String password;
 
 	@Builder

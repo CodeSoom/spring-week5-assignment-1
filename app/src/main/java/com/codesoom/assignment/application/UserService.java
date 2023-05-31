@@ -1,6 +1,9 @@
 package com.codesoom.assignment.application;
 
+import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
+import com.github.dozermapper.core.Mapper;
 import java.util.Collections;
 import java.util.List;
 import org.springframework.stereotype.Service;
@@ -8,11 +11,20 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-	public List<UserData> getAll() {
-		return Collections.emptyList();
+	private UserRepository userRepository;
+	private Mapper dozerMapper;
+
+	public UserService(UserRepository userRepository, Mapper dozerMapper) {
+		this.userRepository = userRepository;
+		this.dozerMapper = dozerMapper;
 	}
 
-	public UserData getDetail(Long id) {
+	public List<User> getAll() {
+		return userRepository.findAll();
+	}
+
+	public User getDetail(Long id) {
+
 		return null;
 	}
 
