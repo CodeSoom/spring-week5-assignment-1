@@ -48,8 +48,8 @@ class UserServiceTest {
 
 		given(userRepository.findAll()).willReturn(Collections.singletonList(userEntity));
 		given(userRepository.findById(VALID_ID)).willReturn(Optional.ofNullable(userEntity));
-		given(userRepository.findById(INVALID_ID)).willReturn(null);
-		given(userRepository.save(userEntity)).will(invocation -> {
+		given(userRepository.findById(INVALID_ID)).willThrow(UserNotFoundException.class);
+		given(userRepository.save(any(User.class))).will(invocation -> {
 			User savedUser = invocation.getArgument(0);
 			return User.builder()
 					.id(1L)
@@ -68,12 +68,12 @@ class UserServiceTest {
 			.password("1234")
 			.build();
 
-		UserData savedUser = userService.create(user);
+		User savedUser = userService.create(user);
 
 		assertThat(savedUser.getId()).isEqualTo(VALID_ID);
 		assertThat(savedUser.getName()).isEqualTo("지니");
 
-		verify(userRepository.save(any(User.class)));
+		verify(userRepository).save(any(User.class));
 	}
 
 	@Test

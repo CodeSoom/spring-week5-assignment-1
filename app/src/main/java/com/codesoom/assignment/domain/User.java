@@ -1,5 +1,6 @@
 package com.codesoom.assignment.domain;
 
+import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.Mapping;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,5 +36,11 @@ public class User {
 		this.name = name;
 		this.email = email;
 		this.password = password;
+	}
+
+	public void update(UserData source) {
+		this.name = source.getName();
+		this.email = source.getEmail();
+		this.password = source.getPassword();
 	}
 }
