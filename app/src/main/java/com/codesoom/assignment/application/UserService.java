@@ -11,7 +11,10 @@ import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
+
 @Service
+@Transactional
 public class UserService {
 
 	private final UserRepository userRepository;
