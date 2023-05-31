@@ -17,9 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
@@ -58,8 +56,12 @@ class UserControllerTest {
 
 		given(userService.create(any(UserData.class))).will(invocation -> {
 			UserData createdUser = invocation.getArgument(0);
-			createdUser.setId(1L);
-			return createdUser;
+			return User.builder()
+					.id(1L)
+					.name(createdUser.getName())
+					.email(createdUser.getEmail())
+					.password(createdUser.getPassword())
+					.build();
 		});
 		given(userService.getAll()).willReturn(Collections.singletonList(userEntity));
 		given(userService.getDetail(1L)).willReturn(userEntity);
