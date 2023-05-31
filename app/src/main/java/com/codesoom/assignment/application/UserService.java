@@ -14,8 +14,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserService {
 
-	private UserRepository userRepository;
-	private Mapper mapper;
+	private final UserRepository userRepository;
+	private final Mapper mapper;
 
 	public UserService(UserRepository userRepository, Mapper mapper) {
 		this.userRepository = userRepository;
@@ -31,11 +31,8 @@ public class UserService {
 	}
 
 	public User create(UserData source) {
-		User user = User.builder()
-				.name(source.getName())
-				.email(source.getEmail())
-				.password(source.getPassword())
-				.build();
+		User user = mapper.map(source, User.class);
+
 		return userRepository.save(user);
 	}
 
