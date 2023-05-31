@@ -16,4 +16,5 @@ public class NotFoundErrorAdvice {
     public ErrorResponse handleProductTaskNotFound() {
         return new ErrorResponse("Product not found");
     }
+
 }

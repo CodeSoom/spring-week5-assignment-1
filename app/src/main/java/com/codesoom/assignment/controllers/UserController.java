@@ -1,6 +1,8 @@
 package com.codesoom.assignment.controllers;
 
+import com.codesoom.assignment.application.UserService;
 import com.codesoom.assignment.dto.UserData;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,31 +13,38 @@ import java.util.List;
 @RequestMapping("/users")
 public class UserController {
 
+	private UserService userService;
+
+	public UserController(UserService userService) {
+		this.userService = userService;
+	}
+
 	@GetMapping
 	public List<UserData> getAll() {
-		return Collections.emptyList();
+		return userService.getAll();
 	}
 
 	@GetMapping("{id}")
-	public UserData getDetail() {
-		return null;
+	public UserData getDetail(@PathVariable long id) {
+		return userService.getDetail(id);
 	}
 
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
 	public UserData create(@RequestBody UserData user) {
-		return user;
+		return userService.create(user);
 	}
 
 	@PatchMapping("{id}")
 	public UserData patch(@PathVariable Long id,
-						  @RequestBody UserData userData) {
-		return userData;
+						  @RequestBody @Valid UserData userData) {
+		return userService.updateDetail(id, userData);
 	}
 
 	@DeleteMapping("{id}")
 	@ResponseStatus(HttpStatus.NO_CONTENT)
-	public void destroy() {
+	public void destroy(@PathVariable Long id) {
+		userService.delete(id);
 	}
 
 
