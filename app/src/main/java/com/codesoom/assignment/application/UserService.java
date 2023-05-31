@@ -4,7 +4,7 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.domain.UserRepository;
 import com.codesoom.assignment.dto.UserData;
 import com.github.dozermapper.core.Mapper;
-import java.util.Collections;
+
 import java.util.List;
 import org.springframework.stereotype.Service;
 
@@ -12,11 +12,11 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
 	private UserRepository userRepository;
-	private Mapper dozerMapper;
+	private Mapper mapper;
 
-	public UserService(UserRepository userRepository, Mapper dozerMapper) {
+	public UserService(UserRepository userRepository, Mapper mapper) {
 		this.userRepository = userRepository;
-		this.dozerMapper = dozerMapper;
+		this.mapper = mapper;
 	}
 
 	public List<User> getAll() {
