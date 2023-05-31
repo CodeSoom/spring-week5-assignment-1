@@ -32,8 +32,8 @@ public class UserService {
 		return user;
 	}
 
-	public UserData updateDetail(Long id, UserData userData) {
-		return userData;
+	public User updateDetail(Long id, UserData userData) {
+		return null;
 	}
 
 	public void delete(Long id) {

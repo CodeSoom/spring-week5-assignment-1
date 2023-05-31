@@ -74,7 +74,7 @@ class UserServiceTest {
 			.password("1000")
 			.build();
 
-		UserData updatedUser = userService.updateDetail(VALID_ID, user);
+		User updatedUser = userService.updateDetail(VALID_ID, user);
 
 		assertThat(updatedUser.getName()).isEqualTo("코딩쟁이");
 	}
