@@ -86,6 +86,23 @@ class UserControllerTest {
 	}
 
 	@Test
+	public void createWithInvalidValue() throws Exception {
+		UserData user = UserData.builder()
+			.name("")
+			.email("test@gmail.com")
+			.password("1234")
+			.build();
+
+		mockMvc.perform(MockMvcRequestBuilders.post("/users")
+				.accept(MediaType.APPLICATION_JSON_UTF8)
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(getJsonString(user)))
+			.andExpect(status().isBadRequest());
+
+		verify(userService, never()).create(any(UserData.class));
+	}
+
+	@Test
 	public void getAll() throws Exception {
 		mockMvc.perform(get("/users"))
 				.andExpect(status().isOk())
