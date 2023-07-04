@@ -4,3 +4,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+server:
+  servlet:
+    encoding:
+      charset: UTF-8
+      force: true
