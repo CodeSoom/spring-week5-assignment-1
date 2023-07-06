@@ -1,9 +1,116 @@
 package com.codesoom.assignment.application;
 
-import static org.junit.jupiter.api.Assertions.*;
-
-
+import com.codesoom.assignment.UserNotFoundException;
+import com.codesoom.assignment.domain.User;
+import com.codesoom.assignment.domain.UserRepository;
+import com.codesoom.assignment.dto.CreateUserData;
+import com.codesoom.assignment.dto.UpdateUserData;
+import com.github.dozermapper.core.DozerBeanMapperBuilder;
+import com.github.dozermapper.core.Mapper;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
 
 class UserServiceTest {
 
+    private UserService userService;
+    private UserRepository userRepository;
+
+    //fixture
+    private User user;
+    private User source;
+    private CreateUserData createUserData;
+    private UpdateUserData updateUserData;
+    private static final Long VALID_ID = 1L;
+    private static final Long INVALID_ID = 100L;
+
+    private static final String NAME = "dh";
+    private static final String EMAIL = "dh@gmail.com";
+    private static final String PASSWORD = "1111";
+    private static final String UPDATED_NAME = "dhj";
+    private static final String UPDATED_EMAIL = "dh@naver.com";
+    private static final String UPDATED_PASSWORD = "2222";
+
+    @BeforeEach
+    void setup(){
+        Mapper mapper = DozerBeanMapperBuilder.buildDefault();
+        userRepository = mock(UserRepository.class);
+        userService = new UserService(userRepository, mapper);
+
+        user = User.builder()
+                .id(VALID_ID)
+                .name(NAME)
+                .email(EMAIL)
+                .password(PASSWORD)
+                .build();
+
+        source = User.builder()
+                .id(VALID_ID)
+                .name(UPDATED_NAME)
+                .email(UPDATED_EMAIL)
+                .password(UPDATED_PASSWORD)
+                .build();
+
+        createUserData = mapper.map(user, CreateUserData.class);
+
+        updateUserData = mapper.map(source, UpdateUserData.class);
+
+        given(userRepository.save(any(User.class))).willReturn(user);
+        given(userRepository.findById(VALID_ID)).willReturn(Optional.of(user));
+        given(userRepository.findById(INVALID_ID)).willThrow(new UserNotFoundException(INVALID_ID));
+    }
+
+    @Test
+    void createUser() {
+        User user = userService.createUser(createUserData);
+
+        assertThat(user).isNotNull();
+        assertThat(user.getId()).isEqualTo(VALID_ID);
+        assertThat(user.getName()).isEqualTo(NAME);
+        assertThat(user.getEmail()).isEqualTo(EMAIL);
+        assertThat(user.getPassword()).isEqualTo(PASSWORD);
+
+        verify(userRepository).save(any(User.class));
+    }
+
+    @Test
+    void updateUserWithExistingId() {
+        User updatedUser = userService.updateUser(VALID_ID, updateUserData);
+
+        assertThat(updatedUser).isNotNull();
+        assertThat(updatedUser.getId()).isEqualTo(VALID_ID);
+        assertThat(updatedUser.getName()).isEqualTo(updateUserData.getName());
+        assertThat(updatedUser.getEmail()).isEqualTo(updateUserData.getEmail());
+        assertThat(updatedUser.getPassword()).isEqualTo(updateUserData.getPassword());
+
+        verify(userRepository).findById(VALID_ID);
+    }
+
+    @Test
+    void updateUserWithNotExistingId() {
+        assertThatThrownBy(()->userService.updateUser(INVALID_ID, updateUserData))
+                .isInstanceOf(UserNotFoundException.class);
+
+        verify(userRepository).findById(INVALID_ID);
+    }
+
+    @Test
+    void deleteUserWithExistingId() {
+        userService.deleteUser(VALID_ID);
+        verify(userRepository).findById(VALID_ID);
+        verify(userRepository).delete(any(User.class));
+    }
+
+    @Test
+    void deleteUserWithNotExistingId() {
+        assertThatThrownBy(()->userService.deleteUser(INVALID_ID))
+                .isInstanceOf(UserNotFoundException.class);
+        verify(userRepository).findById(INVALID_ID);
+    }
 }
