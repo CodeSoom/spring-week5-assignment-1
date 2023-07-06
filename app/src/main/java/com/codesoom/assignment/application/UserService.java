@@ -1,6 +1,7 @@
 package com.codesoom.assignment.application;
 
 import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.domain.Product;
 import com.codesoom.assignment.domain.ProductRepository;
 import com.codesoom.assignment.domain.User;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -23,14 +25,14 @@ public class UserService {
     private final Mapper mapper;
 
     public User createUser(CreateUserData userData) {
-        User user = mapper.map(userData,User.class);
-        return null;
+        User user = mapper.map(userData, User.class);
+        return userRepository.save(user);
     }
 
     public User updateUser(Long id, UpdateUserData userData) {
         User user = findUser(id);
 
-        user.change( userData.getName(), userData.getEmail(), user.getPassword());
+        user.change(userData.getName(), userData.getEmail(), userData.getPassword());
 
         return user;
     }
@@ -45,6 +47,6 @@ public class UserService {
 
     private User findUser(Long id) {
         return userRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new UserNotFoundException(id));
     }
 }

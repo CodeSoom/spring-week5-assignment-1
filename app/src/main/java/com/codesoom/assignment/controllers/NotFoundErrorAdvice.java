@@ -14,14 +14,14 @@ public class NotFoundErrorAdvice {
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(ProductNotFoundException.class)
-    public ErrorResponse handleProductTaskNotFound() {
-        return new ErrorResponse("Product not found");
+    public ErrorResponse handleProductTaskNotFound(ProductNotFoundException exception) {
+        return new ErrorResponse(exception.getMessage());
     }
 
     @ResponseBody
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(UserNotFoundException.class)
-    public ErrorResponse handleUserTaskNotFound() {
-        return new ErrorResponse("User not found");
+    public ErrorResponse handleUserNotFound(UserNotFoundException exception) {
+        return new ErrorResponse(exception.getMessage());
     }
 }

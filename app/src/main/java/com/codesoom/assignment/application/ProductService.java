@@ -27,7 +27,7 @@ public class ProductService {
     }
 
     public Product createProduct(ProductData productData) {
-        Product product = mapper.map(productData,Product.class);
+        Product product = mapper.map(productData, Product.class);
         return productRepository.save(product);
     }
 
