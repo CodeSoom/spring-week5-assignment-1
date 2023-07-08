@@ -22,7 +22,7 @@ public class UpdateUserData {
     @Mapping("email")
     private String email;
 
-    @NotNull
+    @NotBlank
     @Mapping("password")
     private String password;
 }

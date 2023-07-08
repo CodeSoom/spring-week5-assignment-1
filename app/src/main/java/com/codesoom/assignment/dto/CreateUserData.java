@@ -12,8 +12,6 @@ import javax.validation.constraints.NotNull;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateUserData {
-    private Long id;
-
     @NotBlank
     @Mapping("name")
     private String name;
