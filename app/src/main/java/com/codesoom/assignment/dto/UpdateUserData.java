@@ -11,15 +11,9 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UpdateUserData {
-    private Long id;
-
     @NotBlank
     @Mapping("name")
     private String name;
-
-    @NotBlank
-    @Mapping("email")
-    private String email;
 
     @NotBlank
     @Mapping("password")

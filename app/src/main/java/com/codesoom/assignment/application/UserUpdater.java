@@ -19,7 +19,7 @@ public class UserUpdater {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UserNotFoundException(id));
 
-        user.change(userData.getName(), userData.getEmail(), userData.getPassword());
+        user.change(userData.getName(), userData.getPassword());
         return user;
     }
 }

@@ -8,7 +8,6 @@ import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserData;
 import com.codesoom.assignment.dto.UpdateUserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.dozermapper.core.DozerBeanMapperBuilder;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,7 +56,6 @@ class UserControllerTest {
     private static final String EMAIL = "dh@gmail.com";
     private static final String PASSWORD = "1111";
     private static final String UPDATED_NAME = "dhj";
-    private static final String UPDATED_EMAIL = "dh@naver.com";
     private static final String UPDATED_PASSWORD = "2222";
     @BeforeEach
     void setup(){
@@ -70,14 +68,21 @@ class UserControllerTest {
 
         source = User.builder()
                 .id(VALID_ID)
+                .email(EMAIL)
                 .name(UPDATED_NAME)
-                .email(UPDATED_EMAIL)
                 .password(UPDATED_PASSWORD)
                 .build();
 
-        validCreateUserData = DozerBeanMapperBuilder.buildDefault().map(user, CreateUserData.class);
+        validCreateUserData = CreateUserData.builder()
+                                .name(NAME)
+                                .email(EMAIL)
+                                .password(PASSWORD)
+                                .build();
 
-        validUpdateUserData = DozerBeanMapperBuilder.buildDefault().map(source, UpdateUserData.class);
+        validUpdateUserData = UpdateUserData.builder()
+                                    .name(UPDATED_NAME)
+                                    .password(UPDATED_PASSWORD)
+                                    .build();
 
         invalidCreateUserData = new CreateUserData();
 

@@ -90,7 +90,6 @@ class UserServiceTest {
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getId()).isEqualTo(VALID_ID);
         assertThat(updatedUser.getName()).isEqualTo(updateUserData.getName());
-        assertThat(updatedUser.getEmail()).isEqualTo(updateUserData.getEmail());
         assertThat(updatedUser.getPassword()).isEqualTo(updateUserData.getPassword());
 
         verify(userRepository).findById(VALID_ID);

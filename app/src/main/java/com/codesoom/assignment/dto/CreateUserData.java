@@ -20,7 +20,7 @@ public class CreateUserData {
     @Mapping("email")
     private String email;
 
-    @NotNull
+    @NotBlank
     @Mapping("password")
     private String password;
 }
