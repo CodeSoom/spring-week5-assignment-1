@@ -45,33 +45,34 @@ class UserControllerTest {
 
     //fixture
     private User user;
-    private User source;
+    private User updatedUser;
     private CreateUserData validCreateUserData;
     private CreateUserData invalidCreateUserData;
     private UpdateUserData validUpdateUserData;
     private UpdateUserData invalidUpdateUserData;
-    private static final Long VALID_ID = 1L;
-    private static final Long INVALID_ID = 100L;
+    private static final Long EXISTING_ID = 1L;
+    private static final Long NOT_EXISTING_ID = 100L;
     private static final String NAME = "dh";
     private static final String EMAIL = "dh@gmail.com";
     private static final String PASSWORD = "1111";
     private static final String UPDATED_NAME = "dhj";
     private static final String UPDATED_PASSWORD = "2222";
+
     @BeforeEach
     void setup(){
         user = User.builder()
-                .id(VALID_ID)
+                .id(EXISTING_ID)
                 .name(NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
 
-        source = User.builder()
-                .id(VALID_ID)
-                .email(EMAIL)
-                .name(UPDATED_NAME)
-                .password(UPDATED_PASSWORD)
-                .build();
+        updatedUser = User.builder()
+                    .id(EXISTING_ID)
+                    .email(EMAIL)
+                    .name(UPDATED_NAME)
+                    .password(UPDATED_PASSWORD)
+                    .build();
 
         validCreateUserData = CreateUserData.builder()
                                 .name(NAME)
@@ -89,9 +90,9 @@ class UserControllerTest {
         invalidUpdateUserData = new UpdateUserData();
 
         given(userCreator.create(any(CreateUserData.class))).willReturn(user);
-        given(userUpdater.update(eq(VALID_ID),any(UpdateUserData.class))).willReturn(source);
-        given(userUpdater.update(eq(INVALID_ID),any(UpdateUserData.class))).willThrow(new UserNotFoundException(INVALID_ID));
-        given(userDeleter.delete(INVALID_ID)).willThrow(new UserNotFoundException(INVALID_ID));
+        given(userUpdater.update(eq(EXISTING_ID),any(UpdateUserData.class))).willReturn(updatedUser);
+        given(userUpdater.update(eq(NOT_EXISTING_ID),any(UpdateUserData.class))).willThrow(new UserNotFoundException(NOT_EXISTING_ID));
+        given(userDeleter.delete(NOT_EXISTING_ID)).willThrow(new UserNotFoundException(NOT_EXISTING_ID));
     }
 
     @Test
@@ -115,25 +116,25 @@ class UserControllerTest {
 
     @Test
     void updateWithExistingUser() throws Exception {
-        mockMvc.perform(patch("/users/"+VALID_ID)
+        mockMvc.perform(patch("/users/"+EXISTING_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validUpdateUserData))
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isOk())
-                .andExpect(content().string(containsString(source.getName())));
+                .andExpect(content().string(containsString(updatedUser.getName())));
 
-        verify(userUpdater).update(eq(VALID_ID),any(UpdateUserData.class));
+        verify(userUpdater).update(eq(EXISTING_ID),any(UpdateUserData.class));
     }
 
     @Test
     void updateWithNotExistingUser() throws Exception {
-        mockMvc.perform(patch("/users/"+INVALID_ID)
+        mockMvc.perform(patch("/users/"+NOT_EXISTING_ID)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(validUpdateUserData))
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound());
 
-        verify(userUpdater).update(eq(INVALID_ID),any(UpdateUserData.class));
+        verify(userUpdater).update(eq(NOT_EXISTING_ID),any(UpdateUserData.class));
     }
 
     @Test
@@ -146,18 +147,18 @@ class UserControllerTest {
 
     @Test
     void deleteWithExistingUser() throws Exception {
-        mockMvc.perform(delete("/users/"+VALID_ID))
+        mockMvc.perform(delete("/users/"+EXISTING_ID))
                 .andExpect(status().isNoContent());
 
-        verify(userDeleter).delete(VALID_ID);
+        verify(userDeleter).delete(EXISTING_ID);
     }
 
     @Test
     void deleteWithNotExistingUser() throws Exception {
-        mockMvc.perform(delete("/users/"+INVALID_ID))
+        mockMvc.perform(delete("/users/"+NOT_EXISTING_ID))
                 .andExpect(status().isNotFound());
 
-        verify(userDeleter).delete(INVALID_ID);
+        verify(userDeleter).delete(NOT_EXISTING_ID);
     }
 
 }

@@ -26,17 +26,15 @@ class UserServiceTest {
 
     //fixture
     private User user;
-    private User source;
     private CreateUserData createUserData;
     private UpdateUserData updateUserData;
-    private static final Long VALID_ID = 1L;
-    private static final Long INVALID_ID = 100L;
+    private static final Long EXISTING_ID = 1L;
+    private static final Long NOT_EXISTING_ID = 100L;
 
     private static final String NAME = "dh";
     private static final String EMAIL = "dh@gmail.com";
     private static final String PASSWORD = "1111";
     private static final String UPDATED_NAME = "dhj";
-    private static final String UPDATED_EMAIL = "dh@naver.com";
     private static final String UPDATED_PASSWORD = "2222";
 
     @BeforeEach
@@ -49,25 +47,26 @@ class UserServiceTest {
         userDeleter = new UserDeleter(userRepository);
 
         user = User.builder()
-                .id(VALID_ID)
+                .id(EXISTING_ID)
                 .name(NAME)
                 .email(EMAIL)
                 .password(PASSWORD)
                 .build();
 
-        source = User.builder()
-                .id(VALID_ID)
-                .name(UPDATED_NAME)
-                .email(UPDATED_EMAIL)
-                .password(UPDATED_PASSWORD)
-                .build();
+        createUserData = CreateUserData.builder()
+                            .name(NAME)
+                            .email(EMAIL)
+                            .password(PASSWORD)
+                            .build();
 
-        createUserData = mapper.map(user, CreateUserData.class);
-        updateUserData = mapper.map(source, UpdateUserData.class);
+        updateUserData = UpdateUserData.builder()
+                            .name(UPDATED_NAME)
+                            .password(UPDATED_PASSWORD)
+                            .build();
 
         given(userRepository.save(any(User.class))).willReturn(user);
-        given(userRepository.findById(VALID_ID)).willReturn(Optional.of(user));
-        given(userRepository.findById(INVALID_ID)).willThrow(new UserNotFoundException(INVALID_ID));
+        given(userRepository.findById(EXISTING_ID)).willReturn(Optional.of(user));
+        given(userRepository.findById(NOT_EXISTING_ID)).willThrow(new UserNotFoundException(NOT_EXISTING_ID));
     }
 
     @Test
@@ -75,7 +74,7 @@ class UserServiceTest {
         User user = userCreator.create(createUserData);
 
         assertThat(user).isNotNull();
-        assertThat(user.getId()).isEqualTo(VALID_ID);
+        assertThat(user.getId()).isEqualTo(EXISTING_ID);
         assertThat(user.getName()).isEqualTo(NAME);
         assertThat(user.getEmail()).isEqualTo(EMAIL);
         assertThat(user.getPassword()).isEqualTo(PASSWORD);
@@ -85,35 +84,35 @@ class UserServiceTest {
 
     @Test
     void updateUserWithExistingId() {
-        User updatedUser = userUpdater.update(VALID_ID, updateUserData);
+        User updatedUser = userUpdater.update(EXISTING_ID, updateUserData);
 
         assertThat(updatedUser).isNotNull();
-        assertThat(updatedUser.getId()).isEqualTo(VALID_ID);
+        assertThat(updatedUser.getId()).isEqualTo(EXISTING_ID);
         assertThat(updatedUser.getName()).isEqualTo(updateUserData.getName());
         assertThat(updatedUser.getPassword()).isEqualTo(updateUserData.getPassword());
 
-        verify(userRepository).findById(VALID_ID);
+        verify(userRepository).findById(EXISTING_ID);
     }
 
     @Test
     void updateUserWithNotExistingId() {
-        assertThatThrownBy(()->userUpdater.update(INVALID_ID, updateUserData))
+        assertThatThrownBy(()->userUpdater.update(NOT_EXISTING_ID, updateUserData))
                 .isInstanceOf(UserNotFoundException.class);
 
-        verify(userRepository).findById(INVALID_ID);
+        verify(userRepository).findById(NOT_EXISTING_ID);
     }
 
     @Test
     void deleteUserWithExistingId() {
-        userDeleter.delete(VALID_ID);
-        verify(userRepository).findById(VALID_ID);
+        userDeleter.delete(EXISTING_ID);
+        verify(userRepository).findById(EXISTING_ID);
         verify(userRepository).delete(any(User.class));
     }
 
     @Test
     void deleteUserWithNotExistingId() {
-        assertThatThrownBy(()->userDeleter.delete(INVALID_ID))
+        assertThatThrownBy(()->userDeleter.delete(NOT_EXISTING_ID))
                 .isInstanceOf(UserNotFoundException.class);
-        verify(userRepository).findById(INVALID_ID);
+        verify(userRepository).findById(NOT_EXISTING_ID);
     }
 }
