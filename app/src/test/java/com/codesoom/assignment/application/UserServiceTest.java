@@ -10,8 +10,8 @@ import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.Optional;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatThrownBy;
+
+import static org.assertj.core.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
@@ -19,7 +19,9 @@ import static org.mockito.Mockito.verify;
 
 class UserServiceTest {
 
-    private UserService userService;
+    private UserCreator userCreator;
+    private UserDeleter userDeleter;
+    private UserUpdater userUpdater;
     private UserRepository userRepository;
 
     //fixture
@@ -41,7 +43,10 @@ class UserServiceTest {
     void setup(){
         Mapper mapper = DozerBeanMapperBuilder.buildDefault();
         userRepository = mock(UserRepository.class);
-        userService = new UserService(userRepository, mapper);
+
+        userCreator = new UserCreator(userRepository,mapper);
+        userUpdater = new UserUpdater(userRepository);
+        userDeleter = new UserDeleter(userRepository);
 
         user = User.builder()
                 .id(VALID_ID)
@@ -58,7 +63,6 @@ class UserServiceTest {
                 .build();
 
         createUserData = mapper.map(user, CreateUserData.class);
-
         updateUserData = mapper.map(source, UpdateUserData.class);
 
         given(userRepository.save(any(User.class))).willReturn(user);
@@ -68,7 +72,7 @@ class UserServiceTest {
 
     @Test
     void createUser() {
-        User user = userService.createUser(createUserData);
+        User user = userCreator.create(createUserData);
 
         assertThat(user).isNotNull();
         assertThat(user.getId()).isEqualTo(VALID_ID);
@@ -81,7 +85,7 @@ class UserServiceTest {
 
     @Test
     void updateUserWithExistingId() {
-        User updatedUser = userService.updateUser(VALID_ID, updateUserData);
+        User updatedUser = userUpdater.update(VALID_ID, updateUserData);
 
         assertThat(updatedUser).isNotNull();
         assertThat(updatedUser.getId()).isEqualTo(VALID_ID);
@@ -94,7 +98,7 @@ class UserServiceTest {
 
     @Test
     void updateUserWithNotExistingId() {
-        assertThatThrownBy(()->userService.updateUser(INVALID_ID, updateUserData))
+        assertThatThrownBy(()->userUpdater.update(INVALID_ID, updateUserData))
                 .isInstanceOf(UserNotFoundException.class);
 
         verify(userRepository).findById(INVALID_ID);
@@ -102,14 +106,14 @@ class UserServiceTest {
 
     @Test
     void deleteUserWithExistingId() {
-        userService.deleteUser(VALID_ID);
+        userDeleter.delete(VALID_ID);
         verify(userRepository).findById(VALID_ID);
         verify(userRepository).delete(any(User.class));
     }
 
     @Test
     void deleteUserWithNotExistingId() {
-        assertThatThrownBy(()->userService.deleteUser(INVALID_ID))
+        assertThatThrownBy(()->userDeleter.delete(INVALID_ID))
                 .isInstanceOf(UserNotFoundException.class);
         verify(userRepository).findById(INVALID_ID);
     }

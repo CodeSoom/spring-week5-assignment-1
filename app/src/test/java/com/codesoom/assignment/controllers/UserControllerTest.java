@@ -1,13 +1,14 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.UserNotFoundException;
-import com.codesoom.assignment.application.UserService;
+import com.codesoom.assignment.application.UserCreator;
+import com.codesoom.assignment.application.UserDeleter;
+import com.codesoom.assignment.application.UserUpdater;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserData;
 import com.codesoom.assignment.dto.UpdateUserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.dozermapper.core.DozerBeanMapperBuilder;
-import com.github.dozermapper.core.Mapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,7 +36,13 @@ class UserControllerTest {
     ObjectMapper objectMapper;
 
     @MockBean
-    UserService userService;
+    UserCreator userCreator;
+
+    @MockBean
+    UserUpdater userUpdater;
+
+    @MockBean
+    UserDeleter userDeleter;
 
     //fixture
     private User user;
@@ -76,10 +83,10 @@ class UserControllerTest {
 
         invalidUpdateUserData = new UpdateUserData();
 
-        given(userService.createUser(any(CreateUserData.class))).willReturn(user);
-        given(userService.updateUser(eq(VALID_ID),any(UpdateUserData.class))).willReturn(source);
-        given(userService.updateUser(eq(INVALID_ID),any(UpdateUserData.class))).willThrow(new UserNotFoundException(INVALID_ID));
-        given(userService.deleteUser(INVALID_ID)).willThrow(new UserNotFoundException(INVALID_ID));
+        given(userCreator.create(any(CreateUserData.class))).willReturn(user);
+        given(userUpdater.update(eq(VALID_ID),any(UpdateUserData.class))).willReturn(source);
+        given(userUpdater.update(eq(INVALID_ID),any(UpdateUserData.class))).willThrow(new UserNotFoundException(INVALID_ID));
+        given(userDeleter.delete(INVALID_ID)).willThrow(new UserNotFoundException(INVALID_ID));
     }
 
     @Test
@@ -90,7 +97,7 @@ class UserControllerTest {
                 .andExpect(status().isCreated())
                 .andExpect(content().string(containsString(user.getName())));
 
-        verify(userService).createUser(any(CreateUserData.class));
+        verify(userCreator).create(any(CreateUserData.class));
     }
 
     @Test
@@ -110,7 +117,7 @@ class UserControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString(source.getName())));
 
-        verify(userService).updateUser(eq(VALID_ID),any(UpdateUserData.class));
+        verify(userUpdater).update(eq(VALID_ID),any(UpdateUserData.class));
     }
 
     @Test
@@ -121,7 +128,7 @@ class UserControllerTest {
                         .accept(MediaType.APPLICATION_JSON_UTF8))
                 .andExpect(status().isNotFound());
 
-        verify(userService).updateUser(eq(INVALID_ID),any(UpdateUserData.class));
+        verify(userUpdater).update(eq(INVALID_ID),any(UpdateUserData.class));
     }
 
     @Test
@@ -137,7 +144,7 @@ class UserControllerTest {
         mockMvc.perform(delete("/users/"+VALID_ID))
                 .andExpect(status().isNoContent());
 
-        verify(userService).deleteUser(VALID_ID);
+        verify(userDeleter).delete(VALID_ID);
     }
 
     @Test
@@ -145,7 +152,7 @@ class UserControllerTest {
         mockMvc.perform(delete("/users/"+INVALID_ID))
                 .andExpect(status().isNotFound());
 
-        verify(userService).deleteUser(INVALID_ID);
+        verify(userDeleter).delete(INVALID_ID);
     }
 
 }
