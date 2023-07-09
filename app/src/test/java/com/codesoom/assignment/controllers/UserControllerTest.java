@@ -4,6 +4,9 @@ import com.codesoom.assignment.UserNotFoundException;
 import com.codesoom.assignment.application.UserCreator;
 import com.codesoom.assignment.application.UserDeleter;
 import com.codesoom.assignment.application.UserUpdater;
+import com.codesoom.assignment.controllers.users.UserCreateController;
+import com.codesoom.assignment.controllers.users.UserDeleteController;
+import com.codesoom.assignment.controllers.users.UserUpdateController;
 import com.codesoom.assignment.domain.User;
 import com.codesoom.assignment.dto.CreateUserData;
 import com.codesoom.assignment.dto.UpdateUserData;
@@ -25,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@WebMvcTest(UserController.class)
+@WebMvcTest({UserCreateController.class, UserDeleteController.class, UserUpdateController.class})
 class UserControllerTest {
 
     @Autowired
