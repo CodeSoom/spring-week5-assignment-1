@@ -17,6 +17,11 @@ public class UserUpdater {
 
     @Transactional
     public User updateUser(Long id, UserRequest userRequest) {
-        return null;
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+        user.change(userRequest.getName(), userRequest.getEmail(), userRequest.getPassword());
+
+        User updatedUser = userRepository.save(user);
+        return updatedUser;
     }
 }
