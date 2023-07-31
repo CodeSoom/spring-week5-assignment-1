@@ -5,16 +5,20 @@ import com.codesoom.assignment.domain.user.User;
 import com.codesoom.assignment.dto.user.UserRequest;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import org.assertj.core.api.Assertions;
 
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("UserCreator 클래스")
 class UserCreatorTest extends JpaTest {
+    private final String TEST_NAME = "testName";
+    private final String TEST_EMAIL = "test@Email.com";
+    private final String TEST_PASSWORD = "testPassword";
+
     private UserRequest createUserRequest() {
         return new UserRequest(
-                "testName",
-                "test@Email.com",
-                "testPassword"
+                TEST_NAME,
+                TEST_EMAIL,
+                TEST_PASSWORD
         );
     }
 
@@ -38,10 +42,9 @@ class UserCreatorTest extends JpaTest {
                 void it_saves_and_returns_user() {
                     User user = userCreator.createUser(USER_REQUEST);
 
-                    assertNotNull(user);
-                    assertEquals(USER_REQUEST.getName(), user.getName());
-                    assertEquals(USER_REQUEST.getEmail(), user.getEmail());
-                    assertEquals(USER_REQUEST.getPassword(), user.getPassword());
+                    Assertions.assertThat(user.getName()).isEqualTo(TEST_NAME);
+                    Assertions.assertThat(user.getEmail()).isEqualTo(TEST_EMAIL);
+                    Assertions.assertThat(user.getPassword()).isEqualTo(TEST_PASSWORD);
                 }
 
             }
