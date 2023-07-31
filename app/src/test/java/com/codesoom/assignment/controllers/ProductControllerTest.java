@@ -1,9 +1,10 @@
 package com.codesoom.assignment.controllers;
 
 import com.codesoom.assignment.ProductNotFoundException;
-import com.codesoom.assignment.application.ProductService;
-import com.codesoom.assignment.domain.Product;
-import com.codesoom.assignment.dto.ProductData;
+import com.codesoom.assignment.application.product.ProductService;
+import com.codesoom.assignment.controllers.product.ProductController;
+import com.codesoom.assignment.domain.product.Product;
+import com.codesoom.assignment.dto.product.ProductData;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
