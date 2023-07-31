@@ -34,7 +34,6 @@ class UserCreatorTest extends JpaTest {
                 void setUp() {
                     USER_REQUEST = createUserRequest();
                     userCreator = new UserCreator(getUserRepository());
-
                 }
 
                 @Test

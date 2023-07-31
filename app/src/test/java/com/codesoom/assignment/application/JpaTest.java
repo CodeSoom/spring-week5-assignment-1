@@ -10,7 +10,7 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 @DataJpaTest
 public class JpaTest {
     @Autowired
-    UserRepository userRepository;
+    public UserRepository userRepository;
 
     public UserRepository getUserRepository() {
         return userRepository;
