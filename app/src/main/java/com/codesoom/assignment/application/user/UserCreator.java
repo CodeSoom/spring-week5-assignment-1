@@ -13,6 +13,6 @@ public class UserCreator {
     }
 
     public User createUser(UserRequest userRequest) {
-        return null;
+        return userRepository.save(userRequest.toUser());
     }
 }
