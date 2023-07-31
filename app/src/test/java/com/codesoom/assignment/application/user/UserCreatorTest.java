@@ -24,9 +24,6 @@ class UserCreatorTest extends JpaTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 유저_정보가_주어지면 {
-            @Nested
-            @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-            class 유저를_생성하고_반환한다 {
                 private UserRequest USER_REQUEST;
                 private UserCreator userCreator;
                 @BeforeEach
@@ -49,5 +46,4 @@ class UserCreatorTest extends JpaTest {
 
             }
         }
-    }
 }
