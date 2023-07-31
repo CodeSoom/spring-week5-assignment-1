@@ -11,21 +11,16 @@ import javax.validation.constraints.NotNull;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductData {
-    private Long id;
-
+public class CreateUserData {
     @NotBlank
     @Mapping("name")
     private String name;
 
     @NotBlank
-    @Mapping("maker")
-    private String maker;
+    @Mapping("email")
+    private String email;
 
-    @NotNull
-    @Mapping("price")
-    private Integer price;
-
-    @Mapping("imageUrl")
-    private String imageUrl;
+    @NotBlank
+    @Mapping("password")
+    private String password;
 }
