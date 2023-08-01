@@ -14,6 +14,8 @@ public class UserReader {
     }
 
     public User getUser(Long id) {
-        return null;
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+        return user;
     }
 }
