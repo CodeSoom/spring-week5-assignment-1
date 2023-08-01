@@ -39,6 +39,7 @@ class UserReaderTest extends JpaTest {
             }
 
             @DisplayName("해당_유저정보를_리턴한다")
+            @Test
             void it_returns_user() {
                 Assertions.assertThat(userReader.getUser(savedUserId).getName()).isEqualTo(TEST_NAME);
                 Assertions.assertThat(userReader.getUser(savedUserId).getEmail()).isEqualTo(TEST_EMAIL);
