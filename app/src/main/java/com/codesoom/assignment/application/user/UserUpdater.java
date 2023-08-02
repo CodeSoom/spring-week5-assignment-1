@@ -9,16 +9,19 @@ import javax.transaction.Transactional;
 
 @Service
 public class UserUpdater {
+
     private UserRepository userRepository;
 
-    public UserUpdater(UserRepository userRepository) {
+    private UserReader userReader;
+
+    public UserUpdater(UserRepository userRepository, UserReader userReader) {
         this.userRepository = userRepository;
+        this.userReader = userReader;
     }
 
     @Transactional
     public User updateUser(Long id, UserRequest userRequest) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당하는 유저가 없습니다."));
+        User user = userReader.getUser(id);
         user.change(userRequest.getName(), userRequest.getEmail(), userRequest.getPassword());
 
         User updatedUser = userRepository.save(user);

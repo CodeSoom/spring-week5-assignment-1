@@ -25,7 +25,7 @@ class UserUpdaterTest extends JpaTest {
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class updateUser_메서드는 {
-        private UserUpdater userUpdater = new UserUpdater(userRepository);
+        private UserUpdater userUpdater = new UserUpdater(userRepository, new UserReader(userRepository));
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 수정할_유저가_존재한다면 {
