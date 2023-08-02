@@ -1,5 +1,6 @@
 package com.codesoom.assignment.application.user;
 
+import com.codesoom.assignment.domain.user.User;
 import com.codesoom.assignment.domain.user.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -7,11 +8,14 @@ import org.springframework.stereotype.Service;
 public class UserDeleter {
     private final UserRepository userRepository;
 
-    public UserDeleter(UserRepository userRepository) {
+    private final UserReader userReader;
+
+    public UserDeleter(UserRepository userRepository, UserReader userReader) {
         this.userRepository = userRepository;
+        this.userReader = userReader;
     }
-
     public void deleteUser(Long id) {
-
+        User findeduser = userReader.getUser(id);
+        userRepository.deleteById(findeduser.getId());
     }
 }

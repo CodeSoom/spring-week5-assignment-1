@@ -37,7 +37,7 @@ class UserDeleterTest extends JpaTest {
             @Test
             @DisplayName("해당_유저정보를_삭제한다")
             void it_deletes_user() {
-                UserDeleter userDeleter = new UserDeleter(getUserRepository());
+                UserDeleter userDeleter = new UserDeleter(getUserRepository(),new UserReader(getUserRepository()));
                 userDeleter.deleteUser(deleteId);
                 Assertions.assertThat(getUserRepository().findById(deleteId)).isEmpty();
             }
