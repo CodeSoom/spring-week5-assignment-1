@@ -24,7 +24,7 @@ public class UserUpdater {
         User user = userReader.getUser(id);
         user.change(userRequest.getName(), userRequest.getEmail(), userRequest.getPassword());
 
-        User updatedUser = userRepository.save(user);
-        return updatedUser;
+        return userRepository.save(user);
+
     }
 }
