@@ -25,11 +25,14 @@ class UserCreatorTest extends JpaTest {
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class createUser_메서드는 {
+
+        private UserRequest USER_REQUEST;
+        private UserCreator userCreator;
+
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 유저_정보가_주어지면 {
-                private UserRequest USER_REQUEST;
-                private UserCreator userCreator;
+
                 @BeforeEach
                 void setUp() {
                     USER_REQUEST = createUserRequest();
