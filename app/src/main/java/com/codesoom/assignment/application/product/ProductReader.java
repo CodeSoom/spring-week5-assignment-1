@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application.product;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.infra.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.domain.product.Product;
 import com.codesoom.assignment.domain.product.ProductRepository;
 import org.springframework.stereotype.Service;
@@ -26,6 +26,6 @@ public class ProductReader {
 
     private Product findProduct(Long id) {
         return productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException(id));
+                .orElseThrow(() -> new ProductNotFoundException());
     }
 }

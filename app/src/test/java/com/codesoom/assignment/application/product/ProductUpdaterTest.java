@@ -1,6 +1,6 @@
 package com.codesoom.assignment.application.product;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.infra.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.application.JpaTest;
 import com.codesoom.assignment.domain.product.Product;
 import com.codesoom.assignment.dto.product.ProductData;
