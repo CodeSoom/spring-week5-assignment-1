@@ -3,6 +3,7 @@ import com.codesoom.assignment.domain.product.Product;
 import com.codesoom.assignment.domain.product.ProductRepository;
 import com.codesoom.assignment.dto.product.ProductData;
 
+import com.codesoom.assignment.infra.product.exception.ProductNotFoundException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -203,12 +204,12 @@ class ProductControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productData)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidProductRequest))
-                .andExpect(jsonPath("message").value(InvalidProductRequest.MESSAGE))
                 .andExpect(jsonPath("errors[0].source").value("name"))
-                .andExpect(jsonPath("errors[0].type").value("name is empty"))
+                .andExpect(jsonPath("errors[0].type").value("BAD_REQUEST"))
+                .andExpect(jsonPath("errors[0].message").value("상품 이름을 입력해주세요."))
                 .andExpect(jsonPath("errors[1].source").value("maker"))
-                .andExpect(jsonPath("errors[1].type").value("maker is empty"))
+                .andExpect(jsonPath("errors[1].type").value("BAD_REQUEST"))
+                .andExpect(jsonPath("errors[1].message").value("상품 제조사를 입력해주세요."))
                 .andDo(print());
     }
 
@@ -220,8 +221,6 @@ class ProductControllerTest {
                         .contentType(APPLICATION_JSON)
                         .content(objectMapper.writeValueAsString(productRequest)))
                 .andExpect(status().isBadRequest())
-                .andExpect(result -> assertTrue(result.getResolvedException() instanceof InvalidProductRequest))
-                .andExpect(jsonPath("message").value(InvalidProductRequest.MESSAGE))
                 .andDo(print());
     }
 
@@ -229,7 +228,7 @@ class ProductControllerTest {
         return Stream.of(
                 Arguments.of(ProductData.builder().name("").maker("testMaker").price(1000).imageUrl("").build()),
                 Arguments.of(ProductData.builder().name("testName").maker("").price(1000).imageUrl("").build()),
-                Arguments.of(ProductData.builder().name("testName").maker("testMaker").price(-10).imageUrl("").build()),
+                Arguments.of(ProductData.builder().name("testName").maker("testMaker").price(-10).imageUrl("").build())
         );
     }
 }
