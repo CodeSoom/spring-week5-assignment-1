@@ -23,4 +23,6 @@ public class ProductData {
     private Integer price;
 
     private String imageUrl;
+
+
 }
