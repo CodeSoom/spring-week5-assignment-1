@@ -1,12 +1,11 @@
 package com.codesoom.assignment.application.product;
 
-import com.codesoom.assignment.ProductNotFoundException;
+import com.codesoom.assignment.infra.product.exception.ProductNotFoundException;
 import com.codesoom.assignment.application.JpaTest;
 import com.codesoom.assignment.domain.product.Product;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 
-import static org.junit.jupiter.api.Assertions.*;
 @SuppressWarnings({"InnerClassMayBeStatic", "NonAsciiCharacters"})
 @DisplayName("ProductDeleter 클래스")
 class ProductDeleterTest extends JpaTest {
