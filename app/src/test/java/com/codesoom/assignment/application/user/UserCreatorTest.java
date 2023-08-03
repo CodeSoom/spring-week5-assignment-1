@@ -2,7 +2,7 @@ package com.codesoom.assignment.application.user;
 
 import com.codesoom.assignment.application.JpaTest;
 import com.codesoom.assignment.domain.user.User;
-import com.codesoom.assignment.dto.user.UserRequest;
+import com.codesoom.assignment.dto.user.UserData;
 import org.junit.jupiter.api.*;
 
 import org.assertj.core.api.Assertions;
@@ -14,8 +14,8 @@ class UserCreatorTest extends JpaTest {
     private final String TEST_EMAIL = "test@Email.com";
     private final String TEST_PASSWORD = "testPassword";
 
-    private UserRequest createUserRequest() {
-        return new UserRequest(
+    private UserData createUserRequest() {
+        return new UserData(
                 TEST_NAME,
                 TEST_EMAIL,
                 TEST_PASSWORD
@@ -26,7 +26,7 @@ class UserCreatorTest extends JpaTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class createUser_메서드는 {
 
-        private UserRequest USER_REQUEST;
+        private UserData USER_REQUEST;
         private UserCreator userCreator;
 
         @Nested

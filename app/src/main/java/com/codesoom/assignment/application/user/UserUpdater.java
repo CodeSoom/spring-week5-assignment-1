@@ -2,7 +2,7 @@ package com.codesoom.assignment.application.user;
 
 import com.codesoom.assignment.domain.user.User;
 import com.codesoom.assignment.domain.user.UserRepository;
-import com.codesoom.assignment.dto.user.UserRequest;
+import com.codesoom.assignment.dto.user.UserData;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -20,7 +20,7 @@ public class UserUpdater {
     }
 
     @Transactional
-    public User updateUser(Long id, UserRequest userRequest) {
+    public User updateUser(Long id, UserData userRequest) {
         User user = userReader.getUser(id);
         user.change(userRequest.getName(), userRequest.getEmail(), userRequest.getPassword());
 
