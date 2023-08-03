@@ -54,6 +54,7 @@ public class ProductController {
     @DeleteMapping("{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void destroy(@PathVariable Long id) {
-        ProductDeleter.deleteProduct(id);
+
+        productDeleter.deleteProduct(id);
     }
 }
