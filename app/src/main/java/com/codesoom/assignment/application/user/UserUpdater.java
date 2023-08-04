@@ -20,7 +20,7 @@ public class UserUpdater {
     }
 
     @Transactional
-    public User updateUser(Long id, UserData userRequest) {
+    public User update(Long id, UserData userRequest) {
         User user = userReader.getUser(id);
         user.change(userRequest.getName(), userRequest.getEmail(), userRequest.getPassword());
 

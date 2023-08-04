@@ -29,25 +29,24 @@ class UserUpdaterTest extends JpaTest {
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 수정할_유저가_존재한다면 {
-            private UserData USER_REQUEST;
-            private Long savedUserId;
+            private Long id;
             @BeforeEach
             void setUp() {
                 userRepository.deleteAll();
-                USER_REQUEST = createUserRequest();
-                savedUserId = userRepository.save(USER_REQUEST.toUser()).getId();
+                UserData userData = createUserRequest();
+                id = userRepository.save(userData.toUser()).getId();
             }
 
             @DisplayName("해당 유저정보를 수정 후 수정한 유저정보를 리턴한다")
             @Test
             void it_updates_and_returns_user() {
-                UserData userUpdateRequest = UserData.builder()
+                UserData request = UserData.builder()
                         .name("newName")
                         .email("newEmail")
                         .password("newPassword")
                         .build();
 
-                User user = userUpdater.updateUser(savedUserId, userUpdateRequest);
+                User user = userUpdater.update(id, request);
 
                 Assertions.assertThat(user.getName()).isEqualTo("newName");
                 Assertions.assertThat(user.getEmail()).isEqualTo("newEmail");
