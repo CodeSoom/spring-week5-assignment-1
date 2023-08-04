@@ -1,4 +1,4 @@
-package com.codesoom.assignment.controllers;
+package com.codesoom.assignment.controllers.prouct;
 import com.codesoom.assignment.domain.product.Product;
 import com.codesoom.assignment.domain.product.ProductRepository;
 import com.codesoom.assignment.dto.product.ProductData;
