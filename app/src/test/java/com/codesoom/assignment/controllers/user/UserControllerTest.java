@@ -37,7 +37,6 @@ class UserControllerTest {
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class create_메서드는 {
 
-
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
         class 유저_정보_요청이_오면 {
@@ -63,6 +62,31 @@ class UserControllerTest {
                         .andExpect(jsonPath("name").value("testName"))
                         .andExpect(jsonPath("email").value("test@Email"))
                         .andExpect(jsonPath("password").value("testPassword"))
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 이름이_없는_유저_정보_요청이_오면 {
+            @BeforeEach
+            void setUp() {
+                USER_REQUEST = UserData.builder()
+                        .name("")
+                        .email(TEST_EMAIL)
+                        .password(TEST_PASSWORD)
+                        .build();
+            }
+
+            @DisplayName("에러정보를_리턴한다")
+            @Test
+            void it_validate_and_returns_error() throws Exception {
+                String jsonString = objectMapper.writeValueAsString(USER_REQUEST);
+
+                mockMvc.perform(patch("/users")
+                                .contentType("application/json")
+                                .content(jsonString))
+                        .andExpect(status().isBadRequest())
                         .andDo(print());
             }
         }
