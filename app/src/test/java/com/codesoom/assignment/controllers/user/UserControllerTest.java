@@ -11,7 +11,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -100,7 +99,7 @@ class UserControllerTest {
 
                 String jsonString = objectMapper.writeValueAsString(request);
 
-                mockMvc.perform(post("/users/" + id)
+                mockMvc.perform(patch("/users/" + id)
                                 .contentType("application/json")
                                 .content(jsonString))
                         .andExpect(status().isOk())
