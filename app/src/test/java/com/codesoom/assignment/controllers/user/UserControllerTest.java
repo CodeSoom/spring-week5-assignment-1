@@ -9,8 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -31,7 +31,10 @@ class UserControllerTest {
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-    class createUser_메서드는 {
+    class create_메서드는 {
+        private final String TEST_NAME = "testName";
+        private final String TEST_EMAIL = "test@Email";
+        private final String TEST_PASSWORD = "testPassword";
         private UserData USER_REQUEST;
 
         @Nested
@@ -41,9 +44,9 @@ class UserControllerTest {
             @BeforeEach
             void setUp() {
                 USER_REQUEST = UserData.builder()
-                        .name("testName")
-                        .email("test@Email")
-                        .password("testPassword")
+                        .name(TEST_NAME)
+                        .email(TEST_EMAIL)
+                        .password(TEST_PASSWORD)
                         .build();
             }
 
@@ -58,7 +61,8 @@ class UserControllerTest {
                         .andExpect(status().isCreated())
                         .andExpect(jsonPath("name").value("testName"))
                         .andExpect(jsonPath("email").value("test@Email"))
-                        .andExpect(jsonPath("password").value("testPassword"));
+                        .andExpect(jsonPath("password").value("testPassword"))
+                        .andDo(print());
             }
         }
     }
