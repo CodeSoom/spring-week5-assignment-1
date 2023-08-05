@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -55,7 +56,7 @@ class UserControllerTest {
             void it_saves_and_returns_user() throws Exception {
                 String jsonString = objectMapper.writeValueAsString(USER_REQUEST);
 
-                mockMvc.perform(post("/users")
+                mockMvc.perform(patch("/users")
                                 .contentType("application/json")
                                 .content(jsonString))
                         .andExpect(status().isCreated())
