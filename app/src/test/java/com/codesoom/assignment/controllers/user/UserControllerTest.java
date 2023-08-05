@@ -10,8 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -55,7 +54,7 @@ class UserControllerTest {
             void it_saves_and_returns_user() throws Exception {
                 String jsonString = objectMapper.writeValueAsString(USER_REQUEST);
 
-                mockMvc.perform(patch("/users")
+                mockMvc.perform(post("/users")
                                 .contentType("application/json")
                                 .content(jsonString))
                         .andExpect(status().isCreated())
@@ -83,10 +82,68 @@ class UserControllerTest {
             void it_validate_and_returns_error() throws Exception {
                 String jsonString = objectMapper.writeValueAsString(USER_REQUEST);
 
-                mockMvc.perform(patch("/users")
+                mockMvc.perform(post("/users")
                                 .contentType("application/json")
                                 .content(jsonString))
                         .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("errors[0].source").value("name"))
+                        .andExpect(jsonPath("errors[0].type").value("BAD_REQUEST"))
+                        .andExpect(jsonPath("errors[0].message").value("이름을 입력해주세요."))
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 이메일이_없는_유저_정보_요청이_오면 {
+            @BeforeEach
+            void setUp() {
+                USER_REQUEST = UserData.builder()
+                        .name(TEST_NAME)
+                        .email("")
+                        .password(TEST_PASSWORD)
+                        .build();
+            }
+
+            @DisplayName("에러정보를_리턴한다")
+            @Test
+            void it_validate_and_returns_error() throws Exception {
+                String jsonString = objectMapper.writeValueAsString(USER_REQUEST);
+
+                mockMvc.perform(post("/users")
+                                .contentType("application/json")
+                                .content(jsonString))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("errors[0].source").value("email"))
+                        .andExpect(jsonPath("errors[0].type").value("BAD_REQUEST"))
+                        .andExpect(jsonPath("errors[0].message").value("이메일을 입력해주세요."))
+                        .andDo(print());
+            }
+        }
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 패스워드가_없는_유저_정보_요청이_오면 {
+            @BeforeEach
+            void setUp() {
+                USER_REQUEST = UserData.builder()
+                        .name(TEST_NAME)
+                        .email(TEST_EMAIL)
+                        .build();
+            }
+
+            @DisplayName("에러정보를_리턴한다")
+            @Test
+            void it_validate_and_returns_error() throws Exception {
+                String jsonString = objectMapper.writeValueAsString(USER_REQUEST);
+
+                mockMvc.perform(post("/users")
+                                .contentType("application/json")
+                                .content(jsonString))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("errors[0].source").value("password"))
+                        .andExpect(jsonPath("errors[0].type").value("BAD_REQUEST"))
+                        .andExpect(jsonPath("errors[0].message").value("비밀번호를 입력해주세요."))
                         .andDo(print());
             }
         }
