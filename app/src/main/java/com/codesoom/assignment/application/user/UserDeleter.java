@@ -14,7 +14,8 @@ public class UserDeleter {
         this.userRepository = userRepository;
         this.userReader = userReader;
     }
-    public void deleteUser(Long id) {
+
+    public void delete(Long id) {
         User user = userReader.getUser(id);
         userRepository.deleteById(user.getId());
     }
