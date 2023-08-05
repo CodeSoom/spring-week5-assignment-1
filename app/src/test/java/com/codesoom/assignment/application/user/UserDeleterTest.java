@@ -5,7 +5,7 @@ import com.codesoom.assignment.domain.user.User;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.*;
 
-@SuppressWarnings({"NonAsciiCharacters","NonAsciiCharacters"})
+@SuppressWarnings({"NonAsciiCharacters", "NonAsciiCharacters"})
 @DisplayName("UserDeleter 클래스")
 class UserDeleterTest extends JpaTest {
     private final String TEST_NAME = "testName";
@@ -26,8 +26,9 @@ class UserDeleterTest extends JpaTest {
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-        class 유저아이디가_주어지면{
+        class 유저아이디가_주어지면 {
             private long deleteId;
+
             @BeforeEach
             void setUp() {
                 User user = createUser();
@@ -37,8 +38,8 @@ class UserDeleterTest extends JpaTest {
             @Test
             @DisplayName("해당_유저정보를_삭제한다")
             void it_deletes_user() {
-                UserDeleter userDeleter = new UserDeleter(getUserRepository(),new UserReader(getUserRepository()));
-                userDeleter.deleteUser(deleteId);
+                UserDeleter userDeleter = new UserDeleter(getUserRepository(), new UserReader(getUserRepository()));
+                userDeleter.delete(deleteId);
                 Assertions.assertThat(getUserRepository().findById(deleteId)).isEmpty();
             }
         }

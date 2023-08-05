@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -110,6 +111,39 @@ class UserControllerTest {
 
             }
 
+        }
+    }
+
+
+    @Nested
+    @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+    class delete_메서드는 {
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 유저_삭제_요청이_오면 {
+            private Long id;
+
+            @BeforeEach
+            void setUp() {
+                userRepository.deleteAll();
+                User user = User.builder()
+                        .name(TEST_NAME)
+                        .email(TEST_EMAIL)
+                        .password(TEST_PASSWORD)
+                        .build();
+
+                id = userRepository.save(user).getId();
+            }
+
+            @DisplayName("해당_유저정보를_삭제한다")
+            @Test
+            void it_deletes_user() throws Exception {
+                mockMvc.perform(delete("/users/" + id)
+                                .contentType("application/json"))
+                        .andExpect(status().isNoContent())
+                        .andDo(print());
+            }
         }
     }
 }
