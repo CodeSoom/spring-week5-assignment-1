@@ -5,11 +5,17 @@ import com.codesoom.assignment.domain.user.UserRepository;
 import com.codesoom.assignment.dto.user.UserData;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.stream.Stream;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -27,14 +33,42 @@ class UserControllerTest {
     @Autowired
     MockMvc mockMvc;
     @Autowired
-    UserRepository userRepository;
-    @Autowired
     ObjectMapper objectMapper;
+    @Autowired
+    UserRepository userRepository;
+
     private UserData USER_REQUEST;
+
+    private static Stream<Arguments> provideInvalidUserRequests() {
+        return Stream.of(
+                Arguments.of(UserData.builder().name("").email("").password("").build()),
+                Arguments.of(UserData.builder().name("testName").email("").password("").build()),
+                Arguments.of(UserData.builder().name("").email("test@Email").password("").build()),
+                Arguments.of(UserData.builder().name("").email("").password("testPassword").build())
+        );
+    }
 
     @Nested
     @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
     class create_메서드는 {
+
+        @Nested
+        @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
+        class 올바르지_않은_유저정보_요청이_오면 {
+            
+            @ParameterizedTest
+            @DisplayName("상품 생성시 올바르지 않은 요청 케이스별 테스트 요청인 경우 에러응답을 반환한다.")
+            @MethodSource("com.codesoom.assignment.controllers.user.UserControllerTest#provideInvalidUserRequests")
+            void createProductInvalidRequestCase(UserData user) throws Exception {
+
+                mockMvc.perform(post("/users")
+                                .contentType(APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(user)))
+                        .andExpect(status().isBadRequest())
+                        .andDo(print());
+            }
+
+        }
 
         @Nested
         @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
